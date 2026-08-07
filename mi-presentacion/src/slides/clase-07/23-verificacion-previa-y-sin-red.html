@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Verificación previa de la API y operación sin conectividad · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Verificación previa de la API y operación sin conectividad</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+								Verificar la API antes de escribir firmware
+							</div>
+							<p>
+								La petición se prueba primero desde el navegador o desde un cliente
+								de escritorio, hasta obtener la respuesta esperada. Solo entonces se
+								lleva al dispositivo.
+							</p>
+							<p>
+								Depurar a la vez el enlace de red y el código de la petición
+								impide aislar la causa: un 401 puede deberse a la clave, al formato
+								de la cabecera o a la ruta, y sobre el dispositivo las tres se ven
+								igual.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Con qué comprobarlo
+							</div>
+							<p>
+								La barra del navegador basta para un <code>GET</code> sin
+								cabeceras. Para lo demás, <code>curl</code> desde la terminal:
+								muestra el código de estado, las cabeceras y el cuerpo, y su orden
+								se traslada casi literalmente al firmware.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Comportamiento sin conectividad
+							</div>
+							<p>
+								Un dispositivo sin red no debe detenerse ni mostrar el último valor
+								como si fuera actual. Las tres decisiones que hay que tomar antes de
+								programar:
+							</p>
+						</div>
+
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Qué conserva</span>
+								<span class="bd-node__body">Último valor válido con su timestamp, para poder decir cuán antiguo es.</span>
+							</div>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">Cuándo lo declara caducado</span>
+								<span class="bd-node__body">Un umbral explícito, propio de la magnitud: 15 min para temperatura exterior, 5 s para una consigna de control.</span>
+							</div>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Qué sigue haciendo</span>
+								<span class="bd-node__body">Adquirir y almacenar en local. La sesión 10 añade el envío diferido de lo acumulado.</span>
+							</div>
+						</div>
+
+						<div class="term">$ curl -i -H "Authorization: Bearer $CLAVE" \
+       https://api.ejemplo.com/v1/estado
+HTTP/2 200
+content-type: application/json
+x-ratelimit-remaining: 4998</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="22-paper-mqtt-vs-http.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · HTTP frente a MQTT en ESP32</span>
+				</a>
+				<a class="slide-nav__link" href="24-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

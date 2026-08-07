@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>El ciclo del agente y las capacidades · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cómo decide y cómo actúa: el ciclo y las capacidades</h1>
+
+				<div class="blockdiagram" data-animate="fade-up">
+					<div class="bd-node bd-node--ghost">
+						<span class="bd-node__title">1 · Contexto</span>
+						<span class="bd-node__body">El núcleo arma la petición: instrucciones del sistema, historial de la sesión y catálogo de herramientas.</span>
+					</div>
+					<span class="bd-arrow" aria-hidden="true">→</span>
+					<div class="bd-node bd-node--accent">
+						<span class="bd-node__title">2 · Turnos con el modelo</span>
+						<span class="bd-node__body">Varias vueltas de diálogo, no una. En cada una el modelo puede pedir que se ejecute una herramienta.</span>
+					</div>
+					<span class="bd-arrow" aria-hidden="true">→</span>
+					<div class="bd-node bd-node--ok">
+						<span class="bd-node__title">3 · Ejecución</span>
+						<span class="bd-node__body">La llamada se resuelve por un despachador único, con el resultado devuelto al diálogo.</span>
+					</div>
+					<span class="bd-arrow" aria-hidden="true">→</span>
+					<div class="bd-node bd-node--warn">
+						<span class="bd-node__title">4 · Persistencia</span>
+						<span class="bd-node__body">El historial se escribe en el sistema de archivos del equipo, que es lo que da continuidad entre arranques.</span>
+					</div>
+				</div>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Capacidad: la unidad de todo lo que se puede invocar</h3>
+						<p>
+							Cada componente registra un descriptor con su nombre, su esquema de
+							entrada y su ciclo de vida. Las hay de <b>tres clases</b>: herramienta
+							invocable, fuente de eventos y mixta.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Se agrupan por familias (archivos, Lua, HTTP, MCP, planificador,
+							sistema) y el grupo es la unidad de registro y de permiso.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Tres vías de entrada, un solo despachador</h3>
+						<p>
+							Una capacidad se ejecuta desde el <b>modelo</b>, desde la
+							<b>consola</b> o desde una <b>regla del enrutador de eventos</b>. La
+							llamada guarda quién la originó.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Esa marca de origen es lo que permite tratar distinto una acción
+							pedida por una persona y otra decidida por el agente.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">El detalle que conviene retener</span>
+					<p>
+						No todas las capacidades registradas se le enseñan al modelo. Hay una
+						<b>lista de grupos visibles</b> que en el arranque deja a la vista solo
+						lo básico, y activar una habilidad amplía esa lista. Son las dos cosas a
+						la vez: una <b>economía de contexto</b>, porque cada herramienta declarada
+						ocupa tokens en todas las peticiones, y un <b>límite de actuación</b>,
+						porque lo que no está declarado el modelo no lo puede pedir.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-esp-claw.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+					<span>ESP-Claw</span>
+				</a>
+				<a class="slide-nav__link" href="12-dos-ambitos-de-la-ia.html">
+					<span>Los dos ámbitos de la IA</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

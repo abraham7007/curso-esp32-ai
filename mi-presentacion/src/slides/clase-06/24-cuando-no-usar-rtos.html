@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Condiciones en las que el bucle único sigue siendo la respuesta · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Condiciones en las que el bucle único sigue siendo la respuesta</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Criterio
+							</div>
+							<p>
+								Si el problema se resuelve con un bucle y máquinas de estados,
+								incorporar tareas <b>añade complejidad y errores de reproducción
+								difícil</b> sin resolver nada. La concurrencia no es una mejora por
+								sí misma.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								Un fallo de concurrencia aparece con baja frecuencia y no se
+								reproduce a voluntad. El esfuerzo se desplaza de la depuración,
+								donde deja de ser eficaz, hacia el diseño.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead>
+									<tr><th>Situación</th><th>Solución adecuada</th></tr>
+								</thead>
+								<tbody>
+									<tr><td>Todas las actividades ocupan menos de 1 ms por iteración</td><td>Bucle con máquinas de estados</td></tr>
+									<tr><td>Los periodos son múltiplos entre sí y no compiten</td><td>Bucle con máquinas de estados</td></tr>
+									<tr><td>Una operación bloqueante de cientos de ms convive con un periodo de pocos ms</td><td><b>Tareas</b></td></tr>
+									<tr><td>Hay que usar una biblioteca cuya llamada es bloqueante y no se puede trocear</td><td><b>Tareas</b></td></tr>
+									<tr><td>Se quiere aprovechar el segundo núcleo para trabajo de cálculo</td><td><b>Tareas</b></td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Medir antes de optimizar</span>
+							<p>
+								Antes de repartir en tareas conviene disponer de tres cifras:
+								<b>ocupación de procesador por tarea</b>, <b>marca de ocupación
+								máxima de pila</b> y <b>memoria libre</b>. Sin ellas, el reparto se
+								decide por intuición y suele resultar peor que el bucle que
+								sustituye.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="23-deadlock.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Deadlock</span>
+				</a>
+				<a class="slide-nav__link" href="25-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Acumulación de variables de control · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Acumulación de variables de control</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Situación de partida
+							</div>
+							<p>
+								Un programa que crece añadiendo una variable booleana por cada
+								condición termina con un conjunto de banderas independientes:
+								<code>enMarcha</code>, <code>esperandoPeaton</code>,
+								<code>yaAviso</code>, <code>bloqueado</code>.
+							</p>
+							<p>
+								Con <b>n</b> banderas hay <b>2<sup>n</sup></b> combinaciones
+								posibles, y el programa solo define el comportamiento de unas
+								pocas. El resto son estados alcanzables que nadie ha especificado.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Síntoma reconocible
+							</div>
+							<p>
+								Corregir un fallo obliga a añadir otra bandera, y esa corrección
+								habilita una combinación nueva que vuelve a fallar. La causa no es
+								falta de cuidado: el modelo permite representar situaciones que el
+								dispositivo no puede tener.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="banderas-vs-estados"></div>
+							<p class="figure__caption">
+								Con diez banderas hay 1024 situaciones alcanzables y el programa
+								define cinco. Con diez estados declarados hay exactamente diez.
+							</p>
+						</div>
+
+						<div class="term">enMarcha=1 esperandoPeaton=1 yaAviso=0 bloqueado=1
+&gt; ninguna rama del if contempla esta combinacion</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Solución estructural</span>
+							<p>
+								Se sustituye el conjunto de banderas por <b>una sola variable de
+								estado</b> con un número cerrado de valores. El espacio de
+								situaciones deja de crecer de forma exponencial y pasa a ser
+								enumerable, que es la condición para poder verificarlo.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Máquinas de estados finitos</span>
+				</a>
+				<a class="slide-nav__link" href="03-estado-evento-transicion.html">
+					<span>Estado, evento y transición</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

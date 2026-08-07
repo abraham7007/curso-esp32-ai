@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cifrado de la memoria, secure boot y superficie de ataque · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cifrado de la memoria, secure boot y superficie de ataque</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>Cifrado de la memoria</div>
+						<p>
+							La Flash se cifra con una clave que vive dentro del chip. Quien
+							extraiga el módulo y lea la memoria obtiene datos ilegibles, no las
+							credenciales.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>Secure boot</div>
+						<p>
+							El chip solo ejecuta binarios firmados con la clave del fabricante.
+							Impide sustituir el firmware por otro, que es la vía por la que se
+							toma el control del equipo.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Superficie de ataque</div>
+						<p>
+							Todo lo que el dispositivo escucha: el servidor web, la conexión al
+							broker, el puerto de programación. Cada una es una vía, y las
+							que no se usan se cierran.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Ambas medidas son <b>irreversibles</b>: se activan quemando fusibles del
+						chip y no se pueden desactivar. Con secure boot (arranque seguro) activo, un binario
+						sin firmar ya no se ejecuta nunca, y perder la clave de firma convierte
+						el parque en equipos que no admiten ninguna actualización más. Se
+						activan al cerrar el producto, no durante el desarrollo.
+					</p>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">La actualización dentro de la política de seguridad</span>
+					<p>
+						Ningún firmware está libre de fallos, y los de las bibliotecas que
+						incorpora se publican después de venderlo. Por eso <b>la capacidad de
+						actualizar es en sí una medida de seguridad</b>, y probablemente la más
+						importante: un dispositivo que no se puede actualizar queda expuesto a
+						toda vulnerabilidad que se descubra durante su vida útil.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-paper-actualizacion-remota.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · OTA medida</span>
+				</a>
+				<a class="slide-nav__link" href="16-codigo-43-ota-con-reversion.html">
+					<span>La hora del código · Actualización con reversión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

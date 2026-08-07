@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 41 · Diagnóstico de arranque y recuperación escalada · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 41</span>
+					</div>
+
+					<h2 class="code-hour__title">Diagnóstico de arranque con recuperación escalada</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Registrar el <b>reset reason</b> como primera operación y llevar en NVS un contador de arranques fallidos. Con tres fallos seguidos se restituyen los valores por omisión; con cinco, el equipo arranca en modo mínimo.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><code>esp_reset_reason()</code> devuelve por qué se reinició el SoC y distingue un corte de alimentación de un fallo del programa o de un perro guardián vencido. El <b>perro guardián de tarea</b> reinicia el equipo cuando una tarea deja de ceder el procesador. La <b>escalada</b> consiste en responder distinto según cuántas veces seguidas ha fallado: sin contador, el equipo repite el mismo error para siempre.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y la biblioteca Preferences.
+
+<b>2. Firmware.</b> La primera operación de <code>setup()</code> lee <code>esp_reset_reason()</code> y la registra con su nombre legible. Lleva en NVS un contador de arranques fallidos que se incrementa al arrancar y se pone a cero cuando el programa lleva 60 s funcionando sin reiniciar. Con tres fallos consecutivos, restituye la configuración por omisión; con cinco, arranca en un modo mínimo que solo levanta la red y la OTA. El pulsador provoca a voluntad un bucle sin ceder, una desreferencia nula y un reinicio ordenado, para poder observar las tres causas. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el pulsador en el GPIO 4 y los tres LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del arranque, desde la lectura de la causa hasta la decisión de modo. Y el <b>árbol de decisión</b> que va de la causa y el contador de fallos a cada una de las tres respuestas.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un pulsador en el <b>GPIO 4</b> que provoca cada causa a voluntad (bucle sin ceder, fallo de programa, reinicio ordenado) y enciende tres LED de estado en los <b>GPIO 25, 26 y 27</b>.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-pushbutton color="red"></wokwi-pushbutton></span>
+										<span class="hw-set__item"><wokwi-led color="orange"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[BOOT] causa=TASK_WDT  tarea=publicacion fallos_seguidos=1
+[BOOT] arranque normal, contador incrementado
+[BOOT] causa=TASK_WDT  fallos=3 -&gt; restituye valores por omision
+[BOOT] causa=PANIC     fallos=5 -&gt; modo minimo: red y actualizacion
+[BOOT] causa=POWERON   arranque limpio -&gt; contador a cero</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>El detalle que decide si esto funciona está en la última línea: el contador se pone a cero <b>tras 60 s en marcha</b>, no al arrancar. Si se reiniciara al principio, un equipo que falla a los cinco segundos nunca acumularía fallos y la escalada jamás se activaría. Comprobarlo provocando el fallo tres veces seguidas y viendo aparecer la línea de restitución.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-paper-vulnerabilidades-firmware.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Vulnerabilidades de firmware</span>
+				</a>
+				<a class="slide-nav__link" href="10-simulacion-autonomia.html">
+					<span>Autonomía con batería</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

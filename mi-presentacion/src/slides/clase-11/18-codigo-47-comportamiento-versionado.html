@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 47 · Comportamiento versionado y reversible · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 47</span>
+					</div>
+
+					<h2 class="code-hour__title">Comportamiento versionado, validado y reversible</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Dar al comportamiento externo las mismas garantías que la sesión 10 dio al firmware: <b>versionarlo, validarlo antes de aplicarlo y poder volver atrás</b>. El equipo publica qué versión de comportamiento lleva, junto a la del firmware.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b>Validar antes de aplicar</b> significa comprobar sintaxis, referencias y límites sobre el conjunto recibido <b>sin tocar</b> el que está vigente: si algo falla, no se ha sobrescrito nada. El <b>resumen</b> identifica cada versión de forma única, de modo que se puede saber qué ejecuta cada unidad del parque. El <b>modo prueba</b> con vuelta atrás es lo que la sesión 10 conseguía con dos particiones, aquí sin reiniciar.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, ESPAsyncWebServer, LittleFS y ArduinoJson.
+
+<b>2. Firmware.</b> Guarda el conjunto de reglas en LittleFS con un número de versión y un resumen. Expón <code>POST /api/comportamiento</code>, que <b>valida antes de aplicar</b>: comprueba la sintaxis, que cada entrada y salida referenciada exista y que los valores caigan en los límites compilados. Si falla, rechaza sin sobrescribir nada y devuelve el motivo. Si es válido, lo aplica en modo prueba durante 120 s conservando el anterior; si no se registra ningún fallo, lo confirma. Publica en <code>/api/info</code> la versión del firmware y la del comportamiento con su resumen. Emite a 115200 baudios cada paso.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro y los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una carga: validar, aplicar en prueba, confirmar o revertir. Y la <b>máquina de estados</b> del comportamiento, con la rama de rechazo y la de reversión dibujadas.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b>, controla un LED con las reglas en el <b>GPIO 25</b> e indica el estado del comportamiento con otro en el <b>GPIO 26</b>, con 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[INFO] firmware=1.2.0  comportamiento=reglas-v4  resumen=8f21ac
+[CARGA] recibido reglas-v5  validando sintaxis y limites...
+[CARGA] rechazado: la regla 3 referencia una entrada inexistente
+[INFO] sigue vigente reglas-v4  (no se sobrescribio nada)
+[CARGA] recibido reglas-v6  valido -&gt; en prueba durante 120 s
+[CARGA] 120 s sin fallo -&gt; reglas-v6 confirmada v4 de respaldo</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Las líneas tercera y cuarta son el punto del ejercicio: la carga se rechaza y <b>reglas-v4 sigue vigente</b>. Si en la traza propia el rechazo dejara el equipo sin reglas, la validación se está haciendo después de sobrescribir. Comparar además los dos identificadores de <code>[INFO]</code>: sin versión y resumen no hay forma de saber qué ejecuta cada unidad del parque, por barato que sea cambiarlo.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-codigo-46-agente-acotado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Agente acotado</span>
+				</a>
+				<a class="slide-nav__link" href="19-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

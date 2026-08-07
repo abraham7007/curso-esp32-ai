@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Versionado, despliegue y reentrenamiento del modelo · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Herramientas y criterios de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Versionado, despliegue y reentrenamiento del modelo</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								El modelo es un artefacto aparte
+							</div>
+							<p>
+								Tiene <b>su propia versión</b> y su propio despliegue, independientes
+								del firmware. Se distribuye con el mecanismo de actualización de la
+								sesión 10 y se declara en <code>/api/info</code> junto a la versión
+								del programa.
+							</p>
+						</div>
+
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								La distribución de los datos cambia
+							</div>
+							<p>
+								Un modelo entrenado con datos de un año deja de acertar cuando el
+								equipo envejece, se cambia una pieza o varía la estación. La
+								exactitud cae sin que nadie toque nada, y por eso hace falta
+								<b>vigilarla en operación</b>, no solo al desplegar.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="conclusion">
+							<span class="conclusion__label">Criterio de aplicabilidad, en orden</span>
+							<p>
+								<b>1.</b> Un umbral sobre la señal filtrada. <b>2.</b> Un umbral
+								sobre una característica derivada, como la energía de una banda.
+								<b>3.</b> Solo si las dos anteriores no alcanzan el requisito, un
+								modelo entrenado. Y en ese caso, comparado contra la línea de base
+								que las dos primeras establecieron.
+							</p>
+						</div>
+
+						<div class="usecases">
+							<span class="usecases-label">Aplicaciones habituales</span>
+							<div class="usecase">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+								<span>
+									<span class="usecase__name">Mantenimiento por vibración</span>
+									<span class="usecase__what">
+										Un rodamiento que se degrada cambia el espectro antes de fallar:
+										la decisión se toma sobre bandas de energía.
+									</span>
+								</span>
+							</div>
+							<div class="usecase">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								<span>
+									<span class="usecase__name">Reconocimiento de actividad</span>
+									<span class="usecase__what">
+										Distinguir caminar de correr con un acelerómetro: pocas clases y
+										características bien conocidas.
+									</span>
+								</span>
+							</div>
+							<div class="usecase">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+								<span>
+									<span class="usecase__name">Detección de palabra clave</span>
+									<span class="usecase__what">
+										El caso que hizo conocido a este campo, y el que más exige del
+										hardware: requiere instrucciones vectoriales.
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-codigo-51-inferencia-completa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Sistema con inferencia</span>
+				</a>
+				<a class="slide-nav__link" href="17-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "author": "Ejemplo 4 - Salida PWM LEDC",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 50,
+      "left": 180,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -80,
+      "left": -100,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 0,
+      "left": -100,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    [ "esp:3V3", "pot1:VCC", "red", [] ],
+    [ "esp:GND.1", "pot1:GND", "black", [] ],
+    [ "esp:D32", "pot1:SIG", "green", [] ],
+    [ "esp:D2", "r1:1", "blue", [] ],
+    [ "r1:2", "led1:A", "blue", [] ],
+    [ "esp:GND.2", "led1:C", "black", [] ],
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ]
+  ],
+  "dependencies": {}
+}

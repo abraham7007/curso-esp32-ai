@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes con el servidor y el provisioning · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes con el servidor y el provisioning</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>La página se carga a medias</div>
+						<div class="problem-card__body">
+							<p>El panel aparece sin estilos o sin datos, y recargando a veces se arregla.</p>
+							<p><b>Por qué ocurre.</b> Se agotó el límite de sockets simultáneos: cada archivo de la interfaz consume una conexión y varios visitantes las multiplican.</p>
+							<p><b>Cómo comprobarlo.</b> Contar los recursos de la página y multiplicarlos por los visitantes. Reunirlos en un solo archivo comprimido y volver a probar.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>El servidor responde 404 a todo</div>
+						<div class="problem-card__body">
+							<p>El firmware arranca bien y el servidor está en marcha, pero ninguna ruta estática funciona.</p>
+							<p><b>Por qué ocurre.</b> Se grabó el firmware pero no el sistema de archivos: son dos particiones y dos operaciones distintas.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir al arrancar cuántos archivos ve LittleFS. Si son cero, falta subir el sistema de archivos.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>El teléfono se desconecta al guardar</div>
+						<div class="problem-card__body">
+							<p>Durante el provisioning, el móvil pierde el punto de acceso justo al enviar las credenciales.</p>
+							<p><b>Por qué ocurre.</b> En modo combinado, al asociarse como estación el punto de acceso propio salta al canal de esa red y los clientes conectados pierden el enlace.</p>
+							<p><b>Cómo comprobarlo.</b> Confirmar la conexión antes de responder al formulario, o mostrar el resultado en la propia página antes de cambiar de modo.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>El dispositivo queda inaccesible tras configurarlo</div>
+						<div class="problem-card__body">
+							<p>Se guarda una contraseña equivocada y el equipo ya no ofrece el portal ni entra en la red.</p>
+							<p><b>Por qué ocurre.</b> Las credenciales se escribieron sin probarlas: con credenciales guardadas el dispositivo arranca en modo estación y el portal ya no aparece.</p>
+							<p><b>Cómo comprobarlo.</b> Probar la conexión antes de escribir en NVS. Mientras tanto, la salida es el restablecimiento por pulsación larga.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>El panel deja de responder tras un rato</div>
+						<div class="problem-card__body">
+							<p>Con el panel abierto un tiempo largo, las actualizaciones se detienen sin ningún error visible.</p>
+							<p><b>Por qué ocurre.</b> Las conexiones mantenidas de pestañas cerradas sin despedirse siguen ocupando socket hasta que vence el plazo de la pila.</p>
+							<p><b>Cómo comprobarlo.</b> Registrar el número de conexiones abiertas y cerrar las inactivas por plazo desde el propio firmware.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-codigo-39-producto-completo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Producto completo</span>
+				</a>
+				<a class="slide-nav__link" href="21-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

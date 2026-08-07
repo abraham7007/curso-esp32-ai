@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 27 · Adquisición y publicación desacopladas por una cola · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 27</span>
+					</div>
+
+					<h2 class="code-hour__title">Adquisición y publicación desacopladas por una cola</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> El sistema completo de la sesión: una tarea muestrea a <b>200 Hz</b> y encola, otra vacía la cola cada <b>2 s</b> y promedia, y una tercera publica el diagnóstico. Las tres comparten el puerto serie, así que aparecen a la vez cola, mutex y prioridades.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Una <b>cola</b> transporta datos entre tareas sin que ninguna espere a la otra: el productor deposita y sigue. <code>vTaskDelayUntil()</code> despierta en instantes fijos, no «N ms después de terminar», que es lo que va corriendo el periodo. Encolar <b>sin esperar</b> significa que si la cola está llena se descarta y se cuenta, en lugar de bloquear al productor.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Crea tres tareas. La de muestreo lee el GPIO 34 cada 5 ms con <code>vTaskDelayUntil()</code>, prioridad 3, núcleo 1, y encola la muestra con timestamp sin esperar si la cola está llena, contando los descartes. La de proceso, prioridad 2 y núcleo 1, vacía la cola cada 2 s y calcula media, mínimo y máximo. La de diagnóstico, prioridad 1 y núcleo 0, publica cada 5 s la ocupación de la cola, su máximo histórico y la pila libre mínima de las tres tareas. Todo acceso al puerto serie pasa por un mutex, y ninguna tarea lo retiene más de lo que dura su impresión. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la tarea de muestreo, con la rama del descarte cuando la cola está llena. Y un <b>diagrama de bloques</b> con las tres tareas, su núcleo y su prioridad, la cola que las une y el mutex que protege el puerto serie.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> como sensor. Un LED en el <b>GPIO 25</b> conmuta cada 100 muestras y otro en el <b>GPIO 26</b> se enciende mientras el consumidor procesa, ambos con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[TAREA] muestreo nucleo=1 prio=3 periodo=5 ms pila_min=2884
+[TAREA] proceso nucleo=1 prio=2 periodo=2000 ms pila_min=2210
+[TAREA] diagnost nucleo=0 prio=1 periodo=5000 ms pila_min=3012
+[COLA]  ocupacion=12/64  max=51  enviados=40000  descartados=0
+[PROC]  n=400  media=1.842 V  min=1.204 V  max=2.455 V
+[SERIE] mutex: espera_maxima=3 ms contenciones=42</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[COLA]</code>: ocupación 12 de 64, pero <b>máximo histórico 51</b>. La ocupación instantánea no dice nada; el máximo es lo que avisa de que la cola estuvo a punto de llenarse. Con <code>descartados=0</code> el reparto aguanta. Vigilar también la espera máxima del mutex del puerto serie: si creciera, alguna tarea lo estaría reteniendo más de lo que dura su impresión.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-mensajes-vs-memoria-compartida.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Mensajes o memoria compartida</span>
+				</a>
+				<a class="slide-nav__link" href="23-deadlock.html">
+					<span>Deadlock</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

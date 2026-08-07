@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "ejemplos/01-salida-digital"
+		},
+		{
+			"path": "ejemplos/02-entrada-digital"
+		},
+		{
+			"path": "ejemplos/03-entrada-analogica"
+		},
+		{
+			"path": "ejemplos/04-salida-pwm-ledc"
+		},
+		{
+			"path": "ejemplos/04b-salida-pwm-servo"
+		},
+		{
+			"path": "ejemplos/05-impacto-wifi-memoria"
+		},
+		{
+			"path": "ejemplos/06-clase-led"
+		},
+		{
+			"path": "ejemplos/07-clase-boton-antirrebote"
+		}
+	],
+	"settings": {}
+}

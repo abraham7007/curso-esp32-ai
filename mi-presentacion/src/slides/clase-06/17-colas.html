@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Colas: transferencia de mensajes por copia · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Colas: transferencia de mensajes por copia</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Una <b>cola</b> transfiere mensajes <b>por copia</b>: el dato se
+								duplica al enviarlo, de modo que emisor y receptor nunca tocan la
+								misma memoria y no hace falta protegerla.
+							</p>
+							<p>
+								La cola tiene capacidad fija. Enviar a una cola llena bloquea al
+								emisor; recibir de una vacía bloquea al receptor. Ese bloqueo es lo
+								que sincroniza a las dos tareas sin código adicional.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>xQueueCreate(largo, sizeof(Muestra))</code>,
+								<code>xQueueSend()</code> y <code>xQueueReceive()</code>, con un
+								plazo máximo de espera en cada una. Desde una rutina de
+								interrupción hay que usar la variante
+								<code>xQueueSendFromISR()</code>, cuya semántica es distinta.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Qué desacopla</span>
+							<p>
+								Un productor rápido y un consumidor lento. La cola absorbe las
+								ráfagas mientras su capacidad lo permita; superada esa capacidad,
+								hay que decidir <b>de forma explícita</b> qué se descarta, y esa
+								decisión pertenece al requisito.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram">
+							<div class="bd-node bd-node--ok"><span class="bd-node__title">Productor</span><span class="bd-node__body">Muestrea a 1 kHz. Copia cada muestra a la cola y sigue.</span></div>
+							<span class="bd-arrow" aria-hidden="true">→</span>
+							<div class="bd-node bd-node--ghost"><span class="bd-node__title">Cola · 64 elementos</span><span class="bd-node__meta">64 ms de margen a 1 kHz</span></div>
+							<span class="bd-arrow" aria-hidden="true">→</span>
+							<div class="bd-node bd-node--accent"><span class="bd-node__title">Consumidor</span><span class="bd-node__body">Publica por red cada 10 s. Vacía la cola en bloque.</span></div>
+						</div>
+
+						<div class="term">[COLA] capacidad=64  ocupacion_actual=3  ocupacion_maxima=61
+[COLA] enviados=10000  recibidos=10000  descartados=0
+[COLA] espera_maxima_productor=0 ms   espera_maxima_consumidor=998 ms</div>
+
+						<p class="figure__caption">
+							La ocupación máxima de 61 sobre 64 avisa de que el margen es escaso:
+							una ráfaga algo mayor empezaría a descartar muestras.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-codigo-26-condicion-carrera.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Condición de carrera</span>
+				</a>
+				<a class="slide-nav__link" href="18-mutex.html">
+					<span>Mutex e inversión de prioridad</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

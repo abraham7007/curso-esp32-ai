@@ -1,0 +1,678 @@
+/* Fullscreen slide layout. Each slide is one <main class="slide"> filling
+   the viewport; 100dvh (not 100vh) so mobile browser chrome doesn't clip it.
+   The outer frame never scrolls (keeps the "one screen, one slide" feel);
+   .slide__content scrolls internally on its own when content is denser than
+   one viewport (tables, glossaries, 8-card grids) instead of being silently
+   clipped by overflow:hidden. */
+
+.slide {
+	position: relative;
+	width: 100vw;
+	height: 100dvh;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	/* El relleno de .slide es la ZONA MUERTA reservada para el cromo fijo:
+	   arriba la barra de avance y los botones (inicio / tema / pantalla
+	   completa), abajo la franja de navegación anterior-siguiente. La lámina
+	   de contenido (.slide__content) se dibuja dentro de este marco y por eso
+	   nunca puede quedar por debajo de un botón ni tocarlo. */
+	/* Las reservas se calculan contra el cromo real, no a ojo:
+	     · arriba  16 px de separación + 36 px de botón = 52; se reservan 60
+	     · abajo    16 px de separación + 34 px de enlace = 50; se reservan 58
+	   Quedan 8 px de holgura a cada lado, suficientes para que el contenido
+	   nunca toque un botón, y se devuelven a la lámina los 14 px que sobraban
+	   de una reserva anterior fijada por aproximación. */
+	padding: 3.75rem var(--space-lg) 3.625rem;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	/* Firma del mazo: retícula tenue tipo pantalla de osciloscopio.
+	   El curso trata de señales y temporización — cada diapositiva se lee
+	   sobre una grilla de medición, no sobre un fondo liso genérico. */
+	background-image: radial-gradient(
+		color-mix(in oklab, var(--color-border) 70%, transparent) 1px,
+		transparent 1px
+	);
+	background-size: 28px 28px;
+}
+
+/* Marco del modo presentación (presentar.html). Ocupa el hueco entero y no
+   aporta ningún cromo propio: todo lo que se ve es la diapositiva de dentro. */
+.presenter {
+	margin: 0;
+	overflow: hidden;
+	background: var(--color-bg);
+}
+
+.presenter__frame {
+	display: block;
+	width: 100vw;
+	height: 100dvh;
+	border: 0;
+}
+
+.slide--start {
+	/* Top-anchored, texto alineado a la izquierda POR DENTRO del bloque —
+	   pero el bloque en sí sigue centrado horizontalmente en la pantalla
+	   (align-items se hereda de .slide: center). Fijarlo aquí a flex-start
+	   pegaba todo el contenido al borde izquierdo dejando un vacío enorme
+	   a la derecha en pantallas anchas: ese fue el bug reportado. */
+	text-align: left;
+}
+
+.slide--top {
+	justify-content: flex-start;
+}
+
+.slide__content {
+	width: 100%;
+	/* La lámina reclama SIEMPRE todo el alto libre, tenga poco contenido o
+	   mucho. Antes su alto lo fijaba el contenido, así que dos diapositivas
+	   seguidas dibujaban marcos de distinto tamaño y el mazo "saltaba" al
+	   avanzar. Ahora el marco es fijo y lo que varía es cómo se reparte por
+	   dentro. `safe center` evita el recorte clásico del centrado vertical
+	   cuando un contenedor con scroll desborda. */
+	flex: 1 1 auto;
+	justify-content: safe center;
+	/* Fluida: usa el ancho real disponible en vez de un tope fijo angosto.
+	   NOTA: esta regla vive en CSS "sin capa" (plain @import), así que en el
+	   orden de cascada de Tailwind v4 le gana a cualquier utilidad de ancho
+	   escrita en el HTML (max-w-[Nrem] etc.) — esas utilidades no tienen
+	   efecto real. Si una diapositiva necesita una columna más angosta
+	   (portada, resumen), usar la variante .slide__content--narrow. */
+	max-width: min(94vw, 84rem);
+	max-height: 100%;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+
+	/* LÁMINA FÍSICA. El contenido ya no flota sobre el fondo: se apoya como
+	   una hoja sobre la retícula. El relieve se construye con cuatro capas y
+	   ninguna de ellas es un degradado de color:
+	     1. filo interior claro arriba  → la luz cae desde arriba
+	     2. filo interior oscuro abajo  → el canto inferior queda en sombra
+	     3. sombra de contacto (2px)    → la hoja toca la superficie
+	     4. sombra de proyección        → separación real del fondo
+	   Es el mismo recurso de una carátula impresa sobre papel milimetrado.
+	   El relleno generoso es parte del efecto: el texto pegado al filo
+	   destruye la lectura de volumen. */
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-md) var(--space-lg);
+	box-shadow:
+		inset 0 1px 0 var(--stage-hi),
+		inset 0 -1px 0 var(--stage-lo),
+		0 2px 4px -1px hsl(var(--shadow-color) / 0.12),
+		0 18px 40px -20px hsl(var(--shadow-color) / 0.3);
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-border) transparent;
+	/* Reserva SIEMPRE el canal de la barra de desplazamiento, aparezca o no.
+	   Sin esta reserva la lámina era biestable: al rebasar por un píxel salía
+	   la barra, el contenido se estrechaba, una línea se partía en dos y el
+	   desbordamiento pasaba de 1 px a una línea entera; si entonces cabía, la
+	   barra desaparecía y volvía a empezar. De ahí que la comprobación diera
+	   exactamente 16 px —un renglón— en láminas distintas en cada pasada. */
+	scrollbar-gutter: stable;
+}
+
+/* El anclaje superior ya no lo aplica .slide (que ahora solo dibuja el marco)
+   sino el reparto interno de la lámina. Va DESPUÉS de la regla base: al ser
+   más específico, declararlo antes lo dejaba en orden descendente. */
+.slide--start > .slide__content {
+	justify-content: flex-start;
+}
+
+/* Filos del relieve. Se declaran aparte porque el tema oscuro invierte la
+   lógica: sobre superficie oscura la luz superior es un blanco muy tenue,
+   no el blanco puro que funcionaría en claro. */
+:root {
+	--stage-hi: #ffffff;
+	--stage-lo: color-mix(in oklab, var(--color-border) 80%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--stage-hi: color-mix(in oklab, #ffffff 7%, transparent);
+		--stage-lo: color-mix(in oklab, #000000 45%, transparent);
+	}
+}
+
+:root[data-theme="dark"] {
+	--stage-hi: color-mix(in oklab, #ffffff 7%, transparent);
+	--stage-lo: color-mix(in oklab, #000000 45%, transparent);
+}
+
+/* Bug real encontrado por captura: en un flex-column con overflow-y:auto,
+   los hijos con su propio overflow no-visible (ej. <pre class="term">,
+   .table-scroll) obtienen automatic minimum size 0 y el motor los ENCOGE
+   para caber en vez de dejar que este contenedor haga scroll — recortando
+   contenido en silencio sin mostrar ningún scrollbar. flex-shrink:0 fuerza
+   a cada hijo directo a mantener su alto natural; el que sobra lo absorbe
+   el scroll de .slide__content, no el contenido de cada hijo. */
+.slide__content > * {
+	flex-shrink: 0;
+}
+
+/* Un bloque marcado así reclama el alto sobrante de la diapositiva, en vez
+   de dejar un hueco muerto debajo. Útil cuando la lámina la ocupa un solo
+   elemento grande (La hora del código, una tabla, un diagrama). */
+.slide__content > .is-stretch {
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+/* La otra mitad del problema. `is-stretch` sirve cuando hay UN bloque que
+   puede crecer; no sirve cuando la lámina son tres o cuatro bloques de texto
+   apilados, porque estirar un párrafo solo le infla el relleno. Ahí lo que
+   sobra hay que repartirlo ENTRE los bloques.
+
+   Se aplica a cualquier contenedor flex en columna, no solo a la lámina: en
+   los splits estirados hace falta en la columna de texto, que es donde queda
+   el vacío cuando la columna visual no puede crecer.
+
+   El encabezado queda excluido a propósito: separar la insignia de su título,
+   o el título de su entradilla, rompe la cohesión de la cabecera y se lee
+   peor que el hueco que se estaba corrigiendo. Se comprobó por captura.
+
+   Dos propiedades hacen esto seguro:
+     · un margen `auto` solo consume espacio libre POSITIVO, así que en una
+       lámina llena vale cero y la regla no hace nada — no puede provocar
+       desbordamiento;
+     · con dos hijos todo el sobrante se va a una sola separación, que se lee
+       peor que el hueco original (medido: 312 → 330 px). Por eso la clase se
+       pone donde la medición dice que mejora, no por norma; la decide
+       `tools/proponer-stretch.mjs`. */
+.is-spread > * + *:not(.slide__title):not(.slide__lede) {
+	margin-top: auto;
+}
+
+/* Estirar el contenedor no basta: su contenido no hereda ese alto. Una tabla
+   o una rejilla dentro de un bloque estirado conservan su alto natural, se
+   quedan pegadas arriba y el hueco no desaparece — se muda del pie al centro,
+   que se ve peor. Estas reglas hacen que la holgura se reparta DENTRO: entre
+   las filas de la tabla y entre las filas de la rejilla. */
+.slide__content > .is-stretch .table-scroll,
+.slide__content > .is-stretch .table-scroll > table {
+	height: 100%;
+}
+
+/* Con la tabla a alto completo las filas crecen, pero el texto se queda en el
+   borde superior de cada celda y la fila parece medio vacía. Centrado, la
+   altura repartida se lee como aire y no como sobrante. */
+.slide__content > .is-stretch .table-scroll > table td,
+.slide__content > .is-stretch .table-scroll > table th {
+	vertical-align: middle;
+}
+
+.slide__content > .is-stretch.grid {
+	grid-auto-rows: minmax(min-content, 1fr);
+}
+
+/* Las dos composiciones de rejilla declaran `align-items: start` (.layout) y
+   `align-items: center` (.slide__split) porque es lo correcto cuando el
+   bloque NO está estirado. Estirado, ambas dejan sus columnas al alto natural
+   y el vacío se muda al interior del bloque: medido, .slide__split pasaba de
+   306 a 636 px de alto mientras sus dos columnas seguían en 306 y 272. */
+.slide__content > .is-stretch.layout,
+.slide__content > .is-stretch.slide__split {
+	align-items: stretch;
+}
+
+/* Tarjetas dentro de una rejilla estirada: su cuerpo toma el alto sobrante en
+   vez de dejarlo por debajo del borde inferior de la tarjeta.
+
+   Lo que NO se hace: centrar el texto dentro del cuerpo. Se probó y salió
+   peor: tres renglones en el medio de una tarjeta de 460 px dejan una franja
+   vacía ARRIBA y otra ABAJO, dos defectos donde había uno. Una tarjeta que
+   crece mucho más que su contenido no es un problema de reparto interno —es
+   que no debía crecer, y eso lo decide `tools/proponer-stretch.mjs` eligiendo
+   otra variante. */
+.slide__content > .is-stretch.layout > .problem-card,
+.slide__content > .is-stretch.layout > .usecase,
+.slide__content > .is-stretch.layout > .compare__side {
+	display: flex;
+	flex-direction: column;
+}
+
+.slide__content > .is-stretch.layout > .problem-card > .problem-card__body {
+	flex: 1 1 auto;
+}
+
+/* Último eslabón del reparto: si la caja estirada es más alta que su propio
+   contenido —un árbol de nueve renglones dentro de una tarjeta de 486 px—,
+   el contenido se centra. Pegado arriba, el sobrante vuelve a juntarse en un
+   solo hueco, que es justo lo que se quería evitar. */
+.slide__content > .is-stretch .file-tree,
+.slide__content > .is-stretch .detail-panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.slide__content--narrow {
+	max-width: min(92vw, 56rem);
+}
+
+/* Sin lámina: la diapositiva la ocupa un único bloque que YA trae su propio
+   marco (La hora del código, una tabla a pantalla completa). Dibujar la
+   lámina detrás produciría dos marcos concéntricos, que es ruido y además
+   roba el alto del doble relleno. El bloque de dentro asume el relieve. */
+.slide__content--flush {
+	background: none;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+/* CRECE hasta llenar la lámina, pero NUNCA se encoge por debajo de su
+   contenido (`1 0 auto`, no `1 1 auto`). Con shrink activo, el bloque se
+   comprimía para caber y su rejilla interior desbordaba en silencio: el
+   cierre se pintaba encima de las últimas líneas del prompt y el texto
+   desaparecía sin que ningún contenedor acusara desbordamiento. Ahora, si
+   de verdad no cabe, lo acusa .slide__content y la comprobación lo ve. */
+.slide__content--flush > * {
+	flex: 1 0 auto;
+}
+
+/* Layout de dos columnas para diapositivas de concepto: el texto (definición/
+   ejemplo/en la práctica) vive en una columna angosta a la izquierda, y el
+   diagrama o simulación —lo más característico de la diapositiva— ocupa la
+   columna ancha, como protagonista visual en vez de quedar al final de una
+   pila de texto. Preferir esto sobre apilar todo verticalmente siempre que
+   la diapositiva tenga un elemento visual/interactivo real que mostrar. */
+.slide__split {
+	display: grid;
+	grid-template-columns: minmax(15rem, 32%) 1fr;
+	gap: var(--space-lg);
+	/* centrar, no "start": si la columna visual es más corta que el texto,
+	   queda centrada en el alto disponible en vez de pegada arriba con un
+	   vacío debajo — eso fue el desbalance reportado. */
+	align-items: center;
+	width: 100%;
+}
+
+.slide__split-text {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	min-width: 0;
+}
+
+.slide__split-visual {
+	min-width: 0;
+}
+
+/* Variante de la regla de arriba para un split estirado. Vive aquí, y no junto
+   al resto del reparto de `is-stretch`, porque debe ir DESPUÉS de la regla base
+   que cualifica: escrita antes, queda en orden descendente de especificidad y
+   Biome lo rechaza con razón — el orden del archivo dejaría de reflejar quién
+   gana.
+
+   La columna visual de un split no siempre puede crecer. Una tabla sí, pero un
+   panel de simulación o una figura de proporción fija tienen su alto fijado por
+   otra cosa. Centrarla reparte el sobrante en dos mitades, que se leen como
+   aire; dejarla arriba lo junta todo al pie, que es el defecto que se está
+   corrigiendo.
+
+   La columna de TEXTO no se centra a propósito: centrada se despega del título
+   y la lámina pierde el hilo de lectura. Queda anclada arriba, que es el
+   reparto por omisión de un contenedor flex en columna. */
+.slide__content > .is-stretch.slide__split > .slide__split-visual {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+@media (max-width: 56rem) {
+	.slide__split {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ============================================================
+   SISTEMA DE COMPOSICIÓN — elegir el reparto según el contenido
+   ============================================================
+   Cada diapositiva declara explícitamente cómo reparte su espacio, en vez
+   de apilarlo todo en una columna. Se elige por lo que hay que mostrar:
+
+     .layout--split      texto conciso | visual protagonista   (32 / 68)
+     .layout--split-even dos bloques de peso equivalente        (50 / 50)
+     .layout--wide-left  visual ancho | apuntes al lado         (68 / 32)
+     .layout--thirds     tres columnas de igual peso
+     .layout--focus      visual a todo el ancho, con texto arriba y/o abajo
+     .layout--code-pair  dos bloques de código enfrentados, texto arriba/abajo
+
+   Todos colapsan a una columna por debajo de 56rem. */
+
+.layout {
+	display: grid;
+	gap: var(--space-md);
+	width: 100%;
+	align-items: start;
+	min-width: 0;
+}
+
+.layout--split {
+	grid-template-columns: minmax(14rem, 32%) 1fr;
+	align-items: center;
+}
+
+.layout--split-even {
+	grid-template-columns: 1fr 1fr;
+}
+
+.layout--wide-left {
+	grid-template-columns: 1fr minmax(14rem, 32%);
+	align-items: center;
+}
+
+.layout--thirds {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Visual a todo el ancho con texto encima y/o debajo: una sola columna,
+   pero declarada como composición para que la intención quede escrita. */
+.layout--focus {
+	grid-template-columns: 1fr;
+	gap: var(--space-sm);
+}
+
+.layout--code-pair {
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-sm);
+}
+
+/* Columna de texto dentro de cualquier composición: apila sus bloques con
+   el mismo ritmo vertical y no desborda su celda. */
+.layout__text {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	min-width: 0;
+}
+
+/* Columna de visual: solo protege del desbordamiento; el elemento decide
+   su propia proporción (canvas con aspect-[3/1], tabla, diagrama...). */
+.layout__visual {
+	min-width: 0;
+}
+
+/* Un elemento que debe ocupar todas las columnas de la composición
+   (un pie descriptivo bajo dos columnas, una conclusión que cierra). */
+.layout__full {
+	grid-column: 1 / -1;
+	min-width: 0;
+}
+
+@media (max-width: 56rem) {
+	.layout--split,
+	.layout--split-even,
+	.layout--wide-left,
+	.layout--thirds,
+	.layout--code-pair {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Scrollbar propia, discreta, para el caso (raro tras el ajuste de arriba)
+   en que una diapositiva sigue sin caber entera: nunca el scrollbar ancho
+   por defecto del navegador. Las propiedades estándar viven en la regla
+   principal de .slide__content, arriba: repetir aquí el mismo selector con
+   menos especificidad que .slide--start > .slide__content dejaba una
+   declaración descendente que el linter marca con razón. */
+.slide__content::-webkit-scrollbar {
+	width: 6px;
+}
+
+.slide__content::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.slide__content::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   JERARQUÍA — cuatro roles, cada uno con tamaño, color y familia propios
+   ============================================================
+   El salto de tamaño por sí solo no basta a distancia de proyector: dos
+   niveles seguidos con el mismo color se leen como un solo bloque. Aquí
+   cada rol cambia al menos dos de los tres ejes respecto del anterior.
+
+     ROL         TAMAÑO         COLOR              FAMILIA
+     ---------------------------------------------------------------
+     eyebrow     micro          rojo institucional mono, versalitas
+     título      xl             heading (casi negro) mono, 600
+     entradilla  lede           muted              sans, 400
+     h3/h4       h3             azul institucional mono, versalitas
+     cuerpo      body           text               sans
+     apoyo       small          muted              sans
+*/
+
+.slide__eyebrow {
+	font-family: var(--font-mono);
+	font-size: var(--fs-eyebrow);
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-accent);
+}
+
+.slide__title {
+	font-family: var(--font-display);
+	font-weight: 600;
+	font-size: var(--fs-title);
+	line-height: 1.05;
+	/* el monoespaciado ya trae su propio ritmo de avance; el tracking
+	   negativo pensado para una sans grotesca lo aprieta hasta chocar */
+	letter-spacing: -0.01em;
+	color: var(--color-heading);
+	margin: 0;
+}
+
+/* Variante para la mayoría de las láminas de concepto: el título convive con
+   contenido denso y no debe comerse un tercio del alto. */
+.slide__title--sm {
+	font-size: var(--fs-title-sm);
+}
+
+/* Entradilla: la frase que enmarca la lámina. Sans (cambia de familia
+   respecto del título mono), tamaño claramente por encima del cuerpo, y
+   color apagado para que no compita con el título. */
+.slide__subtitle,
+.slide__lede {
+	font-family: var(--font-sans);
+	font-size: var(--fs-lede);
+	font-weight: 400;
+	line-height: 1.5;
+	color: var(--color-text-muted);
+	max-width: 58rem;
+	margin: 0;
+}
+
+/* La primera palabra o dos de la entradilla en tinta plena: ancla la vista
+   al principio de la frase sin recurrir a una negrita completa. */
+.slide__lede strong {
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+/* Encabezado de sección dentro de la lámina. Mono + azul institucional: no
+   se confunde ni con el título (mono pero negro y enorme) ni con el cuerpo
+   (sans). */
+.slide__content h3 {
+	font-family: var(--font-display);
+	font-size: var(--fs-h3);
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--color-navy);
+	margin: 0;
+}
+
+/* Cuerpo por defecto de cualquier lámina. Fijarlo aquí evita que cada
+   diapositiva improvise su tamaño con utilidades sueltas. */
+.slide__content p,
+.slide__content li {
+	font-size: var(--fs-body);
+	line-height: 1.55;
+}
+
+.slide__content .text-sm,
+.slide__content small {
+	font-size: var(--fs-small);
+}
+
+.slide__number {
+	position: absolute;
+	right: var(--space-md);
+	bottom: var(--space-md);
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	color: var(--color-text-muted);
+}
+
+/* Navegación anterior/siguiente entre diapositivas: par de enlaces fijos en
+   las esquinas inferiores, con fondo propio (no solo texto) para que se lean
+   con contraste suficiente sobre cualquier contenido. Omitir el lado que no
+   aplique (portada, cierre). La franja inferior de .slide (padding-bottom de
+   arriba) está reservada para esto: el contenido nunca la alcanza. */
+.slide-nav {
+	position: absolute;
+	left: var(--space-md);
+	right: var(--space-md);
+	bottom: var(--space-sm);
+	z-index: 20;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	pointer-events: none;
+}
+
+.slide-nav > * {
+	pointer-events: auto;
+}
+
+.slide-nav__link {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2xs);
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: var(--color-text);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	text-decoration: none;
+	padding: var(--space-2xs) var(--space-sm);
+	border-radius: var(--radius-full);
+	box-shadow: var(--shadow-sm);
+	transition:
+		color 0.12s ease,
+		border-color 0.12s ease,
+		transform 0.12s ease;
+}
+
+.slide-nav__link:hover {
+	color: var(--color-accent);
+	border-color: var(--color-accent);
+	transform: translateY(-1px);
+}
+
+.slide-nav__link .icon {
+	color: var(--color-accent);
+}
+
+/* Barra de avance de la sesión, en el borde superior. Inyectada por deck.js
+   a partir del número de la diapositiva y de data-deck-total en <body>. */
+.deck-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	z-index: 40;
+	background: color-mix(in oklab, var(--color-border) 55%, transparent);
+}
+
+.deck-progress__fill {
+	height: 100%;
+	width: var(--p, 0%);
+	background: var(--color-accent);
+	transition: width 0.3s ease;
+}
+
+.deck-progress__count {
+	position: fixed;
+	top: calc(var(--space-sm) + 0.15rem);
+	left: var(--space-sm);
+	z-index: 40;
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	letter-spacing: 0.06em;
+	color: var(--color-text-muted);
+	pointer-events: none;
+}
+
+/* Controles fijos de la diapositiva: inicio, tema y pantalla completa.
+   Inyectados por deck.js en la esquina superior derecha. */
+.deck-controls {
+	position: fixed;
+	top: var(--space-sm);
+	right: var(--space-sm);
+	z-index: 30;
+	display: flex;
+	gap: var(--space-2xs);
+}
+
+.deck-controls__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: var(--radius-full);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	color: var(--color-text);
+	text-decoration: none;
+	box-shadow: var(--shadow-sm);
+	cursor: pointer;
+	transition:
+		color 0.12s ease,
+		border-color 0.12s ease,
+		transform 0.12s ease;
+}
+
+.deck-controls__btn:hover {
+	color: var(--color-accent);
+	border-color: var(--color-accent);
+	transform: translateY(-1px);
+}
+
+.deck-controls__btn .icon {
+	width: 1.15rem;
+	height: 1.15rem;
+}
+
+@media (max-width: 768px) {
+	.slide {
+		padding: var(--space-md) var(--space-md);
+		padding-bottom: calc(var(--space-md) + 3rem);
+	}
+
+	.slide-nav {
+		left: var(--space-sm);
+		right: var(--space-sm);
+	}
+
+	.slide-nav__link span {
+		display: none;
+	}
+}

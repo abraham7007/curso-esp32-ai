@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Instante de la medida y timestamp · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					05 · Temporizadores y base de tiempo
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Instante de la medida y timestamp
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								El <b>timestamp</b> (timestamp) es el instante en que se tomó
+								la medida, transportado junto a ella. Sin esa referencia no se
+								puede saber si un dato es reciente, ni calcular una velocidad de
+								cambio, ni ordenar medidas procedentes de varias fuentes.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg
+								class="icon icon--lg text-[var(--color-warn)]"
+								aria-hidden="true"
+							><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="m-0">
+								Un dato sin timestamp no permite distinguir un sensor que
+								dejó de responder de uno que mide una magnitud constante: en los
+								dos casos la aplicación recibe el mismo número una vez tras otra.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Al principio basta con <code>millis()</code>, el tiempo
+								transcurrido desde el arranque: no es una fecha, pero permite
+								calcular intervalos, ordenar medidas y detectar datos obsoletos.
+								La fecha real llega en la Sesión 10 con la sincronización por red.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>lib/Sensor/Medida.h · el dato que la aplicación recibe</span>
+								<span class="codepanel__tag">Comparación</span>
+							</div>
+							<pre><span class="hl hl--hit">float temperatura;   // 23,4 — ¿de qué instante? ¿es válido?</span>
+
+struct Medida {
+  float    valor;    // magnitud ya convertida a unidades de ingeniería
+  <span class="hl hl--add">uint32_t ms;       // millis() del instante de lectura</span>
+  uint8_t  estado;   // OK | FUERA_DE_RANGO | SIN_RESPUESTA
+};
+
+// en el bucle: el dato caduca aunque el sensor siga respondiendo
+Medida m = sensor.read();
+<span class="hl hl--add">if (millis() - m.ms > INTERVALO_MAXIMO_MS) {</span>
+  m.estado = OBSOLETO;
+}</pre>
+							<div class="codepanel__footer">
+								La estructura viaja completa: <b>valor</b>, <b>instante</b> y
+								<b>estado</b>. La aplicación decide con las tres cosas, no con un
+								número suelto.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="22-codigo-18-muestreo-temporizador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Muestreo por temporizador</span>
+				</a>
+				<a class="slide-nav__link" href="24-presupuesto-bucle.html">
+					<span>Presupuesto temporal del bucle</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

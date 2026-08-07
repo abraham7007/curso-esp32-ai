@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Coste en memoria de las conexiones simultáneas · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Coste en memoria de las conexiones simultáneas</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué se está contando
+							</div>
+							<p>
+								Cada visitante abre una conexión por <b>recurso</b> de la página.
+								Cada conexión reserva memoria mientras dura, y con cifrado del
+								transporte esa reserva se multiplica.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Con la interfaz repartida en cinco archivos, tres visitantes
+								simultáneos agotan el límite de sockets antes que la memoria. Reunir
+								esos cinco en uno solo divide por cinco las conexiones sin cambiar
+								ni un byte del contenido, y es la razón de comprimir e incorporar
+								los recursos en un único archivo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="con-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Barras apiladas de conexiones abiertas por visitante frente al límite de sockets del dispositivo, y memoria reservada frente a la disponible"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="con-vis" class="text-sm font-medium">Visitantes simultáneos</label>
+								<input type="range" id="con-vis" min="1" max="6" step="1" value="2" />
+								<span class="readout" id="con-vis-lec">2</span>
+							</div>
+							<div class="controls mt-2">
+								<label for="con-rec" class="text-sm font-medium">Archivos de la interfaz</label>
+								<input type="range" id="con-rec" min="1" max="6" step="1" value="5" />
+								<span class="readout" id="con-rec-lec">5</span>
+							</div>
+							<div class="controls mt-2">
+								<label class="flex items-center gap-2 text-sm">
+									<input type="checkbox" id="con-tls" class="accent-[var(--color-accent)]" />
+									cifrado del transporte
+								</label>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item" id="con-item-soc">
+									<span class="text-xs text-[var(--color-text-muted)]">Conexiones pedidas</span>
+									<span class="readout" id="con-soc">10 de 8</span>
+								</div>
+								<div class="metric__item" id="con-item-mem">
+									<span class="text-xs text-[var(--color-text-muted)]">Memoria reservada</span>
+									<span class="readout" id="con-mem">44 kB</span>
+								</div>
+								<div class="metric__item" id="con-item-res">
+									<span class="text-xs text-[var(--color-text-muted)]">Resultado</span>
+									<span class="readout" id="con-res">se sirve</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-servidor-sincrono-asincrono.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>Servidor síncrono o asíncrono</span>
+				</a>
+				<a class="slide-nav__link" href="06-codigo-36-panel-servido.html">
+					<span>La hora del código · Panel servido</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Cifras del orden de las que se miden en el dispositivo: el límite de
+			// sockets simultáneos de la pila y lo que reserva cada conexión, con y
+			// sin cifrado del transporte.
+			const LIMITE_SOCKETS = 8;
+			const KB_POR_CONEXION = 4.4;
+			const KB_POR_CONEXION_TLS = 26.0;
+			const KB_LIBRES = 195;
+
+			const lienzo = document.getElementById("con-canvas");
+			const ctx = lienzo.getContext("2d");
+			const dVis = document.getElementById("con-vis");
+			const dRec = document.getElementById("con-rec");
+			const cTls = document.getElementById("con-tls");
+			const lecVis = document.getElementById("con-vis-lec");
+			const lecRec = document.getElementById("con-rec-lec");
+			const salSoc = document.getElementById("con-soc");
+			const salMem = document.getElementById("con-mem");
+			const salRes = document.getElementById("con-res");
+			const itSoc = document.getElementById("con-item-soc");
+			const itMem = document.getElementById("con-item-mem");
+			const itRes = document.getElementById("con-item-res");
+
+			function variable(n) {
+				return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+			}
+			function coma(n, d) {
+				return n.toFixed(d).replace(".", ",");
+			}
+
+			function dibujar(vis, rec, tls) {
+				const pedidas = vis * rec;
+				const servidas = Math.min(pedidas, LIMITE_SOCKETS);
+				const kb = servidas * (tls ? KB_POR_CONEXION_TLS : KB_POR_CONEXION);
+
+				const w = lienzo.width;
+				ctx.clearRect(0, 0, w, lienzo.height);
+				const izq = 150;
+				const ancho = w - izq - 40;
+				const atenuado = variable("--color-text-muted");
+				const texto = variable("--color-text");
+				const borde = variable("--color-border");
+				const ok = variable("--color-ok");
+				const acento = variable("--color-accent");
+				const navy = variable("--color-navy");
+
+				// Fila 1: conexiones, una casilla por socket del límite
+				const y1 = 86;
+				const cw = ancho / LIMITE_SOCKETS;
+				for (let i = 0; i < LIMITE_SOCKETS; i++) {
+					const x = izq + i * cw;
+					ctx.fillStyle = i < servidas ? ok : variable("--color-surface");
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = 1.2;
+					ctx.beginPath();
+					ctx.roundRect(x + 3, y1, cw - 6, 46, 5);
+					ctx.fill();
+					ctx.stroke();
+				}
+				// Las que no caben, dibujadas fuera del límite
+				const sobran = pedidas - servidas;
+				if (sobran > 0) {
+					ctx.fillStyle = acento;
+					ctx.font = "600 13px system-ui";
+					ctx.textAlign = "left";
+					ctx.fillText(`+${sobran} rechazadas`, izq + ancho + 6, y1 + 28);
+				}
+				ctx.fillStyle = texto;
+				ctx.font = "600 13px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("Conexiones", izq - 14, y1 + 22);
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px ui-monospace, monospace";
+				ctx.fillText(`límite ${LIMITE_SOCKETS}`, izq - 14, y1 + 38);
+
+				// Fila 2: memoria reservada sobre la disponible
+				const y2 = 190;
+				const frac = Math.min(1, kb / KB_LIBRES);
+				ctx.fillStyle = variable("--color-surface");
+				ctx.strokeStyle = borde;
+				ctx.beginPath();
+				ctx.roundRect(izq, y2, ancho, 46, 6);
+				ctx.fill();
+				ctx.stroke();
+				ctx.fillStyle = frac > 0.75 ? acento : navy;
+				ctx.beginPath();
+				ctx.roundRect(izq, y2, Math.max(4, ancho * frac), 46, 6);
+				ctx.fill();
+				ctx.fillStyle = texto;
+				ctx.font = "600 13px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("Memoria", izq - 14, y2 + 22);
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px ui-monospace, monospace";
+				ctx.fillText(`${KB_LIBRES} kB libres`, izq - 14, y2 + 38);
+
+				ctx.textAlign = "left";
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px system-ui";
+				ctx.fillText(
+					`${vis} visitantes × ${rec} archivos = ${pedidas} conexiones` +
+						(tls ? " · con cifrado del transporte" : ""),
+					izq,
+					50,
+				);
+				ctx.fillText(`${coma(kb, 1)} kB reservados`, izq, y2 + 68);
+
+				return { pedidas, servidas, kb };
+			}
+
+			function actualizar() {
+				const vis = Number(dVis.value);
+				const rec = Number(dRec.value);
+				const tls = cTls.checked;
+				lecVis.textContent = String(vis);
+				lecRec.textContent = String(rec);
+
+				const { pedidas, servidas, kb } = dibujar(vis, rec, tls);
+				salSoc.textContent = `${pedidas} de ${LIMITE_SOCKETS}`;
+				salMem.textContent = `${coma(kb, 1)} kB`;
+
+				const faltanSockets = pedidas > LIMITE_SOCKETS;
+				const faltaMemoria = kb > KB_LIBRES;
+				salRes.textContent = faltaMemoria
+					? "sin memoria"
+					: faltanSockets
+						? "página a medias"
+						: "se sirve";
+
+				itSoc.classList.toggle("metric__item--bad", faltanSockets);
+				itSoc.classList.toggle("metric__item--ok", !faltanSockets);
+				itMem.classList.toggle("metric__item--bad", faltaMemoria);
+				itMem.classList.toggle("metric__item--ok", !faltaMemoria);
+				itRes.classList.toggle("metric__item--bad", faltanSockets || faltaMemoria);
+				itRes.classList.toggle("metric__item--ok", !faltanSockets && !faltaMemoria);
+			}
+
+			for (const el of [dVis, dRec, cTls]) el.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Recorrido de un dato y recorrido inverso de un comando · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					02 · Plataformas y arquitectura de sistema
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Recorrido de un dato y recorrido inverso de un comando</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Dispositivo</span>
+								<span class="bd-node__body">Adquiere, valida, agrega y publica. Guarda en local si no hay enlace.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓ telemetría</span>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Broker o plataforma</span>
+								<span class="bd-node__body">Reparte, autentica y controla el acceso por rama del árbol.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Almacenamiento y visualización</span>
+								<span class="bd-node__body">Serie temporal, paneles y reglas de alerta.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↕ comandos, en sentido inverso</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">Usuario</span>
+								<span class="bd-node__body">Consulta el estado y emite órdenes, que recorren el mismo camino al revés.</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="compare">
+							<div class="compare__panel">
+								<h3>Telemetría</h3>
+								<p>
+									Muchos mensajes, pequeños y periódicos. Perder uno es tolerable
+									porque el siguiente llega pronto.
+								</p>
+								<p class="text-[length:var(--fs-small)]">
+									QoS 0 o 1 · sentido dispositivo → sistema
+								</p>
+							</div>
+							<div class="compare__panel">
+								<h3>Comandos</h3>
+								<p>
+									Pocos mensajes, esporádicos y con efecto físico. Perder uno deja
+									al usuario sin saber si su orden se ejecutó.
+								</p>
+								<p class="text-[length:var(--fs-small)]">
+									QoS 1 con confirmación · sentido sistema → dispositivo
+								</p>
+							</div>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Idempotencia y confirmación</span>
+							<p>
+								Un comando es <b>idempotente</b> si ejecutarlo dos veces produce el
+								mismo resultado que una: <code>led=on</code> lo es,
+								<code>alternar led</code> no. Con comandos idempotentes, QoS 1 basta
+								pese a admitir duplicados. Además, el dispositivo <b>confirma</b>
+								publicando su nuevo estado, con lo que el panel refleja lo ocurrido
+								y no lo solicitado.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-paper-plataformas-nube.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Plataformas de nube</span>
+				</a>
+				<a class="slide-nav__link" href="17-politica-transmision.html">
+					<span>Política de transmisión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

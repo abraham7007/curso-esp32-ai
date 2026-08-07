@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 9 · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>Servidor embebido</div>
+						<p>
+							Como servidor, el dispositivo no decide cuántas conexiones recibe.
+							Reducir el número de archivos de la interfaz vale más que reducir su
+							tamaño: cada archivo cuesta un socket.
+						</p>
+						<p>
+							La interfaz vive en el sistema de archivos, no en el binario, y sin
+							ninguna dependencia externa: durante el provisioning no hay
+							internet.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Producto</div>
+						<p>
+							Las credenciales se <b>prueban antes de guardarse</b>. Sin esa
+							comprobación, un error de tecleo deja el equipo sin portal al que
+							volver.
+						</p>
+						<p>
+							Un solo origen de identidad, la dirección de fabricación, da nombre
+							de red, nombre local, identificador de cliente y número de serie sin
+							provisionar nada.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a las sesiones siguientes</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+						<span>
+							<span class="usecase__name">NVS y sistema de archivos</span>
+							<span class="usecase__what">
+								Aquí se han usado por primera vez; la sesión 10 los trata con su
+								tabla de particiones y su desgaste.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span>
+							<span class="usecase__name">El reset reason</span>
+							<span class="usecase__what">
+								Cuesta una línea y es el primer dato de diagnóstico. La sesión 10 la
+								hace obligatoria.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+						<span>
+							<span class="usecase__name">La API como interfaz para un agente</span>
+							<span class="usecase__what">
+								Los puntos de acceso publicados aquí son lo que un agente consume en
+								la sesión 11.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="23-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Modos de operación, canales y potencia recibida · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Modos de operación, canales y potencia recibida</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Modos de operación
+							</div>
+							<p>
+								<b>Estación</b> (<code>WIFI_STA</code>): se une a una red
+								existente. <b>Punto de acceso</b> (<code>WIFI_AP</code>): crea su
+								propia red. <b>Combinado</b> (<code>WIFI_AP_STA</code>): ambas a la
+								vez, con la salvedad de que comparten una sola radio y un solo
+								canal.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								Exploración de redes
+							</div>
+							<p>
+								<code>WiFi.scanNetworks()</code> devuelve cuántas encontró;
+								<code>WiFi.SSID(i)</code>, <code>WiFi.RSSI(i)</code> y
+								<code>WiFi.channel(i)</code> describen cada una. La exploración
+								bloquea la radio unos <b>2 s</b>, de modo que no se ejecuta dentro
+								de una tarea con requisito temporal.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Banda de 2,4 GHz y canales</span>
+							<p>
+								El ESP32 clásico opera solo en 2,4 GHz. De los 13 canales, solo
+								<b>1, 6 y 11</b> no se solapan entre sí. Un punto de acceso en el
+								canal 3 interfiere con los del 1 y del 6 a la vez, y esa es una
+								causa habitual de enlace inestable en entornos con muchas redes.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead>
+									<tr><th>RSSI</th><th>Calidad</th><th>Comportamiento esperable</th></tr>
+								</thead>
+								<tbody>
+									<tr><td><b>−30 a −55</b></td><td>Excelente</td><td>Sin retransmisiones apreciables</td></tr>
+									<tr><td><b>−56 a −70</b></td><td>Suficiente</td><td>Operación normal</td></tr>
+									<tr><td><b>−71 a −80</b></td><td>Marginal</td><td>Sube el consumo y la latencia</td></tr>
+									<tr><td><b>bajo −80</b></td><td>Insuficiente</td><td>El enlace se pierde y se recupera</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="figure">
+							<div class="figure__frame" data-figure="canales-wifi"></div>
+							<p class="figure__caption">
+								Un punto de acceso en el canal 3 interfiere a la vez con el 1 y con
+								el 6. Es una causa habitual de enlace inestable con RSSI aceptable.
+							</p>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-tcp-vs-udp.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					<span>TCP y UDP</span>
+				</a>
+				<a class="slide-nav__link" href="09-codigo-28-conexion-reintentos.html">
+					<span>La hora del código · Conexión con reintentos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dónde se guarda cada dato y cuánto aguanta la Flash · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Memoria, persistencia y tiempo
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Dónde se guarda cada dato y cuánto aguanta la Flash</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Pares clave-valor</h3>
+						<p>
+							Para datos pequeños, pocos y de escritura ocasional: credenciales,
+							calibración, contador de arranques. Se leen y escriben por nombre.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<code>Preferences</code> sobre la partición <code>nvs</code>.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Sistema de archivos</h3>
+						<p>
+							Para datos grandes o secuenciales: la interfaz web, un registro
+							histórico, un modelo. Se manejan como archivos.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>LittleFS</b>, que sustituye a SPIFFS: tolera el corte de
+							alimentación a mitad de escritura y reparte el desgaste.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Desgaste de la memoria Flash
+							</div>
+							<p>
+								Cada sector admite un número finito de ciclos de borrado, del orden
+								de <b>10 000 a 100 000</b>. Un registro que escriba cada segundo en
+								el mismo sector lo agota en <b>menos de un día</b>.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="conclusion">
+							<span class="conclusion__label">Cómo se diseña para la vida útil</span>
+							<p>
+								Se calcula al revés: si el equipo debe durar <b>diez años</b> y el
+								sector aguanta 100 000 ciclos, el límite es <b>una escritura cada
+								53 minutos</b> sobre ese sector. Acumular en memoria y escribir por
+								bloques, o repartir el desgaste entre sectores, es lo que hace que
+								esa cuenta salga.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								La interfaz de <code>EEPROM</code> del ESP32 <b>no existe como
+								hardware</b>: es una emulación sobre Flash. Cada escritura reescribe
+								un sector entero, aunque solo cambie un byte, y por eso el desgaste
+								es mucho mayor de lo que su nombre sugiere.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-tabla-particiones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					<span>Tabla de particiones</span>
+				</a>
+				<a class="slide-nav__link" href="04-memoria-en-ejecucion.html">
+					<span>Memoria en ejecución</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

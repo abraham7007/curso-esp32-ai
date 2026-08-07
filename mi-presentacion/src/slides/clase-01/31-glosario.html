@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Terminología de la sesión · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					08 · Cierre de sesión
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Terminología de la sesión
+				</h1>
+
+				<p
+					class="text-base text-[var(--color-text-muted)] max-w-[48rem]"
+					data-animate="fade-up"
+				>
+					Cada término con el nombre que recibe en la hoja de datos y en la
+					documentación de Espressif. Varios se emplean en inglés también en
+					español técnico: traducirlos los vuelve irreconocibles frente a la
+					documentación y frente a cualquier otro ingeniero.
+				</p>
+
+				<div
+					class="w-full text-left grid grid-cols-1 sm:grid-cols-2 gap-2 items-start"
+					data-animate="fade-up"
+				>
+					<details class="glossary-item">
+						<summary>
+							SoC
+							<span class="glossary-item__alt">System on a Chip</span>
+						</summary>
+						<p class="glossary-item__body">
+							Circuito integrado que reúne unidad de proceso, memoria,
+							periféricos y un subsistema de radiofrecuencia con su pila de
+							protocolos.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Strapping pin
+							<span class="glossary-item__alt">strapping / boot mode pin</span>
+						</summary>
+						<p class="glossary-item__body">
+							Terminal cuyo nivel se muestrea mientras el chip sale del reset y
+							fija parámetros de la secuencia de arranque. Se nombra en inglés
+							incluso en documentación en español. En el ESP32: GPIO 0, 2, 12 y
+							15.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Entrada flotante
+							<span class="glossary-item__alt">floating input</span>
+						</summary>
+						<p class="glossary-item__body">
+							Terminal de entrada en alta impedancia, sin nada que fije su
+							potencial. Su lectura no es reproducible: adquiere el nivel que le
+							induce el entorno.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Pull-up (y pull-down)
+							<span class="glossary-item__alt">pull-up / pull-down resistor</span>
+						</summary>
+						<p class="glossary-item__body">
+							Resistencia que conecta un terminal a la alimentación (pull-up) o
+							a masa (pull-down) y fija su nivel en reposo. El ESP32 integra una
+							de aproximadamente 45 kΩ en la mayoría de sus GPIO; los GPIO 34 a
+							39 no la tienen.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Toolchain
+							<span class="glossary-item__alt">cross-toolchain</span>
+						</summary>
+						<p class="glossary-item__body">
+							Compilador, ensamblador, enlazador y utilidades asociadas,
+							configurados para generar código de una arquitectura distinta a la
+							del equipo host: <code>xtensa-esp32-elf-gcc</code> para el ESP32 clásico.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Compilación cruzada
+							<span class="glossary-item__alt">cross-compilation</span>
+						</summary>
+						<p class="glossary-item__body">
+							Generación desde un equipo host de código ejecutable en una
+							arquitectura de destino distinta.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Bootloader
+							<span class="glossary-item__alt">first / second-stage bootloader</span>
+						</summary>
+						<p class="glossary-item__body">
+							Programa que se ejecuta antes que la aplicación, inicializa el
+							sistema, localiza la partición activa y transfiere el control a su
+							punto de entrada. El de primera etapa vive en ROM; el de segunda,
+							en Flash.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Tabla de particiones
+							<span class="glossary-item__alt">partition table</span>
+						</summary>
+						<p class="glossary-item__body">
+							Estructura que define las regiones de la memoria Flash y su
+							función: aplicación, configuración persistente y sistema de
+							archivos.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Modo de descarga
+							<span class="glossary-item__alt">download boot mode</span>
+						</summary>
+						<p class="glossary-item__body">
+							Estado de arranque en el que el dispositivo espera recibir un
+							binario por el puerto serie en lugar de ejecutar la aplicación. Se
+							entra manteniendo GPIO 0 en bajo al salir del reset.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Backtrace
+							<span class="glossary-item__alt">backtrace / call stack</span>
+						</summary>
+						<p class="glossary-item__body">
+							Secuencia de direcciones que reconstruye la pila de llamadas
+							activa en el momento de la excepción.
+							<code>esp32_exception_decoder</code> la traduce a nombres de
+							función y números de línea.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Ciclo de trabajo
+							<span class="glossary-item__alt">duty cycle</span>
+						</summary>
+						<p class="glossary-item__body">
+							Fracción del período en la que una señal PWM permanece en nivel
+							alto. Determina el valor medio aplicado a la carga. En el habla
+							corriente se dice <i>duty</i> a secas.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							Caché de instrucciones
+							<span class="glossary-item__alt">instruction cache</span>
+						</summary>
+						<p class="glossary-item__body">
+							Memoria interna que transfiere bloques desde la Flash externa bajo
+							demanda. Permite ejecutar firmware de tamaño muy superior a la
+							SRAM disponible.
+						</p>
+					</details>
+
+					<details class="glossary-item">
+						<summary>
+							LEDC
+							<span class="glossary-item__alt">LED control</span>
+						</summary>
+						<p class="glossary-item__body">
+							Controlador de modulación por ancho de pulso del ESP32. Genera la onda por hardware en uno de sus canales, de modo que mantiene el ciclo de trabajo aunque el programa esté ocupado.
+						</p>
+					</details>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="30-paper-asistentes-ia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Artículos · Fiabilidad del código generado</span>
+				</a>
+				<a class="slide-nav__link" href="32-resumen.html">
+					<span>Síntesis de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 10 · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>Tabla de particiones <span class="glossary-item__alt">partition table</span></h3>
+						<p class="glossary-item__body">Declaración de cómo se reparten los 4 MB de Flash. El gestor de arranque la lee para saber qué aplicación ejecutar.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>NVS <span class="glossary-item__alt">memoria no volátil</span></h3>
+						<p class="glossary-item__body">Partición de pares clave-valor para datos pequeños y de escritura ocasional: credenciales, calibración, contadores.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Wear levelling <span class="glossary-item__alt">nivelado de desgaste</span></h3>
+						<p class="glossary-item__body">Reparto del desgaste entre sectores para que ninguno agote sus ciclos de borrado antes que el resto.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Fragmentación <span class="glossary-item__alt">heap fragmentation</span></h3>
+						<p class="glossary-item__body">Situación en que hay memoria libre suficiente pero ningún bloque contiguo del tamaño pedido. Se detecta comparando dos cifras.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>High water mark <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Peor valor observado desde el arranque, sea de pila libre o de memoria libre. Es la magnitud que decide el margen.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Reset reason <span class="glossary-item__alt">causa del último reinicio</span></h3>
+						<p class="glossary-item__body">Motivo por el que el equipo volvió a arrancar. Es el primer dato de diagnóstico y cuesta una línea registrarlo.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Brownout <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Reinicio provocado por una caída de la alimentación, típicamente al encender la radio. Se confunde con un fallo de programa.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Deep sleep <span class="glossary-item__alt">sueño profundo</span></h3>
+						<p class="glossary-item__body">Modo que apaga casi todo y conserva solo la memoria RTC. Al despertar, el programa recomienza desde <code>setup()</code>.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>OTA <span class="glossary-item__alt">actualización remota</span></h3>
+						<p class="glossary-item__body">Sustitución del firmware a través de la red, con dos particiones, verificación y reversión automática si el arranque no llega a estado sano.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Secure boot <span class="glossary-item__alt">arranque seguro</span></h3>
+						<p class="glossary-item__body">Mecanismo por el que el chip solo ejecuta binarios firmados. Es irreversible: se activa al cerrar el producto.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="19-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

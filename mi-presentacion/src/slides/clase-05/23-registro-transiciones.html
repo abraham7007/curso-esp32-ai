@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Registro de transiciones como mecanismo de trazabilidad · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Registro de transiciones como mecanismo de trazabilidad</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Principio
+							</div>
+							<p>
+								Cada transición emite una línea con timestamp, estado de
+								origen, evento, guarda evaluada y estado de destino. Al ser la
+								transición el único mecanismo de cambio, esa traza describe por
+								completo la historia del dispositivo.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Formato de la línea
+							</div>
+							<p>
+								Un prefijo entre corchetes identifica el módulo, igual que en las
+								sesiones anteriores. Los campos se separan con un solo espacio y
+								llevan nombre, de modo que la traza puede filtrarse con
+								<code>grep</code> y representarse después sin volver a capturarla.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Costo y cuándo se retira</span>
+							<p>
+								Imprimir 80 caracteres a 115200 baudios ocupa unos <b>7 ms</b>. Es
+								despreciable con una transición por segundo e inadmisible con cien.
+								Por eso el registro se condiciona a una constante de compilación y
+								se retira del binario de producción sin tocar el resto del código.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">un solo punto de registro</span>
+							</div>
+							<pre><code>constexpr bool TRAZA = true;   // false en producción
+
+void registrar(Estado de, Evento e, Estado a) {
+  if (!TRAZA) return;          // el compilador elimina la llamada
+  Serial.printf("[FSM] t=%lu %s --%s--&gt; %s\n",
+                millis(), nombre(de), nombre(e), nombre(a));
+}</code></pre>
+						</div>
+
+						<div class="term">[FSM] t=8001   VERDE_VEHICULOS --VENCE_MIN--&gt; AMBAR
+[FSM] t=11001  AMBAR --VENCE_TEMP--&gt; ROJO_CON_PASO
+[FSM] t=13750  ROJO_CON_PASO --PULSADOR--&gt; ROJO_CON_PASO
+[FSM] t=21001  ROJO_CON_PASO --VENCE_TEMP--&gt; VERDE_VEHICULOS</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La tercera línea documenta una transición hacia el mismo estado. No
+								es ruido: deja constancia de que el evento llegó y de que la
+								decisión de ignorarlo fue deliberada.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="22-maquina-conexion-red.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					<span>La conexión de red como máquina</span>
+				</a>
+				<a class="slide-nav__link" href="24-verificacion-sin-hardware.html">
+					<span>Inyección de eventos por el puerto serie</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

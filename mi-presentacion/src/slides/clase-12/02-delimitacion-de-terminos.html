@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Relación de inclusión entre los términos del campo · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Fundamentos y restricciones
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Relación de inclusión entre los términos del campo</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Inteligencia artificial</span>
+								<span class="bd-node__body">Sistemas que resuelven tareas que se atribuían a la inteligencia humana. Incluye métodos que no aprenden nada.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">⊃</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Aprendizaje automático</span>
+								<span class="bd-node__body">El comportamiento se deriva de datos, no se programa regla a regla.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">⊃</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">Aprendizaje profundo</span>
+								<span class="bd-node__body">Redes con muchas capas que extraen las características por sí mismas.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">⊃</span>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">TinyML</span>
+								<span class="bd-node__body">Inferencia sobre microcontroladores: memoria del orden de kilobytes y consumo del orden de milivatios.</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Aprendizaje en el borde
+							</div>
+							<p>
+								No es un subconjunto de los anteriores sino <b>una decisión de
+								arquitectura</b>: dónde se ejecuta el cálculo. Puede ser en un equipo
+								con sistema operativo completo cerca de los sensores, que no es un
+								microcontrolador.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Lo que distingue a TinyML</span>
+							<p>
+								No es el tipo de modelo sino la <b>magnitud de las restricciones</b>.
+								Entre un equipo de borde con 4 GB de memoria y el módulo de este
+								curso con 320 kB hay cuatro órdenes de magnitud, y esa diferencia
+								cambia el planteamiento del problema, no solo el tamaño del modelo.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>TinyML e inferencia en el dispositivo</span>
+				</a>
+				<a class="slide-nav__link" href="03-entrenamiento-e-inferencia.html">
+					<span>Entrenamiento e inferencia</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

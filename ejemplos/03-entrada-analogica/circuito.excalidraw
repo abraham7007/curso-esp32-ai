@@ -1,0 +1,40 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "type": "text", "x": 250, "y": 50, "width": 400, "height": 30, "text": "Diagrama de Circuito - Potenciómetro a ESP32", "fontSize": 20, "fontFamily": 1, "textAlign": "center"
+    },
+    {
+      "type": "rectangle", "x": 200, "y": 150, "width": 150, "height": 300, "backgroundColor": "#e8f3ff"
+    },
+    {
+      "type": "text", "x": 240, "y": 160, "width": 60, "height": 30, "text": "ESP32\n(DevKit)", "fontSize": 16, "fontFamily": 1
+    },
+    {
+      "type": "rectangle", "x": 550, "y": 200, "width": 100, "height": 180, "backgroundColor": "#fff3bf"
+    },
+    {
+      "type": "text", "x": 560, "y": 210, "width": 80, "height": 30, "text": "Potenció-\nmetro", "fontSize": 14, "fontFamily": 1
+    },
+    {
+      "type": "arrow", "x": 350, "y": 220, "width": 200, "height": 0, "points": [[0,0], [200,0]], "strokeColor": "#e03131"
+    },
+    {
+      "type": "text", "x": 420, "y": 200, "width": 60, "height": 20, "text": "3V3", "fontSize": 14, "fontFamily": 1, "strokeColor": "#e03131"
+    },
+    {
+      "type": "arrow", "x": 350, "y": 290, "width": 200, "height": 0, "points": [[0,0], [200,0]], "strokeColor": "#2b8a3e"
+    },
+    {
+      "type": "text", "x": 420, "y": 270, "width": 60, "height": 20, "text": "GPIO 32\n(Cursor)", "fontSize": 14, "fontFamily": 1, "strokeColor": "#2b8a3e"
+    },
+    {
+      "type": "arrow", "x": 350, "y": 360, "width": 200, "height": 0, "points": [[0,0], [200,0]], "strokeColor": "#212529"
+    },
+    {
+      "type": "text", "x": 420, "y": 340, "width": 60, "height": 20, "text": "GND", "fontSize": 14, "fontFamily": 1, "strokeColor": "#212529"
+    }
+  ]
+}

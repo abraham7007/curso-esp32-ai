@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes al implementar una máquina de estados · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes al implementar una máquina de estados</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>El estado no avanza nunca</div>
+						<div class="problem-card__body">
+							<p>La máquina entra en un estado temporizado y no sale de él, aunque el plazo se cumpla de sobra.</p>
+							<p><b>Por qué ocurre.</b> El timestamp se actualiza dentro del cuerpo del estado en vez de en la transición, de modo que <code>millis() - tEntrada</code> vale casi cero en cada iteración.</p>
+							<p><b>Cómo comprobarlo.</b> Registrar el valor de la resta junto al estado: si no crece entre líneas consecutivas, la marca se está reiniciando.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>Una salida queda activa de más</div>
+						<div class="problem-card__body">
+							<p>Al cambiar de estado, un LED o un relé permanece encendido pese a que el nuevo estado no lo contempla.</p>
+							<p><b>Por qué ocurre.</b> Las salidas se escriben en cada <code>case</code> por separado, y el nuevo estado solo activa las suyas sin apagar las anteriores.</p>
+							<p><b>Cómo comprobarlo.</b> Concentrar todas las escrituras en una función <code>aplicarSalidas(estado)</code> que fije el valor de <b>todas</b> las salidas, y llamarla solo tras una transición.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>Un evento se atiende dos veces</div>
+						<div class="problem-card__body">
+							<p>Una sola pulsación provoca dos transiciones encadenadas y la máquina salta un estado.</p>
+							<p><b>Por qué ocurre.</b> El evento se calcula por nivel y no por flanco: mientras el pulsador siga presionado, cada iteración lo vuelve a producir.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir el evento en cada iteración: si aparece repetido durante decenas de líneas, se está leyendo nivel en lugar de flanco.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>La máquina se queda en un estado transitorio</div>
+						<div class="problem-card__body">
+							<p>El dispositivo deja de responder y solo se recupera con un reinicio manual.</p>
+							<p><b>Por qué ocurre.</b> El estado transitorio no tiene plazo máximo, de modo que la ausencia del evento esperado no está contemplada en ninguna fila de la tabla.</p>
+							<p><b>Cómo comprobarlo.</b> Recorrer la tabla y verificar que todo estado transitorio tiene una fila cuyo evento es el vencimiento del plazo.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>El número de estados crece sin control</div>
+						<div class="problem-card__body">
+							<p>El diagrama pasa de cinco a quince estados al añadir una función menor.</p>
+							<p><b>Por qué ocurre.</b> Se están mezclando dos máquinas en una, normalmente la del sistema y la de la interfaz, o falta jerarquía.</p>
+							<p><b>Cómo comprobarlo.</b> Comprobar si los nombres de los estados contienen dos conceptos unidos, como <code>CARGANDO_MOSTRANDO_MENU</code>. Es la señal de que hay dos máquinas.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="27-estado-sistema-vs-interfaz.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Estado del sistema y de la interfaz</span>
+				</a>
+				<a class="slide-nav__link" href="29-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

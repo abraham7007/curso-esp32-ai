@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 7 · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Fundamentos de red</div>
+						<p>
+							Cada capa añade su cabecera: enviar 12 bytes de dato cuesta unos 266
+							en total. La traducción de direcciones explica que el dispositivo
+							alcance al exterior sin ser alcanzable.
+						</p>
+						<p>
+							La conexión se modela como máquina de estados con reintentos y espera
+							creciente, en su propia tarea. Nunca como una espera dentro de
+							<code>setup()</code>.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>HTTP y APIs</div>
+						<p>
+							Un 4xx no se reintenta; un 5xx sí. El límite de uso se divide antes
+							de fijar el periodo de consulta, no después del primer corte.
+						</p>
+						<p>
+							La respuesta se lee del flujo con filtro, no como cadena completa.
+							Las credenciales viven fuera del código versionado.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a la sesión siguiente</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span>
+							<span class="usecase__name">Las dos limitaciones de HTTP</span>
+							<span class="usecase__what">
+								Costo por mensaje e imposibilidad de que el servidor tome la
+								iniciativa. La sesión 8 parte de ambas.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+						<span>
+							<span class="usecase__name">La hora como requisito</span>
+							<span class="usecase__what">
+								Sin hora válida no hay conexión segura. La sesión 10 la convierte en
+								parte de la puesta en marcha.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						<span>
+							<span class="usecase__name">El ESP32 en el papel de servidor</span>
+							<span class="usecase__what">
+								La sesión 9 invierte los papeles: el dispositivo escucha, con las
+								consecuencias de memoria que eso impone.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="25-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="27-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

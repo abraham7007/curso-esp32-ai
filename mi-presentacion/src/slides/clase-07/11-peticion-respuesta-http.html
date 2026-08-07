@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estructura de una petición y de una respuesta HTTP · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Estructura de una petición y de una respuesta HTTP</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Cuatro partes en cada dirección
+							</div>
+							<p>
+								La petición lleva <b>método</b>, <b>ruta</b>, <b>cabeceras</b> y
+								<b>cuerpo</b>. La respuesta sustituye las dos primeras por un
+								<b>código de estado</b> y conserva las otras dos. Una línea en
+								blanco separa las cabeceras del cuerpo.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								La biblioteca <code>HTTPClient</code> compone esas partes:
+								<code>http.begin(url)</code>,
+								<code>http.addHeader("Content-Type", "application/json")</code>,
+								<code>int codigo = http.POST(cuerpo)</code> y
+								<code>http.getString()</code>. Un <b>código negativo</b> señala un
+								fallo de la propia biblioteca, no del servidor.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								<code>http.getString()</code> reserva en memoria la respuesta
+								<b>completa</b>. Con una respuesta de 200 kB agota la memoria libre
+								y el dispositivo se reinicia. La alternativa es leer del flujo por
+								partes, que es el contenido de una lámina posterior.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">lo que viaja por el socket</span>
+							</div>
+							<pre><code><span class="hl hl--hit">POST /v1/medidas HTTP/1.1</span>        ← método y ruta
+Host: api.ejemplo.com               ← cabeceras
+Authorization: Bearer a1b2c3d4
+Content-Type: application/json
+Content-Length: 46
+                                    ← línea en blanco
+<span class="hl hl--add">{"id":"esp32-07","t":23.4,"h":61.2}</span>   ← cuerpo</code></pre>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">respuesta del servidor</span>
+							</div>
+							<pre><code><span class="hl hl--hit">HTTP/1.1 201 Created</span>               ← código de estado
+Content-Type: application/json
+X-RateLimit-Remaining: 4998         ← límite de uso restante
+
+{"ok":true,"id":18342}</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-paper-protocolos-mensajeria.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Elección de protocolo</span>
+				</a>
+				<a class="slide-nav__link" href="12-codigo-29-diagnostico-enlace.html">
+					<span>La hora del código · Diagnóstico del enlace</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

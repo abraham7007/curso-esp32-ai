@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Transferencia de mensajes frente a memoria compartida · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Transferencia de mensajes frente a memoria compartida</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Transferencia de mensajes</h3>
+						<p>
+							Cada tarea posee sus datos y envía copias. No hay memoria que
+							proteger, de modo que no puede haber condición de carrera sobre ella.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Costo:</b> copiar. Una estructura de 200 bytes enviada a 1 kHz son
+							200 kB/s copiados dos veces, al enviar y al recibir.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Memoria compartida</h3>
+						<p>
+							Las tareas acceden a la misma región, protegida con un mutex. No se
+							copia nada.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Costo:</b> toda ruta de acceso debe tomar y devolver el mutex, y
+							basta olvidarlo en una para introducir un fallo que no se reproduce.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Criterio</span>
+					<p>
+						<b>Mensajes por omisión.</b> La memoria compartida se justifica cuando
+						el dato es grande y la frecuencia alta (una imagen, un bloque de
+						muestras) y copiarlo dominaría el tiempo de proceso. En ese caso se
+						comparte el bloque y se envía por la cola <b>un puntero</b>, con la
+						regla de que quien lo recibe es su único propietario hasta devolverlo.
+					</p>
+				</div>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Mecanismo</th><th>Para qué</th><th>Memoria por objeto</th><th>Destinatarios</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>Notificación directa</td><td>Avisar de un suceso</td><td>Ninguna: usa un campo de la tarea</td><td>Uno</td></tr>
+							<tr><td>Semáforo binario</td><td>Avisar de un suceso</td><td>Descriptor del objeto</td><td>Uno o varios</td></tr>
+							<tr><td>Cola</td><td>Transferir datos</td><td>Descriptor + largo × tamaño</td><td>Uno o varios</td></tr>
+							<tr><td>Mutex</td><td>Proteger un recurso único</td><td>Descriptor con herencia de prioridad</td><td>—</td></tr>
+							<tr><td>Grupo de eventos</td><td>Esperar varias condiciones</td><td>Descriptor de 24 bits útiles</td><td>Varios</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-paper-sincronizacion-no-bloqueante.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Sincronización no bloqueante</span>
+				</a>
+				<a class="slide-nav__link" href="22-codigo-27-productor-consumidor.html">
+					<span>La hora del código · Productor y consumidor</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

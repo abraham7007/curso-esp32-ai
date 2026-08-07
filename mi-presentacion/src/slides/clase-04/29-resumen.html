@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Síntesis de la sesión · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--narrow items-center text-center stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					Cierre de sesión
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Síntesis de la sesión</h1>
+
+				<div
+					class="grid grid-cols-1 gap-4 md:grid-cols-3 w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							01
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							La interfaz común es lo que permite sustituir el sensor
+						</h2>
+						<p class="text-sm m-0">
+							La aplicación depende de <code>begin</code>, <code>read</code>,
+							<code>isReady</code> y <code>status</code>, no de la implementación
+							concreta ni del protocolo del dispositivo. Esa dependencia acotada
+							es la condición para cambiar de sensor sin propagar cambios al resto
+							del programa.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							02
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							Entre la magnitud física y el dato hay una cadena
+						</h2>
+						<p class="text-sm m-0">
+							Cada etapa introduce su propio error: la calibración corrige el
+							error sistemático, el filtrado reduce el ruido a cambio de retardo, y
+							la validación es lo que impide que un dato inexistente circule por la
+							aplicación como si fuera una medida.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							03
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							La interrupción garantiza la captura; el temporizador, el instante
+						</h2>
+						<p class="text-sm m-0">
+							El polling pierde eventos en cuanto el bucle se carga, y
+							una base de tiempo variable introduce un error de muestreo que
+							ningún filtrado posterior corrige. Son dos garantías distintas y se
+							obtienen con dos mecanismos distintos.
+						</p>
+					</div>
+				</div>
+
+				<a class="btn btn--secondary" href="/index.html" data-animate="fade-up">
+					Volver al índice ↺
+				</a>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="28-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Glosario</span>
+				</a>
+				<a class="slide-nav__link" href="30-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

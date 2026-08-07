@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Esquema de dos particiones con reversión automática · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Esquema de dos particiones con reversión automática</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">1 · Descarga en la partición libre</span>
+								<span class="bd-node__body">La aplicación en curso sigue ejecutando desde la suya. Un corte aquí no rompe nada.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">2 · Verificación</span>
+								<span class="bd-node__body">Integridad por resumen, versión superior a la actual y firma de quien la publica.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">3 · Marcar como pendiente y reiniciar</span>
+								<span class="bd-node__body">La nueva queda en prueba, no confirmada. Es el estado que hace posible la vuelta atrás.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">4 · Confirmar o revertir</span>
+								<span class="bd-node__body">Si la nueva alcanza un estado sano, se confirma. Si no, el gestor de arranque vuelve a la anterior.</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Qué significa «estado sano»
+							</div>
+							<p>
+								Lo define el programa, no el sistema. Arrancar no basta: un firmware
+								que arranca y no consigue conectar deja el equipo inalcanzable. La
+								condición razonable es <b>haber conectado y haber publicado al menos
+								una vez</b>.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Por qué la reversión es lo que importa</span>
+							<p>
+								Sin ella, una actualización defectuosa convierte un parque entero en
+								equipos que hay que recuperar a mano, uno por uno, con acceso físico.
+								Con ella, el peor caso es que el parque siga en la versión anterior.
+							</p>
+						</div>
+
+						<div class="term">[OTA] version disponible 1.3.0 &gt; actual 1.2.0
+[OTA] descargando a app1  1284 kB  resumen verificado
+[OTA] firma valida  -&gt; marcada como pendiente  reiniciando
+[BOOT] arrancando app1 en modo prueba
+[OTA] conectado y publicado  -&gt; confirmando app1 como valida</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-codigo-42-sueno-profundo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Deep sleep</span>
+				</a>
+				<a class="slide-nav__link" href="14-paper-actualizacion-remota.html">
+					<span>Artículo · OTA medida</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

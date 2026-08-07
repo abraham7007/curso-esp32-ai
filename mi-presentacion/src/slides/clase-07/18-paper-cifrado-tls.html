@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Efecto de la elección del algoritmo sobre el consumo del dispositivo · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Suárez-Albela, M.; Fraga-Lamas, P.; Fernández-Caramés, T. M.</b> (2018). A Practical Evaluation on RSA and ECC-Based Cipher Suites for IoT High-Security Energy-Efficient Fog and Mist Computing Devices. <i>Sensors</i> 18(11), 3868. <code>doi:10.3390/s18113868</code></p>
+
+					<h2 class="paper__title">Efecto de la elección del algoritmo sobre el consumo del dispositivo</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Decidir qué <b>conjunto de cifrado</b> conviene a un equipo con recursos limitados.</li>
+									<li>Las recomendaciones se formulan por nivel de seguridad, <b>sin considerar el consumo</b>.</li>
+									<li>Banco de ensayo propio, comparando conjuntos basados en RSA y en curva elíptica.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>El banco toma <b>1000 muestras de corriente por segundo</b>.</li>
+									<li>Desviación declarada entre duración del ensayo y periodo de medida: <b>0,011 %</b>.</li>
+									<li>La <b>curva elíptica</b> consume menos y rinde más a igual nivel de seguridad, salvo una excepción.</li>
+									<li>Resultado contraintuitivo: la curva <b>más segura</b> resultó también <b>más rápida</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Elegir por tamaño de clave puede dar <b>menos seguridad y peor rendimiento a la vez</b>.</li>
+									<li>La razón de fondo: a igual seguridad, RSA necesita claves que crecen mucho más deprisa.</li>
+									<li>Declarar la exactitud del banco es lo que permite atribuir la diferencia al algoritmo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-clave-equivalente"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Equivalencias de NIST SP 800-57 Parte 1 Rev. 5, no medidas del artículo: explican por qué RSA cuesta más en cómputo y en energía.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-tls-banco"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>La exactitud declarada del banco. Sin ella, una diferencia de consumo no se puede atribuir al algoritmo.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-codigo-30-https-con-hora.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Conexión segura</span>
+				</a>
+				<a class="slide-nav__link" href="19-deserializacion-filtros.html">
+					<span>Deserialización con filtro</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

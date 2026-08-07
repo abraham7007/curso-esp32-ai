@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 13 · Trama con verificación de integridad · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 13</span>
+					</div>
+
+					<h2 class="code-hour__title">Trama con campo de verificación de integridad</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Ampliación del ejemplo 11: el texto plano se sustituye por una trama con cabecera, identificador, longitud, carga útil y checksum. El emisor altera un byte a propósito para que el receptor tenga algo que rechazar.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p>Una <b>trama</b> delimita dónde empieza y acaba cada mensaje, que en un flujo de bytes no es evidente. La <b>longitud</b> dice cuántos bytes de carga esperar; el <b>checksum</b> es información redundante calculada sobre el contenido. El receptor la recalcula y compara: si no coincide, el mensaje llegó alterado. Es un mecanismo de <b>detección</b>, no de corrección — recuperar el dato exige pedirlo otra vez.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Parte del proyecto de PlatformIO del Ejemplo 11, o crea uno nuevo para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Define una trama de bytes: cabecera 0xAA, identificador, longitud, carga útil y checksum calculada sobre identificador, longitud y carga. El emisor la construye y transmite; el receptor la analiza, recalcula la suma y acepta o descarta. Añade una función que altere un byte antes de transmitir, para provocar el rechazo. Emite por el puerto serie a 115200 baudios los bytes en hexadecimal y el veredicto de cada trama.
+
+<b>3. Simulación.</b> Reutiliza la simulación de Wokwi del Ejemplo 11, con las dos placas cruzadas y las masas unidas.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del receptor: acumular bytes, reconocer la cabecera, leer la longitud, comprobar la suma y aceptar o descartar. Y la <b>estructura de la trama</b> dibujada a escala de bytes, con lo que abarca el cálculo de la suma.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>El mismo enlace del Ejemplo 11: TX2 (<b>GPIO 17</b>) de cada placa al RX2 (<b>GPIO 16</b>) de la otra, con masa común. <code>Serial2</code> a 115 200 baudios en ambos extremos.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">[TX] AA 01 04 7A 06 00 00 2F
+[RX] cab=0xAA id=0x01 len=4 suma=0x2F -&gt; aceptada  valor=1658
+[TX] AA 01 04 7A 06 00 00 2E   (un byte alterado)
+[RX] suma esperada=0x2F recibida=0x2E -&gt; descartada
+[RX] tramas aceptadas=1 descartadas=1</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>Comparar las dos tramas de la traza: se diferencian en <b>un solo byte</b>, el último. La primera se acepta y la segunda se descarta con las dos sumas a la vista, la esperada y la recibida. Quitar el campo de comprobación y repetir: las dos tramas pasan a ser indistinguibles y el valor corrompido llega a la aplicación sin que nada avise.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-paper-verificacion-crc.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Función del campo de verificación en una trama</span>
+				</a>
+				<a class="slide-nav__link" href="20-json.html">
+					<span>Serialización en formato JSON</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

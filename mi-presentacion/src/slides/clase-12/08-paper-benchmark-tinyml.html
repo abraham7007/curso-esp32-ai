@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dificultad de comparar sistemas de inferencia entre plataformas · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · arXiv</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Banbury, C. R.; Reddi, V. J.; Lam, M. et al.</b> (2020). Benchmarking TinyML Systems: Challenges and Direction. <i>arXiv</i>. <code>arXiv:2003.04821</code></p>
+
+					<h2 class="paper__title">Dificultad de comparar sistemas de inferencia entre plataformas</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Establecer qué hace falta para <b>comparar de forma justa</b> sistemas de inferencia.</li>
+									<li>Cada fabricante ofrece sus propias herramientas y <b>compiladores propietarios</b>.</li>
+									<li>Eso impide comparar resultados y dificulta llevar el trabajo de una plataforma a otra.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Identifican tres obstáculos: diversidad de hardware, herramientas cerradas y <b>ausencia de cargas comunes</b>.</li>
+									<li>La generación de código optimizado por fabricante <b>resuelve el rendimiento, no la comparabilidad</b>.</li>
+									<li>Un <b>intérprete común</b> permite intercambiar modelos a costa de algo de eficiencia.</li>
+									<li>Su estructura es idéntica en todas las plataformas: el modelo se sustituye sin rehacer la integración.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Sin cargas y métricas compartidas, las cifras publicadas <b>solo valen dentro del trabajo que las produjo</b>.</li>
+									<li>Proponen la dirección que debe seguir un procedimiento de comparación del campo.</li>
+									<li>Es la razón por la que en esta sesión toda cifra se mide en el hardware propio.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-comparabilidad"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia. Con cadenas cerradas, cada cifra vive en su casilla y ninguna comparte a la vez modelo y plataforma con otra.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-tinyml-obstaculos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Cada obstáculo identificado emparejado con lo que haría falta para resolverlo.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-metricas-de-evaluacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+					<span>Métricas de evaluación</span>
+				</a>
+				<a class="slide-nav__link" href="09-codigo-48-umbral-antes-que-modelo.html">
+					<span>La hora del código · Umbral antes que modelo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

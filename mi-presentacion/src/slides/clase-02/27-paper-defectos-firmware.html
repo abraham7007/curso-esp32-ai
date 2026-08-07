@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Defectos reales en firmware de código abierto · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Yuan, B. A.; Davis, J. C. et al.</b> (2023). Finding 709 Defects in 258 Projects: An Experience Report on Applying CodeQL to Open-Source Embedded Software. <i>arXiv</i>. Universidad de Purdue. <code>arXiv:2310.00205</code></p>
+
+					<h2 class="paper__title">Defectos hallados en firmware de código abierto</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Saber qué defectos aparecen en el software embebido que se <b>publica y se reutiliza</b>.</li>
+									<li>Controla dispositivos médicos y vehículos, donde el fallo es severo.</li>
+									<li>Sus prácticas de análisis están menos maduras que las del software general.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Analizador estático sobre <b>258 proyectos</b> de código abierto.</li>
+									<li><b>709 defectos</b> localizados; <b>535</b> son vulnerabilidades, no avisos de estilo.</li>
+									<li><b>376 confirmados</b> por el propio autor: no son falsos positivos.</li>
+									<li>De media, <b>2,75 defectos por proyecto</b> y 1,46 confirmados.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>Encuentra defectos <b>que las pruebas convencionales no detectaron</b>, en proyectos en uso.</li>
+									<li>Como el software se reutiliza, cada defecto viaja a todo lo que lo incorpore.</li>
+									<li>Más de la mitad confirmados: no es ruido del analizador.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-defectos-firmware"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Cada barra es un subconjunto de la anterior, no una categoría aparte.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-defectos-por-proyecto"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las mismas cifras por proyecto: lo que trae de serie el que se vaya a reutilizar.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="26-tipos-de-error.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Tipos de error</span>
+				</a>
+				<a class="slide-nav__link" href="28-codigo-10-integracion.html">
+					<span>Ejemplo 10 · Integración</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

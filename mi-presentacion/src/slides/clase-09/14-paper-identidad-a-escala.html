@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Provisión de identidad cuando el parque deja de configurarse a mano · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Sousa, P. R.; Magalhães, L.; Resende, J. S. et al.</b> (2021). Provisioning, Authentication and Secure Communications for IoT Devices on FIWARE. <i>Sensors</i> 21(17), 5898. <code>doi:10.3390/s21175898</code></p>
+
+					<h2 class="paper__title">Provisión de identidad cuando el parque deja de configurarse a mano</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Resolver cómo se dota de <b>identidad verificable</b> a un parque grande de equipos.</li>
+									<li>La gestión de identidad es el <b>vector de ataque predominante</b>: permite suplantar.</li>
+									<li>Toda medida de seguridad posterior descansa sobre ella.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Analizan la provisión de <b>certificados digitales</b> y su entrega a escala.</li>
+									<li>El proceso tiene tres piezas: configuración del equipo, identidad y claves.</li>
+									<li>El procedimiento habitual es <b>laborioso y depende de configuración manual</b>.</li>
+									<li>Esa dependencia es la que <b>no admite crecimiento</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>La provisión de certificados a escala sigue siendo un <b>problema abierto</b>.</li>
+									<li>Lo que funciona para un prototipo <b>no sirve para un parque</b>.</li>
+									<li>El cuello de botella no es criptográfico: es de procedimiento.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-provision-escala"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Cálculo propio con el ritmo declarado en la leyenda, no medidas del artículo: pone cifra a la conclusión.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-identidad-piezas"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las tres piezas del proceso, con las dos que siguen dependiendo de intervención manual marcadas.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-identidad-dispositivo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					<span>Identidad del dispositivo</span>
+				</a>
+				<a class="slide-nav__link" href="15-etiqueta-producto.html">
+					<span>Etiqueta del producto</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

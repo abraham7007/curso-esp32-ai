@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Recorrido del semáforo estado por estado · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Recorrido del semáforo estado por estado</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué dispara cada transición
+							</div>
+							<p>
+								Dos estados salen por vencimiento de plazo y uno por pulsación
+								<em>si</em> la guarda lo permite. La solicitud del peatón queda
+								registrada aunque llegue antes del tiempo mínimo.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								El estado activo se resalta sobre el diagrama mientras el reloj
+								avanza. Al pulsar antes del tiempo mínimo, la guarda impide la
+								transición y la solicitud pasa a pendiente: el semáforo cambia al
+								cumplirse el plazo, no al pulsar. Pulsar durante el paso peatonal no
+								produce ningún efecto, y esa fila también está en la tabla.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="fsm-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Diagrama de los tres estados del semáforo con el estado activo resaltado, el tiempo transcurrido en el estado y la solicitud peatonal pendiente"
+							></canvas>
+
+							<div class="controls mt-3">
+								<button id="fsm-pulsar" type="button" class="btn btn--primary">
+									Pulsador de peatón
+								</button>
+								<button id="fsm-reiniciar" type="button" class="btn btn--secondary">
+									Reiniciar
+								</button>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Estado activo</span>
+									<span class="readout" id="fsm-estado">VERDE_VEHICULOS</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Tiempo en el estado</span>
+									<span class="readout" id="fsm-tiempo">0,0 s</span>
+								</div>
+								<div class="metric__item" id="fsm-item-guarda">
+									<span class="text-xs text-[var(--color-text-muted)]">Guarda t ≥ 8 s</span>
+									<span class="readout" id="fsm-guarda">no</span>
+								</div>
+								<div class="metric__item" id="fsm-item-solicitud">
+									<span class="text-xs text-[var(--color-text-muted)]">Solicitud peatonal</span>
+									<span class="readout" id="fsm-solicitud">ninguna</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-notacion-uml.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+					<span>Notación UML de máquina de estados</span>
+				</a>
+				<a class="slide-nav__link" href="08-tabla-transiciones.html">
+					<span>Tabla de transiciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Los plazos son los mismos que enuncia la tabla de transiciones de la
+			// lámina siguiente. Si cambian allí, cambian aquí: la simulación no
+			// puede contradecir al texto.
+			const PLAZOS = { VERDE: 8000, AMBAR: 3000, PASO: 10000 };
+			const ESTADOS = [
+				{ id: "VERDE_VEHICULOS", rotulo: "VERDE_VEHICULOS", plazo: PLAZOS.VERDE, tinta: "--color-ok" },
+				{ id: "AMBAR", rotulo: "AMBAR", plazo: PLAZOS.AMBAR, tinta: "--color-warn" },
+				{ id: "ROJO_CON_PASO", rotulo: "ROJO_CON_PASO", plazo: PLAZOS.PASO, tinta: "--color-accent" },
+			];
+
+			const lienzo = document.getElementById("fsm-canvas");
+			const ctx = lienzo.getContext("2d");
+			const salidaEstado = document.getElementById("fsm-estado");
+			const salidaTiempo = document.getElementById("fsm-tiempo");
+			const salidaGuarda = document.getElementById("fsm-guarda");
+			const salidaSolicitud = document.getElementById("fsm-solicitud");
+			const itemGuarda = document.getElementById("fsm-item-guarda");
+			const itemSolicitud = document.getElementById("fsm-item-solicitud");
+
+			let indice = 0;
+			let entrada = performance.now();
+			let pendiente = false;
+
+			function variable(nombre) {
+				return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim();
+			}
+
+			function coma(n, dec) {
+				return n.toFixed(dec).replace(".", ",");
+			}
+
+			// El estado VERDE solo avanza si hay solicitud pendiente Y se cumplió
+			// el mínimo. Los otros dos avanzan por vencimiento del plazo.
+			function avanzar(transcurrido) {
+				const actual = ESTADOS[indice];
+				if (actual.id === "VERDE_VEHICULOS") {
+					if (pendiente && transcurrido >= actual.plazo) {
+						indice = 1;
+						return true;
+					}
+					return false;
+				}
+				if (transcurrido >= actual.plazo) {
+					if (actual.id === "ROJO_CON_PASO") pendiente = false;
+					indice = (indice + 1) % ESTADOS.length;
+					return true;
+				}
+				return false;
+			}
+
+			function dibujar(transcurrido) {
+				const w = lienzo.width;
+				const h = lienzo.height;
+				ctx.clearRect(0, 0, w, h);
+
+				const borde = variable("--color-border");
+				const atenuado = variable("--color-text-muted");
+				const superficie = variable("--color-surface");
+
+				const cy = 96;
+				const rx = 118;
+				const ry = 46;
+				const centros = [150, 450, 750];
+
+				// Flechas entre estados, dibujadas antes para que los nodos las tapen.
+				ctx.strokeStyle = borde;
+				ctx.lineWidth = 1.6;
+				for (let i = 0; i < 2; i++) {
+					ctx.beginPath();
+					ctx.moveTo(centros[i] + rx / 2, cy);
+					ctx.lineTo(centros[i + 1] - rx / 2, cy);
+					ctx.stroke();
+				}
+				// Retorno del último al primero, por debajo.
+				ctx.beginPath();
+				ctx.moveTo(centros[2], cy + ry);
+				ctx.bezierCurveTo(centros[2], cy + 130, centros[0], cy + 130, centros[0], cy + ry);
+				ctx.stroke();
+
+				ctx.fillStyle = atenuado;
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "center";
+				ctx.fillText("pulsador [t ≥ 8 s]", (centros[0] + centros[1]) / 2, cy - 12);
+				ctx.fillText("vence 3 s", (centros[1] + centros[2]) / 2, cy - 12);
+				ctx.fillText("vence 10 s · borra la solicitud", (centros[0] + centros[2]) / 2, cy + 148);
+
+				ESTADOS.forEach((estado, i) => {
+					const activo = i === indice;
+					const tinta = variable(estado.tinta);
+					ctx.beginPath();
+					ctx.roundRect(centros[i] - rx / 2, cy - ry / 2, rx, ry, 10);
+					ctx.fillStyle = activo ? tinta : superficie;
+					ctx.fill();
+					ctx.strokeStyle = activo ? tinta : borde;
+					ctx.lineWidth = activo ? 2.4 : 1.2;
+					ctx.stroke();
+
+					ctx.fillStyle = activo ? variable("--color-surface") : atenuado;
+					ctx.font = activo ? "600 12px ui-monospace, monospace" : "12px ui-monospace, monospace";
+					ctx.fillText(estado.rotulo, centros[i], cy + 4);
+				});
+
+				// Barra de progreso del estado activo: hace visible el plazo.
+				const actual = ESTADOS[indice];
+				const fraccion = Math.min(1, transcurrido / actual.plazo);
+				const bx = 150;
+				const bw = 600;
+				const by = 296;
+				ctx.fillStyle = borde;
+				ctx.beginPath();
+				ctx.roundRect(bx, by, bw, 10, 5);
+				ctx.fill();
+				ctx.fillStyle = variable(actual.tinta);
+				ctx.beginPath();
+				ctx.roundRect(bx, by, Math.max(6, bw * fraccion), 10, 5);
+				ctx.fill();
+
+				ctx.fillStyle = atenuado;
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "left";
+				ctx.fillText("plazo del estado activo", bx, by - 10);
+				ctx.textAlign = "right";
+				ctx.fillText(`${coma(actual.plazo / 1000, 0)} s`, bx + bw, by - 10);
+
+				if (pendiente) {
+					ctx.fillStyle = variable("--color-accent");
+					ctx.textAlign = "center";
+					ctx.font = "600 12px system-ui";
+					ctx.fillText("solicitud peatonal pendiente", w / 2, 26);
+				}
+			}
+
+			function cuadro(ahora) {
+				let transcurrido = ahora - entrada;
+				if (avanzar(transcurrido)) {
+					entrada = ahora;
+					transcurrido = 0;
+				}
+
+				const actual = ESTADOS[indice];
+				const cumple = transcurrido >= actual.plazo;
+				salidaEstado.textContent = actual.rotulo;
+				salidaTiempo.textContent = `${coma(transcurrido / 1000, 1)} s`;
+				salidaGuarda.textContent =
+					actual.id === "VERDE_VEHICULOS" ? (cumple ? "sí" : "no") : "—";
+				salidaSolicitud.textContent = pendiente ? "pendiente" : "ninguna";
+				itemGuarda.classList.toggle("metric__item--ok", actual.id === "VERDE_VEHICULOS" && cumple);
+				itemSolicitud.classList.toggle("metric__item--warn", pendiente);
+
+				dibujar(transcurrido);
+				requestAnimationFrame(cuadro);
+			}
+
+			document.getElementById("fsm-pulsar").addEventListener("click", () => {
+				// Solo el estado VERDE atiende la pulsación; en los otros dos la
+				// tabla dice «ignorar», y eso es lo que ocurre aquí.
+				if (ESTADOS[indice].id === "VERDE_VEHICULOS") pendiente = true;
+			});
+			document.getElementById("fsm-reiniciar").addEventListener("click", () => {
+				indice = 0;
+				pendiente = false;
+				entrada = performance.now();
+			});
+
+			requestAnimationFrame(cuadro);
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

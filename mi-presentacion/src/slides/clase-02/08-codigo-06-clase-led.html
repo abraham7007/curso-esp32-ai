@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 06 · Primera clase: una salida digital encapsulada · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 06</span>
+					</div>
+
+					<h2 class="code-hour__title">Primera clase: una salida digital encapsulada</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> El mismo comportamiento visible del ejemplo 01, pero con el control del LED sacado a una clase <code>Led</code>. El archivo principal deja de saber en qué terminal está conectado: instancia el objeto y llama a sus métodos.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p>Una <b>clase</b> reúne los datos de un periférico y las operaciones que se le aplican. Su <b>interfaz pública</b> (aquí <code>begin()</code>, <code>on()</code>, <code>off()</code> y <code>toggle()</code>) es lo que el resto del programa puede usar; el número de terminal y las llamadas al núcleo quedan <b>privados</b> dentro. <code>begin()</code> existe aparte del constructor porque la configuración del terminal debe ocurrir en <code>setup()</code>, no antes.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino. Crea la carpeta lib/Led/ con los archivos Led.h y Led.cpp.
+
+<b>2. Firmware.</b> La clase Led recibe el número de pin en el constructor y expone begin(), on(), off() y toggle(). El pin y las llamadas al núcleo de Arduino quedan dentro de la clase. En main.cpp instancia un Led en el GPIO 2 y alterna su estado cada 2 s, emitiendo por el puerto serie a 115200 baudios «[LED] estado=ENCENDIDO» o «[LED] estado=APAGADO». main.cpp no debe contener ni pinMode ni digitalWrite.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el LED y su resistencia de 220 Ω en el GPIO 2.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del programa, señalando en qué punto se llama a cada método. Y un <b>diagrama de la clase</b> con lo público arriba y lo privado abajo, marcando qué sabe el archivo principal y qué no.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>LED con resistencia limitadora de 220 Ω al <b>GPIO 2</b>, cátodo a masa. Monitor serie a 115 200 baudios.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+																<span class="hw-set__item">
+																	<wokwi-led color="red"></wokwi-led>
+																	<small>LED</small>
+																</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">[LED] pin=2 configurado como salida
+[LED] estado=APAGADO
+[LED] estado=ENCENDIDO
+[LED] estado=APAGADO
+[LED] estado=ENCENDIDO
+
+Alternancia cada 2 s · el LED del GPIO 2 acompaña cada línea</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>El comportamiento visible es idéntico al del ejemplo 01: si la traza difiere, la refactorización cambió algo que no debía. Lo que sí cambia está en el archivo principal, y se comprueba mirándolo: <b>no debe aparecer ni un <code>pinMode</code> ni un <code>digitalWrite</code></b>. Si aparecen, el detalle del periférico se ha escapado de la clase.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-paper-arquitectura-capas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Efecto medible de separar el firmware en capas</span>
+				</a>
+				<a class="slide-nav__link" href="09-lib-vs-src.html">
+					<span>Extracción de un módulo a lib</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Datos de diagnóstico de un equipo inaccesible · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Datos de diagnóstico de un equipo inaccesible</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Reset reason</div>
+						<p>
+							El primer dato que hay que consultar. Distingue un corte de
+							alimentación de un fallo de programa, de un watchdog o de una orden
+							de reinicio.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>esp_reset_reason()</code> · cuesta una línea.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Registro por niveles</div>
+						<p>
+							Error, aviso, información y depuración. El nivel se elige en
+							compilación, de modo que la traza de producción no arrastra el detalle
+							del desarrollo.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Sustituye a imprimir sin estructura por el puerto serie.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Watchdog</div>
+						<p>
+							Reinicia si una tarea deja de dar señales. Su aviso nombra a la tarea
+							culpable, que es la pista que el fallo no da por sí solo.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Ya apareció en la sesión 6, aquí como herramienta de diagnóstico.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="conclusion">
+							<span class="conclusion__label">Estrategias de recuperación</span>
+							<p>
+								Un <b>contador de arranques fallidos</b> en NVS (memoria no volátil)
+								permite escalar la respuesta: reintentar, después restituir valores
+								por omisión y, si sigue fallando, arrancar en un modo mínimo que al
+								menos permita actualizar. Sin ese contador, el equipo repite el
+								mismo fallo indefinidamente.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Causa registrada</th><th>Qué significa</th><th>Qué revisar</th></tr></thead>
+								<tbody>
+									<tr><td><code>POWERON</code></td><td>Encendido normal</td><td>Nada; es el arranque esperado</td></tr>
+									<tr><td><code>PANIC</code></td><td>Fallo de programa</td><td>La traza de retorno decodificada</td></tr>
+									<tr><td><code>TASK_WDT</code></td><td>Una tarea dejó de ceder</td><td>La tarea nombrada en el aviso</td></tr>
+									<tr><td><code>BROWNOUT</code></td><td>Tensión insuficiente</td><td>Alimentación y consumo de picos</td></tr>
+									<tr><td><code>DEEPSLEEP</code></td><td>Despertar previsto</td><td>Nada; es el ciclo normal de bajo consumo</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								<code>BROWNOUT</code> es la causa que más veces se confunde con un
+								fallo de programa: el equipo se reinicia al encender la radio porque
+								el pico de corriente hunde la tensión. El código no tiene ningún
+								error; la fuente o el cable, sí.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-codigo-40-persistencia-y-hora.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Persistencia y hora</span>
+				</a>
+				<a class="slide-nav__link" href="08-paper-vulnerabilidades-firmware.html">
+					<span>Artículo · Vulnerabilidades de firmware</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

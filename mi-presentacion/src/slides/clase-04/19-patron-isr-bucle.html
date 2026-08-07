@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La rutina registra, el bucle procesa · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					04 · Interrupciones y eventos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Patrón: la rutina registra, el bucle procesa
+				</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								La rutina de servicio hace lo mínimo: incrementar un contador,
+								guardar una marca de tiempo o encolar el evento. Todo el
+								procesamiento (conversión, salida por el puerto serie, escritura
+								en pantalla) ocurre en el bucle principal, que lee esa
+								información cuando le corresponde.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Leer y bajar la bandera debe ser atómico respecto de la
+								interrupción: se delimita con
+								<code>portENTER_CRITICAL(&amp;mux)</code> /
+								<code>portEXIT_CRITICAL(&amp;mux)</code>. Con un solo
+								<code>bool</code>, el riesgo se limita a perder un evento
+								simultáneo.
+							</p>
+						</div>
+
+						<div class="card flex gap-3">
+							<svg
+								class="icon icon--lg text-[var(--color-navy)]"
+								aria-hidden="true"
+							><use href="/course-icons.svg#i-layers" /></svg>
+							<p class="text-sm m-0">
+								En la Sesión 6 este mismo patrón se traslada a una tarea de
+								FreeRTOS: la rutina notifica a la tarea en lugar de marcar una
+								bandera, y el bucle deja de ser el único lugar donde se procesa.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>src/main.cpp · registro en la rutina, proceso en el bucle</span>
+							</div>
+							<pre>volatile bool     hayEvento = false;
+volatile uint32_t msEvento  = 0;
+
+void IRAM_ATTR alFlanco() {
+  msEvento  = millis();
+  hayEvento = true;
+}
+
+void loop() {
+  if (hayEvento) {
+    <span class="hl hl--add">hayEvento = false;</span>
+    Serial.printf("[EVENTO] ms=%lu\n", msEvento);
+    registrarPulsacion(msEvento);
+  }
+
+  // el resto de módulos sigue avanzando
+  sensores.update();
+  pantalla.update();
+}</pre>
+							<div class="codepanel__footer">
+								La bandera se baja <b>antes</b> de procesar: si llega otro evento
+								durante el procesamiento, vuelve a subir y el bucle lo atiende en
+								la iteración siguiente en lugar de descartarlo.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-codigo-17-conteo-interrupcion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Conteo por interrupción</span>
+				</a>
+				<a class="slide-nav__link" href="20-deteccion-flancos.html">
+					<span>Detección por flanco y rebote mecánico</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

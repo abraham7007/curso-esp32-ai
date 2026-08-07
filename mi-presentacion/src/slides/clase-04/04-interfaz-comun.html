@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Interfaz común de la capa de adquisición · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					01 · Sensores y diseño del driver
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Interfaz común de la capa de adquisición
+				</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Todos los sensores del proyecto se exponen a la aplicación con
+								los mismos cuatro métodos, de significado fijo:
+							</p>
+							<ul class="mt-2 pl-4 text-sm leading-relaxed">
+								<li>
+									<code class="font-mono text-[var(--color-navy)]">begin()</code>
+									— configura el sensor y devuelve si la configuración tuvo
+									éxito.
+								</li>
+								<li>
+									<code class="font-mono text-[var(--color-navy)]">read()</code>
+									— entrega la última medida en unidades físicas.
+								</li>
+								<li>
+									<code class="font-mono text-[var(--color-navy)]">isReady()</code>
+									— indica si hay un dato nuevo disponible.
+								</li>
+								<li>
+									<code class="font-mono text-[var(--color-navy)]">status()</code>
+									— informa del estado del sensor: correcto, sin respuesta o
+									fuera de rango.
+								</li>
+							</ul>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p class="m-0 text-sm">
+								La aplicación declara
+								<code>Sensor* fuente = &amp;sensorAnalogico;</code> y llama
+								siempre <code>fuente-&gt;read()</code>. Sustituir el sensor es
+								cambiar esa única línea. El mecanismo se llama
+								<b>polimorfismo</b> (<i>polymorphism</i>): la llamada se resuelve
+								en tiempo de ejecución según el objeto real al que apunta.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="grid gap-1 text-center mb-3">
+							<div
+								class="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+							>
+								<span class="font-mono text-sm font-bold">
+									Capa de aplicación
+								</span>
+								<span class="block text-xs text-[var(--color-text-muted)]">
+									usa un <code>Sensor*</code>, no una implementación concreta
+								</span>
+							</div>
+							<span class="font-mono text-xs text-[var(--color-text-muted)]">
+								↓ depende de
+							</span>
+							<div
+								class="rounded-[var(--radius-md)] border-2 border-[var(--color-navy)] bg-[var(--color-navy-soft)] px-3 py-2"
+							>
+								<span class="font-mono text-sm font-bold text-[var(--color-navy)]">
+									interfaz Sensor
+								</span>
+								<span class="block font-mono text-xs text-[var(--color-navy)]">
+									begin() · read() · isReady() · status()
+								</span>
+							</div>
+							<span class="font-mono text-xs text-[var(--color-text-muted)]">
+								↑ la implementan
+							</span>
+							<div class="grid grid-cols-2 gap-2">
+								<div
+									class="rounded-[var(--radius-md)] border border-[var(--color-accent)] bg-[var(--color-accent-soft)] px-3 py-2"
+								>
+									<span class="font-mono text-sm font-bold text-[var(--color-accent)]">
+										SensorAnalogico
+									</span>
+									<span class="block text-xs text-[var(--color-text-muted)]">
+										ADC1_CH4 · GPIO 32
+									</span>
+								</div>
+								<div
+									class="rounded-[var(--radius-md)] border border-[var(--color-accent)] bg-[var(--color-accent-soft)] px-3 py-2"
+								>
+									<span class="font-mono text-sm font-bold text-[var(--color-accent)]">
+										SensorI2C
+									</span>
+									<span class="block text-xs text-[var(--color-text-muted)]">
+										SDA 21 · SCL 22
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>Sensor.h</span>
+							</div>
+							<pre>enum class Estado { OK, SIN_RESPUESTA, FUERA_DE_RANGO };
+
+class Sensor {                    // clase base abstracta
+public:
+  virtual bool   begin()   = 0;   // método virtual puro
+  virtual float  read()    = 0;
+  virtual bool   isReady() = 0;
+  virtual Estado status()  = 0;
+  virtual ~Sensor() = default;
+};
+
+class SensorAnalogico : public Sensor { /* ADC  */ };
+class SensorI2C       : public Sensor { /* Wire */ };</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-definicion-driver.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Definición y responsabilidad de un driver</span>
+				</a>
+				<a class="slide-nav__link" href="05-codigo-15-driver-comun.html">
+					<span>La hora del código · Interfaz común</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

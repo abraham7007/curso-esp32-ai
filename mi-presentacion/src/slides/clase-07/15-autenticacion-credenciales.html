@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Autenticación por token y custodia de la credencial · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Autenticación por token y custodia de la credencial</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Dónde viaja la credencial
+							</div>
+							<p>
+								En una <b>cabecera</b>
+								(<code>Authorization: Bearer …</code>) o como
+								<b>parámetro de la consulta</b>
+								(<code>?appid=…</code>). La primera es preferible: los parámetros
+								de la consulta quedan registrados en los historiales de los
+								servidores intermedios.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								Una clave escrita en el código fuente y subida a un repositorio
+								público queda expuesta de forma permanente: aunque se borre después,
+								permanece en el historial. La única corrección válida es
+								<b>revocarla y generar otra</b>.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Procedimiento, establecido antes de la primera integración</span>
+							<p>
+								Las credenciales viven en un archivo aparte, listado en
+								<code>.gitignore</code>, con una plantilla de ejemplo versionada
+								para que el proyecto siga siendo reproducible. A partir de la
+								sesión 10 pasan a NVS (memoria no volátil), fuera del binario.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+								<span class="codepanel__path">main.cpp versionado</span>
+							</div>
+							<pre><code><span class="hl hl--hit">const char *CLAVE = "a1b2c3d4e5f6a7b8";  // queda en el historial</span></code></pre>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">tres archivos</span>
+							</div>
+							<pre><code>// credenciales.h        ← NO versionado
+#define WIFI_SSID  "LAB-UNI"
+#define API_CLAVE  "a1b2c3d4e5f6a7b8"
+
+// credenciales.ejemplo.h ← sí versionado
+#define WIFI_SSID  "nombre-de-tu-red"
+#define API_CLAVE  "pon-aqui-tu-clave"
+
+// .gitignore
+<span class="hl hl--add">credenciales.h</span></code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-api-rest.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Lectura de una API REST</span>
+				</a>
+				<a class="slide-nav__link" href="16-https-microcontrolador.html">
+					<span>HTTPS en un microcontrolador</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

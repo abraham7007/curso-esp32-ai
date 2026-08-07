@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calibración de un sensor de bajo costo · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY-NC-ND 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Brown, S. L.; Goulsbra, C. S.; Evans, M. G. et al.</b> (2020). Low cost CO₂ sensing: a simple microcontroller approach with calibration and field use. <i>HardwareX</i>, 8, e00136. <code>doi:10.1016/j.ohx.2020.e00136</code></p>
+
+					<h2 class="paper__title">Función de la calibración en la cadena de medida</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Construir un registrador de CO₂ de <b>bajo costo y replicable</b>, apto para campo.</li>
+									<li>Los sensores asequibles <b>no cumplen</b> los requisitos tal como salen de fábrica.</li>
+									<li>Método: diseño completo documentado y calibración posterior al montaje.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Tras calibrar, exactitud del <b>96 al 99 %</b> en el rango de trabajo.</li>
+									<li>Costo del equipo completo: <b>≈155 £</b>, frente a instrumentación comercial prohibitiva.</li>
+									<li>Validación <b>en campo</b>, sobre un curso de agua en una turbera.</li>
+									<li>Antes de calibrar, el fabricante no garantiza esa exactitud.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>La calibración <b>no es un refinamiento opcional</b>: convierte la salida del sensor en un dato utilizable.</li>
+									<li>Se valida en el entorno de despliegue, no en el banco: temperatura y humedad alteran la respuesta.</li>
+									<li>Sin ese paso, el bajo costo deja de ser una ventaja y pasa a ser el problema.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-calibracion"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>La banda verde es el dato publicado (96 a 99 % <b>tras</b> calibrar). La recta roja es un trazo ilustrativo del error que la calibración corrige.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-calibracion-valor"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las dos cifras del artículo juntas: lo que se gana en exactitud y lo que cuesta el equipo entero.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-calibracion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Calibración de dos puntos</span>
+				</a>
+				<a class="slide-nav__link" href="09-filtrado.html">
+					<span>Media móvil y filtro exponencial</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

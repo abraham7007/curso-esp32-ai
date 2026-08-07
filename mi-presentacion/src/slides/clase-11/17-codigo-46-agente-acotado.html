@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 46 · Agente con margen de actuación acotado · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 46</span>
+					</div>
+
+					<h2 class="code-hour__title">Agente con margen de actuación acotado y registro de decisiones</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Separar <b>quién decide</b> de <b>qué está permitido</b>. Una regla externa propone una consigna; el firmware la acota a un intervalo seguro, la aplica y registra por separado lo pedido y lo aplicado. Ninguna decisión queda sin traza.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>límite compilado</b> es una constante del binario: el agente no puede ampliarlo porque no vive donde él escribe. Si los límites estuvieran en la configuración que el propio agente cambia, no serían límites. <b>Acotar</b> es sustituir el valor pedido por el más cercano permitido, no rechazar la petición. El código <b>429</b> corta un ritmo de peticiones excesivo antes de que sature al equipo.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, ESPAsyncWebServer y ArduinoJson.
+
+<b>2. Firmware.</b> Expón <code>POST /api/consigna</code> para que un agente externo proponga un valor con su motivo. El firmware <b>no aplica lo pedido sin más</b>: lo acota a un intervalo declarado como constante de compilación, aplica el resultado y registra por separado el valor pedido, el aplicado y si hubo que acotarlo. Lleva un contador de decisiones y de recortes. Si llegan más de diez propuestas por minuto, rechaza con 429. Emite a 115200 baudios cada decisión con su motivo.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro y los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una propuesta, desde que llega hasta que se aplica o se acota, con el contador de ritmo incluido. Y la <b>frontera</b> entre lo que decide el agente y lo que el firmware garantiza pase lo que pase, con los límites concretos anotados.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b>, controla un LED con la consigna en el <b>GPIO 25</b> y enciende otro de rechazo en el <b>GPIO 26</b>, ambos con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[AGENTE] propone consigna=95 %  motivo="por debajo del objetivo"
+[LIMITE] permitido=[0, 70] % -&gt; consigna acotada a 70 %
+[APLICA] consigna=70 %  pedido=95 %  acotado=si
+[AGENTE] propone consigna=40 % -&gt; dentro de limite
+[APLICA] consigna=40 %  pedido=40 %  acotado=no
+[RESUMEN] 24 h: 118 decisiones  9 acotadas  0 fuera de rango</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>El resumen de 24 h dice <b>9 acotadas de 118</b>. Ese número es el que hay que vigilar: si creciera, el agente llevaría semanas pidiendo valores absurdos y el recorte lo estaría tapando. Por eso se registran por separado <b>pedido</b> y <b>aplicado</b>: con una sola cifra, un agente que se ha desviado y otro que funciona bien producen exactamente la misma traza.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-codigo-45-verificar-lo-generado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Verificar lo generado</span>
+				</a>
+				<a class="slide-nav__link" href="18-codigo-47-comportamiento-versionado.html">
+					<span>La hora del código · Comportamiento versionado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

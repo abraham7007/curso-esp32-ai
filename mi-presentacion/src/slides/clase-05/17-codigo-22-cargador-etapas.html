@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 22 · Cargador de batería por etapas · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 22</span>
+					</div>
+
+					<h2 class="code-hour__title">Cargador de batería por etapas con guardas sobre la medida</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Un cargador que recorre cuatro etapas, pero cuyas transiciones no las decide el reloj sino una magnitud medida. Es el caso donde una condición mal escrita hace conmutar la máquina decenas de veces por segundo sin que nada del circuito haya cambiado.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Una <b>guarda sobre una medida</b> compara una lectura con un umbral. Con un solo umbral, el ruido la cruza en los dos sentidos sin parar; con <b>histéresis</b> se usan dos umbrales separados, uno para entrar y otro para salir, y el cambio deja de repetirse. <b>Promediar</b> varias lecturas ataca el mismo problema en su origen: el conversor del ESP32 tiene dispersión para cruzar un umbral él solo.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Declara las cuatro etapas como <code>enum class</code>. La transición de CORRIENTE_CONSTANTE a TENSION_CONSTANTE ocurre cuando la tensión medida supera 4,200 V; la de TENSION_CONSTANTE a MANTENIMIENTO, cuando la corriente estimada baja de 25 mA. Aplica una histéresis de 30 mV en ambas guardas. Cualquier medida por encima de 4,350 V lleva a ERROR de forma inmediata, con la salida de carga apagada y sin retorno automático. Promedia 16 lecturas del ADC antes de evaluar la guarda. Imprime a 115200 baudios una línea [MEDIDA] por segundo y una [ESTADO] en cada transición.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y los tres LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la secuencia medir, promediar, comparar contra la guarda y transitar. Y el <b>diagrama de estados</b> donde cada flecha lleve escrita su guarda con el valor numérico y la histéresis aplicada.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> que hace de tensión de celda, ajustado para cubrir de 3,0 V a 4,3 V. Tres LED de etapa en los <b>GPIO 25, 26 y 27</b> con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="orange"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[SETUP] etapa=CORRIENTE_CONSTANTE  v_paso=4.200  hist=0.030 V
+[MEDIDA] t=1000  v=3.712 V  etapa=CORR_CONST  i_lim=500 mA
+[MEDIDA] t=8000  v=4.198 V  guarda v&gt;=4.200 -&gt; NO
+[ESTADO] t=9000  CORR_CONST -&gt; TENSION_CONST  v=4.203 V
+[MEDIDA] t=21000 v=4.201 V  etapa=TENSION_CONST  i=48 mA
+[ESTADO] t=34000 TENSION_CONST -&gt; MANTENIMIENTO  i=24 &lt; 25 mA
+[ERROR]  t=41200 SOBRETENSION v=4.412 V  carga=0</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Mirar la línea <code>[MEDIDA]</code> de los 8000 ms: <b>v = 4,198 V</b> y la guarda responde NO aunque el umbral sea 4,200. Dos milivoltios deciden. En la traza propia hay que buscar lo contrario: varias líneas <code>[ESTADO]</code> seguidas en el mismo instante significan que la histéresis no se aplica y la máquina conmuta con el ruido de la medida.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-maquinas-no-bloqueantes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					<span>El temporizador como evento</span>
+				</a>
+				<a class="slide-nav__link" href="18-varias-maquinas-un-bucle.html">
+					<span>Varias máquinas en un mismo bucle</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

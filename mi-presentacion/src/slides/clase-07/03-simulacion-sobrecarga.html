@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Rendimiento útil según el tamaño de la carga · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Rendimiento útil según el tamaño de la carga</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué se compara
+							</div>
+							<p>
+								Las cabeceras de transporte, red y enlace son las mismas en ambos
+								casos: <b>74 bytes</b>. Lo que cambia es la capa de aplicación,
+								unos 192 bytes en HTTP frente a 2 en el protocolo de la sesión 8.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Con cargas pequeñas, las de un sensor, el protocolo pesa mucho más
+								que el dato y la diferencia entre ambos es de un orden de magnitud.
+								Por encima de unos 500 bytes las dos curvas convergen: ahí la
+								elección del protocolo deja de decidirse por la sobrecarga.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="ovh-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Dos barras apiladas que comparan el reparto entre dato útil y cabeceras de protocolo para HTTP y para una conexión mantenida, según el tamaño de la carga"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="ovh-carga" class="text-sm font-medium">
+									Dato útil por mensaje
+								</label>
+								<input type="range" id="ovh-carga" min="4" max="600" step="4" value="12" />
+								<span class="readout" id="ovh-carga-lectura">12 bytes</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item metric__item--bad">
+									<span class="text-xs text-[var(--color-text-muted)]">HTTP · útil</span>
+									<span class="readout" id="ovh-http">4,5 %</span>
+								</div>
+								<div class="metric__item metric__item--ok">
+									<span class="text-xs text-[var(--color-text-muted)]">Conexión mantenida · útil</span>
+									<span class="readout" id="ovh-mqtt">14 %</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Al día, uno por segundo</span>
+									<span class="readout" id="ovh-dia">23 MB</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Ahorro del segundo</span>
+									<span class="readout" id="ovh-ahorro">×3,1</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-modelo-capas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Las cuatro capas de la pila</span>
+				</a>
+				<a class="slide-nav__link" href="04-cliente-servidor-socket.html">
+					<span>Cliente, servidor, puerto y socket</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Cifras de la lámina anterior: TCP 20 + IP 20 + enlace 34 = 74 bytes
+			// comunes, y la capa de aplicación que distingue a los dos casos.
+			const COMUN = 74;
+			const APP = { http: 192, mantenida: 2 };
+
+			const lienzo = document.getElementById("ovh-canvas");
+			const ctx = lienzo.getContext("2d");
+			const deslizador = document.getElementById("ovh-carga");
+			const lectura = document.getElementById("ovh-carga-lectura");
+			const salHttp = document.getElementById("ovh-http");
+			const salMqtt = document.getElementById("ovh-mqtt");
+			const salDia = document.getElementById("ovh-dia");
+			const salAhorro = document.getElementById("ovh-ahorro");
+
+			function variable(nombre) {
+				return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim();
+			}
+
+			function coma(n, dec) {
+				return n.toFixed(dec).replace(".", ",");
+			}
+
+			function dibujar(carga) {
+				const w = lienzo.width;
+				const h = lienzo.height;
+				ctx.clearRect(0, 0, w, h);
+
+				const filas = [
+					{ rotulo: "HTTP", app: APP.http, y: 96 },
+					{ rotulo: "Conexión mantenida", app: APP.mantenida, y: 216 },
+				];
+				const maximo = carga + COMUN + APP.http;
+				const izq = 210;
+				const ancho = w - izq - 30;
+				const alto = 54;
+
+				const atenuado = variable("--color-text-muted");
+				const texto = variable("--color-text");
+				const ok = variable("--color-ok");
+				const acento = variable("--color-accent");
+				const navy = variable("--color-navy");
+
+				for (const fila of filas) {
+					const total = carga + COMUN + fila.app;
+					const px = (v) => (v / maximo) * ancho;
+
+					let x = izq;
+					const tramos = [
+						{ v: carga, color: ok, nombre: "dato" },
+						{ v: fila.app, color: acento, nombre: "aplicación" },
+						{ v: COMUN, color: navy, nombre: "TCP + IP + enlace" },
+					];
+					for (const tramo of tramos) {
+						const dx = px(tramo.v);
+						ctx.fillStyle = tramo.color;
+						ctx.fillRect(x, fila.y, dx, alto);
+						if (dx > 42) {
+							ctx.fillStyle = variable("--color-surface");
+							ctx.font = "11px ui-monospace, monospace";
+							ctx.textAlign = "center";
+							ctx.fillText(String(tramo.v), x + dx / 2, fila.y + alto / 2 + 4);
+						}
+						x += dx;
+					}
+
+					ctx.fillStyle = texto;
+					ctx.font = "600 13px system-ui";
+					ctx.textAlign = "right";
+					ctx.fillText(fila.rotulo, izq - 14, fila.y + alto / 2 - 2);
+					ctx.fillStyle = atenuado;
+					ctx.font = "11px ui-monospace, monospace";
+					ctx.fillText(`${total} bytes`, izq - 14, fila.y + alto / 2 + 15);
+
+					ctx.fillStyle = carga / total > 0.3 ? ok : acento;
+					ctx.font = "600 13px ui-monospace, monospace";
+					ctx.textAlign = "left";
+					ctx.fillText(`${coma((carga / total) * 100, 1)} % útil`, izq + px(total) + 10, fila.y + alto / 2 + 4);
+				}
+
+				// Leyenda
+				const leyenda = [
+					["dato útil", ok],
+					["cabecera de aplicación", acento],
+					["TCP + IP + enlace", navy],
+				];
+				let lx = izq;
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "left";
+				for (const [nombre, color] of leyenda) {
+					ctx.fillStyle = color;
+					ctx.fillRect(lx, 36, 11, 11);
+					ctx.fillStyle = atenuado;
+					ctx.fillText(nombre, lx + 17, 45);
+					lx += ctx.measureText(nombre).width + 46;
+				}
+			}
+
+			function actualizar() {
+				const carga = Number(deslizador.value);
+				lectura.textContent = `${carga} bytes`;
+				dibujar(carga);
+
+				const totalHttp = carga + COMUN + APP.http;
+				const totalMant = carga + COMUN + APP.mantenida;
+				salHttp.textContent = `${coma((carga / totalHttp) * 100, 1)} %`;
+				salMqtt.textContent = `${coma((carga / totalMant) * 100, 1)} %`;
+				salDia.textContent = `${coma((totalHttp * 86400) / 1e6, 1)} MB`;
+				salAhorro.textContent = `×${coma(totalHttp / totalMant, 1)}`;
+			}
+
+			deslizador.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Control de versiones en un proyecto de firmware · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					02 · Reutilización y control de versiones
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Control de versiones en un proyecto de firmware
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						<b>Versionar</b> (<i>version control</i>) es registrar el estado del
+						proyecto en instantes sucesivos, de modo que cada cambio quede
+						atribuido y sea reversible. En este curso cumple una función
+						concreta: recuperar la última versión que funcionaba y reconstruir
+						el proyecto completo en otro equipo desde lo que está registrado.
+					</p>
+				</div>
+
+				<div
+					class="grid grid-cols-1 gap-3 md:grid-cols-[1fr_1fr_minmax(0,20rem)]"
+					data-animate="fade-up"
+				>
+					<div class="card">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-ok)]" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+							Se versiona
+						</h3>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-1">
+							<li><code>src/</code> — código del proyecto</li>
+							<li><code>lib/</code> — módulos propios</li>
+							<li><code>include/</code> — encabezados compartidos</li>
+							<li><code>platformio.ini</code> — especificación</li>
+							<li><code>diagram.json</code> — montaje simulado</li>
+							<li><code>.gitignore</code> — las exclusiones</li>
+						</ul>
+					</div>
+
+					<div class="card">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-danger)]" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							No se versiona
+						</h3>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-1">
+							<li><code>.pio/</code> — artefactos intermedios</li>
+							<li>Binarios: <code>firmware.bin</code>, <code>.elf</code></li>
+							<li>Credenciales de red y claves de servicios</li>
+						</ul>
+						<p class="m-0 mt-2 text-sm text-[var(--color-text-muted)]">
+							Todo lo excluido se regenera con una construcción, o se declara
+							aparte en el equipo de cada persona.
+						</p>
+					</div>
+
+					<div class="codepanel">
+						<div class="codepanel__header">
+							<span>.gitignore</span>
+						</div>
+						<pre>.pio/
+include/secrets.h</pre>
+						<div class="codepanel__footer">
+							Las dos líneas mínimas de un proyecto de firmware.
+						</div>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p>
+						El archivo que declara las exclusiones es <code>.gitignore</code>, en
+						la raíz del proyecto. Cada línea es un patrón de ruta; una barra
+						final indica un directorio completo. El propio
+						<code>.gitignore</code> sí se versiona: es parte de la
+						especificación del proyecto.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg
+						class="icon icon--lg text-[var(--color-warn)]"
+						aria-hidden="true"
+					><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Las claves de red no se escriben en el código versionado. Se
+						declaran en un archivo excluido por <code>.gitignore</code>, por
+						convención <code>include/secrets.h</code>, y su formato se
+						documenta en un <code>secrets.example.h</code> con valores vacíos,
+						que sí se versiona. Una credencial publicada por error permanece en
+						el historial del repositorio aunque se borre del archivo después.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-lib-vs-src.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Extracción de un módulo a lib</span>
+				</a>
+				<a class="slide-nav__link" href="11-tipos-explicitos.html">
+					<span>Tipos de tamaño específico</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

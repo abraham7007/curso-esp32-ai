@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Planificador expropiativo por prioridades · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Planificador expropiativo por prioridades</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Regla del planificador
+							</div>
+							<p>
+								En cada instante ejecuta la tarea <b>preparada de mayor
+								prioridad</b>. Que sea <b>expropiativo</b> significa que si una
+								tarea de prioridad superior queda preparada, la que está corriendo
+								se interrumpe de inmediato, sin esperar a que ceda.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+								La interrupción periódica del sistema
+							</div>
+							<p>
+								Un temporizador interrumpe cada <b>1 ms</b> en el ESP32
+								(<code>configTICK_RATE_HZ</code> = 1000). En esa interrupción el
+								sistema comprueba qué plazos han vencido y decide si cambia de
+								tarea. Es la unidad mínima de tiempo del planificador:
+								<code>vTaskDelay(1)</code> no espera menos de 1 ms.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								Dos tareas de <b>igual prioridad</b> se reparten el núcleo por
+								turnos de un tick. Una tarea de prioridad alta que nunca se bloquea
+								impide ejecutarse a todas las inferiores, incluida la tarea de
+								reposo que alimenta al watchdog: el resultado es un reinicio.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead>
+									<tr><th>Prioridad</th><th>Uso previsto</th><th>Ejemplo</th></tr>
+								</thead>
+								<tbody>
+									<tr><td><b>0</b></td><td>Tarea de reposo del sistema</td><td>Reservada; alimenta el watchdog</td></tr>
+									<tr><td><b>1</b></td><td>Trabajo de fondo</td><td><code>loop()</code> de Arduino, registro en memoria</td></tr>
+									<tr><td><b>2</b></td><td>Comunicación</td><td>Publicación por red, atención de peticiones</td></tr>
+									<tr><td><b>3</b></td><td>Adquisición periódica</td><td>Muestreo con periodo fijo</td></tr>
+									<tr><td><b>4-24</b></td><td>Respuesta a sucesos</td><td>Tarea despertada desde una interrupción</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Criterio de asignación</span>
+							<p>
+								La prioridad se asigna según el <b>requisito temporal</b>, no según
+								la importancia aparente de la función. Una tarea de interfaz es muy
+								visible y no tiene requisito estricto: darle prioridad alta impide
+								cumplir el periodo de muestreo. Es el error de asignación más
+								frecuente.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-codigo-24-primeras-tareas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Dos tareas</span>
+				</a>
+				<a class="slide-nav__link" href="08-simulacion-planificador.html">
+					<span>Reparto del procesador</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

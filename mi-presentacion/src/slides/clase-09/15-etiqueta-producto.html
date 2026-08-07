@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Contenido obligado de la etiqueta de un producto · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Contenido obligado de la etiqueta de un producto</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué lleva y por qué
+							</div>
+							<p>
+								La etiqueta es la única información disponible cuando el equipo no
+								arranca. Todo lo que haga falta para diagnosticar, reponer o dar de
+								baja la unidad tiene que estar impreso en ella.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								La versión de firmware también va impresa
+							</div>
+							<p>
+								Parece redundante porque el dispositivo la publica en
+								<code>/api/info</code>, pero un equipo que no arranca no publica
+								nada. La impresa es la de fábrica; la publicada, la vigente tras las
+								actualizaciones. Que difieran es un dato de diagnóstico, no un
+								error.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Dato</th><th>Para qué sirve</th></tr></thead>
+								<tbody>
+									<tr><td><b>Modelo</b></td><td>Identifica de qué producto se trata y qué documentación aplica</td></tr>
+									<tr><td><b>Número de serie</b></td><td>Identifica la unidad concreta ante el servicio técnico</td></tr>
+									<tr><td><b>Dirección MAC</b></td><td>Permite localizar el equipo en la red sin encenderlo</td></tr>
+									<tr><td><b>Tensión y corriente</b></td><td>Evita alimentarlo con una fuente inadecuada</td></tr>
+									<tr><td><b>Versión de hardware</b></td><td>Distingue revisiones con distinto comportamiento</td></tr>
+									<tr><td><b>Versión de firmware</b></td><td>La de fábrica, como punto de partida del historial</td></tr>
+									<tr><td><b>Código QR</b></td><td>Emparejamiento sin teclear el nombre de la red ni su clave</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-paper-identidad-a-escala.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Identidad a escala</span>
+				</a>
+				<a class="slide-nav__link" href="16-paper-etiquetado-seguridad.html">
+					<span>Artículo · Etiquetado de seguridad</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

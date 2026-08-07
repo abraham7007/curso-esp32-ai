@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 6 · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>RTOS <span class="glossary-item__alt">real-time operating system</span></h3>
+						<p class="glossary-item__body">Sistema operativo cuyo planificador garantiza un plazo máximo entre que una tarea queda preparada y recibe el procesador. La garantía es sobre el peor caso.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Tarea <span class="glossary-item__alt">task</span></h3>
+						<p class="glossary-item__body">Función con bucle propio y pila propia. La pila es lo que permite interrumpirla en cualquier punto y reanudarla exactamente ahí.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Planificador expropiativo <span class="glossary-item__alt">preemptive scheduler</span></h3>
+						<p class="glossary-item__body">Planificador que interrumpe de inmediato a la tarea en ejecución cuando otra de prioridad superior queda preparada, sin esperar a que ceda.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Tick <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Interrupción periódica del sistema, de 1 ms en el ESP32. Es la unidad mínima de tiempo del planificador y el instante en que revisa los plazos vencidos.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Condición de carrera <span class="glossary-item__alt">race condition</span></h3>
+						<p class="glossary-item__body">Situación en que el resultado depende del orden en que se intercalan dos tareas sobre un dato compartido.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Cola <span class="glossary-item__alt">queue</span></h3>
+						<p class="glossary-item__body">Mecanismo que transfiere mensajes por copia entre tareas. Emisor y receptor no comparten memoria, de modo que no hace falta protegerla.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Mutex <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Objeto que garantiza el uso exclusivo de un recurso no replicable. En FreeRTOS aplica herencia de prioridad, a diferencia del semáforo binario.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Inversión de prioridad <span class="glossary-item__alt">priority inversion</span></h3>
+						<p class="glossary-item__body">Situación en que una tarea de prioridad alta espera de forma indirecta a una de prioridad media, a través de una de prioridad baja que retiene el recurso.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Deadlock <span class="glossary-item__alt">interbloqueo</span></h3>
+						<p class="glossary-item__body">Bloqueo mutuo de dos o más tareas, cada una reteniendo el recurso que la otra necesita. Se elimina fijando un orden global de adquisición.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Core affinity <span class="glossary-item__alt">afinidad de núcleo</span></h3>
+						<p class="glossary-item__body">Núcleo al que queda fijada una tarea. Dejarla sin fijar permite al planificador moverla, con un costo de sincronización medible.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>High water mark de pila <span class="glossary-item__alt">stack high water mark</span></h3>
+						<p class="glossary-item__body">Menor cantidad de pila libre que ha tenido una tarea desde que arrancó. Es el peor caso observado, no el valor actual.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="25-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="27-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

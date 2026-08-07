@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mutex e inversión de prioridad · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Mutex e inversión de prioridad</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Un <b>mutex</b> garantiza que solo una tarea use a la vez un recurso
+								que no admite duplicado: un bus I²C, una pantalla, el puerto serie.
+								La tarea lo toma, usa el recurso y lo devuelve.
+							</p>
+							<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+								Del inglés <i>mutual exclusion</i>. Se traduce como exclusión mutua,
+								aunque la interfaz mantiene el nombre abreviado.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>xSemaphoreCreateMutex()</code>,
+								<code>xSemaphoreTake(m, plazo)</code> y
+								<code>xSemaphoreGive(m)</code>. Toda ruta de salida de la sección
+								protegida, incluidos los retornos anticipados por error, debe
+								devolverlo, o el recurso queda tomado para siempre.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Inversión de prioridad
+							</div>
+							<p>
+								Una tarea de prioridad <b>baja</b> toma el mutex. Una de prioridad
+								<b>alta</b> lo necesita y se bloquea. Entra entonces una de
+								prioridad <b>media</b>, que no necesita el mutex, expropia a la baja
+								y le impide devolverlo. La tarea de prioridad alta queda esperando
+								por una de prioridad media.
+							</p>
+						</div>
+
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ghost"><span class="bd-node__title">Baja</span><span class="bd-node__body">Toma el mutex y es expropiada antes de devolverlo.</span></div>
+							<div class="bd-node bd-node--warn"><span class="bd-node__title">Media</span><span class="bd-node__body">No usa el mutex, pero ocupa el procesador de forma indefinida.</span></div>
+							<div class="bd-node bd-node--accent"><span class="bd-node__title">Alta</span><span class="bd-node__body">Bloqueada esperando un recurso que la de baja no puede liberar.</span></div>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Herencia de prioridad</span>
+							<p>
+								El mutex de FreeRTOS lo resuelve por sí solo: mientras retiene el
+								recurso, la tarea de prioridad baja <b>hereda</b> la prioridad de la
+								más alta que lo espera, de modo que la media no puede expropiarla.
+								Por eso un mutex no es intercambiable con un semáforo binario: el
+								semáforo no hereda.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-colas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					<span>Colas y patrón productor-consumidor</span>
+				</a>
+				<a class="slide-nav__link" href="19-semaforos-grupos-eventos.html">
+					<span>Semáforos y grupos de eventos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

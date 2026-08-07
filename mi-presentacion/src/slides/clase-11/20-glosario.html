@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 11 · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>Runtime embebido <span class="glossary-item__alt">embedded runtime</span></h3>
+						<p class="glossary-item__body">Firmware que ejecuta comportamiento definido fuera del binario: guiones, reglas, configuración o modelos. El binario pasa a ser plataforma.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Máquina virtual de aplicación <span class="glossary-item__alt">application virtual machine</span></h3>
+						<p class="glossary-item__body">Entorno que ejecuta módulos compilados a un formato portable, con aislamiento entre el módulo y el resto del sistema.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Aislamiento de fallos <span class="glossary-item__alt">fault isolation</span></h3>
+						<p class="glossary-item__body">Propiedad por la que el fallo de un módulo no compromete al resto. Separa cargar código arbitrario de cargarlo con permisos declarados.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Determinismo <span class="glossary-item__alt">determinism</span></h3>
+						<p class="glossary-item__body">Propiedad de un sistema cuyo peor caso puede acotarse. La recolección de memoria y el despacho dinámico de un intérprete la dificultan.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Cumplimiento aparente <span class="glossary-item__alt">apparent compliance</span></h3>
+						<p class="glossary-item__body">Modo de fallo en que el código hace lo pedido pero incumple un requisito temporal. Supera la compilación y las pruebas funcionales.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Superficie de ataque <span class="glossary-item__alt">attack surface</span></h3>
+						<p class="glossary-item__body">Todo aquello por lo que se puede influir en el dispositivo. Con comportamiento externo incluye el canal por el que se envía el guion.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>MCP <span class="glossary-item__alt">model context protocol</span></h3>
+						<p class="glossary-item__body">Protocolo por el que un agente consume herramientas y datos. El dispositivo puede actuar en los dos papeles: cliente y servidor.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Contexto <span class="glossary-item__alt">context</span></h3>
+						<p class="glossary-item__body">Información que se entrega a un asistente: hoja de datos, configuración del proyecto, interfaces y restricciones. Su calidad determina la del resultado.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Margen de actuación <span class="glossary-item__alt">action bounds</span></h3>
+						<p class="glossary-item__body">Intervalo dentro del cual se acota lo que un agente propone. Va compilado en el firmware, no en la configuración que el agente puede cambiar.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Versionado del comportamiento <span class="glossary-item__alt">behaviour versioning</span></h3>
+						<p class="glossary-item__body">Registro de qué guion o regla lleva cargada cada unidad. Sin él, dos equipos iguales se comportan distinto sin que conste por qué.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="21-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

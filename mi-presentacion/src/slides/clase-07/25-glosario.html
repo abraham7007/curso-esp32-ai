@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 7 · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>Socket <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Extremo de una conexión: el par dirección IP más puerto. Una conexión queda determinada por sus dos sockets.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>NAT <span class="glossary-item__alt">network address translation</span></h3>
+						<p class="glossary-item__body">Sustitución de la dirección privada de origen por la pública del router. Solo un paquete de salida crea la entrada de la tabla.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>DHCP y DNS <span class="glossary-item__alt">DHCP / DNS</span></h3>
+						<p class="glossary-item__body">El primero reparte dirección, máscara y puerta de enlace al entrar en la red; el segundo traduce nombres a direcciones y su fallo delata una red sin salida a internet.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>RSSI <span class="glossary-item__alt">received signal strength indicator</span></h3>
+						<p class="glossary-item__body">Potencia de la señal recibida, en dBm. Por debajo de −80 dBm el enlace se pierde y se recupera de forma repetida.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>MAC <span class="glossary-item__alt">media access control address</span></h3>
+						<p class="glossary-item__body">Dirección de seis bytes grabada en fabricación. No cambia al mudar de red.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>TCP y UDP <span class="glossary-item__alt">TCP / UDP</span></h3>
+						<p class="glossary-item__body">Protocolos de transporte. TCP garantiza entrega y orden con 20 bytes de cabecera; UDP no garantiza nada y ocupa 8.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>HTTPS <span class="glossary-item__alt">HTTP over TLS</span></h3>
+						<p class="glossary-item__body">HTTP cifrado con TLS. Exige hora válida, memoria adicional y un certificado raíz con el que verificar la cadena de confianza.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>API REST <span class="glossary-item__alt">REST API</span></h3>
+						<p class="glossary-item__body">Interfaz que expone recursos por su ruta, operados con los métodos de HTTP. El servidor no guarda estado entre peticiones.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Idempotencia <span class="glossary-item__alt">idempotence</span></h3>
+						<p class="glossary-item__body">Propiedad de una operación que da el mismo resultado al repetirse. Decide si un reintento es seguro.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Token <span class="glossary-item__alt">bearer token</span></h3>
+						<p class="glossary-item__body">Credencial que acompaña a cada petición en la cabecera <code>Authorization</code>. Nunca se versiona.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Backoff exponencial <span class="glossary-item__alt">exponential backoff</span></h3>
+						<p class="glossary-item__body">Reintento que duplica la espera tras cada fallo, hasta un máximo. Reduce consumo y evita saturar al servidor.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="24-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="26-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

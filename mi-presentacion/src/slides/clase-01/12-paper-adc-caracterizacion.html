@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Caracterización del conversor integrado · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY-NC-ND 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite">
+						<b>Espinosa-Gavira, M. J. et al.</b> (2024). Characterization and
+						Performance Evaluation of ESP32 for Real-time Synchronized Sensor
+						Networks. <i>Procedia Computer Science</i>, 237, 261-268. Universidad
+						de Cádiz. <code>doi:10.1016/j.procs.2024.05.104</code>
+					</p>
+
+					<h2 class="paper__title">
+						Aptitud del conversor integrado para instrumentación
+					</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Saber si una red de sensores sobre ESP32 sirve para <b>instrumentación en tiempo real</b>.</li>
+									<li>Caracterizar el <b>conversor integrado</b>, sin evaluación previa en la literatura.</li>
+									<li>Referencia: un <b>ADS1115 externo de 16 bits</b> con la misma señal patrón.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Error del integrado: <b>±10 mV</b>. Del externo: <b>±2 mV</b>. Un orden de magnitud.</li>
+									<li>La banda <b>no cambia</b> con el periodo de muestreo: 200, 100, 50 y 10 ms.</li>
+									<li>Cuatro limitaciones: no linealidad, ruido, referencia imprecisa y zonas muertas.</li>
+									<li>En red sí cumple: muestreo estable y transmisión sin cuellos de botella.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>Apto como <b>nodo de adquisición</b>; no apto como instrumento analógico.</li>
+									<li>Con requisito de precisión, conversor <b>externo de bajo costo</b>.</li>
+									<li>El criterio no son los bits sino el uso: ±10 mV da igual para mover un actuador y no da igual para publicar una medida.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-adc-error"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span><b>Izquierda:</b> dispersión del error de ambos conversores. <b>Derecha:</b> lo que reducen el condensador y el sobremuestreo.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-adc-periodos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>La banda no cambia en los cuatro periodos: <b>muestrear más despacio no compra exactitud</b>.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-codigo-03-adquisicion-adc.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 03 · Adquisición ADC</span>
+				</a>
+				<a class="slide-nav__link" href="13-pwm.html">
+					<span>Modulación por ancho de pulso</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

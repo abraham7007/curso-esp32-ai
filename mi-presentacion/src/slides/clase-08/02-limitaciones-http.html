@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuatro limitaciones de HTTP en aplicaciones de IoT · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					01 · Protocolo MQTT
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cuatro limitaciones de HTTP en aplicaciones de IoT</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Polling</div>
+						<p>
+							Para enterarse de un cambio, el dispositivo debe preguntar. Preguntar
+							cada 10 s significa <b>8640 peticiones diarias</b>, de las que casi
+							todas responden que no hay novedad.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Sobrecarga por petición</div>
+						<p>
+							Cada consulta abre una conexión, envía unos <b>192 bytes</b> de
+							cabeceras y la cierra. Con 12 bytes de dato, el protocolo pesa
+							dieciséis veces más que lo transportado.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>Consumo energético</div>
+						<p>
+							Cada petición enciende la radio, negocia el transporte y espera. En un
+							equipo alimentado por batería, ese ciclo repetido domina el consumo
+							total.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>Dispositivo no alcanzable</div>
+							<p>
+								La cuarta limitación es la de la sesión anterior: tras la traducción
+								de direcciones, el servidor <b>no puede iniciar</b> una conexión
+								hacia el dispositivo. Una orden de apagado tiene que esperar a la
+								siguiente consulta.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Lo que las cuatro tienen en común</span>
+							<p>
+								Todas derivan del mismo rasgo: HTTP <b>abre y cierra una conexión
+								por mensaje</b>. Mantener una sola conexión abierta, iniciada por el
+								dispositivo, resuelve las cuatro a la vez. Ese es el planteamiento
+								de MQTT.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Escenario</th><th>Con HTTP</th><th>Con conexión mantenida</th></tr></thead>
+								<tbody>
+									<tr><td>Enviar una medida cada 10 s</td><td>8640 conexiones al día</td><td>1 conexión, 8640 mensajes</td></tr>
+									<tr><td>Bytes de protocolo al día</td><td>~1,66 MB</td><td>~17 kB más el mantenimiento</td></tr>
+									<tr><td>Recibir una orden</td><td>Hasta 10 s de retraso</td><td>Inmediata</td></tr>
+									<tr><td>Saber si el equipo sigue vivo</td><td>Solo al recibir su consulta</td><td>El broker lo detecta y avisa</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<p class="figure__caption">
+							Las cifras de la segunda fila corresponden a 192 bytes de cabecera
+							por petición frente a 2 bytes por mensaje publicado.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Protocolo MQTT y plataformas de IoT</span>
+				</a>
+				<a class="slide-nav__link" href="03-publicacion-suscripcion.html">
+					<span>Publicación y suscripción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

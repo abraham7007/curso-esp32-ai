@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 25 · Costo de sincronizar entre núcleos · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 25</span>
+					</div>
+
+					<h2 class="code-hour__title">Costo de sincronizar dos tareas dentro y entre núcleos</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Cuánto tarda un semáforo en pasar el control de una tarea a otra, medido sobre el hardware empleado en dos configuraciones: las dos tareas fijadas al mismo núcleo, y una en cada núcleo. Se repite <b>1000 veces</b> y se comunican mínimo, media y máximo.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>semáforo binario</b> es una señal de un solo permiso: una tarea lo entrega, otra lo toma, y esa entrega es lo que se cronometra. <code>esp_timer_get_time()</code> da microsegundos desde el arranque, resolución suficiente aquí. El <b>error del instrumento</b> se obtiene llamando dos veces seguidas a la función de medida y restando: a esta escala no es despreciable.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Crea dos tareas que se pasen el control con un semáforo binario: la primera lo entrega, la segunda lo toma y lo devuelve. Mide el tiempo de ida y vuelta con <code>esp_timer_get_time()</code> y repítelo 1000 veces. Ejecuta la medida en dos configuraciones seleccionables por constante: ambas tareas fijadas al núcleo 1, y una en cada núcleo. Descuenta el tiempo de la propia función de medida, obtenido llamándola dos veces seguidas. Imprime a 115200 baudios mínimo, media y máximo de cada configuración, y su cociente.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del ciclo de medida, con el descuento del error del instrumento como un paso explícito. Y un <b>diagrama de bloques</b> con las dos configuraciones enfrentadas, mostrando por dónde viaja la señalización en cada una.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> conmuta un LED en el <b>GPIO 25</b> con resistencia de 220 Ω cada 100 intercambios. No hace falta nada más: la medida es interna al procesador.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-resistor></wokwi-resistor></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[CONFIG] repeticiones=1000  reloj=240 MHz error_medida=4.5 us
+[MISMO_NUCLEO] min=0.012 ms media=0.012 ms max=0.013 ms
+[ENTRE_NUCLEOS] min=0.164 ms media=0.171 ms max=0.209 ms
+[RELACION] entre_nucleos / mismo_nucleo = 14.3x
+[AVISO] sin afinidad fijada cae en cualquiera de los dos casos</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[RELACION]</code>: pasar el control entre núcleos cuesta <b>14,3 veces</b> más que dentro del mismo. Comparar después mínimo y máximo de cada configuración: entre núcleos el máximo se separa de la media mucho más que dentro de uno, y esa dispersión es la que vuelve impredecible un plazo. La última línea es el aviso que importa al diseñar: sin afinidad fijada, cada ejecución cae en un caso o en otro.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-dimensionamiento-pila.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Dimensionamiento de la pila</span>
+				</a>
+				<a class="slide-nav__link" href="14-paper-sobrecarga-planificador.html">
+					<span>Artículo · Sobrecarga del planificador</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

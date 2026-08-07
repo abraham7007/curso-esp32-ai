@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tipos de datos de tamaño específico · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					03 · Tipos, constantes y ámbito
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Tipos de datos de tamaño específico
+				</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<code>uint8_t</code>, <code>int16_t</code> y
+								<code>uint32_t</code> declaran el tamaño exacto en bits del
+								dato. <code>int</code> no garantiza el mismo tamaño entre
+								arquitecturas: son 4 bytes en el ESP32 y 2 bytes en un AVR de
+								8 bits, con el mismo código fuente.
+							</p>
+						</div>
+
+						<!-- Anatomía de la sigla: el nombre del tipo es autodescriptivo,
+						     pero solo si se sabe leer. Se descompone justo después de la
+						     definición, antes de usarlo en el ejemplo. -->
+						<div
+							class="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-subtle)] px-3 py-2"
+						>
+							<div class="usecases-label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Anatomía del nombre
+							</div>
+							<dl
+								class="m-0 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm"
+							>
+								<dt class="font-mono font-bold text-[var(--color-accent)]">u</dt>
+								<dd class="m-0"><b>Unsigned</b>: sin signo, solo valores ≥ 0.</dd>
+								<dt class="font-mono font-bold text-[var(--color-accent)]">int</dt>
+								<dd class="m-0"><b>Integer</b>: número entero, sin decimales.</dd>
+								<dt class="font-mono font-bold text-[var(--color-accent)]">8</dt>
+								<dd class="m-0"><b>8 bits</b>: ocupa exactamente 1 byte.</dd>
+								<dt class="font-mono font-bold text-[var(--color-accent)]">_t</dt>
+								<dd class="m-0">
+									<b>Type definition</b>: sufijo de C para un nombre de tipo.
+								</dd>
+							</dl>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+								Ejemplo
+							</div>
+							<p>
+								Un contador de pulsaciones que nunca pasa de 200 cabe en
+								<code>uint8_t</code>: <b>1 byte</b>. Declararlo
+								<code>int</code> gasta <b>4 bytes</b> y desperdicia 3. En una
+								variable suelta es irrelevante; en un arreglo de 1 000
+								muestras son <b>1 KB frente a 4 KB</b> de los 520 KB de SRAM.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Los tipos vienen de <code>&lt;stdint.h&gt;</code>, ya incluido
+								por el núcleo de Arduino: no hace falta añadir nada. Regla del
+								curso: el tipo se elige por el <b>rango real</b> del dato, y
+								<code>size_t</code> para índices y tamaños.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<div class="table-scroll">
+								<table>
+									<thead>
+										<tr>
+											<th>Tipo</th>
+											<th>Tamaño</th>
+											<th>Rango representable</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><code>uint8_t</code></td>
+											<td>1 byte</td>
+											<td>0 … 255</td>
+										</tr>
+										<tr>
+											<td><code>int8_t</code></td>
+											<td>1 byte</td>
+											<td>−128 … 127</td>
+										</tr>
+										<tr>
+											<td><code>uint16_t</code></td>
+											<td>2 bytes</td>
+											<td>0 … 65 535</td>
+										</tr>
+										<tr>
+											<td><code>int16_t</code></td>
+											<td>2 bytes</td>
+											<td>−32 768 … 32 767</td>
+										</tr>
+										<tr>
+											<td><code>uint32_t</code></td>
+											<td>4 bytes</td>
+											<td>0 … 4 294 967 295</td>
+										</tr>
+										<tr>
+											<td><code>int</code></td>
+											<td>4 bytes <i>en el ESP32</i></td>
+											<td>fijado por la arquitectura, no por el código</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="controls mt-3">
+								<label for="tipo-n" class="text-sm font-medium">
+									Muestras almacenadas en el arreglo
+								</label>
+								<input
+									type="range"
+									id="tipo-n"
+									min="100"
+									max="4000"
+									step="100"
+									value="1000"
+								/>
+								<span class="readout" id="tipo-n-out">1 000</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item metric__item--ok">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Arreglo de <code>uint8_t</code>
+									</span>
+									<span class="readout" id="tipo-u8-out">1,0 KB</span>
+								</div>
+								<div class="metric__item metric__item--warn">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Arreglo de <code>int</code>
+									</span>
+									<span class="readout" id="tipo-int-out">3,9 KB</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										SRAM desperdiciada
+									</span>
+									<span class="readout" id="tipo-waste-out">2,9 KB</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Fracción de los 520 KB de SRAM
+									</span>
+									<span class="readout" id="tipo-pct-out">0,56 %</span>
+								</div>
+							</div>
+
+							<div class="sim-caption mt-3">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+								<p class="m-0">
+									Ambos arreglos guardan exactamente el mismo dato, 
+									pulsaciones entre 0 y 200, y producen la misma lectura. La
+									diferencia es la memoria ocupada: el factor 4 entre
+									<code>uint8_t</code> e <code>int</code> es constante, así
+									que crece con el número de muestras.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-control-versiones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Control de versiones</span>
+				</a>
+				<a class="slide-nav__link" href="12-paper-lenguajes-esp32.html">
+					<span>Costo de ejecución de cada lenguaje en el mismo chip</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const SRAM_KB = 520;
+			const nInput = document.getElementById("tipo-n");
+			const nOut = document.getElementById("tipo-n-out");
+			const u8Out = document.getElementById("tipo-u8-out");
+			const intOut = document.getElementById("tipo-int-out");
+			const wasteOut = document.getElementById("tipo-waste-out");
+			const pctOut = document.getElementById("tipo-pct-out");
+
+			function miles(n) {
+				return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			}
+
+			function kb(bytes) {
+				return `${(bytes / 1024).toFixed(1).replace(".", ",")} KB`;
+			}
+
+			function update() {
+				const n = Number(nInput.value);
+				const bytesU8 = n;
+				const bytesInt = n * 4;
+				const waste = bytesInt - bytesU8;
+
+				nOut.textContent = miles(n);
+				u8Out.textContent = kb(bytesU8);
+				intOut.textContent = kb(bytesInt);
+				wasteOut.textContent = kb(waste);
+				pctOut.textContent = `${((waste / 1024 / SRAM_KB) * 100)
+					.toFixed(2)
+					.replace(".", ",")} %`;
+			}
+
+			nInput.addEventListener("input", update);
+			update();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

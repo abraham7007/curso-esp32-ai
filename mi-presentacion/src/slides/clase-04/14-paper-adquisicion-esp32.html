@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Un sistema de adquisición completo sobre ESP32 · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Zobel, O. M.; Maierhofer, J.; Rixen, D. J.</b> (2026). OASIS-ERIS: Open Acquisition System for IEPE Sensors - Electrically Refined and Inter-device Synchronization. <i>arXiv</i>. Universidad Técnica de Múnich. <code>arXiv:2607.22061</code></p>
+
+					<h2 class="paper__title">Alcance del ESP32 como equipo de medida</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Ver si un sistema abierto y de bajo costo puede <b>sustituir a un equipo comercial</b> de medida.</li>
+									<li>Aplicación exigente: <b>análisis modal</b>, con varios canales simultáneos y base de tiempo común.</li>
+									<li>Montaje: ESP32-S3 con conversor externo <b>AD7606C-18</b>, contrastado contra el equipo comercial.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li><b>18 bits</b> y ocho canales muestreados de forma simultánea.</li>
+									<li><b>100 kHz</b> de frecuencia de muestreo tras migrar el firmware a ESP-IDF.</li>
+									<li>Sincronización entre placas por <b>conexión física del reloj</b>, no por software.</li>
+									<li>Los resultados <b>igualan de cerca</b> los del sistema comercial.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>Reemplazo viable en el ámbito académico y con presupuesto ajustado.</li>
+									<li>El conversor <b>integrado en el SoC no alcanza</b> los requisitos de esta aplicación.</li>
+									<li>Lo que se compra con el conversor externo es resolución; lo que se compra con el cable es una base de tiempo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-resolucion-adc"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Los bits no se comparan entre sí sino por el escalón de tensión que cada resolución deja sin resolver, con el mismo fondo de escala de 3,3 V.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-reloj-comun"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Por qué el reloj se comparte por cable: con relojes independientes, comparar canales entre placas deja de ser válido.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-muestreo-solapamiento.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Frecuencia de muestreo y solapamiento</span>
+				</a>
+				<a class="slide-nav__link" href="15-consulta-vs-interrupcion.html">
+					<span>Polling frente a interrupción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

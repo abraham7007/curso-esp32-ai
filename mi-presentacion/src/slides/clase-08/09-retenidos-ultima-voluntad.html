@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mensajes retenidos, Last Will y sesión persistente · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					01 · Protocolo MQTT
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Mensajes retenidos, Last Will y sesión persistente</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>Retained message</div>
+						<p>
+							El broker guarda el <b>último</b> mensaje publicado con esa
+							marca en cada nombre, y lo entrega de inmediato a quien se suscribe
+							después.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Sin él, un panel recién abierto queda vacío hasta la siguiente
+							publicación.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Last Will</div>
+						<p>
+							Mensaje que el cliente entrega <b>al conectarse</b> y que el
+							broker publica en su nombre si la conexión se corta sin
+							despedida.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Es la única forma de que el sistema distinga «sin novedad» de
+							«desconectado».
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>Sesión persistente</div>
+						<p>
+							El broker conserva las suscripciones del cliente y los mensajes
+							de QoS 1 y 2 que llegaron mientras estaba ausente.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Exige un identificador de cliente estable entre reinicios.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="conclusion">
+							<span class="conclusion__label">Los dos primeros se usan juntos</span>
+							<p>
+								El dispositivo publica <code>en linea</code> como retained message en
+								<code>.../estado</code> al conectar, y declara <code>desconectado</code>
+								como Last Will <b>en ese mismo nombre y también retenido</b>.
+								Con esa combinación, cualquier panel que se abra en cualquier momento
+								ve el estado real del equipo, incluso tras un corte de corriente.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+								Keepalive
+							</div>
+							<p>
+								El cliente promete dar señales al menos cada <b>keepalive (intervalo de mantenimiento)</b>
+								segundos. Si el broker no recibe nada en 1,5 veces ese plazo,
+								da la conexión por perdida y publica el Last Will. Un valor de
+								60 s detecta la caída en unos 90 s.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="term">[CONN] id=esp01-a4cf12  keepalive=60 s  sesion_persistente=si
+[CONN] ultima voluntad: uni/lab3/esp01/estado = "desconectado" (retenido)
+[PUB]  uni/lab3/esp01/estado = "en linea" (retenido)
+...
+[CORTE] alimentacion perdida, sin despedida
+[BROKER] t+90 s  keepalive vencido
+[BROKER] publica uni/lab3/esp01/estado = "desconectado" (retenido)
+[PANEL] suscriptor nuevo recibe de inmediato: "desconectado"</div>
+
+						<p class="figure__caption">
+							El panel no necesita lógica de vigilancia: el broker publica el
+							estado real y el retenido se lo entrega a quien llegue después.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-niveles-calidad-servicio.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					<span>Niveles de QoS</span>
+				</a>
+				<a class="slide-nav__link" href="10-seguridad-mqtt.html">
+					<span>Seguridad del intercambio</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

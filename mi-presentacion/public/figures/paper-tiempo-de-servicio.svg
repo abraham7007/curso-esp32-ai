@@ -1,0 +1,115 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 416.214053 141.696" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 141.696 
+L 416.214053 141.696 
+L 416.214053 0 
+L 0 0 
+L 0 141.696 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 99.371549 34.872006 
+Q 136.912234 56.064328 173.187224 76.542145 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-navy); stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 170.437105 72.463316 
+L 173.187224 76.542145 
+L 168.274089 76.294943 
+z
+" clip-path="url(#p736353cd4e)" style="fill: var(--fig-navy); stroke: var(--fig-navy); stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 242.219549 79.224006 
+Q 279.760234 100.416328 316.035224 120.894145 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 313.285105 116.815316 
+L 316.035224 120.894145 
+L 311.122089 120.646943 
+z
+" clip-path="url(#p736353cd4e)" style="fill: var(--fig-accent); stroke: var(--fig-accent); stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 327.829173 121.457754 
+Q 358.324135 100.417323 387.622776 80.202311 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 382.751771 80.890288 
+L 387.622776 80.202311 
+L 385.250554 84.511901 
+z
+" clip-path="url(#p736353cd4e)" style="fill: var(--fig-ok); stroke: var(--fig-ok); stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 176.194853 84.1536 
+L 240.476453 84.1536 
+L 240.476453 72.3264 
+L 176.194853 72.3264 
+z
+" clip-path="url(#p736353cd4e)" style="fill: var(--fig-accent); opacity: 0.18"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 76.201253 33.888 
+L 397.609253 33.888 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-grid); stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 76.201253 78.24 
+L 397.609253 78.24 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-grid); stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 76.201253 122.592 
+L 397.609253 122.592 
+" clip-path="url(#p736353cd4e)" style="fill: none; stroke: var(--fig-grid); stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-navy); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="70.844453" y="36.256047" transform="rotate(-0 70.844453 36.256047)">emisor</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="70.844453" y="80.608047" transform="rotate(-0 70.844453 80.608047)">intermediario</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="70.844453" y="124.960047" transform="rotate(-0 70.844453 124.960047)">receptor</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-navy); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="136.911653" y="50.1504" transform="rotate(-0 136.911653 50.1504)">PUBLISH</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="279.759653" y="94.5024" transform="rotate(-0 279.759653 94.5024)">PUBLISH</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="358.326053" y="94.5024" transform="rotate(-0 358.326053 94.5024)">PUBACK</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 237.249586 95.488 
+Q 208.338846 95.488 179.428107 95.488 
+" style="fill: none; stroke: var(--fig-ink); stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 233.649586 93.688 
+L 237.249586 95.488 
+L 233.649586 97.288 
+" style="fill: none; stroke: var(--fig-ink); stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 183.028107 97.288 
+L 179.428107 95.488 
+L 183.028107 93.688 
+" style="fill: none; stroke: var(--fig-ink); stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(164.989403 97.81315)">tiempo de servicio</text>
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(167.397528 106.8224)">del intermediario</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="397.609253" y="16.64" transform="rotate(-0 397.609253 16.64)">el viaje por la red queda fuera de la medida</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p736353cd4e">
+   <rect x="54.774053" y="4.32" width="357.12" height="133.056"/>
+  </clipPath>
+ </defs>
+</svg>

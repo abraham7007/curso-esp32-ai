@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La tarea y su pila de ejecución · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La tarea y su pila de ejecución</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Una <b>tarea</b> es una función con bucle propio y, sobre todo, con
+								<b>pila propia</b>. Esa pila guarda sus variables locales y la
+								dirección de retorno de cada llamada, y es lo que permite
+								interrumpirla en cualquier punto y reanudarla exactamente ahí.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>xTaskCreatePinnedToCore(funcion, "nombre", pila, param,
+								prioridad, &amp;handle, nucleo)</code>. El tamaño de pila se
+								expresa en <b>palabras</b>, no en bytes: en el ESP32 una palabra
+								son 4 bytes, de modo que 4096 reserva 16 kB.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								La función de una tarea <b>no debe retornar nunca</b>. Si termina,
+								hay que eliminarla con <code>vTaskDelete(NULL)</code>; salir por el
+								final de la función provoca el reinicio del sistema.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">creación y estructura</span>
+							</div>
+							<pre><code>void tareaMuestreo(void *param) {
+  <span class="hl hl--hit">for (;;) {                    // no retorna nunca</span>
+    int v = analogRead(34);
+    vTaskDelay(pdMS_TO_TICKS(1));  // cede el procesador
+  }
+}
+
+void setup() {
+  xTaskCreatePinnedToCore(
+    tareaMuestreo, "muestreo",
+    <span class="hl hl--add">4096,</span>        // pila en palabras → 16 kB
+    nullptr,
+    <span class="hl hl--add">3,</span>           // prioridad; loop() usa 1
+    nullptr,
+    <span class="hl hl--add">1);</span>          // núcleo 1
+}</code></pre>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Cada tarea reserva su pila en SRAM al crearse. Diez tareas de 4096
+								palabras ocupan <b>160 kB</b> de los 320 kB disponibles, y esa
+								memoria se reserva aunque la tarea esté bloqueada.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-rtos-determinismo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					<span>Sistema de tiempo real y determinismo</span>
+				</a>
+				<a class="slide-nav__link" href="05-estados-tarea.html">
+					<span>Los cuatro estados de una tarea</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

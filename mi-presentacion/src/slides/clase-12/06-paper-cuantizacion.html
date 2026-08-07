@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Despliegue de una red cuantizada sobre un microcontrolador · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Novac, P.-E.; Boukli Hacene, G.; Pegatoquet, A. et al.</b> (2021). Quantization and Deployment of Deep Neural Networks on Microcontrollers. <i>Sensors</i> 21(9), 2984. <code>doi:10.3390/s21092984</code></p>
+
+					<h2 class="paper__title">Despliegue de una red cuantizada sobre un microcontrolador</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Llevar una red entrenada a un microcontrolador con memoria y cómputo limitados.</li>
+									<li>La coma flotante de 32 bits ofrece un <b>rango muy superior</b> al que una red necesita.</li>
+									<li>Proponen una cadena <b>extremo a extremo</b>: entrenar, cuantizar y desplegar.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Reducir de <b>32 a 8 bits</b> por parámetro deja cada uno en la cuarta parte de memoria.</li>
+									<li>La <b>aritmética entera</b> resulta más rápida en muchos microcontroladores.</li>
+									<li>La eficiencia energética <b>depende del hardware y del marco</b>, no solo del modelo.</li>
+									<li>Alcance de la propuesta: una sola cadena, frente a herramientas cerradas.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Las cifras de tamaño y de tiempo <b>no se transfieren</b> de una placa a otra.</li>
+									<li>Un modelo que cabe y responde en el hardware del artículo puede no hacerlo en otro.</li>
+									<li>La única forma de saberlo es <b>desplegarlo y medir</b>, no extrapolar.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-cuantizacion-memoria"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia a partir de la reducción publicada, cruzada con la memoria del módulo empleado: el cruce con el presupuesto dice cuántos parámetros caben.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-cuantizacion-efectos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Qué cambia al cuantizar y qué no se puede dar por bueno sin medirlo en el hardware de destino.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-reduccion-del-modelo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Reducción del modelo</span>
+				</a>
+				<a class="slide-nav__link" href="07-metricas-de-evaluacion.html">
+					<span>Métricas de evaluación</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

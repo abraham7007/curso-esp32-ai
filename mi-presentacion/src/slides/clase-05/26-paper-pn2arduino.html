@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Del modelo gráfico al control ejecutable sobre el microcontrolador · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Riera, D.; Vidal, G.; Yepes, S. et al.</b> (2021). PN2ARDUINO: control de sistemas de eventos discretos mediante redes de Petri. <i>Revista Iberoamericana de Automática e Informática Industrial</i>. <code>doi:10.4995/riai.2021.15104</code></p>
+
+					<h2 class="paper__title">Del modelo gráfico al control ejecutable sobre el microcontrolador</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Controlar un sistema de eventos discretos <b>dibujando su modelo</b> en vez de escribir el control.</li>
+									<li>Formalismo: <b>redes de Petri</b>, emparentado con las máquinas de estados.</li>
+									<li>Verificación sobre una maqueta de alarma de incendios con zumbador y fotorresistencia.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>El modelo tiene <b>tres plazas y cinco transiciones</b>: basta para controlar la maqueta.</li>
+									<li>El disparo se fija en <b>799 de 1023</b>, hallado midiendo y no en una hoja de datos.</li>
+									<li>Se comparan dos arquitecturas según dónde vive la lógica de control.</li>
+									<li>Con la lógica fuera, el modelo se cambia <b>sin recompilar</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>El modelo gráfico resulta <b>suficiente</b> para controlar el sistema.</li>
+									<li>La escala de estos sistemas es pequeña aunque el comportamiento no lo parezca.</li>
+									<li>Sacar la lógica del microcontrolador se paga con la <b>autonomía</b> del equipo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-umbral-fotorresistencia"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>El umbral 799 sobre el recorrido completo del convertidor: la decisión reparte el rango en 78 % y 22 %.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-pn-arquitecturas"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>El compromiso entre las dos arquitecturas que compara el artículo, propiedad por propiedad.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="25-codigo-23-maquina-verificable.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Máquina verificable</span>
+				</a>
+				<a class="slide-nav__link" href="27-estado-sistema-vs-interfaz.html">
+					<span>Estado del sistema y de la interfaz</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

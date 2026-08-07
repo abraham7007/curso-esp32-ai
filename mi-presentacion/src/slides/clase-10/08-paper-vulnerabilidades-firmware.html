@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Alcance de una auditoría del entorno de firmware · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Bakhshi, T.; Ghita, B.; Kuzminykh, I.</b> (2024). A Review of IoT Firmware Vulnerabilities and Auditing Techniques. <i>Sensors</i> 24(2), 708. <code>doi:10.3390/s24020708</code></p>
+
+					<h2 class="paper__title">Alcance de una auditoría del entorno de firmware</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Determinar <b>qué hay que auditar</b> para reducir las vulnerabilidades del firmware.</li>
+									<li>Estas vulnerabilidades <b>se pasan por alto</b> durante el desarrollo y el despliegue.</li>
+									<li>Mientras la dependencia de los equipos conectados no deja de crecer.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>La revisión recorre el <b>ciclo completo</b>: componentes, almacenamiento, configuración, entrega, mantenimiento y actualización.</li>
+									<li>Examina además la eficacia de las herramientas disponibles para cada etapa.</li>
+									<li>Esa eficacia resulta <b>desigual</b>: cubren unas partes mucho mejor que otras.</li>
+									<li>Auditar el binario cubre <b>una de las seis</b> etapas.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Una estrategia eficaz debe cubrir <b>todo el ciclo y no solo el código</b>.</li>
+									<li>Auditar el binario sin revisar cómo se almacena, configura y entrega deja abiertas las vías reales.</li>
+									<li>Las cinco etapas restantes son por donde se compromete un equipo en operación.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-ciclo-firmware"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia con las seis etapas que recorren los autores: auditar el binario cubre una.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-auditoria-cobertura"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Dónde hay herramienta madura y dónde el trabajo sigue siendo manual, según lo que afirma la revisión.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-diagnostico-equipo-remoto.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>Diagnóstico de un equipo remoto</span>
+				</a>
+				<a class="slide-nav__link" href="09-codigo-41-diagnostico.html">
+					<span>La hora del código · Diagnóstico de arranque</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

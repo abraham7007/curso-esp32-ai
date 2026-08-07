@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cinco sistemas modelados con estados · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cinco sistemas modelados con estados</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>El mismo formalismo en cinco dominios.</strong> Lo que cambia
+					entre ellos es el origen del evento, no la estructura del modelo.
+				</p>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr>
+								<th>Sistema</th>
+								<th>Estados</th>
+								<th>Origen de los eventos</th>
+								<th>Rasgo que lo distingue</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>Semáforo con paso peatonal</b></td>
+								<td>3</td>
+								<td>Pulsador y temporizador</td>
+								<td>Guarda de tiempo mínimo que acota la solicitud del peatón</td>
+							</tr>
+							<tr>
+								<td><b>Máquina expendedora</b></td>
+								<td>4</td>
+								<td>Monedas, selección y sensor de entrega</td>
+								<td>El estado acumula un valor: el crédito forma parte de él</td>
+							</tr>
+							<tr>
+								<td><b>Portón automático</b></td>
+								<td>5</td>
+								<td>Fines de carrera, barrera y plazo máximo</td>
+								<td>Estado de error alcanzable desde los dos estados transitorios</td>
+							</tr>
+							<tr>
+								<td><b>Cargador por etapas</b></td>
+								<td>4</td>
+								<td>Magnitud medida por el ADC</td>
+								<td>Guardas con histéresis sobre una medida ruidosa</td>
+							</tr>
+							<tr>
+								<td><b>Gestión de la conexión</b></td>
+								<td>4 + subestados</td>
+								<td>Pila de red y temporizadores de reintento</td>
+								<td>Jerarquía: los subestados de operación cuelgan de <code>CONECTADO</code></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Lo que tienen en común</span>
+					<p>
+						En los cinco, el número de estados se mantiene por debajo de seis
+						aunque el sistema sea complejo. Cuando un modelo empieza a necesitar
+						quince estados, casi siempre está mezclando dos máquinas distintas que
+						conviene separar, o pidiendo jerarquía.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-paper-statecharts-jerarquicos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Análisis de statecharts jerárquicos</span>
+				</a>
+				<a class="slide-nav__link" href="22-maquina-conexion-red.html">
+					<span>La conexión de red como máquina</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

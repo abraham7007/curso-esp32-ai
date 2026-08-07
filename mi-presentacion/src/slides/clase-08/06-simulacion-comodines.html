@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Alcance de una suscripción sobre el árbol de topics · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Protocolo MQTT
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Alcance de una suscripción sobre el árbol de topics</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Las dos reglas
+							</div>
+							<p>
+								<code>+</code> sustituye <b>exactamente un nivel</b>;
+								<code>#</code> cubre <b>todos los restantes</b> y solo puede ir al
+								final. Un topic coincide o no coincide: no hay coincidencia
+								parcial.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Cada patrón resalta los topics que entrega el broker. Con el
+								identificador del dispositivo en su propio nivel,
+								<code>uni/lab3/+/temperatura</code> reúne la misma magnitud de todos
+								los equipos y <code>uni/lab3/esp01/+</code> reúne todas las magnitudes
+								de uno. Con el identificador al final, ninguna de las dos consultas
+								es expresable.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<div class="picker" id="cmd-picker">
+								<button type="button" class="picker__item" data-patron="uni/lab3/esp01/temperatura">esp01/temperatura</button>
+								<button type="button" class="picker__item" data-patron="uni/lab3/esp01/+">esp01/+</button>
+								<button type="button" class="picker__item" data-patron="uni/lab3/+/temperatura">+/temperatura</button>
+								<button type="button" class="picker__item" data-patron="uni/lab3/#">lab3/#</button>
+								<button type="button" class="picker__item" data-patron="uni/#">uni/#</button>
+							</div>
+
+							<div class="detail-panel mt-3">
+								<p class="m-0 text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+									Suscripción activa:
+									<code id="cmd-patron">uni/lab3/esp01/temperatura</code>
+								</p>
+								<ul class="m-0 mt-2 list-none p-0" id="cmd-lista"></ul>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item metric__item--ok">
+									<span class="text-xs text-[var(--color-text-muted)]">Topics entregados</span>
+									<span class="readout" id="cmd-entregados">1 de 9</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Mensajes por minuto</span>
+									<span class="readout" id="cmd-carga">12</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-topics-jerarquia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					<span>Jerarquía de topics y comodines</span>
+				</a>
+				<a class="slide-nav__link" href="07-codigo-32-primer-publicador.html">
+					<span>La hora del código · Publicador y suscriptor</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Árbol de ejemplo con dos dispositivos y una rama de comandos, y el
+			// ritmo con que publica cada uno. El segundo dato es lo que convierte
+			// la elección del patrón en una decisión de ingeniería y no de estilo.
+			const TOPICS = [
+				{ t: "uni/lab3/esp01/temperatura", min: 12 },
+				{ t: "uni/lab3/esp01/humedad", min: 12 },
+				{ t: "uni/lab3/esp01/estado", min: 1 },
+				{ t: "uni/lab3/esp01/comando/led", min: 0 },
+				{ t: "uni/lab3/esp02/temperatura", min: 12 },
+				{ t: "uni/lab3/esp02/estado", min: 1 },
+				{ t: "uni/lab5/esp07/temperatura", min: 60 },
+				{ t: "uni/lab5/esp07/estado", min: 1 },
+				{ t: "uni/planta/caudal", min: 30 },
+			];
+
+			const picker = document.getElementById("cmd-picker");
+			const salPatron = document.getElementById("cmd-patron");
+			const lista = document.getElementById("cmd-lista");
+			const salEntregados = document.getElementById("cmd-entregados");
+			const salCarga = document.getElementById("cmd-carga");
+
+			// Regla de coincidencia del protocolo, escrita tal cual: '+' consume un
+			// nivel y '#' consume el resto y termina.
+			function coincide(patron, topic) {
+				const p = patron.split("/");
+				const t = topic.split("/");
+				for (let i = 0; i < p.length; i++) {
+					if (p[i] === "#") return true;
+					if (i >= t.length) return false;
+					if (p[i] !== "+" && p[i] !== t[i]) return false;
+				}
+				return p.length === t.length;
+			}
+
+			function pintar(patron) {
+				salPatron.textContent = patron;
+				lista.textContent = "";
+
+				let entregados = 0;
+				let carga = 0;
+				for (const { t, min } of TOPICS) {
+					const hit = coincide(patron, t);
+					if (hit) {
+						entregados += 1;
+						carga += min;
+					}
+					const li = document.createElement("li");
+					li.className = hit
+						? "font-semibold text-[var(--color-ok)]"
+						: "is-dimmed";
+					const code = document.createElement("code");
+					code.textContent = t;
+					li.append(code);
+					if (hit && min > 0) {
+						const span = document.createElement("span");
+						span.className = "text-[length:var(--fs-micro)] text-[var(--color-text-muted)]";
+						span.textContent = ` · ${min}/min`;
+						li.append(span);
+					}
+					lista.append(li);
+				}
+
+				salEntregados.textContent = `${entregados} de ${TOPICS.length}`;
+				salCarga.textContent = String(carga);
+			}
+
+			picker.addEventListener("click", (ev) => {
+				const boton = ev.target.closest(".picker__item");
+				if (!boton) return;
+				for (const b of picker.querySelectorAll(".picker__item")) {
+					b.classList.toggle("is-selected", b === boton);
+				}
+				pintar(boton.dataset.patron);
+			});
+
+			picker.querySelector(".picker__item").classList.add("is-selected");
+			pintar(TOPICS[0].t);
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

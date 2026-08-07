@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Qué es ESP-Claw y qué exige · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Un agente ejecutándose sobre el propio dispositivo</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué es
+							</div>
+							<p>
+								Marco de trabajo de Espressif que la propia documentación define como
+								<b>«Chat-as-Coding Edge Agent Framework for IoT»</b>: el
+								comportamiento del equipo se describe conversando y queda fijado en
+								<b>guiones en Lua</b> que se guardan en el dispositivo. El ciclo de
+								adquirir, decidir y actuar se resuelve en local.
+							</p>
+							<p>
+								No es un producto cerrado sino <b>una aplicación de ejemplo más
+								componentes</b>: <code>application/edge_agent/</code> monta el
+								equipo concreto y los componentes aportan el runtime, las capacidades
+								y el acceso a los periféricos.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+								Dónde vive lo que el equipo aprende
+							</div>
+							<p>
+								Todo el estado del agente es un <b>árbol de archivos en la partición
+								de datos</b>: <code>sessions/</code>, <code>memory/</code>,
+								<code>skills/</code>, <code>scripts/</code>,
+								<code>router_rules/</code> y <code>scheduler/</code>. Respaldar es
+								copiar esas carpetas; reiniciar de fábrica es volver a grabar la
+								partición.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="esp-claw-requisitos"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+								<span>
+									Requisito publicado frente al módulo empleado. La documentación
+									pide <b>8 MB de Flash y 8 MB de PSRAM</b> y admite ESP32-S3, P4 y
+									C5. El módulo de estas sesiones tiene 4 MB y no lleva PSRAM: no lo
+									ejecuta, y saber por qué forma parte de la lección.
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-binario-frente-a-comportamiento.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					<span>Actualizar el binario o el comportamiento</span>
+				</a>
+				<a class="slide-nav__link" href="11-esp-claw-por-dentro.html">
+					<span>ESP-Claw por dentro</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

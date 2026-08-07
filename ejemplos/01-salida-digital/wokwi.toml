@@ -1,0 +1,23 @@
+[wokwi]
+version = 1
+elf = ".pio/build/esp32dev/firmware.elf"
+firmware = ".pio/build/esp32dev/firmware.bin"
+
+[[serial]]
+port = "USB"
+baud = 115200
+
+[[hardware]]
+type = "esp32dev"
+label = "ESP32 DevKit"
+
+[[hardware]]
+type = "led"
+pin = 2
+color = "red"
+
+[[hardware]]
+type = "resistor"
+left = "led:r"
+right = "esp32dev:GPIO2"
+value = "220"

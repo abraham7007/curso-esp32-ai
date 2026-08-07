@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 29 · Exploración de redes y diagnóstico del enlace · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 29</span>
+					</div>
+
+					<h2 class="code-hour__title">Exploración de redes y diagnóstico de la calidad del enlace</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Explorar las redes visibles al arrancar, clasificarlas por banda y por canal y avisar de las que el ESP32 no puede usar. Ya conectado, medir el <b>RSSI cada 10 s</b> y traducirlo a las cuatro categorías de calidad, que el LED codifica con su ritmo.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>El <b>canal</b> es la porción de banda que ocupa una red. En 2,4 GHz los canales se solapan entre sí, y solo <b>1, 6 y 11</b> no comparten espectro: dos redes en canales vecinos se estorban aunque ambas se reciban fuertes. Un canal por encima del 14 corresponde a <b>5 GHz</b>, banda que este módulo no sintoniza. <code>WiFi.scanNetworks()</code> devuelve la lista con nombre, canal, RSSI y cifrado.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Al arrancar, llama a <code>WiFi.scanNetworks()</code> e imprime para cada red su nombre, canal, RSSI y cifrado. Marca como no utilizable toda red cuyo canal supere el 14, porque corresponde a la banda de 5 GHz. Avisa de las que ocupan un canal distinto de 1, 6 u 11, indicando con cuáles se solapan. Después conéctate y mide el RSSI cada 10000 ms, clasificándolo en EXCELENTE, SUFICIENTE, MARGINAL o SIN_ENLACE según los umbrales de −55, −70 y −80 dBm. El LED codifica la categoría por su ritmo. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la exploración: recorrer la lista, decidir utilizable o no y emitir el aviso de solapamiento. Y la <b>banda de 2,4 GHz</b> con sus 13 canales dibujados con su anchura real, para que se vea por qué solo 1, 6 y 11 no se solapan.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende un LED en el <b>GPIO 25</b> con resistencia de 220 Ω, cuyo ritmo de parpadeo codifica la calidad: fijo para excelente, lento para suficiente, rápido para marginal, apagado sin enlace.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="yellow"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-resistor></wokwi-resistor></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[SCAN] 6 redes en 2114 ms
+[SCAN] LAB-UNI      ch= 6  rssi=-48  WPA2   utilizable
+[SCAN] LAB-UNI-5G   ch=36  rssi=-52  WPA2   NO: banda de 5 GHz
+[SCAN] vecino-3b ch= 3  rssi=-79  WPA2   aviso: solapa 1 y 6
+[RSSI] t=10000  -51 dBm calidad=EXCELENTE
+[RSSI] t=40000  -73 dBm calidad=MARGINAL</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La tercera línea del barrido es la que enseña: <code>vecino-3b</code> está en el canal 3 y <b>solapa con el 1 y con el 6</b>, que es el canal propio. Un enlace inestable con RSSI aceptable casi siempre se explica así, y sin este listado no hay manera de sospecharlo desde el dispositivo. Comparar después las dos líneas <code>[RSSI]</code>: 22 dB de caída bastan para pasar de excelente a marginal.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-peticion-respuesta-http.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>Estructura de petición y respuesta</span>
+				</a>
+				<a class="slide-nav__link" href="13-metodos-codigos-estado.html">
+					<span>Métodos y códigos de estado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La IA como herramienta de desarrollo y como componente en operación · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La IA como herramienta de desarrollo y como componente en operación</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Herramienta de desarrollo</h3>
+						<p>
+							Generar drivers, revisar código, documentar, diagnosticar. Es lo que
+							hace «La hora del código» desde la sesión 1.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>El resultado lo revisa una persona antes de ejecutarse.</b> El
+							error se detecta en desarrollo y no llega al producto.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Componente del sistema en operación</h3>
+						<p>
+							Capacidad de decisión y de actuación sobre el dispositivo mientras
+							está funcionando, sin nadie delante.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Nadie revisa cada decisión.</b> Lo que se revisa es el margen de
+							actuación que se le concede.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Son <b>dos problemas de ingeniería distintos</b> y se confunden con
+						facilidad porque la tecnología es la misma. En el primero, la pregunta es
+						cómo verificar lo generado. En el segundo, qué puede tocar el agente y
+						qué ocurre cuando se equivoca, que no es cuestión de verificación sino de
+						diseño de permisos y de rutas de recuperación.
+					</p>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Lo que no cambia en ninguno de los dos</span>
+					<p>
+						La <b>definición de requisitos</b>, la <b>arquitectura</b>, la
+						<b>seguridad</b>, la <b>validación sobre hardware real</b> y la
+						<b>responsabilidad sobre el resultado</b> siguen siendo del
+						desarrollador. Ninguna de las cinco se delega, y ninguna se cubre
+						generando más código.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-esp-claw-por-dentro.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>ESP-Claw por dentro</span>
+				</a>
+				<a class="slide-nav__link" href="13-flujo-y-contexto.html">
+					<span>Flujo de trabajo y contexto</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

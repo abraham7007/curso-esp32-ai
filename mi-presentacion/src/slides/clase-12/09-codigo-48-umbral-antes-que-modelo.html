@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 48 · Umbral y transformada antes de entrenar nada · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 48</span>
+					</div>
+
+					<h2 class="code-hour__title">Umbral y transformada como línea de base antes de entrenar nada</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Establecer la <b>línea de base</b> antes de plantear ningún modelo: detectar la condición con un umbral sobre la señal filtrada y sobre la energía de una banda, y registrar la matriz de confusión completa contra 200 casos etiquetados a mano.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>La <b>matriz de confusión</b> son las cuatro cuentas, verdaderos y falsos positivos y negativos, y no se puede sustituir por la exactitud, que oculta el reparto entre los dos tipos de error. La <b>energía de banda</b> mide cuánta señal hay en un rango de frecuencias: convierte una forma de onda en un número comparable. La <b>línea de base</b> es el mejor resultado alcanzable sin aprendizaje, y es contra ella ,no contra la nada, como se juzga después un modelo.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Guarda en el sistema de archivos 200 ventanas de señal etiquetadas como normal o anomalía. Implementa tres detectores: umbral sobre la señal cruda, umbral sobre la señal filtrada con el filtro exponencial de la sesión 4, y umbral sobre la energía de una banda obtenida por transformada. Para cada uno, calcula la <b>matriz de confusión completa</b> sobre los 200 casos, y mide el tiempo de proceso y la memoria adicional. Emite a 115200 baudios la comparación de los tres. No entrenes ningún modelo en este ejemplo.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de un caso a través de los tres detectores, con la etapa que añade cada uno. Y la <b>cadena de etapas</b> con el costo en tiempo y memoria de cada una y la exactitud que alcanza.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> como magnitud vigilada, enciende un LED de detección en el <b>GPIO 25</b> y otro de falso positivo en el <b>GPIO 26</b>, con 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[BASE] 200 casos etiquetados: 40 anomalias, 160 normales
+[UMBRAL] señal cruda:    VP=28 FN=12 FP=31 VN=129
+[UMBRAL] señal filtrada: VP=35 FN= 5 FP=11 VN=149
+[BANDA]  energia de banda: VP=38 FN= 2 FP= 4 VN=156
+[COSTO]  filtrado=0.3 ms banda=4.1 ms memoria=1.2 kB
+[EXACTITUD] cruda=78.5 %  filtrada=92.0 %  banda=97.0 %</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea es la que cambia la conversación: <b>97 % sin ningún modelo</b>. A partir de ahí la pregunta ya no es qué modelo usar sino si hace falta alguno. Mirar además las columnas de la primera fila: exactitud del 78,5 % con <b>31 falsos positivos</b>. Una misma exactitud puede repartirse de maneras muy distintas entre los dos errores, y solo la matriz completa lo enseña.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-paper-benchmark-tinyml.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Comparación entre sistemas</span>
+				</a>
+				<a class="slide-nav__link" href="10-simulacion-umbral-decision.html">
+					<span>El umbral y los dos errores</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/dht22-element.js";
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

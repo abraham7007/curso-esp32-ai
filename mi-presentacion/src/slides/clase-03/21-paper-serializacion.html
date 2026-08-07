@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>El costo de serializar en un nodo alimentado por batería · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Luis, Á.; Casares, P.; Cuadrado-Gallego, J. J.; Patricio, M. A.</b> (2021). PSON: A Serialization Format for IoT Sensor Networks. <i>Sensors</i>, 21(13), 4559. Universidad de Alcalá y Universidad Carlos III de Madrid. <code>doi:10.3390/s21134559</code></p>
+
+					<h2 class="paper__title">Costo de transmitir en un formato legible</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Medir el costo de serializar en un nodo alimentado por <b>batería</b>.</li>
+									<li>Los autores parten de que conversión y transmisión son <b>de las mayores cargas</b> del nodo.</li>
+									<li>Proponen un formato propio, <b>PSON</b>, y lo comparan con los de uso extendido.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Un formato se paga <b>dos veces</b>: en tiempo de conversión y en bytes emitidos.</li>
+									<li>Cuanto más simple la conversión y menor el mensaje, <b>mayor la vida útil</b>.</li>
+									<li>La evaluación muestra mejora frente a los formatos habituales.</li>
+									<li>La legibilidad es lo que se compra con los bytes de más.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>El formato es una <b>decisión de diseño con consecuencias energéticas</b>, no una preferencia de estilo.</li>
+									<li>En un enlace de laboratorio la legibilidad compensa; en un nodo remoto hay que justificarla.</li>
+									<li>Se decide con las dos cifras delante, no por costumbre.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-serializacion-bytes"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia: el mismo registro de sensor codificado de cuatro maneras y contado byte a byte.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-serializacion-dos-costos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Los dos costos que el artículo señala y el sitio donde se suman: la autonomía del nodo.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-json.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Serialización en formato JSON</span>
+				</a>
+				<a class="slide-nav__link" href="22-codigo-14-json-uart.html">
+					<span>La hora del código · JSON por UART</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

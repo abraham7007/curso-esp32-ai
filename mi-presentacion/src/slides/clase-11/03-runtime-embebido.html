@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Runtime embebido: firmware que interpreta comportamiento externo · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Compilado frente a interpretado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Runtime embebido: firmware que interpreta comportamiento externo</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Firmware que <b>ejecuta comportamiento definido fuera del
+								binario</b>, en forma de guiones, reglas, archivos de configuración
+								o modelos. El binario deja de ser la funcionalidad y pasa a ser la
+								plataforma sobre la que se define.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Gradación, no dicotomía
+							</div>
+							<p>
+								Entre el binario cerrado y el intérprete completo hay grados: un
+								umbral en NVS (memoria no volátil), una tabla de reglas en un archivo, un
+								guion. Cada paso gana flexibilidad y pierde algo de rendimiento, de
+								determinismo y de memoria.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Antecedente</th><th>Qué interpreta</th><th>Resultado observado</th></tr></thead>
+								<tbody>
+									<tr><td><b>MicroPython</b></td><td>Guiones en Python</td><td>Iteración muy rápida; exige mucha más memoria</td></tr>
+									<tr><td><b>Lua sobre NodeMCU</b></td><td>Guiones en Lua</td><td>Intérprete pequeño; pocas bibliotecas disponibles</td></tr>
+									<tr><td><b>ESPHome</b></td><td>Reglas declarativas</td><td>No hace falta programar; solo lo previsto es expresable</td></tr>
+									<tr><td><b>Berry en Tasmota</b></td><td>Guiones compactos</td><td>Pensado para memoria escasa</td></tr>
+									<tr><td><b>Node-RED</b></td><td>Flujos visuales</td><td>Se ejecuta fuera del dispositivo, no dentro</td></tr>
+									<tr><td><b>WebAssembly</b></td><td>Módulos compilados portables</td><td>Aislamiento y portabilidad; es lo que estudian los artículos</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<p class="figure__caption">
+							Ninguno sustituyó al firmware compilado: cada uno ocupó el nicho en
+							que su compromiso concreto compensaba.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-modelo-de-las-diez-sesiones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>El modelo empleado hasta aquí</span>
+				</a>
+				<a class="slide-nav__link" href="04-comparacion-modelos.html">
+					<span>Comparación entre los dos modelos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cliente, servidor, puerto y socket · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cliente, servidor, puerto y socket</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Cliente y servidor</div>
+						<p>
+							No son tipos de equipo sino <b>papeles en una conexión</b>. El
+							cliente toma la iniciativa; el servidor permanece a la escucha y
+							responde.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							El mismo ESP32 es cliente en esta sesión y servidor en la 9.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Puerto</div>
+						<p>
+							Número de 16 bits que identifica <b>qué programa</b> del equipo
+							atiende la conexión. La dirección IP llega al equipo; el puerto,
+							al programa.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							80 para HTTP, 443 para HTTPS, 1883 para MQTT sin cifrar.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Socket</div>
+						<p>
+							Extremo de una conexión, identificado por el par <b>dirección IP más
+							puerto</b>. Una conexión queda determinada por sus dos sockets.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>192.168.1.47:52310 ⇄ 104.18.2.15:443</code>
+						</p>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En el código
+					</div>
+					<p>
+						El puerto de origen del cliente lo asigna la pila de red de forma
+						automática y cambia en cada conexión; solo se indica el del servidor.
+						Por eso <code>http.begin("http://api.ejemplo.com/v1/datos")</code> no
+						menciona ningún puerto: el 80 va implícito en el esquema
+						<code>http</code>, y el 443 en <code>https</code>.
+					</p>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Aplicaciones habituales</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span>
+							<span class="usecase__name">Dos servicios en el mismo equipo</span>
+							<span class="usecase__what">
+								Un servidor doméstico ofrece la interfaz web en el 80 y el broker
+								MQTT en el 1883, con una sola dirección IP.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span>
+							<span class="usecase__name">Puerto cerrado por el cortafuegos</span>
+							<span class="usecase__what">
+								Una red institucional que solo permite el 443 impide MQTT en su
+								puerto habitual; la solución es el mismo protocolo sobre 443.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span>
+							<span class="usecase__name">Varias conexiones simultáneas</span>
+							<span class="usecase__what">
+								El ESP32 puede tener abiertas la petición HTTP y la conexión al
+								broker: se distinguen por su puerto de origen.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-simulacion-sobrecarga.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Rendimiento útil de la transmisión</span>
+				</a>
+				<a class="slide-nav__link" href="05-direccionamiento.html">
+					<span>Direccionamiento y servicios de red</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

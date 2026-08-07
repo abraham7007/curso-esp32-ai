@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Direcciones ocupadas del bus · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+					03 · El bus I²C
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Direcciones ocupadas del bus
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								El escáner recorre las direcciones válidas (<code>0x08</code> a
+								<code>0x77</code>) emitiendo una condición de inicio sobre cada
+								una y registra las que responden con bit de confirmación
+								(<i>ACK</i>). Es el procedimiento previo a cualquier código de
+								aplicación sobre un bus desconocido.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="m-0 text-sm">
+								Dos dispositivos con la misma dirección aparecen como una sola
+								entrada en la traza: el bus no distingue cuál confirmó. El
+								conflicto se resuelve modificando la dirección por hardware
+								(puente o pin de selección), intercalando un multiplexor de bus,
+								o conectando el segundo dispositivo al otro controlador I²C del
+								ESP32.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<div
+								id="addr-grid"
+								class="grid grid-cols-[2.6rem_repeat(16,minmax(0,1fr))] gap-1"
+							></div>
+
+							<div class="controls mt-3 gap-x-4 gap-y-1">
+								<label class="text-sm flex items-center gap-1">
+									<input type="checkbox" data-dev="oled" checked />
+									Pantalla OLED <code class="font-mono text-xs">0x3C</code>
+								</label>
+								<label class="text-sm flex items-center gap-1">
+									<input type="checkbox" data-dev="pres" checked />
+									Sensor de presión <code class="font-mono text-xs">0x76</code>
+								</label>
+								<label class="text-sm flex items-center gap-1">
+									<input type="checkbox" data-dev="temp" />
+									Sensor de temperatura
+									<code class="font-mono text-xs">0x48</code>
+								</label>
+								<label class="text-sm flex items-center gap-1">
+									<input type="checkbox" data-dev="pres2" />
+									Segundo sensor de presión
+									<code class="font-mono text-xs">0x76</code>
+								</label>
+							</div>
+
+							<div class="controls mt-3">
+								<button
+									class="btn btn--primary"
+									type="button"
+									id="scan-btn"
+								>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Ejecutar escáner
+								</button>
+
+								<div class="metric flex-1">
+									<div class="metric__item">
+										<span class="text-xs text-[var(--color-text-muted)]">
+											Dispositivos conectados
+										</span>
+										<span class="readout" id="out-connected">2</span>
+									</div>
+									<div class="metric__item">
+										<span class="text-xs text-[var(--color-text-muted)]">
+											Direcciones detectadas
+										</span>
+										<span class="readout" id="out-found">2</span>
+									</div>
+									<div class="metric__item metric__item--ok" id="verdict-box">
+										<span class="text-xs text-[var(--color-text-muted)]">
+											Correspondencia
+										</span>
+										<span class="readout" id="out-verdict">sin conflicto</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-bus-i2c.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>El bus I²C</span>
+				</a>
+				<a class="slide-nav__link" href="12-codigo-12-escaner.html">
+					<span>La hora del código · Escáner I²C</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const ADDR_MIN = 0x08;
+			const ADDR_MAX = 0x77;
+
+			const DEVICES = [
+				{ id: "oled", addr: 0x3c },
+				{ id: "pres", addr: 0x76 },
+				{ id: "temp", addr: 0x48 },
+				{ id: "pres2", addr: 0x76 },
+			];
+
+			const CELL_BASE =
+				"rounded-[var(--radius-sm)] border text-center font-mono text-[0.68rem] leading-[1.55] py-[1px]";
+			const CELL_OUT =
+				"border-transparent bg-transparent text-[var(--color-text-muted)] opacity-25";
+			const CELL_IDLE =
+				"border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)]";
+			const CELL_PROBE =
+				"border-[var(--color-navy)] bg-[var(--color-navy-soft)] text-[var(--color-navy)]";
+			const CELL_FOUND =
+				"border-[var(--color-ok)] bg-[var(--color-ok-soft)] text-[var(--color-ok)] font-bold";
+			const CELL_CLASH =
+				"border-[var(--color-warn)] bg-[var(--color-warn-soft)] text-[var(--color-warn)] font-bold";
+
+			const HEX = "0123456789ABCDEF";
+			const grid = document.getElementById("addr-grid");
+			const scanBtn = document.getElementById("scan-btn");
+			const outConnected = document.getElementById("out-connected");
+			const outFound = document.getElementById("out-found");
+			const outVerdict = document.getElementById("out-verdict");
+			const verdictBox = document.getElementById("verdict-box");
+			const cells = new Map();
+
+			function buildGrid() {
+				const corner = document.createElement("span");
+				corner.className = "text-[0.66rem] font-mono text-[var(--color-text-muted)]";
+				grid.append(corner);
+
+				for (let c = 0; c < 16; c++) {
+					const head = document.createElement("span");
+					head.className =
+						"text-[0.66rem] font-mono text-center text-[var(--color-text-muted)]";
+					head.textContent = HEX[c];
+					grid.append(head);
+				}
+
+				for (let r = 0; r < 8; r++) {
+					const label = document.createElement("span");
+					label.className =
+						"text-[0.66rem] font-mono text-right pr-1 self-center text-[var(--color-text-muted)]";
+					label.textContent = `0x${HEX[r]}_`;
+					grid.append(label);
+
+					for (let c = 0; c < 16; c++) {
+						const addr = r * 16 + c;
+						const cell = document.createElement("span");
+						cell.textContent = HEX[r] + HEX[c];
+						if (addr < ADDR_MIN || addr > ADDR_MAX) {
+							cell.className = `${CELL_BASE} ${CELL_OUT}`;
+						} else {
+							cell.className = `${CELL_BASE} ${CELL_IDLE}`;
+							cells.set(addr, cell);
+						}
+						grid.append(cell);
+					}
+				}
+			}
+
+			function activeDevices() {
+				return DEVICES.filter(
+					(d) => document.querySelector(`[data-dev="${d.id}"]`).checked,
+				);
+			}
+
+			function addressMap() {
+				const map = new Map();
+				for (const d of activeDevices()) {
+					map.set(d.addr, (map.get(d.addr) ?? 0) + 1);
+				}
+				return map;
+			}
+
+			function paint(addr, state) {
+				const cell = cells.get(addr);
+				if (cell) cell.className = `${CELL_BASE} ${state}`;
+			}
+
+			function updateMetrics() {
+				const map = addressMap();
+				const connected = activeDevices().length;
+				const found = map.size;
+				const clashes = [...map.values()].filter((n) => n > 1).length;
+
+				outConnected.textContent = String(connected);
+				outFound.textContent = String(found);
+
+				if (clashes > 0) {
+					outVerdict.textContent = `${clashes} dirección duplicada`;
+					verdictBox.className = "metric__item metric__item--warn";
+				} else {
+					outVerdict.textContent = "sin conflicto";
+					verdictBox.className = "metric__item metric__item--ok";
+				}
+			}
+
+			function renderResult() {
+				const map = addressMap();
+				for (const addr of cells.keys()) {
+					const n = map.get(addr) ?? 0;
+					if (n > 1) paint(addr, CELL_CLASH);
+					else if (n === 1) paint(addr, CELL_FOUND);
+					else paint(addr, CELL_IDLE);
+				}
+				updateMetrics();
+			}
+
+			let running = false;
+
+			function runScan() {
+				if (running) return;
+				running = true;
+				scanBtn.disabled = true;
+				const map = addressMap();
+				for (const addr of cells.keys()) paint(addr, CELL_IDLE);
+
+				let addr = ADDR_MIN;
+				const timer = setInterval(() => {
+					if (addr > ADDR_MIN) {
+						const prev = addr - 1;
+						const n = map.get(prev) ?? 0;
+						if (n > 1) paint(prev, CELL_CLASH);
+						else if (n === 1) paint(prev, CELL_FOUND);
+						else paint(prev, CELL_IDLE);
+					}
+					if (addr > ADDR_MAX) {
+						clearInterval(timer);
+						running = false;
+						scanBtn.disabled = false;
+						renderResult();
+						return;
+					}
+					paint(addr, CELL_PROBE);
+					addr++;
+				}, 9);
+			}
+
+			buildGrid();
+			renderResult();
+
+			scanBtn.addEventListener("click", runScan);
+			for (const input of document.querySelectorAll("[data-dev]")) {
+				input.addEventListener("change", () => {
+					if (!running) renderResult();
+				});
+			}
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

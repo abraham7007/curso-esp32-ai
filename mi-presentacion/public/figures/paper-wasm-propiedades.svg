@@ -1,0 +1,67 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 421.56 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 421.56 113.976 
+L 421.56 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 8.4492 49.929402 
+L 107.55 49.929402 
+L 107.55 19.523134 
+L 8.4492 19.523134 
+z
+" clip-path="url(#p838883d786)" style="fill: var(--fig-navy); opacity: 0.14; stroke: var(--fig-navy); stroke-width: 1.1; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 8.4492 86.851299 
+L 107.55 86.851299 
+L 107.55 56.445031 
+L 8.4492 56.445031 
+z
+" clip-path="url(#p838883d786)" style="fill: var(--fig-navy); opacity: 0.14; stroke: var(--fig-navy); stroke-width: 1.1; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="57.9996" y="37.094315" transform="rotate(-0 57.9996 37.094315)">aislamiento fuerte</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ok); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="28.210639" transform="rotate(-0 124.0668 28.210639)">aporta</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="40.155959" transform="rotate(-0 124.0668 40.155959)">el módulo solo alcanza lo que el anfitrión concede</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="53.187216" transform="rotate(-0 124.0668 53.187216)">exige  hay que declarar cada concesión, una por una</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="57.9996" y="74.016212" transform="rotate(-0 57.9996 74.016212)">portabilidad</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="65.132536" transform="rotate(-0 124.0668 65.132536)">aporta</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="77.077856" transform="rotate(-0 124.0668 77.077856)">el mismo módulo sobre plataformas distintas</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="124.0668" y="90.109113" transform="rotate(-0 124.0668 90.109113)">exige  un runtime por plataforma, y hay que mantenerlo</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="8.4492" y="13.007505" transform="rotate(-0 8.4492 13.007505)">toma de posición razonada: el artículo no aporta medidas propias</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p838883d786">
+   <rect x="4.32" y="4.32" width="412.92" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

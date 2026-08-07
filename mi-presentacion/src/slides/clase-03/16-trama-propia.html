@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estructura de una trama con verificación · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					05 · Formato y serialización de datos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Estructura de una trama con verificación
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						Una trama propia se compone de cinco campos en un orden fijo: la
+						<b>cabecera</b> marca dónde empieza el mensaje, el
+						<b>identificador</b> indica de qué tipo es, la <b>longitud</b>
+						declara cuántos bytes de carga siguen, la <b>carga útil</b> transporta
+						los datos y el <b>campo de verificación</b> permite detectar que
+						alguno de los bytes anteriores llegó alterado.
+					</p>
+				</div>
+
+				<div
+					class="grid grid-cols-1 gap-2 md:grid-cols-[1fr_1fr_1fr_2.2fr_1.2fr] w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="card flex flex-col gap-1">
+						<span class="font-mono text-lg font-bold text-[var(--color-accent)]">
+							0xAA
+						</span>
+						<span class="font-display text-sm font-semibold">Cabecera</span>
+						<span class="font-mono text-xs text-[var(--color-text-muted)]">
+							header · 1 byte
+						</span>
+						<p class="text-xs m-0 text-[var(--color-text-muted)]">
+							Marca de inicio reconocible: el receptor descarta todo lo anterior
+							hasta encontrarla.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-1">
+						<span class="font-mono text-lg font-bold text-[var(--color-accent)]">
+							0x01
+						</span>
+						<span class="font-display text-sm font-semibold">Identificador</span>
+						<span class="font-mono text-xs text-[var(--color-text-muted)]">
+							message id · 1 byte
+						</span>
+						<p class="text-xs m-0 text-[var(--color-text-muted)]">
+							Qué tipo de mensaje es, y por tanto cómo debe interpretarse la
+							carga.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-1">
+						<span class="font-mono text-lg font-bold text-[var(--color-accent)]">
+							0x04
+						</span>
+						<span class="font-display text-sm font-semibold">Longitud</span>
+						<span class="font-mono text-xs text-[var(--color-text-muted)]">
+							length · 1 byte
+						</span>
+						<p class="text-xs m-0 text-[var(--color-text-muted)]">
+							Cuántos bytes de carga siguen. Determina dónde termina la trama.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-1">
+						<span class="font-mono text-lg font-bold text-[var(--color-navy)]">
+							7A 06 00 00
+						</span>
+						<span class="font-display text-sm font-semibold">Carga útil</span>
+						<span class="font-mono text-xs text-[var(--color-text-muted)]">
+							payload · 4 bytes
+						</span>
+						<p class="text-xs m-0 text-[var(--color-text-muted)]">
+							Los datos: en el ejemplo, el entero 1658 en cuatro bytes, byte
+							menos significativo primero.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-1">
+						<span class="font-mono text-lg font-bold text-[var(--color-ok)]">
+							0x2F
+						</span>
+						<span class="font-display text-sm font-semibold">Verificación</span>
+						<span class="font-mono text-xs text-[var(--color-text-muted)]">
+							checksum · 1 byte
+						</span>
+						<p class="text-xs m-0 text-[var(--color-text-muted)]">
+							Suma de los siete bytes anteriores módulo 256. El receptor la
+							recalcula y la contrasta.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg
+						class="icon icon--lg text-[var(--color-warn)]"
+						aria-hidden="true"
+					><use href="/course-icons.svg#i-alert" /></svg>
+					<p class="m-0">
+						<b>Sin campo de verificación no hay error de comunicación.</b> La
+						alteración de un solo bit produce un dato erróneo que el receptor
+						acepta como válido. El fallo no se manifiesta como un fallo del
+						enlace, sino como un valor incorrecto dentro de la aplicación —
+						mucho más difícil de atribuir a su causa.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-criterios-seleccion-bus.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Criterios de selección entre UART, I²C y SPI</span>
+				</a>
+				<a class="slide-nav__link" href="17-constructor-tramas.html">
+					<span>Efecto de la verificación ante un bit alterado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

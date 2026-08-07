@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Escenarios de aplicación del UART · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					02 · UART en el ESP32
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Escenarios de aplicación del UART
+				</h1>
+
+				<p class="slide__subtitle" data-animate="fade-up">
+					Cuatro casos habituales en los que el dispositivo del otro extremo
+					expone una interfaz serie y no un bus.
+				</p>
+
+				<div
+					class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+					data-animate="fade-up"
+				>
+					<div class="card flex gap-3">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-wave" /></svg>
+						<div>
+							<h2 class="m-0 text-base font-semibold">Receptores GPS</h2>
+							<p class="m-0 mt-1 text-sm text-[var(--color-text-muted)]">
+								Emiten una trama de texto de forma continua, típicamente a 9 600
+								baudios y una vez por segundo, sin que el anfitrión tenga que
+								pedirla. El flujo es permanente y de un solo sentido: no hace
+								falta ni dirección ni reloj.
+							</p>
+						</div>
+					</div>
+
+					<div class="card flex gap-3">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-link" /></svg>
+						<div>
+							<h2 class="m-0 text-base font-semibold">
+								Módulos de comunicación celular
+							</h2>
+							<p class="m-0 mt-1 text-sm text-[var(--color-text-muted)]">
+								Se controlan con comandos de texto sobre el enlace serie: el
+								anfitrión escribe una orden y la respuesta vuelve por la misma
+								línea. La interfaz es legible en el monitor, lo que hace que el
+								diagnóstico sea directo.
+							</p>
+						</div>
+					</div>
+
+					<div class="card flex gap-3">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-bolt" /></svg>
+						<div>
+							<h2 class="m-0 text-base font-semibold">Radios LoRa de módulo</h2>
+							<p class="m-0 mt-1 text-sm text-[var(--color-text-muted)]">
+								Exponen una interfaz serie que oculta por completo la radio: el
+								anfitrión entrega la carga útil y el módulo resuelve modulación,
+								potencia y temporización. El microcontrolador no necesita
+								conocer la capa física.
+							</p>
+						</div>
+					</div>
+
+					<div class="card flex gap-3">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-terminal" /></svg>
+						<div>
+							<h2 class="m-0 text-base font-semibold">
+								Enlace entre dos placas y salida de diagnóstico
+							</h2>
+							<p class="m-0 mt-1 text-sm text-[var(--color-text-muted)]">
+								Dos extremos, distancia corta y ningún tercer dispositivo en la
+								línea: el direccionamiento sobra. Es también el caso del monitor
+								serie, que es un enlace UART entre la placa y el equipo de
+								desarrollo.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<p class="m-0">
+						<span class="conclusion__label">Conclusión.</span> UART no compite con
+						I²C ni con SPI: resuelve el caso de <b>dos extremos</b> en el que no
+						hace falta ni dirección ni reloj compartido. Por eso sigue siendo la
+						interfaz de los módulos que se integran como una caja cerrada, cuyo
+						funcionamiento interno el anfitrión no necesita conocer.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-puertos-uart-esp32.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Controladores UART del ESP32</span>
+				</a>
+				<a class="slide-nav__link" href="10-bus-i2c.html">
+					<span>El bus I²C</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

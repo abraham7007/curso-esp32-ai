@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Criterios de elección entre plataformas de IoT · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					02 · Plataformas y arquitectura de sistema
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Criterios de elección entre plataformas de IoT</h1>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Plataforma</th><th>Dónde se ejecuta</th><th>Punto fuerte</th><th>Contrapartida</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>Blynk</b></td><td>Servicio del proveedor</td>
+								<td>Panel web y aplicación móvil sin programar nada</td>
+								<td>Dependencia del proveedor; límites en el plan gratuito</td>
+							</tr>
+							<tr>
+								<td><b>ThingsBoard</b></td><td>Propio o del proveedor</td>
+								<td>Gestión de parque y reglas; instalable en equipo propio</td>
+								<td>Requiere administrar el servidor</td>
+							</tr>
+							<tr>
+								<td><b>Node-RED</b></td><td>Propio</td>
+								<td>Integración entre servicios mediante flujos visuales</td>
+								<td>No es una plataforma completa: no almacena por sí solo</td>
+							</tr>
+							<tr>
+								<td><b>Home Assistant</b></td><td>Propio</td>
+								<td>Automatización doméstica con descubrimiento automático</td>
+								<td>Orientado al hogar, no al despliegue industrial</td>
+							</tr>
+							<tr>
+								<td><b>Plataformas industriales</b></td><td>Nube del proveedor</td>
+								<td>Escala, integración con analítica y garantías de servicio</td>
+								<td>Costo y dependencia; complejidad excesiva para un proyecto pequeño</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Los tres criterios que deciden</span>
+					<p>
+						<b>Dónde se ejecuta</b> (equipo propio o servicio ajeno), porque
+						determina quién custodia los datos. <b>Costo según el volumen</b> de
+						mensajes previsto, que hay que calcular antes de elegir. Y <b>grado de
+						dependencia</b>: si el dispositivo habla MQTT, cambiar de plataforma
+						supone reconfigurar; si usa una biblioteca propia del proveedor, supone
+						reprogramar el firmware.
+					</p>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						Plataforma adoptada
+					</div>
+					<p>
+						Los ejemplos usan <b>Blynk</b> por su plantilla de dispositivo y sus
+						flujos de datos asociados a pines virtuales, que permiten tener un panel
+						en marcha en minutos. El firmware se escribe de modo que la publicación
+						quede aislada en una capa propia, para que sustituirla por MQTT directo
+						no afecte al resto.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-que-aporta-plataforma.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+					<span>Qué aporta una plataforma</span>
+				</a>
+				<a class="slide-nav__link" href="15-paper-plataformas-nube.html">
+					<span>Artículo · Plataformas de nube</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

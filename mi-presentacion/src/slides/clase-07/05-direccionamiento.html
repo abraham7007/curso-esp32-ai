@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Direcciones MAC e IP y los servicios que las reparten · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Direcciones MAC e IP y los servicios que las reparten</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Dirección MAC</h3>
+						<p>
+							Seis bytes grabados en fabricación. Identifica al equipo <b>dentro
+							de su tramo físico</b> y no cambia al mudar de red.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							En el ESP32 se lee con <code>WiFi.macAddress()</code>. Los tres
+							primeros bytes identifican al fabricante, y por eso sirve de
+							identificador único del dispositivo, uso que retoma la sesión 9.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Dirección IP</h3>
+						<p>
+							Cuatro bytes asignados <b>por la red</b> en que se entra. Cambia al
+							conectarse a otra red, y puede cambiar dentro de la misma.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Se lee con <code>WiFi.localIP()</code>. Por eso un dispositivo no
+							puede darse a conocer por su IP: la resolución por nombre local es
+							el mecanismo que lo sustituye.
+						</p>
+					</div>
+				</div>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Elemento</th><th>Qué resuelve</th><th>Valor habitual en una red doméstica</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><b>DHCP</b></td><td>Reparte direcciones IP a los equipos que entran</td><td>Lo ejecuta el router; concede la dirección por un plazo</td></tr>
+							<tr><td><b>Máscara de subred</b></td><td>Separa qué parte de la IP identifica la red y qué parte el equipo</td><td><code>255.255.255.0</code>: 254 equipos posibles</td></tr>
+							<tr><td><b>Puerta de enlace</b></td><td>Equipo al que se envía todo lo que no pertenece a la red local</td><td><code>192.168.1.1</code>, el propio router</td></tr>
+							<tr><td><b>DNS</b></td><td>Traduce un nombre a una dirección IP</td><td>El router, o un servicio público como <code>8.8.8.8</code></td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Direcciones privadas y públicas</span>
+					<p>
+						Los rangos <code>192.168.x.x</code>, <code>10.x.x.x</code> y
+						<code>172.16-31.x.x</code> son <b>privados</b>: se repiten en millones
+						de redes y ningún router de internet los encamina. Una dirección
+						pública es única en todo internet. Que el ESP32 tenga una privada es lo
+						que explica la pregunta de apertura, y lo resuelve la lámina siguiente.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-cliente-servidor-socket.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					<span>Cliente, servidor, puerto y socket</span>
+				</a>
+				<a class="slide-nav__link" href="06-traduccion-direcciones.html">
+					<span>Traducción de direcciones (NAT)</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

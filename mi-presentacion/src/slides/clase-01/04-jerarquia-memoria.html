@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Jerarquía de memoria y persistencia · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					01 · Arquitectura interna del SoC
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Jerarquía de memoria y persistencia
+				</h1>
+
+				<div class="is-stretch layout layout--split" data-animate="fade-up">
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p class="text-sm">
+								<b>Flash</b>: no volátil, externa al chip, interfaz SPI. Almacena
+								el firmware. <b>SRAM</b>: volátil, interna, aloja variables y pila
+								de ejecución. <code>int contador = 0;</code> reserva 4 bytes en
+								SRAM y se reinicia a 0 en cada arranque; las instrucciones que lo
+								incrementan residen en Flash y persisten sin alimentación.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p class="text-sm">
+								<code>ESP.getFreeHeap()</code> confirma en vivo la SRAM libre.
+								<code>Preferences.h</code> persiste datos en Flash entre
+								reinicios; <code>PROGMEM</code> lee tablas de solo lectura desde
+								Flash sin ocupar SRAM.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="text-sm">
+								La SRAM es el recurso más limitado. Inicializar la pila WiFi
+								reserva de inmediato unos 40 KB solo en buffers: un firmware que
+								arrancaba puede dejar de hacerlo al añadir conectividad, y la
+								excepción no señala la memoria como causa (el síntoma es un
+								reinicio durante la inicialización).
+							</p>
+						</div>
+					</div>
+
+					<div class="layout__visual">
+					<div class="card">
+					<p class="mb-3 text-sm text-[var(--color-text-muted)]">
+						Cinco memorias, agrupadas por ubicación (interna o externa al
+						chip) y bloques dimensionados a escala logarítmica de su
+						capacidad — van de 16 KB a 4 MB, casi tres órdenes de magnitud, y
+						una escala lineal dejaría invisibles a las más pequeñas.
+					</p>
+					<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+						<div>
+							<h3 class="font-mono text-xs font-bold uppercase tracking-wide text-[var(--color-text-muted)] mb-2">
+								Interna al chip
+							</h3>
+							<div class="layer-picker" data-mem-group="int">
+								<button
+									class="picker__item picker__item--warn appearance-none w-[225px] max-w-full font-sans"
+									type="button"
+									data-mem="sram"
+								>
+									<span>SRAM</span>
+									<small>520 KB</small>
+								</button>
+								<button
+									class="picker__item picker__item--ok appearance-none w-[219px] max-w-full font-sans"
+									type="button"
+									data-mem="rom"
+								>
+									<span>ROM</span>
+									<small>448 KB</small>
+								</button>
+								<button
+									class="picker__item picker__item--warn appearance-none w-[80px] max-w-full font-sans"
+									type="button"
+									data-mem="rtc"
+								>
+									<span>RTC</span>
+									<small>16 KB</small>
+								</button>
+							</div>
+						</div>
+						<div>
+							<h3 class="font-mono text-xs font-bold uppercase tracking-wide text-[var(--color-text-muted)] mb-2">
+								Externa al chip · interfaz SPI
+							</h3>
+							<div class="layer-picker" data-mem-group="ext">
+								<button
+									class="picker__item picker__item--ok appearance-none w-[311px] max-w-full font-sans"
+									type="button"
+									data-mem="flash"
+								>
+									<span>Flash</span>
+									<small>4 MB</small>
+								</button>
+								<button
+									class="picker__item picker__item--warn appearance-none w-[340px] max-w-full font-sans"
+									type="button"
+									data-mem="psram"
+								>
+									<span>PSRAM (opcional)</span>
+									<small>2-8 MB</small>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="flex flex-wrap gap-4 mt-3 text-xs text-[var(--color-text-muted)]">
+						<span class="flex items-center gap-1">
+							<span
+								class="inline-block w-3 h-3 rounded-full bg-[var(--color-ok)]"
+								aria-hidden="true"
+							></span>
+							No volátil — conserva su contenido sin alimentación
+						</span>
+						<span class="flex items-center gap-1">
+							<span
+								class="inline-block w-3 h-3 rounded-full bg-[var(--color-warn)]"
+								aria-hidden="true"
+							></span>
+							Volátil o de persistencia condicional
+						</span>
+					</div>
+
+					<div
+							class="detail-panel mt-3"
+							data-mem-detail
+							aria-live="polite"
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-bloques-funcionales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Diagrama de bloques funcionales</span>
+				</a>
+				<a class="slide-nav__link" href="05-gpio-restricciones.html">
+					<span>GPIO: multiplexado y restricciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const memories = {
+				flash: {
+					title: "Flash — 4 MB",
+					detail:
+						"No volátil, externa al chip, conectada por interfaz SPI. Almacena el bootloader, la tabla de particiones, el firmware y el sistema de archivos. Conserva su contenido sin alimentación eléctrica.",
+				},
+				sram: {
+					title: "SRAM — 520 KB",
+					detail:
+						"Volátil, interna al chip. Contiene las variables, la pila de ejecución (stack) y las reservas dinámicas del heap. Se pierde por completo en cada reinicio.",
+				},
+				rom: {
+					title: "ROM — 448 KB",
+					detail:
+						"No volátil, interna al chip, grabada en fabricación y de solo lectura. Contiene el bootloader de primera etapa, el primer código que ejecuta el chip tras un reinicio.",
+				},
+				rtc: {
+					title: "Memoria RTC — 16 KB",
+					detail:
+						"Interna al chip, en un dominio de alimentación independiente. Retiene variables marcadas para persistir durante el deep sleep (deep sleep) y el contexto del coprocesador ULP, pero se pierde ante un corte de alimentación o un reinicio por hardware.",
+				},
+				psram: {
+					title: "PSRAM (opcional) — 2-8 MB",
+					detail:
+						"Volátil, externa al chip cuando el módulo la incluye. Extiende la SRAM para buffers de gran tamaño, como imágenes o audio. El bloque está dimensionado sobre su capacidad máxima habitual, 8 MB.",
+				},
+			};
+
+			const items = document.querySelectorAll("[data-mem]");
+			const detail = document.querySelector("[data-mem-detail]");
+
+			function selectMemory(id) {
+				for (const item of items) {
+					item.classList.toggle("is-selected", item.dataset.mem === id);
+				}
+				const mem = memories[id];
+				detail.innerHTML = `<b>${mem.title}</b> — ${mem.detail}`;
+			}
+
+			for (const item of items) {
+				item.addEventListener("click", () => selectMemory(item.dataset.mem));
+			}
+
+			selectMemory("flash");
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

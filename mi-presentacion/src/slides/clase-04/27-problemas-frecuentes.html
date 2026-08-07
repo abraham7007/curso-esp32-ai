@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Diagnóstico de fallos frecuentes · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					Cierre de sesión
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Diagnóstico de fallos frecuentes
+				</h1>
+
+				<p
+					class="text-base text-[var(--color-text-muted)] max-w-[52rem]"
+					data-animate="fade-up"
+				>
+					Los ocho fallos de mayor incidencia en la adquisición de datos y en el
+					uso de interrupciones, con la causa que los origina y la medida que
+					confirma esa causa.
+				</p>
+
+				<div
+					class="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4 w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							Un contador de pulsos registra siete eventos ante una única
+							pulsación
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								El rebote mecánico del contacto genera varios flancos durante los
+								primeros milisegundos, y cada flanco invoca la rutina.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Añadir filtrado por tiempo en la rutina con una ventana de 30 ms
+								y observar si la cuenta pasa a uno por pulsación.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							El programa se reinicia al entrar en la rutina de interrupción
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								La rutina usa <code>Serial.print()</code>, <code>delay()</code> o
+								reserva dinámica de memoria, operaciones que no admiten
+								ejecutarse en ese contexto.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Reducirla a incrementar un contador y marcar una bandera. Si el
+								reinicio desaparece, la causa queda confirmada.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							La variable que modifica la interrupción nunca cambia en el bucle
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								Falta el calificador <code>volatile</code>: el compilador mantiene
+								la variable en un registro y el bucle relee siempre la misma
+								copia.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Declararla <code>volatile</code> y verificar que el bucle observa
+								el cambio. El fallo suele desaparecer también al bajar el nivel de
+								optimización, lo que confirma el diagnóstico.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							La señal reconstruida tiene una frecuencia que la entrada no tiene
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								La frecuencia de muestreo está por debajo del doble de la
+								frecuencia máxima de la señal: es aliasing.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Subir la frecuencia de muestreo y comprobar si la componente
+								desaparece. Si no puede subirse, filtrar la señal antes del
+								conversor.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							El periodo de muestreo varía cuando se añade la pantalla
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								La base de tiempo es <code>millis()</code> comprobado en un bucle
+								cuya duración de iteración acaba de crecer.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Pasar la adquisición a un temporizador por hardware y medir con
+								<code>micros()</code> el intervalo entre muestras consecutivas.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							La aplicación usa una temperatura de 0 °C con el sensor
+							desconectado
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								El dato no válido se sustituyó por cero en lugar de informarse
+								como estado, y cero es un valor plausible de la magnitud.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Consultar <code>status()</code> antes de usar el valor y verificar
+								que la lectura sin sensor devuelve el estado de ausencia de
+								respuesta.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							La lectura del sensor es siempre la misma pese a variar la magnitud
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								Se lee antes de que termine la conversión o antes de que
+								transcurra el tiempo de establecimiento del sensor.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Consultar el tiempo de conversión en la hoja de características y
+								comprobar <code>isReady()</code> antes de cada lectura.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							La media móvil responde demasiado tarde a un cambio real
+						</div>
+						<div class="problem-card__body">
+							<b>Por qué ocurre</b>
+							<p class="m-0">
+								La ventana es más larga de lo que admite la dinámica de la señal:
+								el filtrado añade un retardo proporcional al número de muestras.
+							</p>
+							<b>Cómo comprobarlo</b>
+							<p class="m-0">
+								Reducir N o pasar a filtro exponencial, y medir el tiempo que
+								tarda la salida en alcanzar un escalón de entrada.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="26-codigo-19-adquisicion-integrada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Adquisición integrada</span>
+				</a>
+				<a class="slide-nav__link" href="28-glosario.html">
+					<span>Glosario</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

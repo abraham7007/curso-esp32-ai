@@ -1,0 +1,163 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 338.134069 152.784" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 152.784 
+L 338.134069 152.784 
+L 338.134069 0 
+L 0 0 
+L 0 152.784 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 109.366468 42.578781 
+L 165.213957 42.578781 
+L 165.213957 19.946826 
+L 109.366468 19.946826 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-navy); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 175.851574 42.578781 
+L 231.699064 42.578781 
+L 231.699064 19.946826 
+L 175.851574 19.946826 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 242.336681 42.578781 
+L 298.18417 42.578781 
+L 298.18417 19.946826 
+L 242.336681 19.946826 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 109.366468 69.521585 
+L 165.213957 69.521585 
+L 165.213957 46.88963 
+L 109.366468 46.88963 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 175.851574 69.521585 
+L 231.699064 69.521585 
+L 231.699064 46.88963 
+L 175.851574 46.88963 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-navy); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 242.336681 69.521585 
+L 298.18417 69.521585 
+L 298.18417 46.88963 
+L 242.336681 46.88963 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 109.366468 96.464389 
+L 165.213957 96.464389 
+L 165.213957 73.832434 
+L 109.366468 73.832434 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 175.851574 96.464389 
+L 231.699064 96.464389 
+L 231.699064 73.832434 
+L 175.851574 73.832434 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 242.336681 96.464389 
+L 298.18417 96.464389 
+L 298.18417 73.832434 
+L 242.336681 73.832434 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-navy); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 109.366468 123.407193 
+L 165.213957 123.407193 
+L 165.213957 100.775237 
+L 109.366468 100.775237 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 175.851574 123.407193 
+L 231.699064 123.407193 
+L 231.699064 100.775237 
+L 175.851574 100.775237 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 242.336681 123.407193 
+L 298.18417 123.407193 
+L 298.18417 100.775237 
+L 242.336681 100.775237 
+z
+" clip-path="url(#pc2e539f466)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="137.290213" y="34.048741" transform="rotate(-0 137.290213 34.048741)">✓</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="203.775319" y="60.991545" transform="rotate(-0 203.775319 60.991545)">✓</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="270.260426" y="87.934349" transform="rotate(-0 270.260426 87.934349)">✓</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="137.290213" y="114.877152" transform="rotate(-0 137.290213 114.877152)">✓</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="203.775319" y="114.877152" transform="rotate(-0 203.775319 114.877152)">✓</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-paper); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="270.260426" y="114.877152" transform="rotate(-0 270.260426 114.877152)">✓</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="137.290213" y="13.749981" transform="rotate(-0 137.290213 13.749981)">fabricante A</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="203.775319" y="13.749981" transform="rotate(-0 203.775319 13.749981)">fabricante B</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="270.260426" y="13.749981" transform="rotate(-0 270.260426 13.749981)">fabricante C</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="96.069447" y="33.491554" transform="rotate(-0 96.069447 33.491554)">cadena A</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="96.069447" y="60.434357" transform="rotate(-0 96.069447 60.434357)">cadena B</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="96.069447" y="87.377161" transform="rotate(-0 96.069447 87.377161)">cadena C</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-ok); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(47.906947 109.95409)">intérprete</text>
+    <text style="fill: var(--fig-ok); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(71.988197 118.96334)">común</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="203.775319" y="137.686879" transform="rotate(-0 203.775319 137.686879)">sin casillas compartidas no hay dos cifras comparables</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc2e539f466">
+   <rect x="4.32" y="4.32" width="312.48" height="144.144"/>
+  </clipPath>
+ </defs>
+</svg>

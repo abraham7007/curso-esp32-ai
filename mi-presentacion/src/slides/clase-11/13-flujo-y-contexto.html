@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Qué se automatiza del flujo y qué contexto exige · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Qué se automatiza del flujo y qué contexto exige</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Etapa</th><th>¿Se automatiza?</th></tr></thead>
+								<tbody>
+									<tr><td>Especificación</td><td><b>No.</b> Es la entrada, y su calidad decide todo lo demás</td></tr>
+									<tr><td>Arquitectura</td><td><b>No.</b> Decide qué se puede mantener después</td></tr>
+									<tr><td>Generación</td><td>Sí, con supervisión</td></tr>
+									<tr><td>Verificación</td><td>En parte: se generan pruebas, se revisan a mano</td></tr>
+									<tr><td>Simulación</td><td>Sí</td></tr>
+									<tr><td>Medición sobre hardware</td><td><b>No.</b> Es la única prueba de que funciona</td></tr>
+									<tr><td>Despliegue</td><td>Sí, con los mecanismos de la sesión 10</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Qué contexto necesita un asistente
+							</div>
+							<p>
+								La <b>hoja de datos</b> del dispositivo, el <b>archivo de
+								configuración</b> del proyecto, las <b>interfaces existentes</b> y
+								las <b>restricciones de memoria y de tiempo</b>. La calidad del
+								resultado se corresponde con la del contexto entregado.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Por qué el prompt está escrito así</span>
+							<p>
+								Las cuatro partes numeradas de «La hora del código» son exactamente
+								ese contexto: la placa y el marco de trabajo, el comportamiento con
+								el formato de salida fijado, el montaje y el diagrama. Y el apartado
+								«por qué se pide así» es la parte que enseña a especificar, que es la
+								etapa que la tabla marca como no automatizable.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-dos-ambitos-de-la-ia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+					<span>Los dos ámbitos de la IA</span>
+				</a>
+				<a class="slide-nav__link" href="14-paper-calidad-codigo-generado.html">
+					<span>Artículo · Calidad del código generado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

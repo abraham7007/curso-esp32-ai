@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 49 · Entrenar fuera, medir dentro · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 49</span>
+					</div>
+
+					<h2 class="code-hour__title">Modelo entrenado fuera y medido sobre el dispositivo</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Llevar al equipo un modelo entrenado fuera y <b>medir allí sus cuatro cifras</b>: matriz de confusión sobre el conjunto de prueba, tiempo de inferencia, tensor arena y comparación contra la línea de base del ejemplo anterior.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b>Cuantizar</b> es pasar los parámetros de coma flotante a enteros de 8 bits: ocupan la cuarta parte y la aritmética entera es más rápida. El <b>tensor arena</b> del intérprete es aparte de los parámetros y se reserva entera al arrancar, así que hay que contarla en el presupuesto. Las cifras medidas en el ordenador <b>no se transfieren</b> al microcontrolador: por eso la evaluación se repite aquí sobre los mismos 200 casos.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y un intérprete de modelos para microcontroladores.
+
+<b>2. Firmware.</b> Entrena fuera un clasificador sobre las características del ejemplo 48, cuantízalo a enteros de 8 bits y expórtalo. Cárgalo del sistema de archivos y evalúalo sobre los mismos 200 casos, calculando la <b>matriz de confusión completa</b>. Mide por separado inferencia y extracción, y el tensor arena del intérprete. Imprime la comparación contra la línea de base del ejemplo 48: qué exactitud gana y cuánto tiempo y memoria cuesta. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una inferencia, desde la ventana hasta la clase decidida, con las dos etapas cronometradas señaladas. Y el <b>flujo completo</b> desde la recolección de datos hasta la integración, con el esfuerzo relativo de cada etapa.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> para recorrer el rango de la característica y enciende un LED en el <b>GPIO 25</b> con resistencia de 220 Ω que indica la clase decidida.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[MODELO] cargado parametros=4.2 kB  tensor arena=6.0 kB
+[PRUEBA] 200 casos: VP=39 FN=1 FP=3 VN=157  exactitud=98.0 %
+[TIEMPO] inferencia=2.7 ms extraccion=4.1 ms total=6.8 ms
+[BASE]   umbral sobre banda (ej. 48): 97.0 %  total=4.1 ms
+[JUICIO] gana 1.0 punto y cuesta 2.7 ms mas y 10.2 kB
+[MEM]    libre antes=195 kB  durante inferencia=184 kB</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[JUICIO]</code> es el entregable: <b>un punto de exactitud</b> a cambio de 2,7 ms y 10,2 kB. Con esas tres cifras delante, decidir que <b>no</b> compensa es una conclusión tan válida como la contraria — y sin ellas no hay decisión, hay preferencia. Comprobar también que el total de 6,8 ms cabe en el periodo del sistema: una exactitud mejor que llega tarde no sirve.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-simulacion-umbral-decision.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>El umbral y los dos errores</span>
+				</a>
+				<a class="slide-nav__link" href="12-herramientas-y-flujo.html">
+					<span>Herramientas y flujo de trabajo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/dht22-element.js";
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

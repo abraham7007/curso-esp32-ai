@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuantización, pruning y destilación · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Fundamentos y restricciones
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cuantización, pruning y destilación</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>Cuantización</div>
+						<p>
+							Sustituir la coma flotante de 32 bits por enteros de 8. Cada parámetro
+							pasa de 4 bytes a 1: el modelo ocupa <b>la cuarta parte</b>.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Además, muchos microcontroladores calculan con enteros más rápido que
+							con coma flotante.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Pruning</div>
+						<p>
+							Eliminar conexiones o unidades que aportan poco. Reduce el número de
+							parámetros, a veces de forma drástica.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Si se pruning (poda) de forma dispersa, la reducción no se traduce en velocidad:
+							hay que pruningr por bloques.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Destilación</div>
+						<p>
+							Entrenar un modelo pequeño para que reproduzca la salida de uno grande
+							ya entrenado.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Es la más costosa de aplicar: exige el modelo grande y otro
+							entrenamiento completo.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Las tres magnitudes se mueven juntas</span>
+					<p>
+						<b>Exactitud, tamaño y tiempo de inferencia</b> no se optimizan por
+						separado: reducir el modelo baja las tres. La pregunta no es cuánto se
+						puede reducir sino <b>cuánta exactitud admite el requisito</b>, y esa
+						cifra sale de la aplicación, no del modelo.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						La reducción se mide <b>sobre el dispositivo</b>, no sobre el ordenador
+						donde se entrenó. El tiempo de inferencia depende de qué operaciones
+						estén optimizadas para ese procesador, y dos modelos del mismo tamaño
+						pueden tardar cosas muy distintas.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-arquitectura-con-inferencia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Arquitectura del sistema con inferencia</span>
+				</a>
+				<a class="slide-nav__link" href="06-paper-cuantizacion.html">
+					<span>Artículo · Cuantización y despliegue</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

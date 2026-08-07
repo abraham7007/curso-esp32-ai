@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>El modelo empleado hasta aquí y su límite · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					01 · Compilado frente a interpretado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">El modelo empleado hasta aquí y su límite</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Lo que se ha hecho en diez sesiones
+							</div>
+							<p>
+								Código compilado en un <b>binario único</b>. Toda modificación del
+								comportamiento (cambiar un umbral, añadir una regla) exige
+								recompilar y regrabar el dispositivo.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Lo que eso da y lo que cuesta</span>
+							<p>
+								Da el <b>máximo rendimiento y el máximo determinismo</b>: el
+								compilador conoce todo el programa y no hay ninguna capa entre el
+								código y el procesador. Cuesta que el ciclo de cambio sea largo, y
+								que el usuario no pueda adaptar nada sin herramientas de desarrollo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Cambiar un umbral · modelo compilado</span>
+								<span class="bd-node__body">Editar, compilar, grabar, reiniciar. Con OTA, además: publicar, descargar, verificar y confirmar.</span>
+								<span class="bd-node__meta">minutos, y un despliegue completo del parque</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↕</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Cambiar un umbral · comportamiento interpretado</span>
+								<span class="bd-node__body">Enviar el valor nuevo. El firmware no cambia y no hay nada que revertir.</span>
+								<span class="bd-node__meta">segundos, sin riesgo de dejar el equipo inalcanzable</span>
+							</div>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								La comparación no es «uno mejor que otro». Un dispositivo que ya
+								acepta parámetros por su API, como el de la sesión 9, tiene la mitad
+								del camino hecha: lo que esta sesión examina es hasta dónde conviene
+								llevar esa idea.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Compilado, interpretado y agentes</span>
+				</a>
+				<a class="slide-nav__link" href="03-runtime-embebido.html">
+					<span>Runtime embebido</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

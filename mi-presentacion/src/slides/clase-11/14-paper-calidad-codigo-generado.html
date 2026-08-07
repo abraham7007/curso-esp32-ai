@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Proporción de código válido y correcto entre las herramientas de generación · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Yetiştiren, B.; Özsoy, I.; Ayerdem, M.; Tüzün, E.</b> (2023). Evaluating the Code Quality of AI-Assisted Code Generation Tools: An Empirical Study. <i>arXiv</i>. <code>arXiv:2304.10778</code></p>
+
+					<h2 class="paper__title">Proporción de código válido y correcto entre las herramientas de generación</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Medir la calidad del código generado <b>más allá de si funciona</b>.</li>
+									<li>Cinco dimensiones: validez, corrección, seguridad, fiabilidad y mantenibilidad.</li>
+									<li><b>164 problemas</b> planteados a tres herramientas de generación asistida.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Generaciones válidas: <b>150, 148 y 153 de 164</b> — entre el 90,2 % y el 93,3 %.</li>
+									<li>La diferencia entre las tres herramientas <b>es pequeña</b>.</li>
+									<li>Las generaciones no válidas puntúan <b>cero</b> en corrección: no se descartan.</li>
+									<li>Solo <b>dos</b> de las cinco dimensiones se comprueban ejecutando.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Las tres producen código válido en proporción <b>alta y semejante</b>.</li>
+									<li>La diferencia relevante no está en si el código se ejecuta, sino en las <b>otras cuatro dimensiones</b>.</li>
+									<li>Un fragmento válido y correcto puede seguir siendo inseguro o inmantenible.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-codigo-generado"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Cifras publicadas. Las tres herramientas producen código válido en proporción alta y muy semejante.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-codigo-dimensiones"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las cinco dimensiones evaluadas, repartidas según se comprueben ejecutando o leyendo.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-flujo-y-contexto.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Flujo de trabajo y contexto</span>
+				</a>
+				<a class="slide-nav__link" href="15-modos-de-fallo-generado.html">
+					<span>Modos de fallo del código generado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

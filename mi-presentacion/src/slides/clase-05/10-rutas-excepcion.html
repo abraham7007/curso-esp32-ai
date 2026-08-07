@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Rutas de excepción: evento ausente, repetido o inesperado · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Rutas de excepción: evento ausente, repetido o inesperado</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Tres situaciones que el diagrama nominal no cubre.</strong> Las
+					tres ocurren en operación normal, no solo ante un fallo.
+				</p>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+							El evento esperado no llega
+						</div>
+						<div class="problem-card__body">
+							<p>
+								Un portón que ordena abrir y nunca recibe el fin de carrera queda
+								en <code>ABRIENDO</code> de forma indefinida, con el motor
+								alimentado.
+							</p>
+							<p>
+								<b>Tratamiento:</b> todo estado transitorio lleva un plazo máximo.
+								Su vencimiento es un evento que conduce a un estado de error, no
+								una condición que se comprueba aparte.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+							El evento llega repetido
+						</div>
+						<div class="problem-card__body">
+							<p>
+								Un pulsador sin filtrado produce siete eventos por pulsación; una
+								trama de red retransmitida llega dos veces.
+							</p>
+							<p>
+								<b>Tratamiento:</b> la transición debe ser idempotente. Recibir el
+								mismo evento dos veces en el mismo estado produce el mismo
+								resultado que recibirlo una vez.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+							El evento llega en un estado no previsto
+						</div>
+						<div class="problem-card__body">
+							<p>
+								Llega el fin de carrera de apertura mientras la máquina está
+								cerrando: o el sensor falla, o el modelo no representa la realidad.
+							</p>
+							<p>
+								<b>Tratamiento:</b> la rama por defecto del <code>switch</code>
+								registra el par estado-evento por el puerto serie. Ignorarlo en
+								silencio elimina la única pista del fallo.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						Comprobación obligatoria
+					</div>
+					<p>
+						Por cada estado transitorio del diagrama debe existir una fila de la
+						tabla cuyo evento sea el vencimiento del plazo máximo. Si un estado no
+						tiene esa fila, el dispositivo puede quedarse en él para siempre, y esa
+						es una avería que ningún ensayo de corta duración revela.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-codigo-20-semaforo-peatonal.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Semáforo peatonal</span>
+				</a>
+				<a class="slide-nav__link" href="11-estados-error-recuperacion.html">
+					<span>Estados de error y recuperación</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

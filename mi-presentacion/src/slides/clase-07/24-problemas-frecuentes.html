@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes con la conexión y las peticiones · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes con la conexión y las peticiones</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>No conecta con credenciales correctas</div>
+						<div class="problem-card__body">
+							<p>El punto de acceso aparece en la exploración y la contraseña es la buena, pero la asociación nunca se completa.</p>
+							<p><b>Por qué ocurre.</b> La red opera en 5 GHz y el ESP32 clásico solo admite 2,4 GHz. La exploración la muestra porque detecta la baliza, no porque pueda usarla.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir el canal de la red en la exploración: un canal por encima de 14 corresponde a la banda de 5 GHz.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Se reinicia al activar HTTPS</div>
+						<div class="problem-card__body">
+							<p>El proyecto funcionaba con HTTP y se reinicia al cambiar a HTTPS, con una traza que apunta a código sin relación.</p>
+							<p><b>Por qué ocurre.</b> La negociación segura reserva memoria adicional. El proyecto operaba con poco margen y ahora lo agota.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir <code>ESP.getFreeHeap()</code> antes y durante la negociación. Si el mínimo se acerca a cero, la causa es esa.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Certificado no válido todavía</div>
+						<div class="problem-card__body">
+							<p>La conexión segura falla con un error de certificado pese a que el servidor es correcto.</p>
+							<p><b>Por qué ocurre.</b> El dispositivo arrancó sin sincronizar la hora y cree estar en 1970, fecha anterior al inicio de validez de todo certificado.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir la fecha del sistema antes del primer intento. Sincronizar por NTP antes de cualquier conexión segura.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>El servicio deja de responder a media mañana</div>
+						<div class="problem-card__body">
+							<p>Las consultas funcionan durante unas horas y luego devuelven siempre el mismo código de error.</p>
+							<p><b>Por qué ocurre.</b> Se ha superado el límite de uso de la cuenta. El código 429 se mantiene hasta que la ventana se renueva.</p>
+							<p><b>Cómo comprobarlo.</b> Leer la cabecera de límite restante en cada respuesta y registrarla. Dividir la cuota diaria entre el periodo de consulta antes de fijarlo.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>El dispositivo consume mucho más de lo previsto</div>
+						<div class="problem-card__body">
+							<p>La autonomía con batería es una fracción de la estimada, sin que el programa haga nada visible.</p>
+							<p><b>Por qué ocurre.</b> Reintentos demasiado frecuentes ante un fallo permanente, como un token caducado. Cada intento enciende la radio.</p>
+							<p><b>Cómo comprobarlo.</b> Contar los intentos fallidos consecutivos y su causa. Un 4xx repetido señala reintentos que nunca podrán tener éxito.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="23-verificacion-previa-y-sin-red.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					<span>Verificación previa y operación sin red</span>
+				</a>
+				<a class="slide-nav__link" href="25-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Efecto del umbral sobre los dos tipos de error · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Fundamentos y restricciones
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Efecto del umbral sobre los dos tipos de error</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Por qué no hay un umbral óptimo
+							</div>
+							<p>
+								Las dos poblaciones, normal y anomalía, se solapan. Cualquier umbral
+								deja errores de los dos tipos, y moverlo <b>intercambia unos por
+								otros</b>: no los reduce a la vez.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La exactitud apenas se mueve en un tramo amplio del recorrido,
+								mientras el reparto entre falsos positivos y negativos cambia por
+								completo. Por eso el umbral no se elige maximizando la exactitud sino
+								<b>minimizando el costo</b>, y ese costo lo fija la aplicación: aquí,
+								cuánto vale una avería no detectada frente a una revisión innecesaria.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="umb-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Dos distribuciones solapadas, normal y anomalía, con la línea de umbral y las áreas correspondientes a falsos positivos y falsos negativos"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="umb-valor" class="text-sm font-medium">Umbral de decisión</label>
+								<input type="range" id="umb-valor" min="20" max="80" step="1" value="50" />
+								<span class="readout" id="umb-valor-lec">5,0</span>
+							</div>
+							<div class="controls mt-2">
+								<label for="umb-costo" class="text-sm font-medium">
+									Costo de un fallo no detectado frente a una revisión
+								</label>
+								<input type="range" id="umb-costo" min="1" max="50" step="1" value="20" />
+								<span class="readout" id="umb-costo-lec">×20</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Exactitud</span>
+									<span class="readout" id="umb-exac">94 %</span>
+								</div>
+								<div class="metric__item metric__item--warn">
+									<span class="text-xs text-[var(--color-text-muted)]">Falsos positivos</span>
+									<span class="readout" id="umb-fp">8</span>
+								</div>
+								<div class="metric__item metric__item--bad">
+									<span class="text-xs text-[var(--color-text-muted)]">Falsos negativos</span>
+									<span class="readout" id="umb-fn">4</span>
+								</div>
+								<div class="metric__item" id="umb-item-costo">
+									<span class="text-xs text-[var(--color-text-muted)]">Costo total</span>
+									<span class="readout" id="umb-total">88</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-codigo-48-umbral-antes-que-modelo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Umbral antes que modelo</span>
+				</a>
+				<a class="slide-nav__link" href="11-codigo-49-entrenar-y-exportar.html">
+					<span>La hora del código · Entrenar y exportar</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Dos poblaciones gaussianas solapadas, con los tamaños del ejemplo 48:
+			// 160 casos normales y 40 anomalías.
+			const N_NORMAL = 160;
+			const N_ANOMALIA = 40;
+			const MU_NORMAL = 4.0;
+			const MU_ANOMALIA = 6.4;
+			const SIGMA = 0.9;
+
+			const lienzo = document.getElementById("umb-canvas");
+			const ctx = lienzo.getContext("2d");
+			const dUmbral = document.getElementById("umb-valor");
+			const dCosto = document.getElementById("umb-costo");
+			const lecUmbral = document.getElementById("umb-valor-lec");
+			const lecCosto = document.getElementById("umb-costo-lec");
+			const salExac = document.getElementById("umb-exac");
+			const salFP = document.getElementById("umb-fp");
+			const salFN = document.getElementById("umb-fn");
+			const salTotal = document.getElementById("umb-total");
+			const itCosto = document.getElementById("umb-item-costo");
+
+			function variable(n) {
+				return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+			}
+			function coma(n, d) {
+				return n.toFixed(d).replace(".", ",");
+			}
+
+			const densidad = (x, mu) =>
+				Math.exp(-((x - mu) ** 2) / (2 * SIGMA ** 2)) / (SIGMA * Math.sqrt(2 * Math.PI));
+
+			// Proporción de una población por encima del umbral, por integración
+			// numérica: basta para la lámina y evita depender de una función de
+			// error que JavaScript no trae.
+			function proporcionSobre(umbral, mu) {
+				const paso = 0.01;
+				let total = 0;
+				let sobre = 0;
+				for (let x = 0; x <= 10; x += paso) {
+					const d = densidad(x, mu) * paso;
+					total += d;
+					if (x >= umbral) sobre += d;
+				}
+				return sobre / total;
+			}
+
+			function dibujar(umbral) {
+				const w = lienzo.width;
+				const h = lienzo.height;
+				ctx.clearRect(0, 0, w, h);
+
+				const izq = 60;
+				const der = w - 30;
+				const base = 286;
+				const alto = 210;
+				const x = (v) => izq + (v / 10) * (der - izq);
+				const maxD = densidad(MU_NORMAL, MU_NORMAL);
+				const y = (d) => base - (d / maxD) * alto;
+
+				const ok = variable("--color-ok");
+				const acento = variable("--color-accent");
+				const atenuado = variable("--color-text-muted");
+				const borde = variable("--color-border");
+
+				// Áreas de error, dibujadas antes que las curvas
+				for (const [mu, color, esFP] of [[MU_NORMAL, acento, true], [MU_ANOMALIA, ok, false]]) {
+					ctx.beginPath();
+					ctx.moveTo(x(esFP ? umbral : 0), base);
+					for (let v = esFP ? umbral : 0; esFP ? v <= 10 : v <= umbral; v += 0.02) {
+						ctx.lineTo(x(v), y(densidad(v, mu)));
+					}
+					ctx.lineTo(x(esFP ? 10 : umbral), base);
+					ctx.closePath();
+					ctx.fillStyle = color;
+					ctx.globalAlpha = 0.3;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+				}
+
+				// Curvas
+				for (const [mu, color, rotulo] of [[MU_NORMAL, ok, "normal"], [MU_ANOMALIA, acento, "anomalía"]]) {
+					ctx.beginPath();
+					for (let v = 0; v <= 10; v += 0.02) {
+						const px = x(v);
+						const py = y(densidad(v, mu));
+						if (v === 0) ctx.moveTo(px, py);
+						else ctx.lineTo(px, py);
+					}
+					ctx.strokeStyle = color;
+					ctx.lineWidth = 2.2;
+					ctx.stroke();
+					ctx.fillStyle = color;
+					ctx.font = "600 12px system-ui";
+					ctx.textAlign = "center";
+					ctx.fillText(rotulo, x(mu), y(densidad(mu, mu)) - 10);
+				}
+
+				// Umbral
+				ctx.strokeStyle = variable("--color-navy");
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(x(umbral), base + 6);
+				ctx.lineTo(x(umbral), base - alto - 6);
+				ctx.stroke();
+				ctx.fillStyle = variable("--color-navy");
+				ctx.font = "600 12px ui-monospace, monospace";
+				ctx.fillText(coma(umbral, 1), x(umbral), base - alto - 14);
+
+				// Eje
+				ctx.strokeStyle = borde;
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.moveTo(izq, base);
+				ctx.lineTo(der, base);
+				ctx.stroke();
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("característica extraída", der, base + 20);
+				ctx.textAlign = "left";
+				ctx.fillText("relleno rojo: falsos positivos · relleno verde: falsos negativos", izq, 30);
+			}
+
+			function actualizar() {
+				const umbral = Number(dUmbral.value) / 10;
+				const razon = Number(dCosto.value);
+				lecUmbral.textContent = coma(umbral, 1);
+				lecCosto.textContent = `×${razon}`;
+
+				dibujar(umbral);
+
+				const fp = Math.round(N_NORMAL * proporcionSobre(umbral, MU_NORMAL));
+				const fn = Math.round(N_ANOMALIA * (1 - proporcionSobre(umbral, MU_ANOMALIA)));
+				const exac = ((N_NORMAL + N_ANOMALIA - fp - fn) / (N_NORMAL + N_ANOMALIA)) * 100;
+				const costo = fp + fn * razon;
+
+				salExac.textContent = `${coma(exac, 1)} %`;
+				salFP.textContent = String(fp);
+				salFN.textContent = String(fn);
+				salTotal.textContent = String(costo);
+				// Se resalta cuando el costo se acerca a su mínimo en el recorrido.
+				let mejor = Infinity;
+				for (let u = 2; u <= 8; u += 0.1) {
+					const f1 = Math.round(N_NORMAL * proporcionSobre(u, MU_NORMAL));
+					const f2 = Math.round(N_ANOMALIA * (1 - proporcionSobre(u, MU_ANOMALIA)));
+					mejor = Math.min(mejor, f1 + f2 * razon);
+				}
+				const cerca = costo <= mejor * 1.1;
+				itCosto.classList.toggle("metric__item--ok", cerca);
+				itCosto.classList.toggle("metric__item--bad", !cerca);
+			}
+
+			for (const el of [dUmbral, dCosto]) el.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

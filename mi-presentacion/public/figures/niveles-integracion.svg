@@ -1,0 +1,348 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 667.08 122.292" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 122.292 
+L 667.08 122.292 
+L 667.08 0 
+L 0 0 
+L 0 122.292 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 144.436032 57.6282 
+L 190.790208 57.6282 
+L 190.790208 34.8978 
+L 144.436032 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 144.436032 84.6882 
+L 190.790208 84.6882 
+L 190.790208 61.9578 
+L 144.436032 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 144.436032 111.7482 
+L 190.790208 111.7482 
+L 190.790208 89.0178 
+L 144.436032 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 197.111232 57.6282 
+L 243.465408 57.6282 
+L 243.465408 34.8978 
+L 197.111232 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 197.111232 84.6882 
+L 243.465408 84.6882 
+L 243.465408 61.9578 
+L 197.111232 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 197.111232 111.7482 
+L 243.465408 111.7482 
+L 243.465408 89.0178 
+L 197.111232 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 249.786432 57.6282 
+L 296.140608 57.6282 
+L 296.140608 34.8978 
+L 249.786432 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 249.786432 84.6882 
+L 296.140608 84.6882 
+L 296.140608 61.9578 
+L 249.786432 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 249.786432 111.7482 
+L 296.140608 111.7482 
+L 296.140608 89.0178 
+L 249.786432 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 302.461632 57.6282 
+L 348.815808 57.6282 
+L 348.815808 34.8978 
+L 302.461632 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 302.461632 84.6882 
+L 348.815808 84.6882 
+L 348.815808 61.9578 
+L 302.461632 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 302.461632 111.7482 
+L 348.815808 111.7482 
+L 348.815808 89.0178 
+L 302.461632 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 355.136832 57.6282 
+L 401.491008 57.6282 
+L 401.491008 34.8978 
+L 355.136832 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 355.136832 84.6882 
+L 401.491008 84.6882 
+L 401.491008 61.9578 
+L 355.136832 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 355.136832 111.7482 
+L 401.491008 111.7482 
+L 401.491008 89.0178 
+L 355.136832 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 407.812032 57.6282 
+L 454.166208 57.6282 
+L 454.166208 34.8978 
+L 407.812032 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 407.812032 84.6882 
+L 454.166208 84.6882 
+L 454.166208 61.9578 
+L 407.812032 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 407.812032 111.7482 
+L 454.166208 111.7482 
+L 454.166208 89.0178 
+L 407.812032 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 460.487232 57.6282 
+L 506.841408 57.6282 
+L 506.841408 34.8978 
+L 460.487232 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 460.487232 84.6882 
+L 506.841408 84.6882 
+L 506.841408 61.9578 
+L 460.487232 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 460.487232 111.7482 
+L 506.841408 111.7482 
+L 506.841408 89.0178 
+L 460.487232 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 513.162432 57.6282 
+L 559.516608 57.6282 
+L 559.516608 34.8978 
+L 513.162432 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 513.162432 84.6882 
+L 559.516608 84.6882 
+L 559.516608 61.9578 
+L 513.162432 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_25">
+    <path d="M 513.162432 111.7482 
+L 559.516608 111.7482 
+L 559.516608 89.0178 
+L 513.162432 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_26">
+    <path d="M 565.837632 57.6282 
+L 612.191808 57.6282 
+L 612.191808 34.8978 
+L 565.837632 34.8978 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_27">
+    <path d="M 565.837632 84.6882 
+L 612.191808 84.6882 
+L 612.191808 61.9578 
+L 565.837632 61.9578 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_28">
+    <path d="M 565.837632 111.7482 
+L 612.191808 111.7482 
+L 612.191808 89.0178 
+L 565.837632 89.0178 
+z
+" clip-path="url(#p978438d2f4)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="167.61312" y="27.488819" transform="rotate(-0 167.61312 27.488819)">oscilador</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(159.786714 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(157.830112 51.711523)">cargo</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(205.538554 18.802311)">memoria</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(209.752773 27.488819)">Flash</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(212.461914 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(210.505312 51.711523)">cargo</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(251.892426 18.802311)">adaptación</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(253.999536 27.488819)">de antena</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(265.137114 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(263.180512 51.711523)">cargo</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(308.781845 18.754186)">blindaje</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(302.460517 27.440694)">electromag.</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(317.812314 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(315.855712 51.711523)">cargo</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(350.921498 18.802311)">certificación</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(353.028608 27.488819)">de emisiones</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(370.487514 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(368.530912 51.711523)">cargo</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(409.918026 18.754186)">regulación</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(409.918026 27.488819)">de tensión</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(423.162714 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(421.206112 51.711523)">cargo</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(423.162714 71.451508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(421.206112 78.771523)">cargo</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(464.700336 18.802311)">conversor</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(464.700336 27.488819)">USB-serie</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(475.837914 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(473.881312 51.711523)">cargo</text>
+   </g>
+   <g id="text_16">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(475.837914 71.451508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(473.881312 78.771523)">cargo</text>
+   </g>
+   <g id="text_17">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(519.482645 18.802311)">reinicio</text>
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(515.268426 27.488819)">automático</text>
+   </g>
+   <g id="text_18">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(528.513114 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(526.556512 51.711523)">cargo</text>
+   </g>
+   <g id="text_19">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(528.513114 71.451508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(526.556512 78.771523)">cargo</text>
+   </g>
+   <g id="text_20">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="589.01472" y="27.488819" transform="rotate(-0 589.01472 27.488819)">conectores</text>
+   </g>
+   <g id="text_21">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(581.188314 44.391508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(579.231712 51.711523)">cargo</text>
+   </g>
+   <g id="text_22">
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(581.188314 71.451508)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 6.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(579.231712 78.771523)">cargo</text>
+   </g>
+   <g id="text_23">
+    <text style="fill: var(--fig-navy); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="133.900992" y="48.770344" transform="rotate(-0 133.900992 48.770344)">chip</text>
+   </g>
+   <g id="text_24">
+    <text style="fill: var(--fig-navy); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="133.900992" y="75.830344" transform="rotate(-0 133.900992 75.830344)">módulo</text>
+   </g>
+   <g id="text_25">
+    <text style="fill: var(--fig-navy); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="133.900992" y="102.890344" transform="rotate(-0 133.900992 102.890344)">placa de desarrollo</text>
+   </g>
+   <g id="text_26">
+    <text style="fill: var(--fig-accent); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="632.208384" y="49.884719" transform="rotate(-0 632.208384 49.884719)">9</text>
+   </g>
+   <g id="text_27">
+    <text style="fill: var(--fig-accent); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="632.208384" y="76.944719" transform="rotate(-0 632.208384 76.944719)">4</text>
+   </g>
+   <g id="text_28">
+    <text style="fill: var(--fig-ok); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="632.208384" y="104.004719" transform="rotate(-0 632.208384 104.004719)">0</text>
+   </g>
+   <g id="text_29">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(623.177915 19.4283)">a tu</text>
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(620.920298 27.874472)">cargo</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p978438d2f4">
+   <rect x="4.32" y="4.32" width="658.44" height="113.652"/>
+  </clipPath>
+ </defs>
+</svg>

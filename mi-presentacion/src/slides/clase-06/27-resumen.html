@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 6 · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>Tareas y planificador</div>
+						<p>
+							Las tareas no aceleran el sistema: acotan el peor caso. La prioridad
+							se asigna por requisito temporal, nunca por la importancia aparente
+							de la función.
+						</p>
+						<p>
+							Toda tarea sincronizada con otra se fija al mismo núcleo:
+							sincronizar entre núcleos costó <b>190 ms</b> frente a
+							<b>0,012 ms</b> en la medida de referencia.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>Comunicación</div>
+						<p>
+							Colas por omisión, porque transfieren por copia y no hay memoria que
+							proteger. Mutex solo para recursos únicos, con orden global de
+							adquisición.
+						</p>
+						<p>
+							<code>volatile</code> no resuelve una condición de carrera. La
+							corrección tiene un costo en tiempo; la ausencia de corrección lo
+							tiene en datos.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a la sesión siguiente</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span>
+							<span class="usecase__name">La comunicación como tarea independiente</span>
+							<span class="usecase__what">
+								Las peticiones de red se atienden en su propia tarea, en el núcleo 0,
+								sin detener la adquisición.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						<span>
+							<span class="usecase__name">Medir antes de repartir</span>
+							<span class="usecase__what">
+								Ocupación por tarea, high water mark y memoria libre son las tres
+								cifras previas a cualquier decisión de diseño.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span>
+							<span class="usecase__name">El costo de la pila TLS</span>
+							<span class="usecase__what">
+								La sesión 7 añade cifrado del transporte, cuyo consumo de memoria
+								obliga a revisar el dimensionado que aquí se establece.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="26-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="28-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

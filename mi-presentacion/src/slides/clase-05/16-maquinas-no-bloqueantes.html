@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>El vencimiento del temporizador como evento del modelo · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">El vencimiento del temporizador como evento del modelo</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Una máquina es <b>no bloqueante</b> cuando ninguna de sus
+								transiciones detiene el bucle. El paso del tiempo se observa
+								comparando <code>millis()</code> contra la marca de entrada al
+								estado, y su vencimiento es un evento igual que cualquier otro.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>millis()</code> devuelve un <code>unsigned long</code> de 32
+								bits que desborda a los <b>49,7 días</b>. La resta
+								<code>millis() - tEntrada</code> sigue dando el valor correcto tras
+								el desbordamiento porque la aritmética sin signo es modular; la
+								comparación <code>millis() &gt; tEntrada + plazo</code> no lo hace.
+								Por eso la forma con resta es la única admisible.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Consecuencia sobre el modelo</span>
+							<p>
+								Cuando el plazo es un evento, aparece en la tabla de transiciones y
+								se verifica como los demás. Cuando es un <code>delay()</code>, no
+								está en ninguna parte del modelo y sus efectos solo se descubren en
+								ejecución.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+								<span class="codepanel__path">el bucle se detiene</span>
+							</div>
+							<pre><code>case Estado::AMBAR:
+  digitalWrite(PIN_AMBAR, HIGH);
+  <span class="hl hl--hit">delay(3000);   // 3 s sin leer entradas ni atender nada</span>
+  estado = Estado::ROJO;
+  break;</code></pre>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">el plazo es un evento</span>
+							</div>
+							<pre><code>case Estado::AMBAR:
+  <span class="hl hl--add">if (millis() - tEntrada &gt;= 3000)   // resta, no suma</span>
+    estado = Estado::ROJO;
+  break;</code></pre>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Con <code>delay(3000)</code> el bucle ejecuta unas 0,3 iteraciones
+								por segundo durante el ámbar; con la comparación, mantiene las
+								decenas de miles habituales. La diferencia es la que decide si el
+								pulsador se atiende o se pierde.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-implementaciones-alternativas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Tabla en memoria y punteros a función</span>
+				</a>
+				<a class="slide-nav__link" href="17-codigo-22-cargador-etapas.html">
+					<span>La hora del código · Cargador por etapas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

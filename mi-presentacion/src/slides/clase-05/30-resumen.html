@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 5 · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>Modelado</div>
+						<p>
+							Una variable de estado con un número cerrado de valores sustituye al
+							conjunto de banderas. El espacio de situaciones deja de crecer de
+							forma exponencial y pasa a ser enumerable.
+						</p>
+						<p>
+							La tabla de transiciones se redacta completa, incluidas las filas
+							cuya acción es ignorar el evento: dejan constancia de que la
+							situación se consideró.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>Implementación</div>
+						<p>
+							<code>enum class</code> y <code>switch</code> hasta unos diez
+							estados. Las acciones de entrada van en la transición, no en el
+							cuerpo del estado.
+						</p>
+						<p>
+							El vencimiento de un plazo es un evento del modelo, observado con la
+							resta <code>millis() - tEntrada</code>. Ningún
+							<code>delay()</code> dentro de la máquina.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a la sesión siguiente</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span>
+							<span class="usecase__name">Estados de error con ruta de salida</span>
+							<span class="usecase__what">
+								Todo estado transitorio lleva plazo máximo; su vencimiento conduce a
+								un estado con salidas seguras y recuperación acotada.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+						<span>
+							<span class="usecase__name">Verificación por inyección de eventos</span>
+							<span class="usecase__what">
+								La tabla es finita, de modo que la cobertura de transiciones puede
+								medirse y comunicarse por el monitor serie.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+						<span>
+							<span class="usecase__name">El límite del bucle único</span>
+							<span class="usecase__what">
+								Varias máquinas conviven en un bucle mientras sus requisitos
+								temporales sean compatibles. La sesión 6 trata el caso en que no lo
+								son.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="29-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="31-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

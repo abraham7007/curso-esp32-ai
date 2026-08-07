@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 17 · Conteo de eventos por interrupción · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 17</span>
+					</div>
+
+					<h2 class="code-hour__title">Conteo de eventos por interrupción con filtrado de rebotes</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> El mismo pulsador contado de dos maneras a la vez: por interrupción de flanco y por polling dentro de un bucle al que se añade carga. La traza compara las dos cuentas pulsación a pulsación.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p>Una <b>interrupción</b> desvía la ejecución en cuanto ocurre el flanco, sin que el bucle tenga que estar mirando. Su rutina debe ser corta y no puede imprimir ni esperar: aquí solo filtra el rebote e incrementa un contador declarado <code>volatile</code>, palabra que impide al compilador cachear la variable porque cambia fuera del flujo normal. El <b>polling</b>, en cambio, solo ve lo que ocurre cuando le toca mirar.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Configura el GPIO 4 como INPUT_PULLUP y asocia una interrupción al flanco de bajada. La rutina lleva IRAM_ATTR, filtra rebotes de 30 ms comparando micros() y solo incrementa un contador volatile: no imprime nada ni llama a funciones bloqueantes. En paralelo, cuenta el mismo pulsador por consulta dentro de loop(), al que añades una carga artificial de 40 ms por iteración. Emite por el puerto serie a 115200 baudios ambas cuentas y su diferencia.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el pulsador entre el GPIO 4 y GND.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> con las dos rutas (la rutina de interrupción y la consulta en el bucle) y el punto donde cada una registra el evento. Y un <b>cronograma</b> con la carga del bucle y las pulsaciones, señalando cuál se le escapa a la consulta.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>Pulsador entre el <b>GPIO 4</b> y masa, configurado como <code>INPUT_PULLUP</code>: en reposo el nivel es 1 y la pulsación lo lleva a 0, de modo que la interrupción se asocia al <b>flanco de bajada</b>.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+																<span class="hw-set__item">
+																	<wokwi-pushbutton color="green"></wokwi-pushbutton>
+																	<small>Pulsador</small>
+																</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">[SETUP] GPIO4 PULLUP · FALLING · rebote=30 ms · carga=40 ms
+[EVENTO] n=1   ms=1284   interrupcion=si   consulta=si
+[EVENTO] n=2   ms=1811   interrupcion=si   consulta=no
+[EVENTO] n=3   ms=2456   interrupcion=si   consulta=si
+[EVENTO] n=4   ms=2990   interrupcion=si   consulta=no
+...
+[CMP] reales=20 interrupcion=20 consulta=14 perdidos=6 (30%)
+[REBOTE] sin filtro: 1 pulsacion = 7 cuentas | con filtro: 1</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>Recorrer la columna <code>consulta</code>: hay pulsaciones con <code>si</code> y otras con <b><code>no</code></b>, mientras la columna <code>interrupcion</code> es <code>si</code> siempre. Con 40 ms de carga en el bucle, la consulta pierde eventos y no puede garantizar cuáles. Subir la carga y ver crecer las pérdidas: la diferencia entre los dos métodos no es de estilo, es de <b>garantía</b>.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-requisitos-isr.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Requisitos de una rutina de servicio</span>
+				</a>
+				<a class="slide-nav__link" href="19-patron-isr-bucle.html">
+					<span>La rutina registra, el bucle procesa</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

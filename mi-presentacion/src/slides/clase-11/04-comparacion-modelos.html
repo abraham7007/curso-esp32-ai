@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ocho dimensiones para comparar los dos modelos · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					01 · Compilado frente a interpretado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Ocho dimensiones para comparar los dos modelos</h1>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Dimensión</th><th>Firmware compilado</th><th>Comportamiento interpretado</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><b>Velocidad de iteración</b></td><td>Minutos: compilar, grabar, reiniciar</td><td>Segundos: enviar el guion</td></tr>
+							<tr><td><b>Rendimiento</b></td><td>Máximo; sin capa intermedia</td><td>Menor; cada instrucción pasa por el intérprete</td></tr>
+							<tr><td><b>Determinismo</b></td><td>Acotable; se puede medir el peor caso</td><td>Difícil de acotar: recolección de memoria y despacho dinámico</td></tr>
+							<tr><td><b>Memoria</b></td><td>Solo el programa</td><td>Programa, intérprete y estructuras en ejecución</td></tr>
+							<tr><td><b>Depuración</b></td><td>Traza de retorno y depurador por interfaz</td><td>Errores del guion, a veces solo en ejecución</td></tr>
+							<tr><td><b>Superficie de ataque</b></td><td>La del firmware</td><td>Además: quien pueda enviar un guion decide qué hace el equipo</td></tr>
+							<tr><td><b>Certificación</b></td><td>Se certifica un binario concreto</td><td>El comportamiento cambia después de certificar</td></tr>
+							<tr><td><b>Mantenimiento</b></td><td>Una versión por parque</td><td>Tantas configuraciones como instalaciones</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Las dos filas que suelen decidir</span>
+					<p>
+						<b>Certificación</b> y <b>superficie de ataque</b>. Un equipo con
+						requisito de seguridad funcional se certifica sobre un binario concreto,
+						y un comportamiento que cambia después invalida esa certificación. Y
+						quien pueda enviar un guion decide qué hace el dispositivo, lo que
+						convierte el canal de envío en un mecanismo tan crítico como la firma del
+						firmware de la sesión 10.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-runtime-embebido.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Runtime embebido</span>
+				</a>
+				<a class="slide-nav__link" href="05-codigo-44-reglas-interpretadas.html">
+					<span>La hora del código · Reglas interpretadas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

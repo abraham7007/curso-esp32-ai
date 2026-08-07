@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 5 · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>Estado <span class="glossary-item__alt">state</span></h3>
+						<p class="glossary-item__body">Situación en la que el dispositivo permanece hasta que ocurre un evento. Determina las salidas activas y los eventos que se atienden.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Evento <span class="glossary-item__alt">event</span></h3>
+						<p class="glossary-item__body">Hecho instantáneo observable por el sistema: un flanco en un terminal, el vencimiento de un plazo o la llegada de una trama.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Transición <span class="glossary-item__alt">transition</span></h3>
+						<p class="glossary-item__body">Paso de un estado a otro provocado por un evento. Es el único mecanismo admitido para cambiar de estado.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Condición de guarda <span class="glossary-item__alt">condición de guarda</span></h3>
+						<p class="glossary-item__body">Expresión booleana asociada a una transición. El evento la dispara únicamente si la condición se cumple.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Acción de entrada <span class="glossary-item__alt">entry action</span></h3>
+						<p class="glossary-item__body">Instrucción que se ejecuta una sola vez al llegar a un estado, no en cada iteración del bucle mientras el estado dure.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Modelo de Moore <span class="glossary-item__alt">Moore machine</span></h3>
+						<p class="glossary-item__body">Formalismo en el que las salidas dependen solo del estado activo. Es el que emplea este curso por su lectura directa sobre el diagrama.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Modelo de Mealy <span class="glossary-item__alt">Mealy machine</span></h3>
+						<p class="glossary-item__body">Formalismo en el que las salidas dependen del estado y del evento. Requiere menos estados y responde en el instante del evento.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>UML <span class="glossary-item__alt">Unified Modeling Language</span></h3>
+						<p class="glossary-item__body">Lenguaje de modelado normalizado. De su repertorio esta sesión emplea el diagrama de máquina de estados, con flechas rotuladas <code>evento [guarda] / acción</code>.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Statechart <span class="glossary-item__alt">máquina de estados jerárquica</span></h3>
+						<p class="glossary-item__body">Máquina en la que un estado contiene a su vez otra máquina completa. Evita repetir una misma transición en cada subestado.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Tabla de transiciones <span class="glossary-item__alt">state transition table</span></h3>
+						<p class="glossary-item__body">Enumeración de todas las combinaciones de estado y evento con su destino y su acción. Cada fila constituye un caso de prueba.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Máquina no bloqueante <span class="glossary-item__alt">non-blocking state machine</span></h3>
+						<p class="glossary-item__body">Máquina cuyas transiciones no detienen el bucle. El paso del tiempo se observa comparando <code>millis()</code> contra la marca de entrada al estado.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="28-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="30-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

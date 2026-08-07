@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Envío por variación significativa frente a envío periódico · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					02 · Plataformas y arquitectura de sistema
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Envío por variación significativa frente a envío periódico</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+				<div class="slide__split-text">
+				<div class="compare">
+					<div class="compare__panel">
+						<h3>Envío periódico</h3>
+						<p>
+							Un mensaje cada intervalo fijo, cambie o no la magnitud. El volumen
+							es conocido de antemano.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Cada 5 s son <b>17 280 mensajes al día</b> por dispositivo.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Envío por variación significativa</h3>
+						<p>
+							Solo cuando la magnitud se aparta del último valor enviado más de un
+							umbral.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Una temperatura interior con umbral de 0,3 °C: unos <b>200 mensajes al
+							día</b>.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion">
+					<span class="conclusion__label">La combinación es lo que se usa</span>
+					<p>
+						Envío por variación <b>más un mensaje de seguridad</b> cada cierto
+						tiempo aunque no haya cambio. Sin ese refuerzo el silencio es ambiguo:
+						un sensor estable y uno averiado producen lo mismo.
+					</p>
+				</div>
+				</div>
+
+				<div class="slide__split-visual">
+					<div class="figure">
+						<div class="figure__frame" data-figure="politica-transmision"></div>
+						<p class="figure__caption">
+							Cada punto rojo es un mensaje publicado. La magnitud se sigue
+							midiendo cada 5 s: lo que cambia es cuántas veces se transmite.
+						</p>
+					</div>
+				</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						Agregación previa en el dispositivo
+					</div>
+					<p>
+						Muestrear a 100 Hz no obliga a publicar a 100 Hz: el dispositivo puede
+						enviar cada minuto la <b>media, el mínimo, el máximo y el número de
+						muestras</b>, cuatro números en lugar de 6000. Lo que se descarta hay
+						que decidirlo, no dejarlo al azar del ancho de banda.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-arquitectura-completa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Arquitectura completa del sistema</span>
+				</a>
+				<a class="slide-nav__link" href="18-codigo-34-telemetria-comandos.html">
+					<span>La hora del código · Telemetría y comandos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

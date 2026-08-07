@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ausencia de respuesta del extremo remoto · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					06 · Robustez del enlace
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Ausencia de respuesta del extremo remoto
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						Un enlace puede quedarse sin respuesta por desconexión del cable, por
+						un dispositivo que no completó su arranque o por una trama perdida. Un
+						programa que espera indefinidamente esa respuesta se detiene por
+						completo: deja de atender el resto de sus tareas sin emitir ninguna
+						indicación.
+					</p>
+				</div>
+
+				<div
+					class="grid grid-cols-1 gap-3 md:grid-cols-3 w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="card flex flex-col gap-2">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-clock" /></svg>
+						<h2 class="font-display text-base font-semibold m-0">
+							Timeout
+						</h2>
+						<p class="text-sm m-0">
+							Cuánto se espera antes de dar por perdida la respuesta. Se fija a
+							partir del tiempo de respuesta especificado por el dispositivo, con
+							margen: ni tan corto que descarte respuestas válidas, ni tan largo
+							que el sistema quede detenido.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-flow" /></svg>
+						<h2 class="font-display text-base font-semibold m-0">
+							Política de reintento
+						</h2>
+						<p class="text-sm m-0">
+							Cuántas veces se vuelve a intentar y con qué separación entre
+							intentos. Un número acotado de reintentos distingue un fallo
+							transitorio, que se recupera, de uno permanente, que debe
+							notificarse.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<svg
+							class="icon icon--lg text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-alert" /></svg>
+						<h2 class="font-display text-base font-semibold m-0">
+							Estado de error definido
+						</h2>
+						<p class="text-sm m-0">
+							Qué hace el sistema cuando los reintentos se agotan: un estado
+							explícito (sensor no disponible, enlace caído) y no un valor
+							cualquiera que la aplicación interprete como una medida real.
+						</p>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p>
+						<code>Serial2.setTimeout(200);</code> limita a 200 ms la espera de las
+						lecturas de <code>readBytes</code> y <code>readStringUntil</code>. En
+						I²C, <code>Wire.endTransmission()</code> devuelve un código distinto
+						de cero cuando el dispositivo no confirma: comprobar ese valor de
+						retorno es lo que distingue un enlace que informa de su fallo de uno
+						que se cuelga en silencio.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="25-orden-bytes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Endianness y alineación</span>
+				</a>
+				<a class="slide-nav__link" href="27-paper-tramas-uart.html">
+					<span>Una lectura del puerto no equivale a una trama</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

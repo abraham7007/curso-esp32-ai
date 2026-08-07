@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────────────────────────────
+# Qué NO se versiona en este repositorio
+#
+# El repositorio contiene el sitio de láminas (mi-presentacion/) y los
+# proyectos PlatformIO terminados (ejemplos/). Todo lo demás del espacio de
+# trabajo queda fuera a propósito, por los motivos anotados en cada bloque.
+# ─────────────────────────────────────────────────────────────────────
+
+# ── Carpetas del espacio de trabajo que no forman parte del repositorio ──
+# Edición 9  · material de la edición anterior (32 MB de PDF)
+# Edición 10 · temario institucional y borradores antiguos
+# borrador ejemplos · pruebas desechables; además contiene credenciales
+#                     reales de un punto de acceso personal
+# metodologia-curso · kit portátil, con vida propia
+/Edición 9/
+/Edición 10/
+/borrador ejemplos/
+/metodologia-curso/
+
+# El enlace simbólico de la raíz apunta a metodologia-curso/, que no está
+# en el repositorio: versionarlo dejaría un enlace roto al clonar.
+# (No afecta a mi-presentacion/.claude/, que sí se versiona.)
+/.claude/
+
+# ── Evaluación ──
+# Los bancos de preguntas traen la respuesta correcta de cada ítem.
+mi-presentacion/pruebas/
+
+# ── Artículos ──
+# 62 PDF de terceros, ~175 MB. Son de acceso abierto, pero eso no siempre
+# autoriza redistribuirlos, y al menos uno es CC BY-ND. El índice con los
+# DOI sí se versiona: con él, cada PDF se descarga de su editorial.
+mi-presentacion/src/paper/**/*.pdf
+
+# ── Artefactos regenerables ──
+node_modules/
+.pio/
+dist/
+.capturas/
+mi-presentacion/export/
+*.local
+
+# ── Sistema y editor ──
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+*.log

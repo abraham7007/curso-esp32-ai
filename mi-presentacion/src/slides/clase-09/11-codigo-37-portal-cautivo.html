@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 37 · Portal cautivo con prueba previa · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 37</span>
+					</div>
+
+					<h2 class="code-hour__title">Portal cautivo con prueba de credenciales antes de guardarlas</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> El procedimiento completo de puesta en marcha: sin credenciales guardadas el equipo arranca como punto de acceso con portal cautivo; con ellas, como estación. Las credenciales <b>se prueban antes de escribirse</b> y una pulsación larga las borra.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>portal cautivo</b> se consigue resolviendo toda consulta de nombres a la propia dirección del equipo: el teléfono cree que no hay internet y abre solo la página de configuración. La <b>memoria no volátil</b> conserva las credenciales entre arranques. Probar antes de guardar es lo que evita el callejón sin salida: unas credenciales erróneas escritas dejan al equipo reintentando contra una red inalcanzable y <b>sin portal al que volver</b>.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, ESPAsyncWebServer y la biblioteca Preferences.
+
+<b>2. Firmware.</b> Al arrancar lee las credenciales de la NVS. Si no las hay, activa el modo punto de acceso con nombre <code>ESP32-XXXXXX</code> derivado de los tres últimos bytes de la MAC, levanta un servidor de nombres que resuelva toda consulta a su propia dirección y sirve un formulario con las redes visibles. Al recibirlo, <b>intenta la conexión antes de guardar</b>: solo si tiene éxito escribe en NVS y reinicia; si falla, devuelve el motivo y no guarda nada. Una pulsación de más de 5 s en el GPIO 4 borra las credenciales. Emite a 115200 baudios cada paso con su resultado.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los tres LED y el pulsador en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del arranque, con la bifurcación según haya credenciales o no. Y la <b>máquina de estados</b> del provisioning, con las rutas de fallo y el punto exacto en que se escribe en NVS.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende tres LED de fase en los <b>GPIO 25, 26 y 27</b> con resistencia de 220 Ω y lee un pulsador de restablecimiento en el <b>GPIO 4</b> con <code>INPUT_PULLUP</code>.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-pushbutton color="black"></wokwi-pushbutton></span>
+										<span class="hw-set__item"><wokwi-led color="yellow"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[NVS]  sin credenciales guardadas -&gt; modo punto de acceso
+[AP]   ssid=ESP32-A4CF12  ip=192.168.4.1  portal activo
+[DNS]  toda consulta resuelta a 192.168.4.1
+[POST] /guardar ssid=LAB-UNI  probando credenciales...
+[PRUEBA] fallo: WL_CONNECT_FAILED -&gt; NO se guarda, avisa
+[POST] /guardar ssid=LAB-UNI  probando credenciales...
+[PRUEBA] exito ip=192.168.1.47 -&gt; guardadas reiniciando</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Las dos parejas de líneas <code>[POST]</code> y <code>[PRUEBA]</code> son el ejercicio entero. En la primera, la conexión falla y <b>no se escribe nada</b>; en la segunda tiene éxito y solo entonces se guarda. Si en la traza propia apareciera el guardado antes que la prueba, un error de tecleo dejaría el equipo reiniciándose contra una red inalcanzable, sin portal al que volver: de ahí que el borrado por pulsación larga forme parte del ejercicio y no sea un extra.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-provisioning-credenciales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					<span>Provisioning por portal cautivo</span>
+				</a>
+				<a class="slide-nav__link" href="12-paper-incorporacion-red.html">
+					<span>Artículo · Incorporación a la red</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

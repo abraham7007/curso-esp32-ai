@@ -1,0 +1,94 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 459.977175 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 459.977175 113.976 
+L 459.977175 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 50.7878 47.4576 
+L 227.5622 47.4576 
+L 227.5622 21.3744 
+L 50.7878 21.3744 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-accent); opacity: 0.12; stroke: var(--fig-accent); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 233.581244 34.416 
+Q 245.642467 34.416 256.36205 34.416 
+" clip-path="url(#pd4d2a6d1be)" style="fill: none; stroke: var(--fig-muted); stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 251.96205 32.216 
+L 256.36205 34.416 
+L 251.96205 36.616 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 263.7206 47.4576 
+L 440.495 47.4576 
+L 440.495 21.3744 
+L 263.7206 21.3744 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-ok); opacity: 0.12; stroke: var(--fig-ok); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 50.7878 81.5664 
+L 227.5622 81.5664 
+L 227.5622 55.4832 
+L 50.7878 55.4832 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-accent); opacity: 0.12; stroke: var(--fig-accent); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 233.581244 68.5248 
+Q 245.642467 68.5248 256.36205 68.5248 
+" clip-path="url(#pd4d2a6d1be)" style="fill: none; stroke: var(--fig-muted); stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 251.96205 66.3248 
+L 256.36205 68.5248 
+L 251.96205 70.7248 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 263.7206 81.5664 
+L 440.495 81.5664 
+L 440.495 55.4832 
+L 263.7206 55.4832 
+z
+" clip-path="url(#pd4d2a6d1be)" style="fill: var(--fig-ok); opacity: 0.12; stroke: var(--fig-ok); stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="139.175" y="36.664125" transform="rotate(-0 139.175 36.664125)">los mensajes grandes retrasan a los pequeños</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="352.1078" y="36.7835" transform="rotate(-0 352.1078 36.7835)">tres políticas de planificación en el borde</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="139.175" y="70.745425" transform="rotate(-0 139.175 70.745425)">el intermediario se queda sin memoria al acumular copias</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="352.1078" y="70.8923" transform="rotate(-0 352.1078 70.8923)">reserva explícita de memoria</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="139.175" y="15.3552" transform="rotate(-0 139.175 15.3552)">problema observado</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="352.1078" y="15.3552" transform="rotate(-0 352.1078 15.3552)">respuesta propuesta</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pd4d2a6d1be">
+   <rect x="46.7702" y="4.32" width="401.76" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

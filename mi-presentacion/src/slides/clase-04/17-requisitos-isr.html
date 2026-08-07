@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Requisitos de una rutina de servicio · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					04 · Interrupciones y eventos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Requisitos de una rutina de servicio
+				</h1>
+
+				<div
+					class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-start"
+					data-animate="fade-up"
+				>
+					<div class="flex flex-col gap-3">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								La <b>rutina de servicio</b> (ISR) se ejecuta en un contexto en el
+								que el resto del sistema está detenido. Sus restricciones no son
+								preferencias de estilo: incumplirlas produce reinicios y datos
+								incoherentes.
+							</p>
+						</div>
+
+						<ul class="flex flex-col gap-2 text-sm m-0 p-0 list-none">
+							<li>
+								<b>Duración mínima.</b> Mientras se ejecuta, nada más avanza y
+								las demás interrupciones quedan pendientes.
+							</li>
+							<li>
+								<b>Sin <code>Serial.print()</code>, <code>delay()</code> ni
+								esperas.</b> Bloquean con el sistema detenido.
+							</li>
+							<li>
+								<b>Sin reserva dinámica.</b> <code>new</code>,
+								<code>malloc</code> y <code>String</code> usan un asignador que
+								no es reentrante.
+							</li>
+							<li>
+								<b>Variables compartidas <code>volatile</code>.</b> Sin ese
+								calificador el compilador puede cachearlas en un registro y el
+								bucle no ve el cambio.
+							</li>
+							<li>
+								<b>Acceso protegido.</b> Si la variable ocupa más de una
+								palabra, el bucle puede leerla a medio actualizar.
+							</li>
+						</ul>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								La rutina se marca con <code>IRAM_ATTR</code> para que su código
+								resida en RAM interna y no dependa de la caché de la Flash.
+							</p>
+						</div>
+					</div>
+
+					<div class="flex flex-col gap-3">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>rutina asociada a un pulsador</span>
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+							</div>
+							<pre>void alFlanco() {
+  <span class="hl hl--hit">String msg = "pulso ";</span>
+  msg += String(millis());
+  <span class="hl hl--hit">Serial.println(msg);</span>
+  delay(20);
+  contador++;
+}</pre>
+							<div class="codepanel__footer">
+								Reserva dinámica, salida serie y espera bloqueante;
+								<b>contador</b> tampoco es <b>volatile</b>.
+							</div>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>rutina asociada a un pulsador</span>
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+							</div>
+							<pre>volatile uint32_t pulsos = 0;
+volatile bool hayEvento = false;
+
+void IRAM_ATTR alFlanco() {
+  pulsos++;
+  hayEvento = true;
+}</pre>
+							<div class="codepanel__footer">
+								La rutina solo registra el evento. La interpretación y la salida
+								por el puerto serie ocurren después, en el bucle.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-mecanismo-interrupcion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Mecanismo de atención de una interrupción</span>
+				</a>
+				<a class="slide-nav__link" href="18-codigo-17-conteo-interrupcion.html">
+					<span>La hora del código · Conteo por interrupción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

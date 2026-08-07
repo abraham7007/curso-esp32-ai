@@ -1,0 +1,27 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "type": "text", "x": 100, "y": 1, "width": 600, "height": 60, "text": "Cronograma de Señal PWM para Control de Servo\n(50 Hz — período de 20 ms)", "fontSize": 18, "fontFamily": 1, "textAlign": "center"
+    },
+
+    { "type": "text", "x": 50, "y": 70, "width": 450, "height": 25, "text": "1) Ángulo = 0° -> pulso = 1000 µs (5% del periodo)", "fontSize": 14, "fontFamily": 1 },
+    { "type": "line", "x": 50, "y": 140, "width": 500, "height": 0, "points": [[0,0],[500,0]], "strokeColor": "#aaa", "strokeStyle": "dashed" },
+    { "type": "text", "x": 560, "y": 130, "width": 110, "height": 20, "text": "pulso=1.0 ms", "fontSize": 12, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "line", "x": 50, "y": 160, "width": 500, "height": 60, "points": [[0,0],[0,-60],[25,-60],[25,0],[500,0]], "strokeColor": "#1971c2", "strokeWidth": 2 },
+
+    { "type": "text", "x": 50, "y": 185, "width": 450, "height": 25, "text": "2) Ángulo = 90° -> pulso = 1500 µs (7.5% del periodo)", "fontSize": 14, "fontFamily": 1 },
+    { "type": "line", "x": 50, "y": 255, "width": 500, "height": 0, "points": [[0,0],[500,0]], "strokeColor": "#aaa", "strokeStyle": "dashed" },
+    { "type": "text", "x": 560, "y": 245, "width": 110, "height": 20, "text": "pulso=1.5 ms", "fontSize": 12, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "line", "x": 50, "y": 275, "width": 500, "height": 60, "points": [[0,0],[0,-60],[38,-60],[38,0],[500,0]], "strokeColor": "#2b8a3e", "strokeWidth": 2 },
+
+    { "type": "text", "x": 50, "y": 300, "width": 450, "height": 25, "text": "3) Ángulo = 180° -> pulso = 2000 µs (10% del periodo)", "fontSize": 14, "fontFamily": 1 },
+    { "type": "line", "x": 50, "y": 370, "width": 500, "height": 0, "points": [[0,0],[500,0]], "strokeColor": "#aaa", "strokeStyle": "dashed" },
+    { "type": "text", "x": 560, "y": 360, "width": 110, "height": 20, "text": "pulso=2.0 ms", "fontSize": 12, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "line", "x": 50, "y": 390, "width": 500, "height": 60, "points": [[0,0],[0,-60],[50,-60],[50,0],[500,0]], "strokeColor": "#f59f00", "strokeWidth": 2 },
+
+    { "type": "text", "x": 50, "y": 470, "width": 640, "height": 70, "text": "Escala: 500 px ≈ 20 ms (1 ms ≈ 25 px). A diferencia del LED (5 kHz, duty variable 0-100%), el servo\nusa 50 Hz y el ángulo se codifica en un pulso angosto de 1-2 ms dentro de cada periodo de 20 ms.", "fontSize": 12, "fontFamily": 1, "strokeColor": "#495057" }
+  ]
+}

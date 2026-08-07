@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Medida del costo de HTTP frente a publicación y suscripción sobre ESP32 · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Adriansyah, S.; Sumarno; Nurfuha, U. M. et al.</b> (2026). Performance Analysis of MQTT and HTTP Protocols on Low-Power ESP32 Devices for IoT Applications. <i>Jurnal Teknologi Informasi</i>. <code>doi:10.1109/ICITSI.2026.10412887</code></p>
+
+					<h2 class="paper__title">Medida del costo de HTTP frente a publicación y suscripción sobre ESP32</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Cuantificar la diferencia entre los dos protocolos <b>sobre el hardware de este curso</b>.</li>
+									<li>En latencia, consumo, sobrecarga y estabilidad ante red degradada.</li>
+									<li>Revisión sistemática según <b>PRISMA 2020</b>: de 166 registros, 9 estudios empíricos.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>MQTT responde entre <b>4,76× y 12,1×</b> más rápido que HTTP.</li>
+									<li>El extremo alto corresponde a tráfico elevado y servidor remoto.</li>
+									<li>Reducción de consumo: solo del <b>6 % al 8 %</b>. La radio domina en ambos casos.</li>
+									<li><b>9 de 166</b> registros superaron los criterios de inclusión.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>MQTT supera a HTTP en <b>todas las dimensiones medidas</b>, y la diferencia crece con el tráfico.</li>
+									<li>HTTP sigue siendo adecuado cuando priman la <b>compatibilidad y la simplicidad</b>.</li>
+									<li>La proporción 9 de 166 dice cuánta literatura sobre el asunto no aporta medidas propias.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-mqtt-dos-ventajas"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las dos ventajas publicadas a la misma escala: la de latencia es de otro orden que la de consumo.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-mqtt-prisma"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>El filtro de la revisión. Casi todo lo publicado no aporta medidas comparables sobre este hardware.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-codigo-31-cliente-api.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Cliente de API</span>
+				</a>
+				<a class="slide-nav__link" href="23-verificacion-previa-y-sin-red.html">
+					<span>Verificación previa y operación sin red</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

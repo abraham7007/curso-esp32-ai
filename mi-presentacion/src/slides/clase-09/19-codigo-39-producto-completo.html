@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 39 · Dispositivo completo listo para entregar · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 39</span>
+					</div>
+
+					<h2 class="code-hour__title">Dispositivo completo: provisioning, panel, API e identidad</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Integrar la sesión entera en un equipo que <b>una persona sin conocimientos técnicos</b> pueda poner en marcha: escanea el código, elige su red, escribe la contraseña y ve el panel. Sin manual y sin tocar el código.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>La <b>identidad</b> del equipo se deriva de la dirección de fabricación: número de serie y nombre local salen de ella, así que dos unidades nunca chocan. El <b>reset reason</b> la conserva el SoC y distingue un corte de alimentación de un fallo del firmware; cuesta una línea y es el primer dato que se consulta ante una avería. El <b>ritmo del LED</b> es la única interfaz cuando aún no hay red: cada fase necesita el suyo.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, ESPAsyncWebServer, ArduinoJson y Preferences.
+
+<b>2. Firmware.</b> Reúne los ejemplos 36 a 38 en un solo proyecto: provisioning por portal cautivo con prueba previa, panel servido desde LittleFS, API con los cinco puntos de acceso, nombre local por mDNS, identidad derivada de la dirección de fabricación y restablecimiento con confirmación. El LED de estado codifica la fase con un ritmo distinto para sin configurar, conectando y conectado. Registra al arrancar la versión, el número de serie y el reset reason.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los cuatro componentes en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del arranque completo, desde la lectura de la NVS hasta el servidor en marcha. Y el <b>recorrido del usuario</b> desde que abre la caja hasta que ve el primer dato, marcando en cada paso qué hace el equipo y qué ve la persona.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b>, controla un LED en el <b>GPIO 25</b>, indica el estado con otro en el <b>GPIO 26</b> y lee el pulsador de restablecimiento en el <b>GPIO 4</b>.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-pushbutton color="black"></wokwi-pushbutton></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[BOOT] fw=1.2.0  serie=A4CF12  causa_reinicio=POWERON
+[NVS]  credenciales presentes -&gt; modo estacion
+[RED]  conectado ip=192.168.1.47  rssi=-58 dBm
+[MDNS] esp32-a4cf12.local publicado
+[HTTP] servidor listo interfaz desde LittleFS (3 archivos)
+[HTTP] GET /  200  primer visitante memoria libre=196880
+[API]  GET /api/estado  200  v=1.842  desde el movil</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La primera línea vale por sí sola: <b>versión, serie y causa del reinicio</b>. Cuando alguien devuelva una unidad, es lo único que habrá para empezar. Recorrer después la traza como si fuera el usuario: entre <code>[BOOT]</code> y el primer <code>GET /</code> no debería hacer falta explicar nada. Si algún paso necesitara una instrucción escrita, está mal resuelto.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-codigo-38-api-y-descubrimiento.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · API y descubrimiento</span>
+				</a>
+				<a class="slide-nav__link" href="20-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

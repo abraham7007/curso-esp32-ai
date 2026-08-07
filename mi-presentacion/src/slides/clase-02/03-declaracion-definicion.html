@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Declaración frente a definición · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					01 · Organización del proyecto
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Declaración frente a definición
+				</h1>
+
+				<p class="slide__subtitle" data-animate="fade-up">
+					La declaración anuncia la firma; la definición aporta el cuerpo. Van en
+					archivos distintos porque las consume gente distinta de la cadena de
+					construcción.
+				</p>
+
+				<div class="compare items-start" data-animate="fade-up">
+					<div class="codepanel">
+						<div class="codepanel__header">
+							<span class="codepanel__path">lib/Led/Led.h</span>
+							<span class="codepanel__tag">Interfaz pública · contrato</span>
+						</div>
+						<pre>#include &lt;Arduino.h&gt;
+
+class Led {
+public:
+  explicit Led(uint8_t pin);
+  void begin();
+<span class="hl hl--foco">  void on();</span><span class="hl hl--foco">  void off();</span>
+private:
+  uint8_t pin_;
+};</pre>
+					</div>
+
+					<div class="codepanel">
+						<div class="codepanel__header">
+							<span class="codepanel__path">lib/Led/Led.cpp</span>
+							<span class="codepanel__tag">Unidad de traducción · privado</span>
+						</div>
+						<pre>#include "Led.h"
+
+Led::Led(uint8_t pin) : pin_(pin) {}
+
+void Led::begin() { pinMode(pin_, OUTPUT); }
+
+<span class="hl hl--foco">void Led::on()  { digitalWrite(pin_, HIGH); }</span><span class="hl hl--foco">void Led::off() { digitalWrite(pin_, LOW); }</span></pre>
+					</div>
+				</div>
+
+				<div class="blockdiagram" data-animate="fade-up">
+					<div class="bd-node">
+						<span class="bd-node__title">1 · Preprocesador</span>
+						<span class="bd-node__body">
+							Copia <code>Led.h</code> dentro de <code>Led.cpp</code> y dentro de
+							<code>main.cpp</code>.
+						</span>
+					</div>
+					<span class="bd-arrow" aria-hidden="true">→</span>
+					<div class="bd-node bd-node--warn">
+						<span class="bd-node__title">2 · Compilador</span>
+						<span class="bd-node__body">
+							Traduce cada unidad por separado: <code>main.o</code> y
+							<code>Led.o</code>, sin verse una a otra.
+						</span>
+					</div>
+					<span class="bd-arrow" aria-hidden="true">→</span>
+					<div class="bd-node bd-node--ok">
+						<span class="bd-node__title">3 · Enlazador (linker)</span>
+						<span class="bd-node__body">
+							Casa cada símbolo pendiente con su definición y produce
+							<code>firmware.bin</code>.
+						</span>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="term">[LINK ERROR] undefined reference to 'Led::toggle()' in main.cpp.o
+cpp-linker: error: ld returned 1 exit status</div>
+
+					<div class="warn-box">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<p class="m-0 text-sm">
+							Un método declarado en el <code>.h</code> y nunca definido en el
+							<code>.cpp</code> <b>compila sin una queja</b>: al compilador le
+							basta la firma. Quien falla es el enlazador, que busca el cuerpo y
+							no lo encuentra.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-estructura-proyecto.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Estructura de un proyecto</span>
+				</a>
+				<a class="slide-nav__link" href="04-proteccion-inclusion.html">
+					<span>Include guard</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

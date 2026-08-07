@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Notación UML de máquina de estados · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Notación UML de máquina de estados</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Notación normalizada para dibujar máquinas de estados. Rectángulo
+								redondeado para el estado, flecha para la transición, círculo
+								relleno para el estado inicial y círculo con anillo para el final.
+							</p>
+							<p>
+								Cada flecha se rotula
+								<code>evento [guarda] / acción</code>. Las tres partes son
+								opcionales salvo el evento.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Función del diagrama
+							</div>
+							<p>
+								El diagrama es la <b>especificación acordada</b> entre quien define
+								el requisito y quien lo implementa. Se revisa y se corrige antes de
+								escribir código, cuando modificar una transición cuesta mover una
+								flecha. Un desacuerdo detectado aquí no llega a ser un fallo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">● → VERDE_VEHICULOS</span>
+								<span class="bd-node__body">Estado inicial. Salidas: verde de vehículos activo, rojo de peatones activo.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__meta">pulsador [t ≥ 8 s] / —</span>
+								<span class="bd-node__body">La guarda impide acortar el verde por debajo del mínimo, aunque se pulse antes.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">AMBAR</span>
+								<span class="bd-node__body">Duración fija de 3 s. Único evento admitido: el vencimiento del temporizador.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">ROJO_CON_PASO</span>
+								<span class="bd-node__body">Salidas invertidas. Al vencer, retorna al estado inicial y la solicitud queda atendida.</span>
+							</div>
+						</div>
+						<p class="figure__caption">
+							La guarda <code>[t ≥ 8 s]</code> es el elemento que convierte un
+							diagrama correcto en un semáforo utilizable: sin ella, pulsar
+							repetidamente detiene el tráfico.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-moore-mealy.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Modelos de Moore y de Mealy</span>
+				</a>
+				<a class="slide-nav__link" href="07-simulacion-semaforo.html">
+					<span>Recorrido del semáforo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

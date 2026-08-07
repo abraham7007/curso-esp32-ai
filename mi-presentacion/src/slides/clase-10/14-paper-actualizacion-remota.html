@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Costo temporal de una actualización sobre una red de bajo consumo · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Mahfoudhi, F.; Sultania, A. K.; Famaey, J.</b> (2022). Over-the-Air Firmware Updates for Constrained NB-IoT Devices. <i>Sensors</i> 22(19), 7572. <code>doi:10.3390/s22197572</code></p>
+
+					<h2 class="paper__title">Costo temporal de una actualización sobre una red de bajo consumo</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Ver si es viable actualizar un equipo de recursos limitados por <b>banda estrecha</b>.</li>
+									<li>Sin instalar <b>ninguna pasarela local</b>.</li>
+									<li>El mantenimiento de un parque desplegado es, según los autores, el costo dominante.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Memoria repartida en <b>dos secciones iguales</b>: aplicación y gestor de arranque.</li>
+									<li>Tiempo de actualización: de <b>178 s</b> para 2 kB a <b>4338 s</b> para 1000 kB.</li>
+									<li>La relación es <b>lineal</b> con el tamaño en esta red.</li>
+									<li><b>Retransmisión por segmento</b>: solo se reenvía el trozo perdido o corrompido.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>El crecimiento lineal contrasta con el <b>exponencial</b> que las simulaciones atribuyen a otras tecnologías.</li>
+									<li>El diseño modular y la retransmisión por segmento son lo que hace <b>viable</b> el procedimiento.</li>
+									<li>Sin ellos, un fallo de enlace obligaría a empezar de cero: setenta y dos minutos otra vez.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-ota-tiempo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Los dos puntos publicados y la recta que los une. El extremo decide: 72 minutos con el equipo ocupado en actualizarse.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-ota-segmento"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Lo que evita la retransmisión por segmento, calculado con el tiempo por kB que se deduce de sus cifras.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-actualizacion-remota.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>OTA</span>
+				</a>
+				<a class="slide-nav__link" href="15-seguridad-dispositivo.html">
+					<span>Seguridad del dispositivo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

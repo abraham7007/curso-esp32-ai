@@ -1,0 +1,104 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 321.367887 147.24" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 147.24 
+L 321.367887 147.24 
+L 321.367887 0 
+L 0 0 
+L 0 147.24 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 75.478812 79.164 
+L 137.35604 79.164 
+L 137.35604 23.724 
+L 75.478812 23.724 
+z
+" clip-path="url(#p9124ef80c7)" style="fill: var(--fig-ok); stroke: var(--fig-paper); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 137.35604 79.164 
+L 199.233267 79.164 
+L 199.233267 23.724 
+L 137.35604 23.724 
+z
+" clip-path="url(#p9124ef80c7)" style="fill: var(--fig-surface); stroke: var(--fig-paper); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 75.478812 134.604 
+L 137.35604 134.604 
+L 137.35604 79.164 
+L 75.478812 79.164 
+z
+" clip-path="url(#p9124ef80c7)" style="fill: var(--fig-accent); stroke: var(--fig-paper); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 137.35604 134.604 
+L 199.233267 134.604 
+L 199.233267 79.164 
+L 137.35604 79.164 
+z
+" clip-path="url(#p9124ef80c7)" style="fill: var(--fig-surface); stroke: var(--fig-paper); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-paper); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="106.417426" y="50.630519" transform="rotate(-0 106.417426 50.630519)">950</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-paper); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="106.417426" y="65.730253" transform="rotate(-0 106.417426 65.730253)">correcto</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-muted); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="168.294653" y="50.630519" transform="rotate(-0 168.294653 50.630519)">0</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="168.294653" y="65.730253" transform="rotate(-0 168.294653 65.730253)">falso positivo</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-paper); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="106.417426" y="106.070519" transform="rotate(-0 106.417426 106.070519)">50</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-paper); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="106.417426" y="121.144472" transform="rotate(-0 106.417426 121.144472)">falso negativo</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-muted); font: 13px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="168.294653" y="106.070519" transform="rotate(-0 168.294653 106.070519)">0</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="168.294653" y="121.170253" transform="rotate(-0 168.294653 121.170253)">correcto</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="106.417426" y="17.0712" transform="rotate(-0 106.417426 17.0712)">predice normal</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="168.294653" y="17.0712" transform="rotate(-0 168.294653 17.0712)">predice anomalía</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="70.528634" y="53.812047" transform="rotate(-0 70.528634 53.812047)">es normal</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="70.528634" y="109.252047" transform="rotate(-0 70.528634 109.252047)">es anomalía</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="214.702574" y="44.7912" transform="rotate(-0 214.702574 44.7912)">exactitud</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-ok); font: 15px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="214.702574" y="62.532" transform="rotate(-0 214.702574 62.532)">95 %</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="214.702574" y="94.6872" transform="rotate(-0 214.702574 94.6872)">anomalías detectadas</text>
+   </g>
+   <g id="text_16">
+    <text style="fill: var(--fig-accent); font: 15px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="214.702574" y="113.5368" transform="rotate(-0 214.702574 113.5368)">0 de 50</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9124ef80c7">
+   <rect x="4.32" y="4.32" width="312.48" height="138.6"/>
+  </clipPath>
+ </defs>
+</svg>

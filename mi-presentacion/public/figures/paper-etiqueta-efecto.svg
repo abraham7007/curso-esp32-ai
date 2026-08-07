@@ -1,0 +1,52 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 410.4 108.432" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 108.432 
+L 410.4 108.432 
+L 410.4 0 
+L 0 0 
+L 0 108.432 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="fill: var(--fig-ok); font: 12px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.3552" y="41.592405" transform="rotate(-0 12.3552 41.592405)">↑</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="36.4608" y="40.73553" transform="rotate(-0 36.4608 40.73553)">etiqueta con información de seguridad</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="398.0448" y="40.73553" transform="rotate(-0 398.0448 40.73553)">más elegidos</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-ok); font: 12px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.3552" y="65.542485" transform="rotate(-0 12.3552 65.542485)">↑</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="36.4608" y="64.550141" transform="rotate(-0 36.4608 64.550141)">etiqueta con vida de soporte</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="398.0448" y="64.68561" transform="rotate(-0 398.0448 64.68561)">más elegidos</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-accent); font: 12px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.3552" y="89.492565" transform="rotate(-0 12.3552 89.492565)">→</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="36.4608" y="88.46569" transform="rotate(-0 36.4608 88.46569)">etiqueta que sugiere seguridad deficiente</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="398.0448" y="88.517487" transform="rotate(-0 398.0448 88.517487)">sin mejora</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.3552" y="14.2992" transform="rotate(-0 12.3552 14.2992)">sentido del efecto sobre la elección de compra</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.3552" y="98.12448" transform="rotate(-0 12.3552 98.12448)">declarar una protección pobre penaliza más que guardar silencio</text>
+   </g>
+  </g>
+ </g>
+</svg>

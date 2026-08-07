@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Modelos de Moore y de Mealy · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Modelos de Moore y de Mealy</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>La diferencia es dónde se sitúan las salidas.</strong> El mismo
+					sistema admite ambos formalismos, y la elección tiene consecuencias
+					medibles sobre el número de estados y sobre la latencia.
+				</p>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Moore — la salida depende del estado</h3>
+						<p>
+							Cada estado fija sus salidas. Para representar dos salidas distintas
+							hacen falta dos estados, de modo que el diagrama crece.
+						</p>
+						<div class="term">estado AMBAR  → salida: ambar=1, verde=0, rojo=0
+estado ROJO   → salida: ambar=0, verde=0, rojo=1</div>
+						<p class="text-[length:var(--fs-small)]">
+							La salida cambia en el instante de la transición y se mantiene
+							estable mientras dure el estado.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Mealy — la salida depende del estado y del evento</h3>
+						<p>
+							La salida se asocia a la transición. El mismo estado produce salidas
+							distintas según el evento que lo abandone, y hacen falta menos
+							estados.
+						</p>
+						<div class="term">ESPERA,  moneda/devolver_cambio → ESPERA
+ESPERA,  seleccion/entregar    → ENTREGA</div>
+						<p class="text-[length:var(--fs-small)]">
+							La salida responde en el mismo instante del evento, sin esperar a
+							consolidar el estado.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Opción adoptada</span>
+					<p>
+						<b>Moore</b>, por dos razones verificables. Las salidas quedan
+						determinadas por una sola variable, de modo que el estado impreso por
+						el monitor serie describe por completo lo que hace el dispositivo. Y el
+						diagrama admite lectura directa: cada nodo lleva escritas sus salidas.
+						Mealy se reserva para las transiciones que deben producir un efecto
+						inmediato, como emitir una trama de acuse.
+					</p>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En el código
+					</div>
+					<p>
+						En una máquina de Moore, las salidas se escriben en la acción de
+						entrada de cada estado o en una única función
+						<code>aplicarSalidas(estado)</code> llamada tras cada transición. Esta
+						segunda forma concentra en un punto todas las escrituras a
+						<code>digitalWrite()</code> y evita que una salida quede activa al
+						cambiar de estado.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-acciones-guardas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Acciones y condiciones de guarda</span>
+				</a>
+				<a class="slide-nav__link" href="06-notacion-uml.html">
+					<span>Notación UML de máquina de estados</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

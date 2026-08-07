@@ -1,0 +1,124 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 433.345 146.742544" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 146.742544 
+L 433.345 146.742544 
+L 433.345 0 
+L 0 0 
+L 0 146.742544 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 16.105 129.650356 
+L 429.025 129.650356 
+L 429.025 29.858356 
+L 16.105 29.858356 
+L 16.105 129.650356 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="text_1">
+     <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="222.565" y="140.48895" transform="rotate(-0 222.565 140.48895)">esfuerzo que exige</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="text_2">
+     <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="10.44125" y="79.754356" transform="rotate(-90 10.44125 79.754356)">exactitud alcanzable</text>
+    </g>
+   </g>
+   <g id="line2d_1">
+    <path d="M 61.985 118.245556 
+L 297.502333 42.213556 
+" clip-path="url(#pc82db9d213)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: var(--fig-grid)"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 16.105 129.650356 
+L 16.105 29.858356 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 16.105 129.650356 
+L 429.025 129.650356 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="288.091667" y="49.015156" transform="rotate(-0 288.091667 49.015156)">medida directa</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-warn); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="181.038333" y="80.378356" transform="rotate(-0 181.038333 80.378356)">híbrido</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="89.278333" y="108.890356" transform="rotate(-0 89.278333 108.890356)">estimación por modelo</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(178.399435 101.391166) rotate(-32)">exactitud y esfuerzo se intercambian</text>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m23d5e93ea9" d="M 0 6.708204 
+C 1.779036 6.708204 3.485448 6.001385 4.743416 4.743416 
+C 6.001385 3.485448 6.708204 1.779036 6.708204 0 
+C 6.708204 -1.779036 6.001385 -3.485448 4.743416 -4.743416 
+C 3.485448 -6.001385 1.779036 -6.708204 0 -6.708204 
+C -1.779036 -6.708204 -3.485448 -6.001385 -4.743416 -4.743416 
+C -6.001385 -3.485448 -6.708204 -1.779036 -6.708204 0 
+C -6.708204 1.779036 -6.001385 3.485448 -4.743416 4.743416 
+C -3.485448 6.001385 -1.779036 6.708204 0 6.708204 
+z
+" style="stroke: var(--fig-ok)"/>
+    </defs>
+    <g clip-path="url(#pc82db9d213)">
+     <use xlink:href="#m23d5e93ea9" x="276.091667" y="46.015156" style="fill: var(--fig-ok); stroke: var(--fig-ok)"/>
+    </g>
+   </g>
+   <g id="PathCollection_2">
+    <defs>
+     <path id="m8aff7bd83a" d="M 0 6.708204 
+C 1.779036 6.708204 3.485448 6.001385 4.743416 4.743416 
+C 6.001385 3.485448 6.708204 1.779036 6.708204 0 
+C 6.708204 -1.779036 6.001385 -3.485448 4.743416 -4.743416 
+C 3.485448 -6.001385 1.779036 -6.708204 0 -6.708204 
+C -1.779036 -6.708204 -3.485448 -6.001385 -4.743416 -4.743416 
+C -6.001385 -3.485448 -6.708204 -1.779036 -6.708204 0 
+C -6.708204 1.779036 -6.001385 3.485448 -4.743416 4.743416 
+C -3.485448 6.001385 -1.779036 6.708204 0 6.708204 
+z
+" style="stroke: var(--fig-warn)"/>
+    </defs>
+    <g clip-path="url(#pc82db9d213)">
+     <use xlink:href="#m8aff7bd83a" x="169.038333" y="77.378356" style="fill: var(--fig-warn); stroke: var(--fig-warn)"/>
+    </g>
+   </g>
+   <g id="PathCollection_3">
+    <defs>
+     <path id="m59d19bce71" d="M 0 6.708204 
+C 1.779036 6.708204 3.485448 6.001385 4.743416 4.743416 
+C 6.001385 3.485448 6.708204 1.779036 6.708204 0 
+C 6.708204 -1.779036 6.001385 -3.485448 4.743416 -4.743416 
+C 3.485448 -6.001385 1.779036 -6.708204 0 -6.708204 
+C -1.779036 -6.708204 -3.485448 -6.001385 -4.743416 -4.743416 
+C -6.001385 -3.485448 -6.708204 -1.779036 -6.708204 0 
+C -6.708204 1.779036 -6.001385 3.485448 -4.743416 4.743416 
+C -3.485448 6.001385 -1.779036 6.708204 0 6.708204 
+z
+" style="stroke: var(--fig-accent)"/>
+    </defs>
+    <g clip-path="url(#pc82db9d213)">
+     <use xlink:href="#m59d19bce71" x="77.278333" y="105.890356" style="fill: var(--fig-accent); stroke: var(--fig-accent)"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc82db9d213">
+   <rect x="16.105" y="29.858356" width="412.92" height="99.792"/>
+  </clipPath>
+ </defs>
+</svg>

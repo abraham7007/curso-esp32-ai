@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Acciones de entrada, de salida y condiciones de guarda · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Acciones de entrada, de salida y condiciones de guarda</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								La <b>acción de entrada</b> se ejecuta una sola vez al llegar al
+								estado; la <b>acción de salida</b>, una sola vez al abandonarlo.
+								Ninguna de las dos se repite mientras el estado permanece activo.
+							</p>
+							<p>
+								La <b>condición de guarda (condición de guarda)</b> (condición de guarda) es una expresión booleana que
+								acompaña a una transición: el evento la dispara solo si la condición
+								se cumple. Un mismo evento puede llevar a estados distintos según la
+								guarda que se satisfaga.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Ejemplo
+							</div>
+							<p>
+								En un cargador, el evento <code>VENCE_MEDIDA</code> lleva a
+								<code>TENSION_CONSTANTE</code> si la guarda
+								<code>v &gt;= 4,20 V</code> se cumple, y mantiene el estado actual
+								si no. Mismo evento, dos destinos.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">acción de entrada · una vez</span>
+							</div>
+							<pre><code>// La transición cambia el estado y ejecuta la acción de entrada.
+// Al estar dentro del if, se ejecuta una sola vez.
+if (evento == VENCE_TEMPORIZADOR) {
+  estado = Estado::AMBAR;
+  <span class="hl hl--hit">digitalWrite(PIN_AMBAR, HIGH);   // acción de entrada</span>
+  <span class="hl hl--hit">tInicio = millis();              // acción de entrada</span>
+}</code></pre>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+								<span class="codepanel__path">acción repetida en cada iteración</span>
+							</div>
+							<pre><code>case Estado::AMBAR:
+  <span class="hl hl--hit">tInicio = millis();   // se reinicia en cada vuelta del bucle</span>
+  if (millis() - tInicio &gt; 3000) estado = Estado::ROJO;
+  break;   // la condición nunca se cumple: el estado no avanza</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Regla de implementación</span>
+					<p>
+						Lo que debe ocurrir <b>una vez</b> va en la transición; lo que debe
+						evaluarse <b>en cada iteración</b> va en el cuerpo del estado. Confundir
+						ambos produce el fallo del panel derecho: un timestamp que se
+						reinicia sola y un estado que no progresa nunca.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-estado-evento-transicion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Estado, evento y transición</span>
+				</a>
+				<a class="slide-nav__link" href="05-moore-mealy.html">
+					<span>Modelos de Moore y de Mealy</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

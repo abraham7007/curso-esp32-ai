@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes con tareas concurrentes · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes con tareas concurrentes</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Reinicio por watchdog</div>
+						<div class="problem-card__body">
+							<p>El sistema se reinicia con <code>Task watchdog got triggered</code> y el nombre de una tarea.</p>
+							<p><b>Por qué ocurre.</b> Esa tarea no cede el procesador: contiene una espera activa o un cálculo largo sin <code>vTaskDelay()</code>. La tarea de reposo no llega a ejecutarse y no alimenta al watchdog.</p>
+							<p><b>Cómo comprobarlo.</b> Localizar el bucle sin cesión en la tarea nombrada. Añadir <code>vTaskDelay(1)</code> confirma el diagnóstico, aunque la corrección definitiva sea reestructurar el cálculo.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Traza serie entremezclada</div>
+						<div class="problem-card__body">
+							<p>Las líneas del monitor aparecen cortadas y superpuestas entre sí.</p>
+							<p><b>Por qué ocurre.</b> Varias tareas escriben en el puerto serie sin protección. La escritura no es indivisible y el planificador interrumpe a mitad de línea.</p>
+							<p><b>Cómo comprobarlo.</b> Proteger todo acceso al puerto con un mutex. Si el desorden desaparece, la causa era esa.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Reinicios aleatorios sin patrón</div>
+						<div class="problem-card__body">
+							<p>El equipo se reinicia tras minutos u horas, con trazas de retorno distintas cada vez.</p>
+							<p><b>Por qué ocurre.</b> Desbordamiento de pila de alguna tarea: escribe fuera de su región y corrompe memoria ajena. El fallo se manifiesta lejos de donde se produjo.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir <code>uxTaskGetStackHighWaterMark()</code> de todas las tareas de forma periódica. La que se acerque a cero es la responsable.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>El periodo de muestreo no se cumple</div>
+						<div class="problem-card__body">
+							<p>La tarea de adquisición pierde su ritmo cuando el usuario interactúa con el equipo.</p>
+							<p><b>Por qué ocurre.</b> Asignación de prioridades por visibilidad de la función y no por requisito temporal: la tarea de interfaz tiene prioridad superior a la de muestreo.</p>
+							<p><b>Cómo comprobarlo.</b> Comparar la prioridad de ambas tareas con su plazo. La que tiene plazo más corto debe tener prioridad mayor.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>Retrasos de cientos de milisegundos sin causa aparente</div>
+						<div class="problem-card__body">
+							<p>Dos tareas que se sincronizan responden con lentitud irregular pese a estar ambas desocupadas.</p>
+							<p><b>Por qué ocurre.</b> Las tareas no tienen afinidad fijada y el planificador las ha repartido entre núcleos distintos, donde la sincronización cuesta mucho más.</p>
+							<p><b>Cómo comprobarlo.</b> Fijarlas al mismo núcleo con <code>xTaskCreatePinnedToCore()</code> y volver a medir. Es el resultado del artículo de esta sesión.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="24-cuando-no-usar-rtos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>Cuándo no usar un sistema operativo</span>
+				</a>
+				<a class="slide-nav__link" href="26-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

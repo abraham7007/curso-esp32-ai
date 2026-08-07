@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cambios en el dispositivo al pasar de cliente a servidor · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cambios en el dispositivo al pasar de cliente a servidor</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Como cliente · sesiones 7 y 8</h3>
+						<p>
+							El dispositivo <b>elige cuándo</b> hablar. Abre una conexión, la usa
+							y la cierra. El consumo de memoria es conocido y ocurre en el
+							instante que el programa decide.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Como servidor · esta sesión</h3>
+						<p>
+							El dispositivo <b>no controla</b> cuándo llegan las peticiones ni
+							cuántas llegan a la vez. Cada conexión abierta reserva memoria, y
+							ese consumo lo fija quien se conecta.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								La consecuencia que sorprende
+							</div>
+							<p>
+								Un navegador moderno abre <b>varias conexiones simultáneas</b> para
+								cargar una sola página: una por el documento y una por cada
+								recurso. Una página con hoja de estilos, guion e icono son cuatro
+								conexiones de un solo visitante.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								La pila de red del ESP32 admite un número limitado de sockets
+								simultáneos, fijado en la configuración del proyecto. Superado ese
+								límite, las conexiones nuevas se rechazan: el navegador muestra la
+								página a medias y el fallo parece del código de la interfaz.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="term">[HTTP] GET /            200  1284 B  conexion 1
+[HTTP] GET /estilo.css   200   842 B  conexion 2
+[HTTP] GET /panel.js     200  2110 B  conexion 3
+[HTTP] GET /favicon.svg  200   312 B  conexion 4
+[MEM]  libre antes=214512  con 4 conexiones=196880  por conexion≈4.4 kB</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Criterio de diseño</span>
+							<p>
+								Reducir el <b>número de recursos</b> de la página vale más que
+								reducir su tamaño: cada archivo suelto cuesta una conexión, y las
+								conexiones son el recurso escaso. Una interfaz de un solo archivo
+								se sirve con una sola.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Servidor web embebido y producto</span>
+				</a>
+				<a class="slide-nav__link" href="03-modos-operacion.html">
+					<span>Modos de operación de la radio</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

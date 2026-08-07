@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Síntesis de la sesión · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content slide__content--narrow items-center text-center stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					08 · Cierre de sesión
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Síntesis de la sesión</h1>
+
+				<div
+					class="grid grid-cols-1 gap-4 md:grid-cols-3 w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							01
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							Las restricciones del SoC están especificadas
+						</h2>
+						<p class="text-sm m-0">
+							Nivel lógico de 3,3 V, 12 mA recomendados por terminal, GPIO
+							reservados por la memoria Flash y por la secuencia de arranque, y
+							un bloque ADC2 inhabilitado con la radio activa: todos estos
+							parámetros figuran en la hoja de datos y se verifican
+							antes de fijar la asignación de señales.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							02
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							La cadena de construcción tiene cuatro etapas
+						</h2>
+						<p class="text-sm m-0">
+							Preprocesador, compilador, ensamblador y enlazador: cada una
+							genera una clase de error propia y el mensaje identifica la
+							etapa, lo que acota el ámbito de búsqueda de la causa.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							03
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							La reproducibilidad se declara
+						</h2>
+						<p class="text-sm m-0">
+							La plataforma de destino, el framework y las versiones de las
+							dependencias se declaran en <code>platformio.ini</code>: esa
+							especificación es la condición para que la construcción sea
+							idéntica en otro equipo y en otro momento.
+						</p>
+					</div>
+				</div>
+
+				<a class="btn btn--secondary" href="01-portada.html" data-animate="fade-up">
+					Volver al índice ↺
+				</a>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="31-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Glosario</span>
+				</a>
+				<a class="slide-nav__link" href="33-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

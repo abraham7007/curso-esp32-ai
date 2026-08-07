@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Xtensa frente a RISC-V · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					04 · Familia ESP32 y niveles de integración
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">
+					Xtensa frente a RISC-V
+				</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Las dos arquitecturas conviven.</strong> RISC-V no sustituyó a
+					Xtensa: Espressif lo adoptó para las variantes nuevas de bajo costo y
+					mantuvo Xtensa donde hacía falta más potencia de proceso.
+				</p>
+
+				<div class="layout layout--wide-left" data-animate="fade-up">
+					<div class="layout__visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="familia-arquitecturas"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								<span>
+									<b>Lo que revela el eje de tiempo.</b> Todo lo marcado en rojo
+									desde 2020 es RISC-V y de un solo núcleo: es la línea de bajo
+									costo. El ESP32-P4 rompe el patrón con RISC-V de doble núcleo.
+								</span>
+							</p>
+						</div>
+					</div>
+
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+								Xtensa
+							</div>
+							<p>
+								Arquitectura propietaria de Cadence (Tensilica). Espressif paga
+								licencia por usarla y no puede modificar el juego de
+								instrucciones. Compilador:
+								<code>xtensa-esp32-elf-gcc</code>.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+								RISC-V
+							</div>
+							<p>
+								Juego de instrucciones abierto y libre de regalías, mantenido por
+								RISC-V International. Cualquiera puede implementarlo sin pagar
+								licencia. Compilador: <code>riscv32-esp-elf-gcc</code>.
+							</p>
+						</div>
+
+						<div class="card">
+							<h3 class="mb-2">Qué cambia al programar</h3>
+							<p class="text-sm">
+								Casi nada con Arduino o ESP-IDF: el mismo
+								<code>digitalWrite()</code> compila para las dos. La diferencia
+								aparece al depurar con desensamblador o al medir ciclos.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<div class="conclusion__label">Opción adoptada</div>
+					<p>
+						ESP32 clásico, Xtensa. Elegir el compilador no es una decisión
+						manual: PlatformIO invoca uno u otro según la placa declarada en
+						<code>platformio.ini</code>. Cambiar de variante es cambiar una línea
+						de ese archivo.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-familia-esp32.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Criterios de selección de la familia</span>
+				</a>
+				<a class="slide-nav__link" href="17-niveles-integracion.html">
+					<span>Niveles de integración</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

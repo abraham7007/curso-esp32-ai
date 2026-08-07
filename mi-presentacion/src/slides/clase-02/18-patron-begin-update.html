@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Patrón begin() y update() · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					05 · Temporización no bloqueante
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Patrón begin() y update()
+				</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<code>begin()</code> configura el periférico <b>una vez</b>, y
+								se invoca desde <code>setup()</code>: modo del pin, frecuencia,
+								estado inicial. <code>update()</code> hace avanzar el módulo
+								<b>un paso</b> y se invoca en cada iteración de
+								<code>loop()</code>: lee, decide y devuelve el control sin
+								bloquear.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Este par es la base de las Sesiones 4, 5 y 6 (driver de sensor,
+								máquina de estados, cliente de red). Un módulo que respeta el
+								patrón puede coexistir con otros en el mismo bucle; uno que
+								espera dentro de sí mismo con <code>delay()</code> detiene a
+								todos los demás durante esa espera.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span>src/main.cpp</span>
+							</div>
+							<pre>Led   led(2);      // el constructor solo guarda el pin
+Boton boton(4);
+
+void setup() {
+  <span class="hl hl--add">led.begin();     // configuracion, una sola vez</span>
+  <span class="hl hl--add">boton.begin();</span>
+}
+
+void loop() {
+  <span class="hl hl--hit">boton.update();  // un paso por iteracion</span>
+  <span class="hl hl--hit">led.update();</span>
+
+  if (boton.fuePulsado()) led.toggle();
+}</pre>
+							<div class="codepanel__footer">
+								Ninguna clase conoce a la otra: <b>main.cpp</b> es el único
+								punto donde se decide que una pulsación conmuta ese LED.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-codigo-07-clase-boton.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Clase de entrada digital</span>
+				</a>
+				<a class="slide-nav__link" href="19-delay-vs-millis.html">
+					<span>Temporización bloqueante y no bloqueante</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Traducción de direcciones y su efecto sobre la arquitectura · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Traducción de direcciones y su efecto sobre la arquitectura</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								La <b>traducción de direcciones de red</b> (NAT) sustituye, en cada
+								paquete que sale, la dirección privada de origen por la pública del
+								router, y anota la correspondencia en una tabla para saber a quién
+								entregar la respuesta.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Respuesta a la pregunta de apertura</span>
+							<p>
+								La entrada en esa tabla <b>solo la crea un paquete de salida</b>. Un
+								paquete que llega desde internet sin corresponder a ninguna
+								conexión iniciada dentro no tiene destinatario y se descarta. Por
+								eso el dispositivo alcanza al exterior pero el exterior no lo
+								alcanza a él.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Consecuencia sobre la arquitectura
+							</div>
+							<p>
+								Un servidor en la nube no puede iniciar una conexión hacia el
+								dispositivo. Las arquitecturas de IoT resuelven esto de dos formas:
+								el dispositivo <b>consulta de forma periódica</b> (lo que hace HTTP
+								y se examina en el Tema B) o <b>mantiene abierta</b> una conexión
+								que él mismo inició, que es lo que hace MQTT en la sesión 8.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Salida · el dispositivo inicia</span>
+								<span class="bd-node__body">192.168.1.47:52310 → el router lo reescribe como 190.12.44.8:61002 y anota el par.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Respuesta</span>
+								<span class="bd-node__body">Llega a 190.12.44.8:61002. La tabla dice a quién pertenece y se entrega.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Entrada no solicitada</span>
+								<span class="bd-node__body">Llega a 190.12.44.8:8080 sin entrada en la tabla. No hay destinatario: se descarta.</span>
+							</div>
+						</div>
+
+						<p class="figure__caption">
+							La asimetría no es una medida de seguridad deliberada, sino la
+							consecuencia de que la tabla solo se rellena desde dentro. Su efecto
+							protector es real de todos modos.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-direccionamiento.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					<span>Direccionamiento y servicios de red</span>
+				</a>
+				<a class="slide-nav__link" href="07-tcp-vs-udp.html">
+					<span>TCP y UDP</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

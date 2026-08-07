@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Semáforos de señalización y grupos de eventos · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Semáforos de señalización y grupos de eventos</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>Semáforo binario</div>
+						<p>
+							Señaliza que algo ocurrió. Su uso característico es <b>avisar a una
+							tarea desde una rutina de interrupción</b>: la rutina lo entrega y
+							retorna en microsegundos; la tarea despierta y hace el trabajo.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>xSemaphoreGiveFromISR()</code> desde la rutina;
+							<code>xSemaphoreTake()</code> desde la tarea.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Semáforo de conteo</div>
+						<p>
+							Administra un conjunto de recursos equivalentes y limitados. Se
+							inicializa con la cantidad disponible; tomarlo la reduce y devolverlo
+							la repone.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Tres memorias intermedias de captura: la cuarta tarea que las pida
+							queda bloqueada hasta que se libere una.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>Grupo de eventos</div>
+						<p>
+							Conjunto de bits, cada uno una condición. Una tarea espera a que
+							<b>varios se cumplan a la vez</b>, sin encadenar esperas.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Enlace establecido, hora sincronizada y sensor calibrado: publicar
+							exige los tres.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Notificación directa a tarea</div>
+							<p>
+								Cuando el destinatario es <b>uno solo y conocido</b>, la
+								notificación directa sustituye al semáforo. No crea ningún objeto:
+								usa un campo que toda tarea ya tiene, de modo que ahorra memoria y
+								ciclos.
+							</p>
+							<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+								<code>xTaskNotifyGive(handle)</code> y
+								<code>ulTaskNotifyTake()</code>. Su límite es justamente ese: un
+								destinatario, no varios.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">la rutina señala, la tarea trabaja</span>
+							</div>
+							<pre><code>void IRAM_ATTR alFlanco() {
+  BaseType_t despertar = pdFALSE;
+  <span class="hl hl--add">vTaskNotifyGiveFromISR(hTarea, &amp;despertar);</span>
+  portYIELD_FROM_ISR(despertar);   // cede si procede
+}
+
+void tareaEvento(void *) {
+  for (;;) {
+    <span class="hl hl--add">ulTaskNotifyTake(pdTRUE, portMAX_DELAY);</span>
+    procesar();   // aquí sí se puede imprimir y calcular
+  }
+}</code></pre>
+						</div>
+						<p class="figure__caption">
+							Es el patrón «la rutina registra, el bucle procesa» de la sesión 4,
+							con la tarea en el lugar del bucle.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-mutex.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					<span>Mutex e inversión de prioridad</span>
+				</a>
+				<a class="slide-nav__link" href="20-paper-sincronizacion-no-bloqueante.html">
+					<span>Artículo · Sincronización no bloqueante</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

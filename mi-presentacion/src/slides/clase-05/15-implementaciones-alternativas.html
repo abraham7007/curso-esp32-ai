@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tabla en memoria y punteros a función · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Tabla en memoria y punteros a función</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Dos alternativas al <code>switch</code>.</strong> Ambas cuestan
+					más de escribir y solo se justifican cuando el número de estados hace
+					ilegible la selección múltiple.
+				</p>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Tabla de transiciones en memoria</h3>
+						<p>
+							La tabla de diseño se traslada a un arreglo de estructuras. Buscar la
+							fila que corresponde al par estado-evento sustituye al
+							<code>switch</code>.
+						</p>
+						<div class="codepanel">
+							<pre><code>struct Fila {
+  Estado desde; Evento ev; Estado hasta; void (*accion)();
+};
+const Fila TABLA[] PROGMEM = {
+  {Estado::VERDE, Evento::PULSADOR,   Estado::AMBAR, arrancarAmbar},
+  {Estado::AMBAR, Evento::VENCE_TEMP, Estado::ROJO,  arrancarPaso },
+};</code></pre>
+						</div>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Ventaja:</b> la tabla del diseño y la del código son el mismo
+							objeto, de modo que no pueden divergir. Con
+							<code>PROGMEM</code> reside en Flash y no ocupa SRAM.
+						</p>
+					</div>
+
+					<div class="compare__panel">
+						<h3>Punteros a función por estado</h3>
+						<p>
+							Cada estado es una función, y una variable de tipo puntero apunta a
+							la del estado activo. La transición reasigna ese puntero.
+						</p>
+						<div class="codepanel">
+							<pre><code>void (*estadoActual)(Evento);
+
+void enVerde(Evento e) {
+  if (e == Evento::PULSADOR) estadoActual = enAmbar;
+}
+void loop() { estadoActual(leerEvento()); }</code></pre>
+						</div>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Ventaja:</b> cada estado queda aislado en su propia función, lo
+							que facilita añadir estados sin tocar los existentes.
+							<b>Costo:</b> el flujo deja de leerse en un solo punto y la
+							traza de retorno resulta menos informativa.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Cuál se elige</span>
+					<p>
+						El <code>switch</code> hasta unos <b>diez estados</b>, que cubre todos
+						los ejemplos de este curso. La <b>tabla en memoria</b> cuando el
+						número de filas crece y conviene generarla o revisarla como dato. Los
+						<b>punteros a función</b> cuando cada estado tiene lógica extensa
+						propia. Adoptar la tercera forma en un problema de tres estados añade
+						indirección sin resolver ningún problema real.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-21-porton-automatico.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Portón automático</span>
+				</a>
+				<a class="slide-nav__link" href="16-maquinas-no-bloqueantes.html">
+					<span>El temporizador como evento</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

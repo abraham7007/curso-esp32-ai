@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "author": "Ejemplo 7 - Clase Botón Antirrebote (30ms)",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 80,
+      "left": 180,
+      "attrs": {
+        "color": "green",
+        "key": "b"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:D4",
+      "btn1:2.r",
+      "green",
+      [
+        "h20",
+        "v33.6",
+        "h125.7"
+      ]
+    ],
+    [
+      "esp:GND.1",
+      "btn1:1.l",
+      "purple",
+      [
+        "h33.1",
+        "v-56"
+      ]
+    ],
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

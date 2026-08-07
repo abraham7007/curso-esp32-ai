@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 15 · Dos sensores tras la misma interfaz · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 15</span>
+					</div>
+
+					<h2 class="code-hour__title">Dos sensores distintos tras la misma interfaz</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Una clase base <code>Sensor</code> con los métodos que toda fuente debe ofrecer, implementada dos veces: para una entrada analógica y para un sensor I²C. El archivo principal trabaja con un puntero a la base y no sabe cuál tiene delante.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p>Un <b>método virtual puro</b> declara qué debe existir sin decir cómo: obliga a cada implementación a proporcionarlo. El archivo principal guarda un <b>puntero a la clase base</b> y la llamada se resuelve en ejecución sobre el objeto real. Que la interfaz incluya <code>isReady()</code> y <code>status()</code>, y no solo <code>read()</code>, es lo que permite distinguir un valor válido de uno que no lo es.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, con lib/Sensor/ para la interfaz y sus dos implementaciones.
+
+<b>2. Firmware.</b> Sensor es una clase base abstracta con begin(), read(), isReady() y status() virtuales puros. Impleméntala en SensorAnalogico (GPIO 32) y SensorI2C. En main.cpp declara un puntero Sensor* y trabaja solo a través de él: cambiar de fuente debe ser cambiar una única línea. Emite por el puerto serie a 115200 baudios «[APP] fuente=X valor=N.N C estado=OK», con el mismo formato para ambas.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 32 y un sensor I²C en SDA 21 y SCL 22.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una lectura, con la comprobación de estado antes de usar el valor. Y un <b>diagrama de clases</b> con la base y sus dos implementaciones, marcando qué conoce el archivo principal.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>Potenciómetro con extremos a 3V3 y GND y cursor al <b>GPIO 32</b> (ADC1_CH4) como fuente analógica. Sensor con interfaz I²C en SDA <b>GPIO 21</b> y SCL <b>GPIO 22</b>, alimentado a 3V3.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+																<span class="hw-set__item">
+																	<wokwi-potentiometer></wokwi-potentiometer>
+																	<small>Potenciómetro</small>
+																</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">[APP] fuente=analogico  valor=23.4 C  estado=OK
+[APP] fuente=analogico  valor=23.5 C  estado=OK
+[APP] fuente=analogico  valor=23.4 C  estado=OK
+
+--- se cambia solo la línea que elige la fuente ---
+
+[APP] fuente=i2c        valor=23.6 C  estado=OK
+[APP] fuente=i2c        valor=23.6 C  estado=OK
+[APP] fuente=i2c        valor=23.7 C  estado=OK</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>Las dos mitades de la traza son <b>idénticas en formato</b> y solo cambia el campo <code>fuente</code>: el código que las emite es el mismo. Comprobar en el proyecto propio que cambiar de fuente toca <b>una sola línea</b>. Si hubiera que tocar además la parte que imprime o la que decide, la aplicación depende de la implementación y no de la interfaz.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-interfaz-comun.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Interfaz común de la capa de adquisición</span>
+				</a>
+				<a class="slide-nav__link" href="06-cadena-tratamiento.html">
+					<span>Cadena de tratamiento de la señal</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

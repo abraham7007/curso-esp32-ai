@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pila de software y niveles de abstracción · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					05 · Pila de software y herramientas
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Pila de software y niveles de abstracción
+				</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<b>Pila de software</b> (software stack). Cada capa invoca a la
+								inmediatamente inferior sin conocer su implementación:
+								<code>digitalWrite(2, HIGH)</code> no accede al hardware,
+								atraviesa la jerarquía hasta convertirse en una escritura
+								sobre un registro.
+							</p>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+									src/main.cpp
+								</span>
+							</div>
+							<pre><code><span class="hl hl--add">digitalWrite(2, HIGH);</span>
+  -&gt; gpio_set_level(GPIO_NUM_2, 1);
+    -&gt; REG_WRITE(GPIO_OUT_W1TS_REG, BIT(2));</code></pre>
+							<ul class="syntax-notes">
+								<li>
+									<span class="syntax-notes__ref syntax-notes__ref--add">L1</span>
+									<span>Lo único que se escribe en <code>src/main.cpp</code>.
+									Pertenece al núcleo de Arduino, así que no exige ningún
+									<code>#include</code> añadido; las dos líneas de abajo ya
+									son código de las librerías.</span>
+								</li>
+								<li>
+									<span class="syntax-notes__ref">L2</span>
+									<span><code>gpio_set_level()</code> es de ESP-IDF
+									(<code>driver/gpio.h</code>). Puede llamarse desde el mismo
+									<code>main.cpp</code> cuando se necesita un parámetro del
+									periférico que Arduino no expone.</span>
+								</li>
+								<li>
+									<span class="syntax-notes__ref">L3</span>
+									<span><code>W1TS</code> significa <i>write 1 to set</i>:
+									escribir un 1 en el bit 2 pone ese terminal en alto sin
+									alterar los demás. Asignar el registro completo apagaría
+									las otras salidas.</span>
+								</li>
+							</ul>
+							<div class="codepanel__footer">
+								Trayecto simplificado: omite pasos internos entre niveles.
+							</div>
+						</div>
+					</div>
+
+					<div class="layout__visual">
+						<div
+						class="relative max-w-[38rem] mx-auto pt-6 pb-2"
+						id="layer-stack"
+						role="img"
+						aria-label="Pila de cinco capas de software apiladas de mayor a menor abstracción (aplicación, núcleo de Arduino, ESP-IDF y FreeRTOS, capa de abstracción de hardware y registros del hardware)  atravesada por una flecha vertical que representa el trayecto de la llamada digitalWrite(2, HIGH) hasta el registro"
+					>
+						<span
+							class="absolute top-0 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap bg-[var(--color-bg)] px-2 font-mono text-[0.68rem] font-semibold text-[var(--color-accent)]"
+							aria-hidden="true"
+						>
+							digitalWrite(2, HIGH)
+						</span>
+						<div
+							class="pointer-events-none absolute top-6 bottom-2 left-1/2 z-10 w-px -translate-x-1/2 bg-[var(--color-accent)]"
+							aria-hidden="true"
+						></div>
+						<svg
+							class="icon pointer-events-none absolute bottom-0 left-1/2 z-10 -translate-x-1/2 rotate-90 text-[var(--color-accent)]"
+							aria-hidden="true"
+						><use href="/course-icons.svg#i-arrow-right" /></svg>
+
+						<div class="layer-picker" data-layer-picker>
+							<button
+								class="picker__item appearance-none w-full font-sans"
+								type="button"
+								data-index="0"
+							>
+								<span>Aplicación</span>
+								<small>main.cpp</small>
+							</button>
+							<button
+								class="picker__item appearance-none mx-auto w-[91%] font-sans"
+								type="button"
+								data-index="1"
+							>
+								<span>Núcleo de Arduino</span>
+								<small>Arduino core</small>
+							</button>
+							<button
+								class="picker__item appearance-none mx-auto w-[82%] font-sans"
+								type="button"
+								data-index="2"
+							>
+								<span>ESP-IDF y FreeRTOS</span>
+								<small>drivers · RTOS</small>
+							</button>
+							<button
+								class="picker__item appearance-none mx-auto w-[73%] font-sans"
+								type="button"
+								data-index="3"
+							>
+								<span>Capa de abstracción de hardware</span>
+								<small>HAL</small>
+							</button>
+							<button
+								class="picker__item appearance-none mx-auto w-[64%] font-sans"
+								type="button"
+								data-index="4"
+							>
+								<span>Registros del hardware</span>
+								<small>espacio de direcciones</small>
+							</button>
+						</div>
+					</div>
+
+						<div class="detail-panel mt-3 max-w-[38rem] mx-auto" data-layer-detail></div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-niveles-integracion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Niveles de integración</span>
+				</a>
+				<a class="slide-nav__link" href="19-arduino-vs-espidf.html">
+					<span>Núcleo de Arduino frente a ESP-IDF</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const layers = [
+				{
+					title: "Aplicación",
+					detail:
+						"Nivel en el que se escribe la aplicación (main.cpp). Invoca funciones de la capa inferior sin acceder al hardware de forma directa. La llamada digitalWrite(2, HIGH) pertenece a este nivel.",
+				},
+				{
+					title: "Núcleo de Arduino para ESP32",
+					detail:
+						"Traduce la interfaz uniforme de Arduino a llamadas de ESP-IDF. Aporta portabilidad entre plataformas a cambio de no exponer la totalidad de los parámetros de configuración de cada periférico.",
+				},
+				{
+					title: "ESP-IDF y FreeRTOS",
+					detail:
+						"Entorno oficial de Espressif. Contiene los drivers de los periféricos, la pila de comunicaciones y un sistema operativo de tiempo real. Se ejecuta también cuando la aplicación se desarrolla sobre el núcleo de Arduino.",
+				},
+				{
+					title: "Capa de abstracción de hardware (HAL)",
+					detail:
+						"Aísla las diferencias de implementación entre variantes de la familia, de modo que un mismo driver opere sobre SoC con periféricos internamente distintos.",
+				},
+				{
+					title: "Registros del hardware",
+					detail:
+						"Posiciones del espacio de direcciones cuya escritura modifica el estado del circuito. La conmutación efectiva del terminal ocurre en este nivel: todas las capas superiores se resuelven en escrituras sobre estos registros.",
+				},
+			];
+
+			const items = document.querySelectorAll("[data-layer-picker] .picker__item");
+			const detail = document.querySelector("[data-layer-detail]");
+
+			function selectLayer(index) {
+				for (const item of items) {
+					item.classList.toggle(
+						"is-selected",
+						Number(item.dataset.index) === index,
+					);
+				}
+				const layer = layers[index];
+				detail.innerHTML = `<b>${layer.title}</b> — ${layer.detail}`;
+			}
+
+			for (const item of items) {
+				item.addEventListener("click", () => selectLayer(Number(item.dataset.index)));
+			}
+
+			selectLayer(0);
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

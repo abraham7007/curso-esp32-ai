@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La hora del sistema como requisito de operación · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					01 · Memoria, persistencia y tiempo
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La hora del sistema como requisito de operación</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								De qué depende la hora
+							</div>
+							<p>
+								Se sincroniza por <b>NTP</b> al arrancar y se mantiene con el reloj
+								interno, que deriva. Sin red no hay hora, y sin hora no hay
+								conexión segura ni registro histórico fechable.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>configTzTime(zona, servidor)</code> fija a la vez el servidor y
+								la zona horaria con sus reglas de cambio estacional. Es preferible a
+								<code>configTime()</code> con un desplazamiento fijo, que deja de ser
+								correcto el día del cambio de hora.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Reloj interno o reloj externo</span>
+							<p>
+								El interno pierde la hora al cortar la alimentación y deriva del
+								orden de <b>segundos al día</b>. Un reloj externo con pila la
+								conserva y deriva mucho menos. La decisión la impone el requisito:
+								si el equipo debe fechar datos sin red, hace falta el externo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Sin hora válida</span>
+								<span class="bd-node__body">El sistema cree estar en 1970. Todo certificado se rechaza por no ser válido todavía.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓ NTP</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Con hora válida</span>
+								<span class="bd-node__body">Se validan certificados, se fechan las medidas y el registro remoto es ordenable.</span>
+							</div>
+						</div>
+
+						<div class="term">[BOOT] fecha del sistema = 1970-01-01 00:00:00
+[NTP]  sincronizando con pool.ntp.org (zona &lt;-05&gt;5)
+[NTP]  hora valida: 2026-07-28 09:22:05 -05  en 842 ms
+[TLS]  cadena de certificados verificada
+[DATO] t=2026-07-28T09:22:07-05  v=23.4  fechado en el dispositivo</div>
+
+						<p class="figure__caption">
+							El orden de la puesta en marcha no es negociable: red, hora y solo
+							después cualquier conexión segura.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-memoria-en-ejecucion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>Memoria en ejecución</span>
+				</a>
+				<a class="slide-nav__link" href="06-codigo-40-persistencia-y-hora.html">
+					<span>La hora del código · Persistencia y hora</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

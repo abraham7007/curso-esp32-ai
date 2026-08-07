@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Separación entre el estado del sistema y el de la interfaz · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Separación entre el estado del sistema y el de la interfaz</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Estado del sistema</h3>
+						<p>
+							Qué está haciendo el dispositivo: <code>CARGANDO</code>,
+							<code>MANTENIMIENTO</code>, <code>ERROR</code>. Existe aunque no haya
+							nadie mirando y aunque no haya pantalla conectada.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Cambia por eventos físicos y por vencimientos de plazo.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Estado de la interfaz</h3>
+						<p>
+							Qué se está mostrando: <code>PANTALLA_PRINCIPAL</code>,
+							<code>MENU_AJUSTES</code>, <code>CONFIRMANDO_BORRADO</code>. Depende
+							de por dónde navega el usuario.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Cambia por pulsaciones y por tiempos de inactividad.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Unificar ambos produce estados como
+						<code>CARGANDO_MOSTRANDO_MENU</code>. El número de estados pasa a ser
+						el <b>producto</b> de los dos conjuntos, y entrar en un menú deja de
+						ser independiente de lo que hace el equipo: navegar por los ajustes
+						podría detener la carga.
+					</p>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Cómo se relacionan</span>
+					<p>
+						Son dos máquinas independientes que se comunican en un solo sentido: la
+						interfaz <b>lee</b> el estado del sistema para representarlo, y le envía
+						eventos, <code>SOLICITUD_PARADA</code>, en lugar de escribir su
+						variable de estado. Con 4 estados de sistema y 5 de interfaz son
+						<b>9 estados</b> separados frente a los <b>20</b> del producto.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="26-paper-pn2arduino.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Del modelo gráfico al control</span>
+				</a>
+				<a class="slide-nav__link" href="28-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

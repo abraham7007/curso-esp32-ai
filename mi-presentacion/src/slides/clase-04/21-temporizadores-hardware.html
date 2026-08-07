@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Temporizador por hardware frente a millis() · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					05 · Temporizadores y base de tiempo
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Temporizador por hardware frente a <code>millis()</code>
+				</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h2 class="font-display text-base font-semibold m-0 mb-1">
+							<code>millis()</code> comprobado en el bucle
+						</h2>
+						<p class="text-sm m-0">
+							La comprobación se ejecuta cuando el bucle llega a ella: el
+							intervalo real es el primer múltiplo de la duración de la iteración
+							que alcanza el periodo, y depende de todo lo que el bucle haga
+							antes. El error se acumula ciclo a ciclo cuando el instante
+							siguiente se fija releyendo el reloj en lugar de sumar el periodo al
+							instante teórico anterior.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h2 class="font-display text-base font-semibold m-0 mb-1">
+							Temporizador por hardware
+						</h2>
+						<p class="text-sm m-0">
+							El periférico cuenta con su propia base de tiempo y dispara una
+							interrupción con periodo fijo, con independencia de lo que esté
+							haciendo el programa. El bucle no interviene en la decisión de
+							cuándo muestrear: solo consume el dato que la rutina ya tomó.
+						</p>
+					</div>
+				</div>
+
+				<div
+					class="grid grid-cols-1 xl:grid-cols-[1.3fr_1fr] gap-4 w-full items-start"
+					data-animate="fade-up"
+				>
+					<div class="card">
+						<canvas
+							id="drift-canvas"
+							class="w-full aspect-[5/2]"
+							width="800"
+							height="320"
+							role="img"
+							aria-label="Deriva acumulada del instante de muestreo frente al número de ciclos, comparando la base de tiempo por millis en el bucle con la del temporizador por hardware"
+						></canvas>
+
+						<div class="controls mt-3">
+							<label for="drift-load" class="text-sm font-medium">
+								Duración de una iteración del bucle
+							</label>
+							<input
+								type="range"
+								id="drift-load"
+								min="1"
+								max="30"
+								step="1"
+								value="12"
+							/>
+							<span class="readout" id="drift-load-readout">12 ms</span>
+						</div>
+
+						<div class="metric mt-3">
+							<div class="metric__item">
+								<span class="text-xs text-[var(--color-text-muted)]">
+									Periodo nominal de muestreo
+								</span>
+								<span class="readout">10 ms</span>
+							</div>
+							<div class="metric__item" id="drift-int-item">
+								<span class="text-xs text-[var(--color-text-muted)]">
+									Intervalo real con <code>millis()</code>
+								</span>
+								<span class="readout" id="drift-int-out">12 ms</span>
+							</div>
+							<div class="metric__item" id="drift-mil-item">
+								<span class="text-xs text-[var(--color-text-muted)]">
+									Deriva tras 500 ciclos con <code>millis()</code>
+								</span>
+								<span class="readout" id="drift-mil-out">1,0 s</span>
+							</div>
+							<div class="metric__item metric__item--ok">
+								<span class="text-xs text-[var(--color-text-muted)]">
+									Deriva tras 500 ciclos con temporizador
+								</span>
+								<span class="readout">±0,01 ms</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="flex flex-col gap-3">
+						<div class="conclusion">
+							<p>
+								<span class="conclusion__label">Conclusión.</span>
+								Para parpadear un LED, <code>millis()</code> basta: un desfase de
+								unos milisegundos no es observable. Para muestrear una señal a
+								frecuencia fija, la base de tiempo debe ser el
+								<b>temporizador por hardware</b>, porque un periodo de muestreo
+								que varía introduce un error que ningún filtrado posterior puede
+								corregir.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Núcleo 3.x: <code>timerBegin(frecuencia)</code>
+								devuelve el temporizador ya configurado,
+								<code>timerAttachInterrupt(timer, &amp;rutina)</code> asocia la
+								rutina y <code>timerAlarm(timer, ticks, true, 0)</code> fija el
+								periodo con recarga automática.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La deriva con <code>millis()</code> crece de forma lineal con el
+								número de ciclos y se anula solo cuando la duración de la
+								iteración divide exactamente al periodo; la del temporizador
+								permanece acotada en unos pocos microsegundos sea cual sea la
+								carga.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-deteccion-flancos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Detección por flanco y rebote mecánico</span>
+				</a>
+				<a class="slide-nav__link" href="22-codigo-18-muestreo-temporizador.html">
+					<span>La hora del código · Muestreo por temporizador</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			// Periodo de muestreo nominal y horizonte de la comparación.
+			const T_NOM = 10;
+			const N_CICLOS = 500;
+			const JITTER_TIMER = 0.01;
+
+			const canvas = document.getElementById("drift-canvas");
+			const ctx = canvas.getContext("2d");
+			const loadInput = document.getElementById("drift-load");
+			const loadReadout = document.getElementById("drift-load-readout");
+			const intOut = document.getElementById("drift-int-out");
+			const milOut = document.getElementById("drift-mil-out");
+			const intItem = document.getElementById("drift-int-item");
+			const milItem = document.getElementById("drift-mil-item");
+
+			const GEO = { left: 74, right: 776, top: 26, bottom: 252, axisY: 252 };
+
+			function cssVar(name) {
+				return getComputedStyle(document.documentElement)
+					.getPropertyValue(name)
+					.trim();
+			}
+
+			function coma(n, dec) {
+				return n.toFixed(dec).replace(".", ",");
+			}
+
+			function miles(n) {
+				return Math.round(n)
+					.toString()
+					.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			}
+
+			// El bucle solo puede actuar en los instantes en que llega a la
+			// comprobación: el intervalo real se redondea al alza hasta el
+			// primer múltiplo de la duración de la iteración.
+			function intervaloReal(loadMs) {
+				return Math.ceil(T_NOM / loadMs) * loadMs;
+			}
+
+			function formatoMs(ms) {
+				if (Math.abs(ms) >= 2000) return `${coma(ms / 1000, 1)} s`;
+				return `${miles(ms)} ms`;
+			}
+
+			function draw(loadMs) {
+				const w = canvas.width;
+				const h = canvas.height;
+				const g = GEO;
+				const derivaCiclo = intervaloReal(loadMs) - T_NOM;
+				const derivaTotal = derivaCiclo * N_CICLOS;
+				const yMax = Math.max(derivaTotal, 100);
+
+				ctx.clearRect(0, 0, w, h);
+				ctx.fillStyle = cssVar("--color-surface");
+				ctx.fillRect(0, 0, w, h);
+
+				const accent = cssVar("--color-accent");
+				const navy = cssVar("--color-navy");
+				const border = cssVar("--color-border");
+				const muted = cssVar("--color-text-muted");
+				const text = cssVar("--color-text");
+
+				const x = (n) => g.left + (n / N_CICLOS) * (g.right - g.left);
+				const y = (ms) => g.bottom - (ms / yMax) * (g.bottom - g.top);
+
+				// retícula horizontal
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "right";
+				for (let i = 0; i <= 4; i++) {
+					const v = (yMax * i) / 4;
+					ctx.strokeStyle = border;
+					ctx.lineWidth = 1;
+					ctx.setLineDash([4, 4]);
+					ctx.beginPath();
+					ctx.moveTo(g.left, y(v));
+					ctx.lineTo(g.right, y(v));
+					ctx.stroke();
+					ctx.setLineDash([]);
+					ctx.fillStyle = muted;
+					ctx.fillText(formatoMs(v), g.left - 8, y(v) + 4);
+				}
+
+				// eje de ciclos
+				ctx.strokeStyle = text;
+				ctx.globalAlpha = 0.45;
+				ctx.beginPath();
+				ctx.moveTo(g.left, g.axisY);
+				ctx.lineTo(g.right, g.axisY);
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+
+				ctx.fillStyle = muted;
+				for (let n = 0; n <= N_CICLOS; n += 100) {
+					ctx.strokeStyle = border;
+					ctx.beginPath();
+					ctx.moveTo(x(n), g.axisY);
+					ctx.lineTo(x(n), g.axisY + 5);
+					ctx.stroke();
+					ctx.textAlign = n === 0 ? "left" : n === N_CICLOS ? "right" : "center";
+					ctx.fillText(String(n), x(n), g.axisY + 20);
+				}
+				ctx.textAlign = "right";
+				ctx.fillText("ciclos de muestreo", g.right, g.axisY + 40);
+				ctx.textAlign = "left";
+				ctx.fillText("deriva acumulada", g.left - 66, g.top - 10);
+
+				// deriva con millis() en el bucle
+				ctx.strokeStyle = accent;
+				ctx.lineWidth = 2.6;
+				ctx.beginPath();
+				ctx.moveTo(x(0), y(0));
+				ctx.lineTo(x(N_CICLOS), y(derivaTotal));
+				ctx.stroke();
+
+				// deriva con temporizador por hardware
+				ctx.strokeStyle = navy;
+				ctx.lineWidth = 2.6;
+				ctx.beginPath();
+				for (let n = 0; n <= N_CICLOS; n += 5) {
+					const v = JITTER_TIMER * Math.sin(n / 18);
+					if (n === 0) ctx.moveTo(x(n), y(v));
+					else ctx.lineTo(x(n), y(v));
+				}
+				ctx.stroke();
+
+				// leyenda
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "left";
+				let lx = g.left + 10;
+				const seg = (color, label) => {
+					ctx.strokeStyle = color;
+					ctx.lineWidth = 2.6;
+					ctx.beginPath();
+					ctx.moveTo(lx, g.top);
+					ctx.lineTo(lx + 24, g.top);
+					ctx.stroke();
+					ctx.fillStyle = muted;
+					ctx.fillText(label, lx + 30, g.top + 4);
+					lx += 30 + ctx.measureText(label).width + 26;
+				};
+				seg(accent, "millis() en el bucle");
+				seg(navy, "temporizador por hardware");
+			}
+
+			function update() {
+				const load = Number(loadInput.value);
+				const real = intervaloReal(load);
+				const derivaTotal = (real - T_NOM) * N_CICLOS;
+				const exacto = real === T_NOM;
+
+				loadReadout.textContent = `${load} ms`;
+				intOut.textContent = `${real} ms`;
+				milOut.textContent = exacto ? "0 ms" : formatoMs(derivaTotal);
+
+				intItem.classList.toggle("metric__item--ok", exacto);
+				intItem.classList.toggle("metric__item--bad", !exacto);
+				milItem.classList.toggle("metric__item--ok", exacto);
+				milItem.classList.toggle("metric__item--bad", !exacto);
+
+				draw(load);
+			}
+
+			loadInput.addEventListener("input", update);
+			new MutationObserver(() => update()).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			update();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

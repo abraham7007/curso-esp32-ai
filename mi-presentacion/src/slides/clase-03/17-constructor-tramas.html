@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Efecto de la verificación ante un bit alterado · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+					05 · Formato y serialización de datos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Efecto de la verificación ante un bit alterado
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								El checksum (suma de comprobación) es la suma de todos los bytes anteriores
+								módulo 256. El emisor la calcula antes de transmitir y el
+								receptor la recalcula sobre lo que recibe: si ambas no coinciden,
+								al menos un bit cambió durante el trayecto.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="m-0 text-sm">
+								La misma alteración produce dos resultados distintos según la
+								trama incorpore o no el campo de verificación: con él, el
+								receptor descarta la trama y el fallo queda registrado en el
+								enlace; sin él, la trama se acepta y el valor erróneo continúa
+								hacia la aplicación sin ninguna señal de que algo ocurrió.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<div class="grid grid-cols-8 gap-1 text-center">
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									cabecera
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									id
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									longitud
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									carga 0
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									carga 1
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									carga 2
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									carga 3
+								</span>
+								<span class="text-[0.62rem] text-[var(--color-text-muted)]">
+									verificación
+								</span>
+
+								<span id="byte-0"></span>
+								<span id="byte-1"></span>
+								<span id="byte-2"></span>
+								<span id="byte-3"></span>
+								<span id="byte-4"></span>
+								<span id="byte-5"></span>
+								<span id="byte-6"></span>
+								<span id="byte-7"></span>
+							</div>
+
+							<p
+								class="font-mono text-xs text-[var(--color-text-muted)] mt-2"
+								id="bit-detail"
+							></p>
+
+							<div class="controls mt-3">
+								<label class="text-sm font-medium" for="sel-byte">
+									Byte alterado
+								</label>
+								<select
+									id="sel-byte"
+									class="rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] font-mono text-sm px-2 py-1"
+								>
+									<option value="0">carga 0</option>
+									<option value="1">carga 1</option>
+									<option value="2">carga 2</option>
+									<option value="3">carga 3</option>
+								</select>
+
+								<label class="text-sm font-medium" for="sel-bit">Bit</label>
+								<select
+									id="sel-bit"
+									class="rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] font-mono text-sm px-2 py-1"
+								>
+									<option value="-1">sin alterar</option>
+									<option value="7">bit 7</option>
+									<option value="6">bit 6</option>
+									<option value="5">bit 5</option>
+									<option value="4" selected>bit 4</option>
+									<option value="3">bit 3</option>
+									<option value="2">bit 2</option>
+									<option value="1">bit 1</option>
+									<option value="0">bit 0</option>
+								</select>
+
+								<label class="text-sm flex items-center gap-1">
+									<input type="checkbox" id="chk-verify" checked />
+									Campo de verificación
+								</label>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Suma esperada
+									</span>
+									<span class="readout" id="out-expected">0x2F</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Suma recalculada
+									</span>
+									<span class="readout" id="out-computed">0x1F</span>
+								</div>
+								<div class="metric__item metric__item--bad" id="verdict-box">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Veredicto del receptor
+									</span>
+									<span class="readout" id="out-verdict">trama descartada</span>
+								</div>
+							</div>
+
+							<div class="detail-panel mt-3">
+								<p class="text-sm" id="out-detail"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-trama-propia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Estructura de una trama con verificación</span>
+				</a>
+				<a class="slide-nav__link" href="18-paper-verificacion-crc.html">
+					<span>Función del campo de verificación en una trama</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			// Trama de ejemplo: cabecera 0xAA, identificador 0x01, longitud 4 y una
+			// carga útil de 4 bytes con el entero 1658 (byte menos significativo
+			// primero). El checksum es la suma módulo 256 de todo lo
+			// anterior: 0xAA + 0x01 + 0x04 + 0x7A + 0x06 = 0x2F.
+			const HEADER = [0xaa, 0x01, 0x04];
+			const PAYLOAD = [0x7a, 0x06, 0x00, 0x00];
+
+			const BYTE_BASE =
+				"rounded-[var(--radius-sm)] border px-1 py-1 font-mono text-sm text-center";
+			const BYTE_NORMAL =
+				"border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-text)]";
+			const BYTE_ALTERED =
+				"border-[var(--color-danger)] bg-[var(--color-danger-soft)] text-[var(--color-danger)] font-bold";
+			const BYTE_CHECK =
+				"border-[var(--color-ok)] bg-[var(--color-ok-soft)] text-[var(--color-ok)] font-bold";
+			const BYTE_ABSENT =
+				"border border-dashed border-[var(--color-border)] bg-transparent text-[var(--color-text-muted)] opacity-45";
+
+			const selByte = document.getElementById("sel-byte");
+			const selBit = document.getElementById("sel-bit");
+			const chkVerify = document.getElementById("chk-verify");
+			const bitDetail = document.getElementById("bit-detail");
+			const outExpected = document.getElementById("out-expected");
+			const outComputed = document.getElementById("out-computed");
+			const outVerdict = document.getElementById("out-verdict");
+			const outDetail = document.getElementById("out-detail");
+			const verdictBox = document.getElementById("verdict-box");
+
+			function hex(byte) {
+				return `0x${byte.toString(16).toUpperCase().padStart(2, "0")}`;
+			}
+
+			function bin(byte) {
+				const s = byte.toString(2).padStart(8, "0");
+				return `${s.slice(0, 4)} ${s.slice(4)}`;
+			}
+
+			function checksum(bytes) {
+				return bytes.reduce((acc, b) => acc + b, 0) & 0xff;
+			}
+
+			function decodeValue(payload) {
+				return (
+					payload[0] +
+					payload[1] * 256 +
+					payload[2] * 65536 +
+					payload[3] * 16777216
+				);
+			}
+
+			function setCell(index, text, state) {
+				const cell = document.getElementById(`byte-${index}`);
+				cell.className = `${BYTE_BASE} ${state}`;
+				cell.textContent = text;
+			}
+
+			function update() {
+				const idx = Number(selByte.value);
+				const bit = Number(selBit.value);
+				const verify = chkVerify.checked;
+
+				const sent = [...PAYLOAD];
+				const expected = checksum([...HEADER, ...sent]);
+
+				const received = [...sent];
+				if (bit >= 0) received[idx] = sent[idx] ^ (1 << bit);
+				const computed = checksum([...HEADER, ...received]);
+				const altered = bit >= 0 && received[idx] !== sent[idx];
+
+				HEADER.forEach((b, i) => {
+					setCell(i, hex(b), BYTE_NORMAL);
+				});
+				received.forEach((b, i) => {
+					const isAltered = altered && i === idx;
+					setCell(3 + i, hex(b), isAltered ? BYTE_ALTERED : BYTE_NORMAL);
+				});
+				setCell(
+					7,
+					verify ? hex(expected) : "ausente",
+					verify ? BYTE_CHECK : BYTE_ABSENT,
+				);
+
+				bitDetail.textContent = altered
+					? `carga ${idx}: ${hex(sent[idx])} → ${hex(received[idx])}   (${bin(sent[idx])} → ${bin(received[idx])}, bit ${bit} invertido)`
+					: "carga sin alterar: los ocho bytes llegan tal como se transmitieron";
+
+				outExpected.textContent = verify ? hex(expected) : "no transmitida";
+				outComputed.textContent = hex(computed);
+
+				const value = decodeValue(received);
+				const original = decodeValue(sent);
+
+				if (verify && computed !== expected) {
+					outVerdict.textContent = "trama descartada";
+					verdictBox.className = "metric__item metric__item--bad";
+					outDetail.innerHTML = `La suma recalculada sobre los bytes recibidos (${hex(computed)}) no coincide con la transmitida (${hex(expected)}). El receptor <b>descarta la trama</b>, la contabiliza como errónea y no entrega ningún valor a la aplicación.`;
+				} else if (verify) {
+					outVerdict.textContent = "trama aceptada";
+					verdictBox.className = "metric__item metric__item--ok";
+					outDetail.innerHTML = `Ambas sumas valen ${hex(expected)}. El receptor <b>acepta la trama</b> y entrega el valor <b>${original}</b>, que es el transmitido.`;
+				} else if (altered) {
+					outVerdict.textContent = "aceptada con dato incorrecto";
+					verdictBox.className = "metric__item metric__item--warn";
+					outDetail.innerHTML = `Sin campo de verificación no hay nada que contrastar: el receptor <b>acepta la trama</b> y entrega <b>${value}</b> en lugar de ${original}. La aplicación no dispone de ninguna indicación de que el dato es erróneo.`;
+				} else {
+					outVerdict.textContent = "aceptada sin comprobar";
+					verdictBox.className = "metric__item metric__item--warn";
+					outDetail.innerHTML = `El valor entregado (<b>${value}</b>) es correcto, pero lo es por casualidad: sin campo de verificación el receptor acepta cualquier trama, alterada o no.`;
+				}
+			}
+
+			for (const el of [selByte, selBit, chkVerify]) {
+				el.addEventListener("change", update);
+			}
+			update();
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

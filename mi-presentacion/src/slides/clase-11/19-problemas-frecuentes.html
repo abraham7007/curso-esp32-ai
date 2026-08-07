@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes con comportamiento externo y asistentes · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes con comportamiento externo y asistentes</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>El periodo deja de cumplirse tras añadir reglas</div>
+						<div class="problem-card__body">
+							<p>El equipo cumplía su periodo con el umbral compilado y lo pierde al pasar a reglas interpretadas.</p>
+							<p><b>Por qué ocurre.</b> Cada evaluación pasa por el intérprete y cuesta dos órdenes de magnitud más. Con muchas reglas o periodo corto, deja de caber en el presupuesto del bucle.</p>
+							<p><b>Cómo comprobarlo.</b> Medir el tiempo de evaluación y multiplicarlo por el número de reglas y la frecuencia. Es el cálculo del ejemplo 44.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>El código generado compila y falla en operación</div>
+						<div class="problem-card__body">
+							<p>El driver supera las pruebas en el banco y en el equipo real pierde muestras.</p>
+							<p><b>Por qué ocurre.</b> Cumplimiento aparente: el código hace lo pedido pero bloquea donde no debe. Ninguna prueba funcional lo detecta.</p>
+							<p><b>Cómo comprobarlo.</b> Medir la duración de una iteración del bucle con y sin el código nuevo. Si crece un orden de magnitud, hay una espera bloqueante dentro.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>Nadie sabe qué está ejecutando el equipo</div>
+						<div class="problem-card__body">
+							<p>Dos unidades del mismo modelo se comportan distinto y no consta por qué.</p>
+							<p><b>Por qué ocurre.</b> Con comportamiento externo hay tantas configuraciones como instalaciones, y sin versionado del guion no queda registro de cuál lleva cada una.</p>
+							<p><b>Cómo comprobarlo.</b> Publicar en <code>/api/info</code> la versión del firmware y también la del comportamiento cargado, con su resumen.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Una regla errónea deja el equipo inservible</div>
+						<div class="problem-card__body">
+							<p>Se envía un guion con un fallo y el dispositivo deja de responder.</p>
+							<p><b>Por qué ocurre.</b> El comportamiento externo se ejecuta sin aislamiento: un fallo suyo alcanza al resto del sistema.</p>
+							<p><b>Cómo comprobarlo.</b> Acotar lo que el guion puede tocar y validar la regla antes de aplicarla. Conservar la anterior para poder volver a ella.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>El agente pide valores absurdos y nadie se entera</div>
+						<div class="problem-card__body">
+							<p>El sistema funciona con normalidad durante meses y al revisarlo se descubren decisiones sin sentido.</p>
+							<p><b>Por qué ocurre.</b> El firmware acota las propuestas fuera de rango y aplica el valor recortado, pero registra solo el aplicado.</p>
+							<p><b>Cómo comprobarlo.</b> Registrar por separado lo pedido y lo aplicado, con un contador de recortes. Un contador que crece es el aviso.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-codigo-47-comportamiento-versionado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Comportamiento versionado</span>
+				</a>
+				<a class="slide-nav__link" href="20-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

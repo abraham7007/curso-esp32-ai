@@ -1,0 +1,105 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 526.190837 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 526.190837 113.976 
+L 526.190837 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 4.32 109.656 
+L 394.92 109.656 
+L 394.92 4.32 
+L 4.32 4.32 
+L 4.32 109.656 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 4.32 44.164487 
+L 78.01344 44.164487 
+L 78.01344 28.593078 
+L 4.32 28.593078 
+z
+" clip-path="url(#pee079b41ae)" style="fill: var(--fig-accent)"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 4.32 89.962748 
+L 300.976998 89.962748 
+L 300.976998 74.391339 
+L 4.32 74.391339 
+z
+" clip-path="url(#pee079b41ae)" style="fill: var(--fig-ok)"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m4b00ef7ee0" d="M 0 0 
+L 0 2 
+" style="stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </defs>
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="4.32" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="78.01344" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="144.337535" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="210.661631" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="276.985726" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m4b00ef7ee0" x="343.309822" y="109.656" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="text_1">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="87.705249" y="38.717611" transform="rotate(-0 87.705249 38.717611)">una sola lectura: no se puede distinguir una plataforma de otra</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="301.828415" y="84.692512" transform="rotate(-0 301.828415 84.692512)">100 × 23 = 2300 medidas: media y desviación</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pee079b41ae">
+   <rect x="4.32" y="4.32" width="390.6" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

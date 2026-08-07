@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estación, punto de acceso y modo combinado · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Estación, punto de acceso y modo combinado</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>Estación</div>
+						<p>
+							Se une a una red existente. Recibe su dirección por DHCP y es
+							alcanzable dentro de esa red, no desde fuera.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>WIFI_STA</code> · el modo de las sesiones 7 y 8.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>Punto de acceso</div>
+						<p>
+							Crea su propia red y reparte direcciones. Los clientes se conectan a
+							él <b>sin que exista ninguna otra red</b>.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>WIFI_AP</code> · máximo de 4 clientes por omisión.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Combinado</div>
+						<p>
+							Ambos a la vez. Permite configurar el dispositivo mientras sigue
+							conectado, pero <b>comparten una sola radio y un solo canal</b>.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>WIFI_AP_STA</code> · el punto de acceso adopta el canal de la
+							red a la que se una.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						En modo combinado <b>el canal no se elige</b>: al asociarse como
+						estación, el punto de acceso propio se mueve al canal de esa red y los
+						clientes ya conectados a él pierden el enlace. Es el fallo
+						característico de este modo, y su síntoma (el móvil se desconecta justo
+						al guardar las credenciales) no señala la causa.
+					</p>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Cómo se usa en un producto</span>
+					<p>
+						Sin credenciales guardadas, el dispositivo arranca como <b>punto de
+						acceso</b> y ofrece el portal de configuración. Con credenciales
+						válidas, arranca como <b>estación</b> y sirve su interfaz dentro de la
+						red del usuario. El modo combinado se reserva para el instante de la
+						transición, y se abandona en cuanto la conexión se confirma.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-inversion-del-rol.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					<span>De cliente a servidor</span>
+				</a>
+				<a class="slide-nav__link" href="04-servidor-sincrono-asincrono.html">
+					<span>Servidor síncrono o asíncrono</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

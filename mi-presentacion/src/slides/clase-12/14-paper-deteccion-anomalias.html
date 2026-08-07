@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Detección de anomalías sin etiquetas en entorno industrial · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Antonini, M.; Pincheira, M.; Vecchio, M.; Antonelli, F.</b> (2023). An Adaptable and Unsupervised TinyML Anomaly Detection System for Extreme Industrial Environments. <i>Sensors</i> 23(4), 2344. <code>doi:10.3390/s23042344</code></p>
+
+					<h2 class="paper__title">Detección de anomalías sin etiquetas en entorno industrial</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Detectar el fallo de un equipo industrial ejecutando el análisis <b>en el propio dispositivo</b>.</li>
+									<li>El enfoque habitual aumenta la complejidad y <b>falla sin conectividad</b>.</li>
+									<li>Resulta inaplicable donde el enlace no se puede garantizar.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Sistema de detección <b>no supervisada</b>: sin conjunto de fallos etiquetados.</li>
+									<li>En un equipo industrial, ese conjunto <b>rara vez existe</b>.</li>
+									<li>Desplegado sobre el hardware para vigilar una <b>bomba</b>.</li>
+									<li>Las métricas recogidas son del <b>sistema de pruebas</b>, no del despliegue.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>La inferencia local hace viable la <b>vigilancia continua</b> donde el enlace no se garantiza.</li>
+									<li>Se sitúa en la línea del <b>mantenimiento según el estado</b>: intervenir solo cuando hace falta.</li>
+									<li>Los autores <b>esperan</b> que las cifras del banco se aproximen a las del despliegue, sin afirmarlo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-vigilancia-continua"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Cálculo propio sobre una jornada con los cortes indicados, no medidas del artículo: si el análisis vive en el servidor, lo vigilado es lo que el enlace deja pasar.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-anomalias-requisitos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Lo que cada enfoque exige antes de poder funcionar. La columna de la derecha es la que hace viable el caso industrial.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-codigo-50-recoleccion-etiquetado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Recolección y etiquetado</span>
+				</a>
+				<a class="slide-nav__link" href="15-codigo-51-inferencia-completa.html">
+					<span>La hora del código · Sistema con inferencia</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

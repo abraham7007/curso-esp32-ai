@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Direccionamiento y confirmación en el bus I²C · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					03 · El bus I²C
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Direccionamiento y confirmación en el bus I²C
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Dos conductores compartidos por todos los dispositivos:
+								<b>SDA</b> (datos, <i>serial data</i>) y <b>SCL</b> (reloj,
+								<i>serial clock</i>). Un <b>maestro</b> (<i>controller</i>)
+								inicia toda transferencia, y cada <b>esclavo</b>
+								(<i>target</i>) queda identificado por una dirección de 7 bits.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Ejemplo
+							</div>
+							<p>
+								Una pantalla en <code>0x3C</code> y un sensor en
+								<code>0x76</code> comparten los mismos dos cables. El maestro
+								emite primero la dirección y solo responde el dispositivo que la
+								reconoce; el resto permanece a la escucha.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								<code>Wire.begin(21, 22);</code> fija SDA y SCL. La velocidad es
+								100 kHz (modo estándar) o 400 kHz (modo rápido) con
+								<code>Wire.setClock(400000);</code>
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="i2c-bus"
+								class="w-full aspect-[3/1]"
+								width="900"
+								height="300"
+								role="img"
+								aria-label="Topología del bus I²C: líneas SDA y SCL compartidas por el maestro y dos esclavos con direcciones 0x3C y 0x76, con dos resistencias de polarización de 4,7 kilohmios hacia 3,3 voltios"
+							></canvas>
+
+							<div class="warn-box mt-3">
+								<svg
+									class="icon icon--lg text-[var(--color-warn)]"
+									aria-hidden="true"
+								><use href="/course-icons.svg#i-alert" /></svg>
+								<p class="m-0 text-sm">
+									<b>Resistencias de polarización.</b> SDA y SCL son de colector
+									abierto: los dispositivos solo pueden llevar la línea a nivel
+									bajo. Sin resistencias a 3,3 V (típicamente 4,7 kΩ) la línea
+									nunca vuelve a alto y el bus no funciona. Muchos módulos
+									comerciales ya las incorporan, lo que produce montajes que
+									funcionan sin que el requisito se haya considerado — y fallan
+									al añadir varios módulos, porque las resistencias quedan en
+									paralelo.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-escenarios-uart.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Escenarios de aplicación del UART</span>
+				</a>
+				<a class="slide-nav__link" href="11-escaner-i2c.html">
+					<span>Direcciones ocupadas del bus</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const canvas = document.getElementById("i2c-bus");
+			const ctx = canvas.getContext("2d");
+
+			const DEVICES = [
+				{ label: "Maestro", sub: "ESP32", cx: 175, master: true },
+				{ label: "Pantalla", sub: "0x3C", cx: 445, master: false },
+				{ label: "Sensor", sub: "0x76", cx: 700, master: false },
+			];
+
+			function cssVar(name) {
+				return getComputedStyle(document.documentElement)
+					.getPropertyValue(name)
+					.trim();
+			}
+
+			function roundRect(x, y, w, h, r) {
+				ctx.beginPath();
+				ctx.moveTo(x + r, y);
+				ctx.arcTo(x + w, y, x + w, y + h, r);
+				ctx.arcTo(x + w, y + h, x, y + h, r);
+				ctx.arcTo(x, y + h, x, y, r);
+				ctx.arcTo(x, y, x + w, y, r);
+				ctx.closePath();
+			}
+
+			function drawBus() {
+				const w = canvas.width;
+				const h = canvas.height;
+				const left = 78;
+				const right = w - 30;
+				const railY = 26;
+				const sdaY = 100;
+				const sclY = 136;
+				const boxTop = 196;
+				const boxH = 66;
+				const boxW = 150;
+
+				ctx.clearRect(0, 0, w, h);
+				ctx.fillStyle = cssVar("--color-surface");
+				ctx.fillRect(0, 0, w, h);
+
+				const accent = cssVar("--color-accent");
+				const navy = cssVar("--color-navy");
+				const border = cssVar("--color-border");
+				const muted = cssVar("--color-text-muted");
+				const text = cssVar("--color-text");
+				const surface2 = cssVar("--color-surface-2");
+
+				// carril de alimentación
+				ctx.strokeStyle = muted;
+				ctx.lineWidth = 1.6;
+				ctx.beginPath();
+				ctx.moveTo(left, railY);
+				ctx.lineTo(right, railY);
+				ctx.stroke();
+
+				ctx.fillStyle = muted;
+				ctx.font = "600 13px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("3,3 V", left - 10, railY + 5);
+
+				// resistencias de polarización, una por línea
+				const pullups = [
+					{ x: 800, y: sdaY, color: accent },
+					{ x: 855, y: sclY, color: navy },
+				];
+				for (const p of pullups) {
+					ctx.strokeStyle = muted;
+					ctx.lineWidth = 1.6;
+					ctx.beginPath();
+					ctx.moveTo(p.x, railY);
+					ctx.lineTo(p.x, p.y);
+					ctx.stroke();
+
+					ctx.fillStyle = surface2;
+					ctx.strokeStyle = muted;
+					roundRect(p.x - 7, 46, 14, 32, 3);
+					ctx.fill();
+					ctx.stroke();
+				}
+				ctx.fillStyle = muted;
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "center";
+				ctx.fillText("4,7 kΩ", 800, 96);
+				ctx.textAlign = "left";
+				ctx.fillText("4,7 kΩ", 812, 132);
+
+				// líneas del bus
+				const lines = [
+					{ y: sdaY, name: "SDA", color: accent },
+					{ y: sclY, name: "SCL", color: navy },
+				];
+				for (const ln of lines) {
+					ctx.strokeStyle = ln.color;
+					ctx.lineWidth = 3;
+					ctx.beginPath();
+					ctx.moveTo(left, ln.y);
+					ctx.lineTo(right, ln.y);
+					ctx.stroke();
+
+					ctx.fillStyle = ln.color;
+					ctx.font = "600 14px system-ui";
+					ctx.textAlign = "right";
+					ctx.fillText(ln.name, left - 10, ln.y + 5);
+				}
+
+				// dispositivos y sus derivaciones a ambas líneas
+				for (const d of DEVICES) {
+					for (const ln of lines) {
+						const sx = ln.name === "SDA" ? d.cx - 26 : d.cx + 26;
+						ctx.strokeStyle = ln.color;
+						ctx.lineWidth = 1.8;
+						ctx.beginPath();
+						ctx.moveTo(sx, ln.y);
+						ctx.lineTo(sx, boxTop);
+						ctx.stroke();
+
+						ctx.fillStyle = ln.color;
+						ctx.beginPath();
+						ctx.arc(sx, ln.y, 4, 0, Math.PI * 2);
+						ctx.fill();
+					}
+
+					ctx.fillStyle = d.master ? cssVar("--color-accent-soft") : surface2;
+					ctx.strokeStyle = d.master ? accent : border;
+					ctx.lineWidth = d.master ? 2 : 1.4;
+					roundRect(d.cx - boxW / 2, boxTop, boxW, boxH, 8);
+					ctx.fill();
+					ctx.stroke();
+
+					ctx.fillStyle = text;
+					ctx.font = "600 15px system-ui";
+					ctx.textAlign = "center";
+					ctx.fillText(d.label, d.cx, boxTop + 27);
+					ctx.fillStyle = d.master ? accent : muted;
+					ctx.font = "600 14px ui-monospace, monospace";
+					ctx.fillText(d.sub, d.cx, boxTop + 49);
+				}
+
+				ctx.fillStyle = muted;
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "left";
+				ctx.fillText(
+					"dos conductores, cualquiera que sea el número de dispositivos",
+					left,
+					h - 10,
+				);
+			}
+
+			drawBus();
+
+			new MutationObserver(drawBus).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

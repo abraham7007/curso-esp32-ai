@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Diagrama de bloques funcionales · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					01 · Arquitectura interna del SoC
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Diagrama de bloques funcionales
+				</h1>
+
+				<div class="layout layout--split" data-animate="fade-up">
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								El SoC se organiza en <b>bloques funcionales</b> que operan en
+								paralelo. La CPU no ejecuta la función de un bloque: la configura
+								y consulta mediante registros mapeados en memoria, en su espacio
+								de direcciones.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p class="text-sm">
+								Sin librerías externas:
+								<code>pinMode()</code>/<code>digitalWrite()</code> para GPIO,
+								<code>analogRead()</code> para ADC, <code>ledcAttach()</code> para
+								PWM, <code>Wire.h</code>/<code>SPI.h</code> para buses (todo en el
+								paquete <code>espressif32</code> de PlatformIO). SRAM libre en
+								vivo: <code>ESP.getFreeHeap()</code>.
+							</p>
+						</div>
+
+						<div class="card">
+							<h3 class="mb-2">Reparto entre núcleos</h3>
+							<p class="text-sm">
+								<b>PRO_CPU (núcleo 0)</b> atiende la pila de WiFi y Bluetooth;
+								<b>APP_CPU (núcleo 1)</b> ejecuta <code>main.cpp</code>. Es el
+								reparto habitual, no una imposición del hardware: la afinidad de
+								cada tarea es configurable.
+							</p>
+						</div>
+					</div>
+
+					<div class="layout__visual">
+						<div class="card">
+							<div
+								class="grid grid-cols-6 gap-3"
+						id="soc-picker"
+						role="img"
+						aria-label="Diagrama de bloques funcionales del ESP32, con siete bloques seleccionables"
+					>
+						<button type="button" class="picker__item col-span-3" data-block="cpu">
+							<b>Procesador · 2 núcleos</b>
+							<small>Xtensa LX6 · 240 MHz</small>
+						</button>
+						<button type="button" class="picker__item col-span-2" data-block="sram">
+							<b>SRAM</b>
+							<small>520 KB · volátil</small>
+						</button>
+						<button type="button" class="picker__item col-span-1" data-block="rom">
+							<b>ROM</b>
+							<small>448 KB</small>
+						</button>
+						<button type="button" class="picker__item col-span-4" data-block="periph">
+							<b>Periféricos</b>
+							<small>GPIO · ADC · DAC · PWM · táctil · buses</small>
+						</button>
+						<button type="button" class="picker__item col-span-2" data-block="rtc">
+							<b>Bloque RTC</b>
+							<small>16 KB + ULP</small>
+						</button>
+						<button type="button" class="picker__item col-span-3" data-block="radio">
+							<b>Radio</b>
+							<small>WiFi · Bluetooth · 2,4 GHz</small>
+						</button>
+						<button type="button" class="picker__item col-span-3" data-block="flash">
+							<b>Memoria Flash</b>
+							<small>4 MB · externa · SPI</small>
+						</button>
+					</div>
+
+						<div class="detail-panel mt-3" id="soc-detail">
+								<p class="text-sm">
+									Cada rectángulo corresponde a un bloque del SoC. Al
+									seleccionarlo se describe su función, su capacidad y el grado
+									de autonomía que tiene respecto de la CPU.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div data-animate="fade-up">
+					<div class="usecases-label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						Operación en paralelo: tres casos
+					</div>
+					<div class="usecases">
+						<div class="usecase">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+							<span>
+								<span class="usecase__name">El PWM no se detiene</span>
+								<span class="usecase__what">
+									Un LED atenuado por el bloque LEDC mantiene su brillo aunque la
+									CPU esté ocupada en un <code>delay()</code> de 4 s: el
+									periférico genera la onda por su cuenta.
+								</span>
+							</span>
+						</div>
+						<div class="usecase">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+							<span>
+								<span class="usecase__name">El RTC vigila dormido</span>
+								<span class="usecase__what">
+									Un registrador con batería apaga los dos núcleos y deja al
+									coprocesador ULP leyendo un sensor cada 10 min, con un consumo
+									mil veces menor.
+								</span>
+							</span>
+						</div>
+						<div class="usecase">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+							<span>
+								<span class="usecase__name">La radio va aparte</span>
+								<span class="usecase__what">
+									Mientras <code>main.cpp</code> corre en el núcleo 1, la pila
+									WiFi retransmite en el núcleo 0 sin que el programa tenga que
+									intervenir.
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-clasificacion-dispositivo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>El ESP32 frente a un microcontrolador</span>
+				</a>
+				<a class="slide-nav__link" href="04-jerarquia-memoria.html">
+					<span>Jerarquía de memoria y persistencia</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			const BLOCKS = {
+				cpu: {
+					icon: "i-cpu",
+					title: "Procesador · 2 núcleos",
+					body: "Dos núcleos Xtensa LX6 independientes, identificados como PRO_CPU (núcleo 0) y APP_CPU (núcleo 1). En una aplicación conectada, PRO_CPU ejecuta habitualmente la pila de comunicaciones y APP_CPU la lógica de la aplicación; la afinidad de cada tarea a un núcleo es configurable, igual que la frecuencia de reloj: 80, 160 o 240 MHz. A 240 MHz cada núcleo ejecuta del orden de cientos de millones de instrucciones simples por segundo; a 160 o 80 MHz ese límite baja en la misma proporción. En la práctica el reloj se reduce por debajo del máximo cuando la carga de trabajo no lo exige, porque el consumo dinámico crece de forma aproximadamente proporcional a la frecuencia.",
+				},
+				sram: {
+					icon: "i-layers",
+					title: "SRAM",
+					body: "Aloja las variables globales, la pila de ejecución (stack) de cada tarea y las reservas dinámicas del heap. Es el recurso más limitado del sistema: sus 520 KB se reparten entre el firmware, los buffers de los periféricos activos y la radio si está inicializada. Su contenido se pierde por completo en cada reinicio.",
+				},
+				rom: {
+					icon: "i-book",
+					title: "ROM",
+					body: "Memoria grabada durante la fabricación del chip, no modificable por el usuario. Contiene el bootloader de primera etapa, que gestiona el protocolo inicial de carga del firmware antes de que se ejecute cualquier código propio del proyecto.",
+				},
+				periph: {
+					icon: "i-plug",
+					title: "Periféricos",
+					body: "Cada periférico incorpora lógica propia, accesible mediante registros mapeados en el espacio de direcciones de la CPU. Una vez configurado, opera sin intervención del procesador: un canal LEDC sostiene su señal PWM y un temporizador continúa su cuenta con independencia del programa en ejecución. El bloque de detección táctil mide la variación de capacidad de un terminal sin componentes externos.",
+				},
+				rtc: {
+					icon: "i-clock",
+					title: "Bloque RTC",
+					body: "Dominio de alimentación que permanece activo aun con el resto del SoC en deep sleep (deep sleep). Conserva 16 KB de memoria propia y dispone de un coprocesador ULP (Ultra Low Power) capaz de adquirir señales de forma autónoma, sin activar los núcleos principales.",
+				},
+				radio: {
+					icon: "i-wave",
+					title: "Radio",
+					body: "Etapa de radiofrecuencia y pila de protocolos para WiFi y Bluetooth en la banda de 2,4 GHz. Su inicialización reserva de inmediato unos 40 KB de SRAM para buffers y produce picos de corriente superiores a 300 mA. Mientras está activa, inhabilita el bloque ADC2.",
+				},
+				flash: {
+					icon: "i-folder",
+					title: "Memoria Flash",
+					body: "Integrado externo al SoC, conectado por interfaz SPI. Almacena el bootloader, la tabla de particiones, el firmware y el sistema de archivos. La ejecución del código ocurre a través de una caché de instrucciones que trae bloques a la memoria bajo demanda.",
+				},
+			};
+
+			const picker = document.getElementById("soc-picker");
+			const detail = document.getElementById("soc-detail");
+
+			function select(key, btn) {
+				for (const el of picker.querySelectorAll(".picker__item")) {
+					el.classList.remove("is-selected");
+				}
+				btn.classList.add("is-selected");
+				const info = BLOCKS[key];
+				detail.innerHTML = `<p><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#${info.icon}"/></svg> <b>${info.title}</b> — ${info.body}</p>`;
+			}
+
+			for (const btn of picker.querySelectorAll("[data-block]")) {
+				btn.addEventListener("click", () => select(btn.dataset.block, btn));
+			}
+		</script>
+	</body>
+</html>

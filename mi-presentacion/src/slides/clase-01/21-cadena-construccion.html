@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Etapas de la cadena de construcción · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					06 · Cadena de construcción y grabado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">
+					Etapas de la cadena de construcción
+				</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>No hay una sola herramienta.</strong> PlatformIO encadena cinco
+					programas distintos, cada uno con su entrada, su salida y su clase
+					propia de error. Identificar la etapa acota dónde buscar la causa.
+				</p>
+
+				<div class="picker" data-stage-picker data-animate="fade-up">
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="0"
+					>
+						main.cpp<small>fuente</small>
+					</button>
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="1"
+					>
+						main.i<small>preprocesador</small>
+					</button>
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="2"
+					>
+						main.s<small>compilador</small>
+					</button>
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="3"
+					>
+						main.o<small>ensamblador</small>
+					</button>
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="4"
+					>
+						firmware.elf<small>enlazador</small>
+					</button>
+					<button
+						class="picker__item appearance-none font-sans"
+						type="button"
+						data-index="5"
+					>
+						firmware.bin<small>esptool</small>
+					</button>
+				</div>
+
+				<div class="controls" data-animate="fade-up">
+					<button class="btn btn--secondary" type="button" data-action="reset">
+						Volver al inicio
+					</button>
+					<button class="btn btn--primary" type="button" data-action="next">
+						Siguiente etapa →
+					</button>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="layout__text">
+						<div class="detail-panel">
+							<div class="blockdiagram">
+								<div class="bd-node bd-node--ghost">
+									<span class="bd-node__title">Entra</span>
+									<span class="bd-node__body" data-stage-in></span>
+								</div>
+								<span class="bd-arrow" aria-hidden="true">→</span>
+								<div class="bd-node bd-node--accent">
+									<span class="bd-node__title" data-stage-tool></span>
+									<span class="bd-node__body" data-stage-file></span>
+								</div>
+								<span class="bd-arrow" aria-hidden="true">→</span>
+								<div class="bd-node bd-node--ghost">
+									<span class="bd-node__title">Sale</span>
+									<span class="bd-node__body" data-stage-out></span>
+								</div>
+							</div>
+
+							<h3 class="mt-3 mb-1">Qué hace por dentro</h3>
+							<p class="text-sm" data-stage-desc></p>
+
+							<h3 class="mt-3 mb-1">La orden que se ejecuta</h3>
+							<div class="term" data-stage-cmd></div>
+						</div>
+
+						<div class="warn-box mt-3">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="text-sm">
+								<b>Error típico de esta etapa.</b>
+								<span data-stage-error></span>
+							</p>
+						</div>
+					</div>
+
+					<div class="layout__visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="cadena-tamanos"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								<span>
+									<b>El tamaño no crece de forma monótona.</b> El preprocesado
+									infla el archivo al pegar dentro las cabeceras completas; las
+									etapas siguientes lo reducen. El ELF vuelve a crecer porque
+									arrastra librerías e información de depuración, que
+									<b>no</b> se graban en la placa: por eso el .bin final es
+									mucho menor.
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-herramientas-curso.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cadena de herramientas</span>
+				</a>
+				<a class="slide-nav__link" href="22-informe-memoria.html">
+					<span>Informe de memoria</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			/* Los tamaños son los mismos que alimentan la figura generada
+			   (tools/figures/render.py, constante CADENA): el panel y el gráfico
+			   no pueden contradecirse porque salen del mismo juego de datos. */
+			const stages = [
+				{
+					file: "main.cpp",
+					tool: "archivo fuente",
+					entra: "lo que escribe la persona",
+					sale: "main.cpp",
+					cmd: "// punto de partida: aún no se ha ejecutado ninguna herramienta",
+					desc: "Entrada de la cadena. Es texto: para el procesador no significa nada todavía. Vive en src/ y es lo único de todo este recorrido que se guarda en el repositorio.",
+					error:
+						"Ninguno propio. Un archivo fuera de src/ simplemente no entra en la construcción, y el síntoma aparece más tarde como símbolo sin definir.",
+				},
+				{
+					file: "main.i",
+					tool: "preprocesador",
+					entra: "main.cpp",
+					sale: "main.i",
+					cmd: "xtensa-esp32-elf-g++ -E main.cpp -o main.i",
+					desc: "Trabaja sobre el texto, sin entender C++. Sustituye cada #include por el contenido íntegro del archivo de cabecera, expande las macros y elimina los comentarios y las ramas #ifdef que no se cumplen. Por eso 2 KB pasan a 820 KB: Arduino.h arrastra decenas de cabeceras del SDK.",
+					error:
+						"«No such file or directory» al no encontrar una cabecera. Es un problema de rutas de búsqueda o de librería no declarada en platformio.ini, no de código.",
+				},
+				{
+					file: "main.s",
+					tool: "compilador",
+					entra: "main.i",
+					sale: "main.s",
+					cmd: "xtensa-esp32-elf-g++ -S main.i -o main.s",
+					desc: "Aquí sí se analiza el lenguaje: tipos, ámbitos, plantillas. Traduce a instrucciones de la arquitectura Xtensa y aplica las optimizaciones del nivel elegido. El archivo se desinfla porque desaparece todo lo que era solo declaración.",
+					error:
+						"Errores de sintaxis y de tipos, con archivo y número de línea exactos. Es la única etapa que señala una línea concreta del código escrito.",
+				},
+				{
+					file: "main.o",
+					tool: "ensamblador",
+					entra: "main.s",
+					sale: "main.o",
+					cmd: "xtensa-esp32-elf-as main.s -o main.o",
+					desc: "Traduce cada instrucción de texto a su código máquina binario. El resultado es un objeto reubicable: las llamadas a funciones definidas en otros archivos quedan como huecos anotados en una tabla de símbolos, pendientes de resolver.",
+					error:
+						"Casi nunca falla, porque su entrada la generó el compilador. Si falla, suele ser por ensamblador escrito a mano dentro de un bloque asm.",
+				},
+				{
+					file: "firmware.elf",
+					tool: "enlazador",
+					entra: "main.o + librerías",
+					sale: "firmware.elf",
+					cmd: "xtensa-esp32-elf-g++ main.o libs.a -T esp32.ld -o firmware.elf",
+					desc: "Junta todos los objetos y librerías, rellena los huecos de la tabla de símbolos y asigna a cada función y variable su dirección definitiva, siguiendo el guion de enlazado (.ld) que describe el mapa de memoria del ESP32. Crece a 1150 KB porque incorpora las librerías y la información de depuración.",
+					error:
+						"«undefined reference to ...». No indica una línea: indica un símbolo que nadie define. Falta un archivo, una librería o la implementación de algo declarado.",
+				},
+				{
+					file: "firmware.bin",
+					tool: "esptool",
+					entra: "firmware.elf",
+					sale: "firmware.bin",
+					cmd: "esptool.py --chip esp32 elf2image firmware.elf",
+					desc: "Extrae del ELF solo las secciones que deben residir en Flash, descarta la información de depuración y antepone la cabecera que el bootloader del ESP32 espera encontrar. De 1150 KB quedan 262 KB: eso es lo que se transfiere realmente a la placa.",
+					error:
+						"«Image too large» si el binario no cabe en la partición declarada. Se corrige en la tabla de particiones, no en el código.",
+				},
+			];
+
+			const items = document.querySelectorAll("[data-stage-picker] .picker__item");
+			const campos = {
+				file: document.querySelector("[data-stage-file]"),
+				tool: document.querySelector("[data-stage-tool]"),
+				entra: document.querySelector("[data-stage-in]"),
+				sale: document.querySelector("[data-stage-out]"),
+				cmd: document.querySelector("[data-stage-cmd]"),
+				desc: document.querySelector("[data-stage-desc]"),
+				error: document.querySelector("[data-stage-error]"),
+			};
+			const nextBtn = document.querySelector('[data-action="next"]');
+			const resetBtn = document.querySelector('[data-action="reset"]');
+
+			let current = 0;
+
+			function render() {
+				const stage = stages[current];
+				for (const item of items) {
+					item.classList.toggle(
+						"is-selected",
+						Number(item.dataset.index) === current,
+					);
+				}
+				campos.file.textContent = stage.file;
+				campos.tool.textContent = stage.tool;
+				campos.entra.textContent = stage.entra;
+				campos.sale.textContent = stage.sale;
+				campos.cmd.textContent = stage.cmd;
+				campos.desc.textContent = stage.desc;
+				campos.error.textContent = ` ${stage.error}`;
+				nextBtn.disabled = current === stages.length - 1;
+			}
+
+			function goTo(index) {
+				current = Math.min(Math.max(index, 0), stages.length - 1);
+				render();
+			}
+
+			for (const item of items) {
+				item.addEventListener("click", () => goTo(Number(item.dataset.index)));
+			}
+
+			nextBtn.addEventListener("click", () => goTo(current + 1));
+			resetBtn.addEventListener("click", () => goTo(0));
+
+			render();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

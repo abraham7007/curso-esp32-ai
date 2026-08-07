@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tres formas de mantener la interfaz al día y su costo · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Tres formas de mantener la interfaz al día y su costo</h1>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Mecanismo</th><th>Quién toma la iniciativa</th><th>Costo en el dispositivo</th><th>Cuándo se elige</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>Polling</b></td>
+								<td>El navegador, cada intervalo</td>
+								<td>Una conexión nueva por consulta</td>
+								<td>Magnitudes que cambian despacio; es lo más simple</td>
+							</tr>
+							<tr>
+								<td><b>Server-Sent Events (SSE)</b></td>
+								<td>El dispositivo, cuando hay novedad</td>
+								<td>Una conexión mantenida por visitante</td>
+								<td>Telemetría en un solo sentido</td>
+							</tr>
+							<tr>
+								<td><b>WebSocket</b></td>
+								<td>Ambos, en cualquier momento</td>
+								<td>Una conexión mantenida y memoria por marco</td>
+								<td>Cuando el panel también manda órdenes</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Criterio</span>
+					<p>
+						El polling (consulta periódica) es la única que <b>no mantiene conexión abierta</b>,
+						y por eso es la que escala a más visitantes con el límite de sockets de
+						la lámina anterior. Las otras dos consumen un socket por visitante
+						mientras el panel esté abierto: con cuatro pestañas olvidadas, el
+						dispositivo se queda sin sockets sin que nadie esté mirando.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Con WebSocket hay que <b>cerrar las conexiones muertas</b>: un navegador
+						que se cierra sin despedirse deja el socket ocupado hasta que vence el
+						plazo de la pila. Es el mismo problema que resolvía el mensaje de última
+						voluntad en la sesión 8, aquí sin nadie que lo publique.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-interfaz-fuera-del-binario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					<span>La interfaz fuera del binario</span>
+				</a>
+				<a class="slide-nav__link" href="09-api-propia-y-mdns.html">
+					<span>API propia y nombre local</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

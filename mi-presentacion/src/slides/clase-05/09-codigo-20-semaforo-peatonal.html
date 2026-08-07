@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 20 · Semáforo con paso peatonal · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 20</span>
+					</div>
+
+					<h2 class="code-hour__title">Semáforo con paso peatonal controlado por una máquina de estados</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Un cruce con paso peatonal resuelto con tres estados. El pulsador no acorta el verde: una guarda de tiempo mínimo decide si la solicitud se atiende ahora o queda pendiente hasta que se cumpla el plazo. Es la tabla de transiciones de la lámina anterior llevada a firmware, sin una sola pausa en el bucle.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b><code>enum class</code></b> declara un tipo con un conjunto cerrado de valores: el compilador rechaza cualquier otro, y ahí se acaban los estados inventados sobre la marcha. <b><code>millis()</code></b> devuelve los milisegundos transcurridos desde el arranque; guardando el instante de entrada al estado y restándolo, el tiempo pasa a ser una condición más y el bucle nunca se detiene. Una <b>guarda</b> es justamente esa condición: la transición solo ocurre si se cumple, y si no, el evento espera o se descarta.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Declara un <code>enum class Estado</code> con VERDE_VEHICULOS, AMBAR y ROJO_CON_PASO, y una sola variable de ese tipo. El bucle lee el pulsador, calcula el evento y resuelve la transición en un <code>switch</code>. Prohibido <code>delay()</code> y prohibido añadir banderas salvo una para la solicitud peatonal. El verde dura un mínimo de 8000 ms aunque se pulse antes; el ámbar, 3000 ms; el paso, 10000 ms. Imprime a 115200 baudios una línea [ESTADO] por transición y una [EVENTO] por pulsación, con la guarda evaluada.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los cinco LED en los GPIO indicados y el pulsador entre el GPIO 4 y GND.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una vuelta del bucle: leer entradas, calcular el evento, evaluar la guarda, transitar o no. Y el <b>diagrama de estados</b> con los tres estados, el inicial marcado y cada flecha rotulada <code>evento [guarda] / acción</code>.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> controla cinco LED: los tres de vehículos en los <b>GPIO 25, 26 y 27</b> y los dos de peatones en los <b>GPIO 32 y 33</b>, cada uno con su resistencia de 220 Ω a masa. El pulsador de solicitud va entre el <b>GPIO 4</b> y masa, declarado <code>INPUT_PULLUP</code>.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="yellow"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-pushbutton color="black"></wokwi-pushbutton></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[SETUP] verde_min=8000  ambar=3000  paso=10000 ms
+[EVENTO] t=3410   PULSADOR  guarda t&gt;=8000 -&gt; pendiente
+[ESTADO] t=8001   VERDE_VEHICULOS -&gt; AMBAR
+[ESTADO] t=11001  AMBAR -&gt; ROJO_CON_PASO
+[EVENTO] t=13750  PULSADOR en ROJO_CON_PASO -&gt; ignorar
+[ESTADO] t=21001  ROJO_CON_PASO -&gt; VERDE  solicitud borrada</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Comparar las dos líneas <code>[EVENTO]</code>. La de los 3410 ms encuentra la guarda sin cumplir y la solicitud queda <b>pendiente</b>; la de los 13 750 ms llega con el paso ya concedido y se <b>ignora</b>. Entre aplazar y descartar está la diferencia que la tabla declara. Comprobar además que entre dos líneas <code>[ESTADO]</code> consecutivas nunca transcurre menos de lo que fija <code>[SETUP]</code>: si transcurriera, la guarda no se está evaluando y el pulsador estaría cortando el verde.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-tabla-transiciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>Tabla de transiciones</span>
+				</a>
+				<a class="slide-nav__link" href="10-rutas-excepcion.html">
+					<span>Rutas de excepción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

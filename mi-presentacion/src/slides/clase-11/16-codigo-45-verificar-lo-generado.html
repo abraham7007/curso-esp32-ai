@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 45 · Verificación de un driver generado · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 45</span>
+					</div>
+
+					<h2 class="code-hour__title">Verificación de un driver generado contra los cuatro modos de fallo</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Pedir a un asistente un driver para un sensor y <b>someterlo a la lista de comprobación</b> de la lámina anterior, midiendo sobre el hardware lo que tenga requisito temporal. El entregable no es el driver: es el informe de revisión.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Los <b>cuatro modos de fallo</b> del código generado son funciones inexistentes, cumplimiento temporal aparente, dependencias desproporcionadas y credenciales incrustadas. Solo el primero lo detecta el compilador; el segundo se mide, el tercero se ve en el tamaño del binario y el cuarto solo leyendo.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Pide a un asistente un driver para el sensor con la interfaz común de la sesión 4: un método de inicio y otro de lectura que devuelva el valor con indicación de validez. Después <b>revísalo</b> contra los cuatro modos de fallo y documenta cada punto en la cabecera. Mide con <code>esp_timer_get_time()</code> la lectura y la duración de una iteración con y sin el driver. Corrige lo que encuentres dejando constancia de qué cambiaste. Emite a 115200 baudios el informe.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el sensor en el GPIO 15 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la revisión: los cuatro puntos en orden, con lo que se comprueba en cada uno y qué hacer si aparece un hallazgo. Y la <b>lista de comprobación</b> con el resultado de cada punto y, para los hallazgos, qué se cambió.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un sensor de temperatura y humedad en el <b>GPIO 15</b> con su resistencia de polarización, y enciende un LED de actividad en el <b>GPIO 25</b> con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-dht22></wokwi-dht22></span>
+										<span class="hw-set__item"><wokwi-led color="orange"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[REV] 1. funciones inexistentes ... 0 hallazgos (compila)
+[REV] 2. requisito temporal ....... 1: delay(250) bloquea el bucle
+[REV] 3. dependencias ............. 1: 38 kB para formatear texto
+[REV] 4. credenciales ............. 0 hallazgos
+[MEDIDA] bucle sin driver=0.4 ms con driver=250.6 ms</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea es la prueba: el bucle pasa de <b>0,4 a 250,6 ms</b> al incorporar el driver. El punto 1 no encontró nada, compila, y aun así el proyecto ya no cumple su periodo. Los puntos 2, 3 y 4 no los detecta ninguna herramienta: hay que medir, mirar el binario y leer.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-modos-de-fallo-generado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Modos de fallo del código generado</span>
+				</a>
+				<a class="slide-nav__link" href="17-codigo-46-agente-acotado.html">
+					<span>La hora del código · Agente acotado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/dht22-element.js";
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

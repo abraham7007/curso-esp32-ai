@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Costo de interpretar según el número de reglas · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Compilado frente a interpretado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Costo de interpretar según el número de reglas</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué se compara
+							</div>
+							<p>
+								El mismo conjunto de condiciones evaluado con el valor compilado
+								(<b>0,4 µs</b> por condición) y con el intérprete de la lámina
+								anterior, <b>41 µs</b>. Ambas cifras son las que mide el ejemplo 44.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Con pocas reglas y periodo holgado, la diferencia no se nota y la
+								flexibilidad sale gratis. Al acortar el periodo o multiplicar las
+								reglas, la versión interpretada agota el presupuesto del bucle
+								mientras la compilada sigue holgada. El punto en que eso ocurre es lo
+								que decide, y depende del caso concreto.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="int-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Ocupación del periodo por la evaluación de las reglas, comparada entre la versión compilada y la interpretada, frente al presupuesto disponible"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="int-reglas" class="text-sm font-medium">Número de reglas</label>
+								<input type="range" id="int-reglas" min="1" max="120" step="1" value="20" />
+								<span class="readout" id="int-reglas-lec">20</span>
+							</div>
+							<div class="controls mt-2">
+								<label for="int-periodo" class="text-sm font-medium">Periodo del bucle</label>
+								<input type="range" id="int-periodo" min="1" max="50" step="1" value="10" />
+								<span class="readout" id="int-periodo-lec">10 ms</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item metric__item--ok">
+									<span class="text-xs text-[var(--color-text-muted)]">Compilado</span>
+									<span class="readout" id="int-comp">0,1 %</span>
+								</div>
+								<div class="metric__item" id="int-item-interp">
+									<span class="text-xs text-[var(--color-text-muted)]">Interpretado</span>
+									<span class="readout" id="int-interp">8,2 %</span>
+								</div>
+								<div class="metric__item" id="int-item-res">
+									<span class="text-xs text-[var(--color-text-muted)]">Resultado</span>
+									<span class="readout" id="int-res">cabe</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-codigo-44-reglas-interpretadas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Reglas interpretadas</span>
+				</a>
+				<a class="slide-nav__link" href="07-paper-maquina-virtual-embebida.html">
+					<span>Artículo · Máquina virtual embebida</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Cifras medidas en el ejemplo 44 sobre el módulo empleado.
+			const US_COMPILADO = 0.4;
+			const US_INTERPRETADO = 41.0;
+			// Fracción del periodo que puede ocupar la evaluación sin comprometer
+			// el resto del bucle: el presupuesto de la sesión 4.
+			const PRESUPUESTO = 0.5;
+
+			const lienzo = document.getElementById("int-canvas");
+			const ctx = lienzo.getContext("2d");
+			const dReglas = document.getElementById("int-reglas");
+			const dPeriodo = document.getElementById("int-periodo");
+			const lecReglas = document.getElementById("int-reglas-lec");
+			const lecPeriodo = document.getElementById("int-periodo-lec");
+			const salComp = document.getElementById("int-comp");
+			const salInterp = document.getElementById("int-interp");
+			const salRes = document.getElementById("int-res");
+			const itInterp = document.getElementById("int-item-interp");
+			const itRes = document.getElementById("int-item-res");
+
+			function variable(n) {
+				return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+			}
+			function coma(n, d) {
+				return n.toFixed(d).replace(".", ",");
+			}
+
+			function dibujar(reglas, periodoMs) {
+				const msComp = (reglas * US_COMPILADO) / 1000;
+				const msInterp = (reglas * US_INTERPRETADO) / 1000;
+
+				const w = lienzo.width;
+				ctx.clearRect(0, 0, w, lienzo.height);
+				const izq = 158;
+				const ancho = w - izq - 40;
+				const atenuado = variable("--color-text-muted");
+				const texto = variable("--color-text");
+				const borde = variable("--color-border");
+				const ok = variable("--color-ok");
+				const acento = variable("--color-accent");
+
+				const filas = [
+					{ rotulo: "Compilado", ms: msComp, color: ok, y: 96 },
+					{ rotulo: "Interpretado", ms: msInterp, color: acento, y: 200 },
+				];
+
+				for (const f of filas) {
+					// El carril representa el periodo completo del bucle.
+					ctx.fillStyle = variable("--color-surface");
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = 1.2;
+					ctx.beginPath();
+					ctx.roundRect(izq, f.y, ancho, 52, 6);
+					ctx.fill();
+					ctx.stroke();
+
+					const frac = Math.min(1, f.ms / periodoMs);
+					ctx.fillStyle = f.color;
+					ctx.beginPath();
+					ctx.roundRect(izq, f.y, Math.max(3, ancho * frac), 52, 6);
+					ctx.fill();
+
+					ctx.fillStyle = texto;
+					ctx.font = "600 13px system-ui";
+					ctx.textAlign = "right";
+					ctx.fillText(f.rotulo, izq - 14, f.y + 24);
+					ctx.fillStyle = atenuado;
+					ctx.font = "11px ui-monospace, monospace";
+					ctx.fillText(`${coma(f.ms, 2)} ms`, izq - 14, f.y + 40);
+
+					if (f.ms > periodoMs) {
+						ctx.fillStyle = acento;
+						ctx.font = "600 12px system-ui";
+						ctx.textAlign = "left";
+						ctx.fillText("no cabe en el periodo", izq + ancho + 8, f.y + 30);
+					}
+				}
+
+				// Línea del presupuesto disponible
+				const xPres = izq + ancho * PRESUPUESTO;
+				ctx.strokeStyle = variable("--color-navy");
+				ctx.lineWidth = 1.6;
+				ctx.setLineDash([5, 4]);
+				ctx.beginPath();
+				ctx.moveTo(xPres, 76);
+				ctx.lineTo(xPres, 272);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = variable("--color-navy");
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "center";
+				ctx.fillText("presupuesto", xPres, 66);
+
+				ctx.fillStyle = atenuado;
+				ctx.textAlign = "left";
+				ctx.fillText(
+					`${reglas} reglas evaluadas en cada iteración de ${periodoMs} ms`,
+					izq,
+					40,
+				);
+				ctx.fillText("el carril completo es un periodo", izq, 300);
+
+				return { msComp, msInterp };
+			}
+
+			function actualizar() {
+				const reglas = Number(dReglas.value);
+				const periodo = Number(dPeriodo.value);
+				lecReglas.textContent = String(reglas);
+				lecPeriodo.textContent = `${periodo} ms`;
+
+				const { msComp, msInterp } = dibujar(reglas, periodo);
+				const fComp = msComp / periodo;
+				const fInterp = msInterp / periodo;
+				salComp.textContent = `${coma(fComp * 100, 1)} %`;
+				salInterp.textContent = `${coma(fInterp * 100, 1)} %`;
+
+				const cabe = fInterp <= PRESUPUESTO;
+				salRes.textContent = cabe ? "cabe" : "excede el presupuesto";
+				itInterp.classList.toggle("metric__item--ok", cabe);
+				itInterp.classList.toggle("metric__item--bad", !cabe);
+				itRes.classList.toggle("metric__item--ok", cabe);
+				itRes.classList.toggle("metric__item--bad", !cabe);
+			}
+
+			for (const el of [dReglas, dPeriodo]) el.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

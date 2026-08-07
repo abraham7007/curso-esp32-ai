@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Variabilidad del costo del planificador según la carga de tareas · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY-NC-ND 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Grosu, R.; Sifakis, J.; Tripakis, S.</b> (2021). Measurement-based timing analysis of the FreeRTOS scheduler overhead. <i>Journal of Systems Architecture</i>. <code>doi:10.1016/j.sysarc.2021.102132</code></p>
+
+					<h2 class="paper__title">Variabilidad del costo del planificador según la carga de tareas</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Cuantificar el tiempo que consume el <b>propio sistema operativo</b>, al margen de la aplicación.</li>
+									<li>Dos fuentes: la función de <b>tick</b> y la conmutación de contexto.</li>
+									<li>Escenario de <b>diez tareas periódicas</b>, provocando el instante crítico a propósito.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Tick sin tareas que desbloquear: <b>1,5 µs</b>. Es el valor más frecuente.</li>
+									<li>Cada tarea que entra en la lista de preparadas añade <b>3,7 µs</b>.</li>
+									<li>Peor caso observado con las diez coincidiendo: <b>60,75 µs</b>.</li>
+									<li>Cuarenta veces el valor habitual, en el mismo sistema y sin cambiar nada.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>El costo del tick <b>no es constante</b>: depende de cuántas tareas se desbloquean.</li>
+									<li>Suponer el peor caso en todos los ticks introduce un pesimismo que su modelo reduce.</li>
+									<li>El valor que suele darse por bueno es el más frecuente, no el que decide el plazo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-costo-tick"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia con las cifras publicadas. El modelo lineal y el peor caso medido en el instante crítico.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-tick-pesimismo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>El pesimismo que su modelo reduce: suponer el peor caso en cada tick reserva cuarenta veces lo que cuesta en el caso más frecuente.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-codigo-25-afinidad-nucleos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Core affinity</span>
+				</a>
+				<a class="slide-nav__link" href="15-condicion-carrera.html">
+					<span>Condición de carrera</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

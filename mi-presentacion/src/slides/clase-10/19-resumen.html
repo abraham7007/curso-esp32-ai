@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 10 · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>Memoria y tiempo</div>
+						<p>
+							La tabla de particiones se decide antes de empezar: añadir la segunda
+							aplicación después borra todo lo guardado en cada unidad desplegada.
+						</p>
+						<p>
+							La Flash tiene ciclos contados. Se acumula en memoria y se vuelca por
+							bloques, con la vida útil calculada a partir del ritmo real de
+							escritura.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Robustez y despliegue</div>
+						<p>
+							El reset reason (causa del último reinicio) se registra siempre. Un contador de
+							arranques fallidos permite escalar la respuesta en vez de repetir el
+							mismo fallo.
+						</p>
+						<p>
+							La versión nueva se confirma por <b>haber publicado</b>, no por haber
+							arrancado. Sin esa condición, la reversión no llega a dispararse.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a las sesiones siguientes</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						<span>
+							<span class="usecase__name">Actualizar el binario frente a actualizar el comportamiento</span>
+							<span class="usecase__what">
+								La sesión 11 compara esta operación con cambiar lo que el dispositivo
+								hace sin tocar el firmware.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+						<span>
+							<span class="usecase__name">Memoria y consumo como restricción</span>
+							<span class="usecase__what">
+								La sesión 12 parte de estas dos magnitudes para decidir si un modelo
+								cabe en el dispositivo.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+						<span>
+							<span class="usecase__name">Despliegue y versionado</span>
+							<span class="usecase__what">
+								El mecanismo de actualización de esta sesión es el que distribuye el
+								modelo en la sesión 12.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="20-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

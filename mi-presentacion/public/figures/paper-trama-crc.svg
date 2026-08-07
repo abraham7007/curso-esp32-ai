@@ -1,0 +1,159 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 410.4 143.841929" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 143.841929 
+L 410.4 143.841929 
+L 410.4 0 
+L 0 0 
+L 0 143.841929 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 15.965217 81.148975 
+L 45.078261 81.148975 
+L 45.078261 51.104071 
+L 15.965217 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-muted); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 45.078261 81.148975 
+L 74.191304 81.148975 
+L 74.191304 51.104071 
+L 45.078261 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-navy); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 74.191304 81.148975 
+L 103.304348 81.148975 
+L 103.304348 51.104071 
+L 74.191304 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-navy); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 103.304348 81.148975 
+L 307.095652 81.148975 
+L 307.095652 51.104071 
+L 103.304348 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 307.095652 81.148975 
+L 365.321739 81.148975 
+L 365.321739 51.104071 
+L 307.095652 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-accent); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 365.321739 81.148975 
+L 394.434783 81.148975 
+L 394.434783 51.104071 
+L 365.321739 51.104071 
+z
+" clip-path="url(#pf4ad1c5725)" style="fill: var(--fig-muted); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 30.521739 42.227367 
+Q 30.521739 45.236179 30.521739 48.244991 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(13.457702 37.080513) rotate(-38)">delimitador</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="30.521739" y="88.016381" transform="rotate(-0 30.521739 88.016381)">1 B</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 59.634783 42.229069 
+Q 59.634783 45.237242 59.634783 48.245416 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(45.891595 37.080513) rotate(-38)">dirección</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="59.634783" y="88.016381" transform="rotate(-0 59.634783 88.016381)">1 B</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 88.747826 42.227649 
+Q 88.747826 45.236355 88.747826 48.245061 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(78.325488 37.080513) rotate(-38)">control</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="88.747826" y="88.016381" transform="rotate(-0 88.747826 88.016381)">1 B</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="205.2" y="68.466523" transform="rotate(-0 205.2 68.466523)">carga útil</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="205.2" y="88.016381" transform="rotate(-0 205.2 88.016381)">7 B</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-paper); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="336.208696" y="68.494023" transform="rotate(-0 336.208696 68.494023)">comprobación</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="336.208696" y="88.016381" transform="rotate(-0 336.208696 88.016381)">2 B</text>
+   </g>
+   <g id="patch_11">
+    <path d="M 379.878261 42.227367 
+Q 379.878261 45.236179 379.878261 48.244991 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-ink); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(362.814224 37.080513) rotate(-38)">delimitador</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-muted); font: 7px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="379.878261" y="88.016381" transform="rotate(-0 379.878261 88.016381)">1 B</text>
+   </g>
+   <g id="patch_12">
+    <path d="M 304.201747 97.459065 
+Q 205.199428 97.459065 106.19711 97.459065 
+" style="fill: none; stroke: var(--fig-muted); stroke-width: 0.8; stroke-linecap: round"/>
+    <path d="M 300.601747 95.659065 
+L 304.201747 97.459065 
+L 300.601747 99.259065 
+" style="fill: none; stroke: var(--fig-muted); stroke-width: 0.8; stroke-linecap: round"/>
+    <path d="M 109.79711 99.259065 
+L 106.19711 97.459065 
+L 109.79711 95.659065 
+" style="fill: none; stroke: var(--fig-muted); stroke-width: 0.8; stroke-linecap: round"/>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="205.2" y="106.043323" transform="rotate(-0 205.2 106.043323)">el campo de comprobación se calcula sobre estos bytes</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="15.965217" y="118.91971" transform="rotate(-0 15.965217 118.91971)">emisor</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="91.65913" y="118.91971" transform="rotate(-0 91.65913 118.91971)">T=23.4C  →  FCS = 0x7ADD</text>
+   </g>
+   <g id="text_16">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="15.965217" y="134.371375" transform="rotate(-0 15.965217 134.371375)">receptor</text>
+   </g>
+   <g id="text_17">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="91.65913" y="134.371375" transform="rotate(-0 91.65913 134.371375)">un bit alterado  →  FCS = 0xE508</text>
+   </g>
+   <g id="text_18">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="295.450435" y="126.645542" transform="rotate(-0 295.450435 126.645542)">≠  trama descartada</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf4ad1c5725">
+   <rect x="4.32" y="6.465929" width="401.76" height="133.056"/>
+  </clipPath>
+ </defs>
+</svg>

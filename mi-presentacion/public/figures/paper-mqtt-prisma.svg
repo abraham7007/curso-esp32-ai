@@ -1,0 +1,60 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 402.179087 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 402.179087 113.976 
+L 402.179087 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 7.259087 109.656 
+L 397.859087 109.656 
+L 397.859087 4.32 
+L 7.259087 4.32 
+L 7.259087 109.656 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 7.259087 40.377323 
+L 256.642163 40.377323 
+L 256.642163 24.982062 
+L 7.259087 24.982062 
+z
+" clip-path="url(#p53c6e20db4)" style="fill: var(--fig-muted); opacity: 0.55"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 7.259087 80.891169 
+L 20.779856 80.891169 
+L 20.779856 65.495908 
+L 7.259087 65.495908 
+z
+" clip-path="url(#p53c6e20db4)" style="fill: var(--fig-ok)"/>
+   </g>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+   <g id="text_1">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="261.149087" y="35.01852" transform="rotate(-0 261.149087 35.01852)">166 registros iniciales</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="25.286779" y="75.561585" transform="rotate(-0 25.286779 75.561585)">9 con medidas propias sobre ESP32</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="131.950625" y="98.312123" transform="rotate(-0 131.950625 98.312123)">el 95 % de lo publicado no aporta medidas comparables</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p53c6e20db4">
+   <rect x="7.259087" y="4.32" width="390.6" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

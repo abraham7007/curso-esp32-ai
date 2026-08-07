@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Costo y requisitos de HTTPS en un microcontrolador · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Costo y requisitos de HTTPS en un microcontrolador</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Certificado raíz</div>
+						<p>
+							El dispositivo comprueba que el certificado del servidor procede de
+							una autoridad en la que confía. Necesita llevar ese certificado raíz
+							incorporado: no hay almacén del sistema del que tomarlo.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Hora válida</div>
+						<p>
+							Todo certificado tiene fecha de inicio y de caducidad. Un ESP32 que
+							arranca sin sincronizar la hora cree estar en 1970 y <b>rechaza todo
+							certificado válido</b>.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Memoria</div>
+						<p>
+							La negociación reserva memoria para las claves y las memorias
+							intermedias de cifrado. Es la causa de que añadir HTTPS a un proyecto
+							en marcha produzca fallos aparentemente ajenos.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								<code>client.setInsecure()</code> deshabilita la validación de la
+								cadena de confianza. La conexión sigue cifrada, pero el dispositivo
+								deja de comprobar <b>con quién</b> habla: cualquier equipo
+								interpuesto puede presentarse como el servidor legítimo. Es
+								admisible en una prueba de laboratorio y nunca en un producto.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="term">[TLS] sin sincronizar la hora: fecha del sistema = 1970-01-01
+[TLS] error -0x2700 certificado no valido todavia
+[NTP] hora sincronizada: 2026-07-28 14:22:05 UTC
+[TLS] negociacion completada en 1842 ms
+[MEM] libre antes=214512  durante negociacion=163208  despues=198744</div>
+
+						<p class="figure__caption">
+							La hora se sincroniza <b>antes</b> del primer intento de conexión
+							segura. El error de certificado no válido todavía es el síntoma más
+							frecuente de haber invertido ese orden.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-autenticacion-credenciales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					<span>Autenticación y credenciales</span>
+				</a>
+				<a class="slide-nav__link" href="17-codigo-30-https-con-hora.html">
+					<span>La hora del código · Conexión segura</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

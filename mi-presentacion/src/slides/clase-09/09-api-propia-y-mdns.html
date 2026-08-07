@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La API del dispositivo y su nombre en la red local · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La API del dispositivo y su nombre en la red local</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								La API es parte del producto
+							</div>
+							<p>
+								Los puntos de acceso de estado y de configuración no sirven solo al
+								panel propio: los consume cualquier aplicación externa, un panel de
+								terceros o un agente. Diseñarlos como interfaz pública, y no como
+								detalle interno, es lo que hace integrable el dispositivo.
+							</p>
+						</div>
+
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+								Resolución por nombre local
+							</div>
+							<p>
+								La dirección la asigna la red y cambia. <b>mDNS</b> publica un
+								nombre, <code>esp32-a4cf12.local</code>, que se resuelve dentro de
+								la red local sin ningún servidor de nombres.
+							</p>
+							<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+								<code>MDNS.begin(nombre)</code> y
+								<code>MDNS.addService("http", "tcp", 80)</code>.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Punto de acceso</th><th>Qué hace</th></tr></thead>
+								<tbody>
+									<tr><td><code>GET /api/info</code></td><td>Modelo, número de serie, versión de firmware</td></tr>
+									<tr><td><code>GET /api/estado</code></td><td>Últimas medidas con su timestamp</td></tr>
+									<tr><td><code>GET /api/config</code></td><td>Configuración vigente, sin credenciales</td></tr>
+									<tr><td><code>POST /api/config</code></td><td>Modifica parámetros; responde con lo que quedó</td></tr>
+									<tr><td><code>POST /api/reset</code></td><td>Restablece valores de fábrica; exige confirmación</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Dos reglas que evitan rehacerla</span>
+							<p>
+								<code>GET /api/config</code> <b>nunca devuelve la contraseña</b> de
+								la red, solo su nombre: lo contrario expone la credencial a quien
+								esté en la misma red. Y toda escritura responde con la
+								configuración <b>resultante</b>, no con un acuse vacío, para que el
+								cliente sepa qué quedó guardado de verdad.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-actualizacion-datos-interfaz.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					<span>Actualización de datos en la interfaz</span>
+				</a>
+				<a class="slide-nav__link" href="10-provisioning-credenciales.html">
+					<span>Provisioning por portal cautivo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

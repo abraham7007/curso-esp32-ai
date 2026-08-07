@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 36 · Panel servido desde el sistema de archivos · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 36</span>
+					</div>
+
+					<h2 class="code-hour__title">Panel de control servido desde el sistema de archivos</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Servir una página de control desde <b>LittleFS</b>, no como cadenas dentro del código. Tres rutas: la estática, una de estado que devuelve JSON y una de comando. Se mide la memoria libre con el panel abierto y cerrado.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b>LittleFS</b> es un sistema de archivos sobre la partición de datos: la interfaz vive ahí y se sustituye sin recompilar. Un <b>servidor asíncrono</b> atiende cada petición en su propia tarea, así que el manejador se ejecuta en un contexto donde el trabajo largo detiene todo lo demás: se limita a encolar. <b>mDNS</b> publica un nombre local, de modo que el panel se abre por nombre y no por dirección.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y las bibliotecas ESPAsyncWebServer y ArduinoJson.
+
+<b>2. Firmware.</b> Monta LittleFS y sirve desde <code>/www/</code> una página con su hoja de estilos, sin incrustar HTML como cadenas en el código. Añade <code>GET /api/estado</code>, que devuelve en JSON la lectura del GPIO 34 y el estado del LED, y <code>POST /api/led?valor=0|1</code>, cuyo manejador solo encola la orden: la actuación ocurre en el bucle. Publica el nombre local con mDNS. Imprime a 115200 baudios cada petición atendida con su ruta, su código y su tamaño, y la memoria libre con el panel abierto y cerrado.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una orden, desde que el manejador la encola hasta que el bucle la ejecuta. Y el <b>árbol de rutas</b> del servidor, con el método de cada una, qué devuelve y si escribe algo en el dispositivo.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> como magnitud a mostrar y controla un LED en el <b>GPIO 25</b> con resistencia de 220 Ω desde el panel.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[FS]   LittleFS montado usado=48 kB de 1408 kB  archivos=3
+[HTTP] servidor asincrono en el puerto 80  ip=192.168.1.47
+[HTTP] GET /            200  1284 B
+[HTTP] GET /api/estado  200    64 B  v=1.842
+[HTTP] POST /api/led    200     0 B  valor=1
+[MEM]  sin panel=214512  con panel=196880  diferencia=17.6 kB</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[MEM]</code> es la que decide: tener el panel abierto cuesta <b>17,6 kB</b>. Con varios navegadores conectados esa cifra se multiplica, y es la que hay que restar antes de añadir una conexión segura o un modelo. Comprobar además que la petición <code>POST</code> devuelve enseguida: si tardara lo que dura la actuación, el manejador estaría trabajando en vez de encolar.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-simulacion-conexiones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Coste de las conexiones simultáneas</span>
+				</a>
+				<a class="slide-nav__link" href="07-interfaz-fuera-del-binario.html">
+					<span>La interfaz fuera del binario</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

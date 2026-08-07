@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 38 · API del dispositivo con nombre local · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 38</span>
+					</div>
+
+					<h2 class="code-hour__title">API del dispositivo con nombre local y factory reset</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Publicar la API completa de la lámina anterior y hacer al equipo localizable por nombre. La lectura de configuración <b>nunca devuelve la contraseña</b>, toda escritura responde con la configuración resultante, y el restablecimiento exige confirmación explícita.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>punto de acceso</b> de la API es un método más una ruta; el método dice si la operación lee o escribe. Responder con la <b>configuración resultante</b> en lugar de con un acuse vacío ahorra una segunda petición y elimina la duda de qué quedó guardado. El código <b>409</b> significa que la petición es válida pero choca con el estado actual: aquí se usa para exigir confirmación antes de una operación que no se puede deshacer.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, ESPAsyncWebServer, ArduinoJson y Preferences.
+
+<b>2. Firmware.</b> Publica el nombre local con mDNS y anuncia el servicio HTTP. Implementa <code>GET /api/info</code>, <code>GET /api/estado</code>, <code>GET /api/config</code>, <code>POST /api/config</code> y <code>POST /api/reset</code>. La lectura de configuración devuelve el nombre de la red pero <b>nunca la contraseña</b>. Toda escritura responde con la configuración resultante, no con un acuse vacío. El restablecimiento responde 409 si la petición no lleva confirmación explícita, y al ejecutarse registra por separado qué borra y qué conserva. Emite a 115200 baudios cada petición con su código.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el pulsador en el GPIO 4 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del restablecimiento, con la comprobación de la confirmación y la separación entre lo que se borra y lo que se conserva. Y la <b>tabla de la API</b>, una fila por punto de acceso: método, ruta, qué devuelve y si modifica el dispositivo.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un pulsador de restablecimiento en el <b>GPIO 4</b> con <code>INPUT_PULLUP</code> y enciende un LED de confirmación en el <b>GPIO 25</b> con resistencia de 220 Ω, que parpadea durante la cuenta atrás.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-pushbutton color="red"></wokwi-pushbutton></span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[MDNS] publicado esp32-a4cf12.local http/tcp puerto 80
+[HTTP] GET  /api/info    200  modelo=UNI-01 serie=A4CF12 fw=1.2.0
+[HTTP] GET  /api/config  200  ssid=LAB-UNI  (sin contrasena)
+[HTTP] POST /api/config  200  devuelve la configuracion resultante
+[HTTP] POST /api/reset   409  falta confirmacion explicita
+[HTTP] POST /api/reset   200  confirmado=si borrando datos</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Las dos líneas de <code>/api/reset</code>: la primera responde <b>409</b> y no borra nada. Esa negativa es lo que impide que una petición repetida o perdida deje el equipo en blanco, y es la idempotencia de la sesión 8 aplicada a algo que no se puede deshacer. Mirar además la línea de <code>GET /api/config</code>: si en la traza propia apareciera la contraseña, cualquiera dentro de la red la tendría con una sola petición.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-restablecimiento-fabrica.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Factory reset</span>
+				</a>
+				<a class="slide-nav__link" href="19-codigo-39-producto-completo.html">
+					<span>La hora del código · Producto completo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

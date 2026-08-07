@@ -1,0 +1,61 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 551.50215 125.064" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 125.064 
+L 551.50215 125.064 
+L 551.50215 0 
+L 0 0 
+L 0 125.064 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="32.719218" transform="rotate(-0 12.5784 32.719218)">✓</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="33.2244" y="32.301327" transform="rotate(-0 33.2244 32.301327)">memoria del modelo</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="177.7464" y="32.301327" transform="rotate(-0 177.7464 32.301327)">a la cuarta parte</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="52.511298" transform="rotate(-0 12.5784 52.511298)">✓</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="33.2244" y="52.093407" transform="rotate(-0 33.2244 52.093407)">aritmética</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="177.7464" y="52.240829" transform="rotate(-0 177.7464 52.240829)">entera, más rápida en muchos MCU</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-warn); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="72.303378" transform="rotate(-0 12.5784 72.303378)">?</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="33.2244" y="71.885487" transform="rotate(-0 33.2244 71.885487)">exactitud</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-warn); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="177.7464" y="71.856268" transform="rotate(-0 177.7464 71.856268)">puede degradarse: hay que medirla</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="92.095458" transform="rotate(-0 12.5784 92.095458)">✕</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="33.2244" y="91.79577" transform="rotate(-0 33.2244 91.79577)">eficiencia energética</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="177.7464" y="91.677567" transform="rotate(-0 177.7464 91.677567)">depende de la placa y del marco</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="11.30544" transform="rotate(-0 12.5784 11.30544)">qué cambia al pasar de 32 a 8 bits por parámetro</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="117.25128" transform="rotate(-0 12.5784 117.25128)">las cifras de tamaño y de tiempo no se transfieren de una placa a otra: hay que medir en el hardware de destino</text>
+   </g>
+  </g>
+ </g>
+</svg>

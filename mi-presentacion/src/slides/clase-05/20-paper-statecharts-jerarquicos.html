@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Efecto de la jerarquía sobre la verificabilidad del modelo · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Kirshin, A.; Moshkovich, D.; Hoppe, A.</b> (2007). Compositional analysis of hierarchical state machines. <i>IBM Haifa Research Lab</i>. <code>doi:10.1145/1274900.1274918</code></p>
+
+					<h2 class="paper__title">Efecto de la jerarquía sobre la verificabilidad del modelo</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Ver si un modelo <b>organizado en jerarquía</b> puede analizarse por partes.</li>
+									<li>Analizarlo completo obliga a recorrer todas las combinaciones de subestados.</li>
+									<li>Ese número crece de forma <b>multiplicativa</b> con los componentes.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Batería de <b>27 modelos</b> de complejidad creciente, con plazo de 4 h cada uno.</li>
+									<li>El análisis plano resolvió <b>2 de 27</b>: los demás se interrumpieron sin resultado.</li>
+									<li>El compositivo resolvió <b>27 de 27</b>, todos en menos de 30 minutos.</li>
+									<li>El error que introduce descomponer se mantiene en el orden de <b>10⁻³</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>La jerarquía sustituye un análisis único e inviable por <b>una serie de análisis pequeños</b>.</li>
+									<li>La ganancia en tiempo <b>no se paga</b> con pérdida de exactitud apreciable.</li>
+									<li>La jerarquía no solo ordena el diagrama: es lo que hace comprobable el modelo.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-statecharts-escala"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia con las cifras publicadas. Modelos que cada procedimiento logró resolver, de 27.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-statecharts-tiempo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Lo que tarda cada uno. El plazo de 4 h del análisis plano no es tiempo de cálculo: es una rendición.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-maquinas-jerarquicas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Máquinas jerárquicas</span>
+				</a>
+				<a class="slide-nav__link" href="21-casos-aplicacion.html">
+					<span>Cinco sistemas modelados con estados</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

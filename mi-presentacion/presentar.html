@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Presentación · Fundamentos de ESP32 + AI</title>
+		<link rel="stylesheet" href="./src/css/base.css" />
+	</head>
+	<body class="presenter">
+		<!-- MODO PRESENTACIÓN.
+
+		     Cada diapositiva es un documento HTML independiente, y la API de
+		     pantalla completa del navegador está atada al documento: en cuanto
+		     se navega a otra dirección, el documento se destruye y el navegador
+		     sale de pantalla completa. Por eso, pulsando «siguiente» estando a
+		     pantalla completa, se salía de ella.
+
+		     Este marco lo resuelve sin tocar ninguna diapositiva: la pantalla
+		     completa se pide sobre ESTE documento, que no se destruye nunca, y
+		     las diapositivas se suceden dentro del marco interior. Navegar
+		     dentro de un marco no afecta al documento que lo contiene. -->
+		<iframe
+			id="marco"
+			class="presenter__frame"
+			title="Diapositiva en curso"
+			allowfullscreen
+		></iframe>
+
+		<script type="module" src="./src/js/presenter.js"></script>
+	</body>
+</html>

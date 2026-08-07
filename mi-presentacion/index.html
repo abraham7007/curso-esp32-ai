@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fundamentos de ESP32 + AI · Edición 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link rel="stylesheet" href="/src/css/base.css" />
+	</head>
+	<body>
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					PIT 2026 · Cursos Gratuitos OTI-UNI · Universidad Nacional de
+					Ingeniería
+				</span>
+				<h1 class="slide__title" data-animate="fade-up">
+					Fundamentos de ESP32 + AI
+				</h1>
+				<p class="slide__subtitle" data-animate="fade-up">
+					Edición 10 · Material interactivo de las 12 sesiones del curso.
+				</p>
+
+				<div
+					class="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3 w-full"
+					data-animate="fade-up"
+				>
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-01/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							01
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Arquitectura del ESP32 y entorno
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Arquitectura del SoC · Construcción y flasheo
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-02/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							02
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Arquitectura de software y proyectos
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Separación de responsabilidades · POO en periféricos
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-03/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							03
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Protocolos de comunicación entre dispositivos
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								UART · Buses I²C y SPI · Serialización
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-04/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							04
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Adquisición de datos e interrupciones
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Drivers y señal · Interrupciones y temporizadores
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-05/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							05
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Máquinas de estados finitos
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Modelado por estados · Implementación y casos
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-06/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							06
+						</span>
+						<span>
+							<span class="block font-semibold">
+								FreeRTOS sobre dos núcleos
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Tareas y planificador · Sincronización
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-07/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							07
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Redes TCP/IP y HTTP: el ESP32 como cliente
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Direccionamiento y WiFi · HTTP y APIs REST
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-08/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							08
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Protocolo MQTT y plataformas de IoT
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Mecanismos de MQTT · Plataformas de IoT
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-09/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							09
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Servidor web embebido y paso a producto
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Servidor web y modos · Requisitos de producto
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-10/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							10
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Firmware de producción y actualización remota
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Memoria y persistencia · Consumo, seguridad y OTA
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-11/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							11
+						</span>
+						<span>
+							<span class="block font-semibold">
+								Compilado, interpretado y agentes de IA
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Compilado frente a interpretado · Agentes de IA
+							</span>
+						</span>
+					</a>
+
+					<a
+						class="card flex items-start gap-4"
+						href="/src/slides/clase-12/01-portada.html"
+					>
+						<span
+							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
+						>
+							12
+						</span>
+						<span>
+							<span class="block font-semibold">
+								TinyML y Edge AI en microcontroladores
+							</span>
+							<span class="block text-sm text-[var(--color-text-muted)]">
+								Fundamentos y restricciones · Flujo de trabajo
+							</span>
+						</span>
+					</a>
+				</div>
+
+				<div class="sim-caption" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<p class="m-0 text-sm">
+						<b>Para proyectar en clase</b>, abrir cualquier sesión y pulsar el
+						botón de pantalla completa: la presentación se mantiene a pantalla
+						completa al avanzar de lámina. También se puede entrar directamente
+						desde
+						<a
+							class="underline"
+							href="/presentar.html#/src/slides/clase-01/01-portada.html"
+						>
+							el modo presentación
+						</a>. Las flechas del teclado recorren la sesión.
+					</p>
+				</div>
+			</div>
+		</main>
+
+		<script type="module" src="/src/js/deck.js"></script>
+	</body>
+</html>

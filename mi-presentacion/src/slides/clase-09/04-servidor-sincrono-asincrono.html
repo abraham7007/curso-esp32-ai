@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Servidor síncrono frente a asíncrono y su efecto sobre las tareas · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Servidor síncrono frente a asíncrono y su efecto sobre las tareas</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="compare">
+							<div class="compare__panel">
+								<h3>Síncrono</h3>
+								<p>
+									Se consulta desde el bucle con
+									<code>server.handleClient()</code> y atiende una petición por
+									llamada. Mientras la atiende, el bucle está ocupado.
+								</p>
+							</div>
+							<div class="compare__panel">
+								<h3>Asíncrono</h3>
+								<p>
+									Atiende en su propia tarea y llama a los manejadores por
+									suceso. El bucle no interviene y varias peticiones se solapan.
+								</p>
+							</div>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								En el asíncrono, el manejador se ejecuta <b>en el contexto de la
+								tarea del servidor</b>: no debe bloquear ni hacer trabajo largo,
+								igual que una rutina de interrupción. Un manejador que lee un
+								sensor lento detiene la atención de todas las demás peticiones.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Partes de una ruta
+							</div>
+							<p>
+								Una <b>ruta</b> asocia un método y un camino a un
+								<b>manejador</b>. La petición aporta <b>parámetros de consulta</b>
+								y, en escritura, un <b>cuerpo</b>.
+							</p>
+						</div>
+
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">rutas de un panel mínimo</span>
+							</div>
+							<pre><code>// Recurso estático: se sirve desde el sistema de archivos
+server.serveStatic("/", LittleFS, "/www/")
+      .setDefaultFile("index.html");
+
+// Estado: solo lectura, devuelve JSON
+server.on("/api/estado", HTTP_GET, [](AsyncWebServerRequest *r) {
+  <span class="hl hl--hit">r-&gt;send(200, "application/json", estadoEnJson());</span>
+});
+
+// Comando: escritura, con parámetro de consulta
+server.on("/api/led", HTTP_POST, [](AsyncWebServerRequest *r) {
+  <span class="hl hl--add">bool on = r-&gt;getParam("valor", true)-&gt;value() == "1";</span>
+  solicitarLed(on);          // solo encola: no actúa aquí
+  r-&gt;send(200);
+});</code></pre>
+						</div>
+
+						<p class="figure__caption">
+							El manejador de escritura <b>encola</b> la orden en vez de ejecutarla:
+							es el mismo patrón de la sesión 4, con la tarea del servidor en el
+							lugar de la rutina de interrupción.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-modos-operacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					<span>Modos de operación de la radio</span>
+				</a>
+				<a class="slide-nav__link" href="05-simulacion-conexiones.html">
+					<span>Coste de las conexiones simultáneas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

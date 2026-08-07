@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calibración de dos puntos · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					02 · Tratamiento de la señal
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Calibración de dos puntos
+				</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p class="text-sm">
+								<b>Offset</b> (<i>desplazamiento</i>): toda la característica
+								está corrida una cantidad constante. <b>Ganancia</b>
+								(<i>gain</i>): la pendiente de la característica no es la
+								nominal, y el error crece con la magnitud medida. El método de
+								dos puntos toma dos medidas de referencia conocidas y ajusta la
+								recta que las une.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+								Ejemplo
+							</div>
+							<p class="text-sm">
+								Un sensor indica 2,1 °C con la referencia en 0,0 °C y 101,4 °C
+								con la referencia en 100,0 °C. El offset es de +2,1 °C y la
+								ganancia, (101,4 − 2,1) / 100,0 = 0,9929. La corrección es
+								<code class="font-mono text-[var(--color-navy)]">
+									real = (leido − 2.1) / 0.9929
+								</code>
+								.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p class="m-0 text-sm">
+								<code>analogReadMilliVolts(pin)</code> aplica la calibración de
+								fábrica del convertidor. Las constantes propias de la unidad se
+								guardan con la biblioteca <code>Preferences</code> y se aplican
+								dentro de <code>read()</code>, nunca en la capa de aplicación.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon text-[var(--color-warn)]" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="text-sm">
+								Los valores de calibración de fábrica del convertidor del ESP32
+								son una media del lote, no de la unidad concreta: dan una
+								aproximación, no una medida trazable. Cuando la exactitud
+								importa, la calibración se hace sobre el dispositivo real y sus
+								constantes se guardan en NVS (memoria no volátil).
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<svg
+								class="w-full h-auto"
+								viewBox="0 0 640 345"
+								role="img"
+								aria-label="Característica del sensor: recta ideal frente a recta medida con los dos puntos de referencia, y error residual antes y después de la corrección"
+							>
+								<title>
+									Recta ideal, recta medida y error residual de la calibración de
+									dos puntos
+								</title>
+
+								<line
+									x1="60"
+									y1="20"
+									x2="60"
+									y2="180"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1.5"
+								/>
+								<line
+									x1="60"
+									y1="180"
+									x2="600"
+									y2="180"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1.5"
+								/>
+								<line
+									x1="60"
+									y1="107"
+									x2="600"
+									y2="107"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1"
+									stroke-dasharray="4 5"
+								/>
+								<line
+									x1="60"
+									y1="34"
+									x2="600"
+									y2="34"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1"
+									stroke-dasharray="4 5"
+								/>
+								<line
+									x1="330"
+									y1="20"
+									x2="330"
+									y2="180"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1"
+									stroke-dasharray="4 5"
+								/>
+
+								<text
+									x="52"
+									y="184"
+									text-anchor="end"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									0
+								</text>
+								<text
+									x="52"
+									y="111"
+									text-anchor="end"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									50
+								</text>
+								<text
+									x="52"
+									y="38"
+									text-anchor="end"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									100
+								</text>
+								<text
+									x="14"
+									y="100"
+									transform="rotate(-90 14 100)"
+									text-anchor="middle"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									lectura (°C)
+								</text>
+								<text
+									x="330"
+									y="199"
+									text-anchor="middle"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									referencia (°C)
+								</text>
+
+								<line
+									x1="60"
+									y1="180"
+									x2="600"
+									y2="34.5"
+									class="stroke-[var(--color-navy)]"
+									stroke-width="2"
+									stroke-dasharray="7 5"
+								/>
+								<line
+									x1="60"
+									y1="176.9"
+									x2="600"
+									y2="32.5"
+									class="stroke-[var(--color-accent)]"
+									stroke-width="2.5"
+								/>
+
+								<circle
+									cx="60"
+									cy="176.9"
+									r="4.5"
+									class="fill-[var(--color-accent)]"
+								/>
+								<circle
+									cx="600"
+									cy="32.5"
+									r="4.5"
+									class="fill-[var(--color-accent)]"
+								/>
+
+								<line
+									x1="74"
+									y1="30"
+									x2="104"
+									y2="30"
+									class="stroke-[var(--color-navy)]"
+									stroke-width="2"
+									stroke-dasharray="7 5"
+								/>
+								<text
+									x="112"
+									y="34"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									recta ideal (lectura = referencia)
+								</text>
+								<line
+									x1="74"
+									y1="52"
+									x2="104"
+									y2="52"
+									class="stroke-[var(--color-accent)]"
+									stroke-width="2.5"
+								/>
+								<text
+									x="112"
+									y="56"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									recta medida (offset +2,1 · ganancia 0,9929)
+								</text>
+								<circle
+									cx="89"
+									cy="74"
+									r="4.5"
+									class="fill-[var(--color-accent)]"
+								/>
+								<text
+									x="112"
+									y="78"
+									class="fill-[var(--color-accent)] font-mono text-[11px]"
+								>
+									punto 1 · ref 0,0 → lee 2,1 (°C)
+								</text>
+								<circle
+									cx="89"
+									cy="92"
+									r="4.5"
+									class="fill-[var(--color-accent)]"
+								/>
+								<text
+									x="112"
+									y="96"
+									class="fill-[var(--color-accent)] font-mono text-[11px]"
+								>
+									punto 2 · ref 100,0 → lee 101,4
+								</text>
+
+								<text
+									x="60"
+									y="228"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									error residual = lectura − referencia (°C)
+								</text>
+								<line
+									x1="60"
+									y1="240"
+									x2="60"
+									y2="310"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1.5"
+								/>
+								<line
+									x1="60"
+									y1="296.7"
+									x2="600"
+									y2="296.7"
+									class="stroke-[var(--color-border)]"
+									stroke-width="1"
+									stroke-dasharray="4 5"
+								/>
+								<text
+									x="52"
+									y="300"
+									text-anchor="end"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									0
+								</text>
+								<text
+									x="52"
+									y="248"
+									text-anchor="end"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									+2,5
+								</text>
+
+								<line
+									x1="60"
+									y1="240.7"
+									x2="600"
+									y2="259.3"
+									class="stroke-[var(--color-accent)]"
+									stroke-width="2.5"
+								/>
+								<line
+									x1="60"
+									y1="296.7"
+									x2="600"
+									y2="296.7"
+									class="stroke-[var(--color-ok)]"
+									stroke-width="2.5"
+								/>
+								<text
+									x="592"
+									y="246"
+									text-anchor="end"
+									class="fill-[var(--color-accent)] font-mono text-[11px]"
+								>
+									sin corregir: +2,1 → +1,4 °C
+								</text>
+								<text
+									x="74"
+									y="290"
+									class="fill-[var(--color-ok)] font-mono text-[11px]"
+								>
+									tras la corrección de dos puntos: ≈ 0,0 °C
+								</text>
+								<text
+									x="330"
+									y="326"
+									text-anchor="middle"
+									class="fill-[var(--color-text-muted)] font-mono text-[11px]"
+								>
+									referencia (°C)
+								</text>
+							</svg>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Offset
+									</span>
+									<span class="readout">+2,1 °C</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Ganancia
+									</span>
+									<span class="readout">0,9929</span>
+								</div>
+								<div class="metric__item metric__item--ok">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Error tras corregir
+									</span>
+									<span class="readout">≈ 0,0 °C</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-cadena-tratamiento.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cadena de tratamiento de la señal</span>
+				</a>
+				<a class="slide-nav__link" href="08-paper-calibracion.html">
+					<span>Función de la calibración en la cadena de medida</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

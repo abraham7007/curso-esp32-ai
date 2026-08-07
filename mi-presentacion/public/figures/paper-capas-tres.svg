@@ -1,0 +1,107 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 399.24 125.064" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 125.064 
+L 399.24 125.064 
+L 399.24 0 
+L 0 0 
+L 0 125.064 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 11.689811 46.23264 
+L 181.195472 46.23264 
+L 181.195472 24.50016 
+L 11.689811 24.50016 
+z
+" clip-path="url(#pcb75b5ae5a)" style="fill: var(--fig-accent); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 11.689811 72.10464 
+L 181.195472 72.10464 
+L 181.195472 50.37216 
+L 11.689811 50.37216 
+z
+" clip-path="url(#pcb75b5ae5a)" style="fill: var(--fig-accent); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 11.689811 97.97664 
+L 181.195472 97.97664 
+L 181.195472 76.24416 
+L 11.689811 76.24416 
+z
+" clip-path="url(#pcb75b5ae5a)" style="fill: var(--fig-accent); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-accent); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="96.442642" y="13.3752" transform="rotate(-0 96.442642 13.3752)">monolítico</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-paper); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="96.442642" y="37.7339" transform="rotate(-0 96.442642 37.7339)">aplicación</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-paper); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="96.442642" y="63.46715" transform="rotate(-0 96.442642 63.46715)">servicios</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-paper); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="96.442642" y="89.33915" transform="rotate(-0 96.442642 89.33915)">acceso al hardware</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="96.442642" y="111.6888" transform="rotate(-0 96.442642 111.6888)">en rojo, el código que toca el hardware</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 218.044528 46.23264 
+L 387.550189 46.23264 
+L 387.550189 24.50016 
+L 218.044528 24.50016 
+z
+" clip-path="url(#pf0a5717f02)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 218.044528 72.10464 
+L 387.550189 72.10464 
+L 387.550189 50.37216 
+L 218.044528 50.37216 
+z
+" clip-path="url(#pf0a5717f02)" style="fill: var(--fig-surface); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 218.044528 97.97664 
+L 387.550189 97.97664 
+L 387.550189 76.24416 
+L 218.044528 76.24416 
+z
+" clip-path="url(#pf0a5717f02)" style="fill: var(--fig-ok); stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="302.797358" y="13.3752" transform="rotate(-0 302.797358 13.3752)">por capas</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="302.797358" y="37.7339" transform="rotate(-0 302.797358 37.7339)">aplicación</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="302.797358" y="63.46715" transform="rotate(-0 302.797358 63.46715)">servicios</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-paper); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="302.797358" y="89.33915" transform="rotate(-0 302.797358 89.33915)">acceso al hardware</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-ok); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="302.797358" y="111.6888" transform="rotate(-0 302.797358 111.6888)">solo una capa lo toca</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pcb75b5ae5a">
+   <rect x="4.32" y="4.32" width="184.245283" height="116.424"/>
+  </clipPath>
+  <clipPath id="pf0a5717f02">
+   <rect x="210.674717" y="4.32" width="184.245283" height="116.424"/>
+  </clipPath>
+ </defs>
+</svg>

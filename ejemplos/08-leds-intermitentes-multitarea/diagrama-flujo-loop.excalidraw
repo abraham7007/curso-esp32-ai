@@ -1,0 +1,49 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "type": "text", "x": 150, "y": 20, "width": 550, "height": 30, "text": "Diagrama de Flujo de una Vuelta de loop() - 3 LEDs Multitarea", "fontSize": 18, "fontFamily": 1, "textAlign": "center"
+    },
+    {
+      "type": "rectangle", "x": 200, "y": 70, "width": 450, "height": 450, "strokeColor": "#333", "strokeStyle": "dashed", "backgroundColor": "#f8f9fa"
+    },
+    {
+      "type": "text", "x": 220, "y": 80, "width": 200, "height": 20, "text": "loop() - Ejecución ultrarrápida no bloqueante", "fontSize": 13, "fontFamily": 1
+    },
+    {
+      "type": "rectangle", "x": 250, "y": 110, "width": 350, "height": 80, "backgroundColor": "#ffe3e3"
+    },
+    {
+      "type": "text", "x": 260, "y": 120, "width": 330, "height": 60, "text": "1. led1.update()  [GPIO 2, T = 500 ms]\n¿now - lastToggle >= 500 ms?\n ├─ SÍ -> Conmutar GPIO 2 + Emitir Serial\n └─ NO -> Salida Inmediata (Continuar)", "fontSize": 12, "fontFamily": 1
+    },
+    {
+      "type": "arrow", "x": 425, "y": 190, "width": 0, "height": 25, "points": [[0,0], [0,25]]
+    },
+    {
+      "type": "rectangle", "x": 250, "y": 215, "width": 350, "height": 80, "backgroundColor": "#d3f9d8"
+    },
+    {
+      "type": "text", "x": 260, "y": 225, "width": 330, "height": 60, "text": "2. led2.update()  [GPIO 4, T = 800 ms]\n¿now - lastToggle >= 800 ms?\n ├─ SÍ -> Conmutar GPIO 4 + Emitir Serial\n └─ NO -> Salida Inmediata (Continuar)", "fontSize": 12, "fontFamily": 1
+    },
+    {
+      "type": "arrow", "x": 425, "y": 295, "width": 0, "height": 25, "points": [[0,0], [0,25]]
+    },
+    {
+      "type": "rectangle", "x": 250, "y": 320, "width": 350, "height": 80, "backgroundColor": "#e8f3ff"
+    },
+    {
+      "type": "text", "x": 260, "y": 330, "width": 330, "height": 60, "text": "3. led3.update()  [GPIO 5, T = 1300 ms]\n¿now - lastToggle >= 1300 ms?\n ├─ SÍ -> Conmutar GPIO 5 + Emitir Serial\n └─ NO -> Salida Inmediata (Continuar)", "fontSize": 12, "fontFamily": 1
+    },
+    {
+      "type": "arrow", "x": 425, "y": 400, "width": 0, "height": 25, "points": [[0,0], [0,25]]
+    },
+    {
+      "type": "rectangle", "x": 325, "y": 425, "width": 200, "height": 35, "backgroundColor": "#ffd8a8"
+    },
+    {
+      "type": "text", "x": 335, "y": 435, "width": 180, "height": 20, "text": "Fin de vuelta -> Reinicia loop()", "fontSize": 12, "fontFamily": 1, "textAlign": "center"
+    }
+  ]
+}

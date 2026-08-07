@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Degradación progresiva de la memoria en ejecución · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					01 · Memoria, persistencia y tiempo
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Degradación progresiva de la memoria en ejecución</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Memoria libre</div>
+						<p>
+							Cuánta queda sin reservar. Es la cifra que todo el mundo mira, y por
+							sí sola <b>no basta</b> para saber si la próxima reserva va a caber.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>ESP.getFreeHeap()</code>
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Mayor bloque contiguo</div>
+						<p>
+							El trozo libre más grande de una pieza. Una reserva de 40 kB falla si
+							esta cifra es 38, <b>aunque haya 190 kB libres</b> repartidos.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>ESP.getMaxAllocHeap()</code>
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Mínimo histórico</div>
+						<p>
+							Lo más bajo que ha llegado a estar desde el arranque. Es el peor caso
+							observado, y por tanto la magnitud que decide el margen.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>ESP.getMinFreeHeap()</code>
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="conclusion">
+							<span class="conclusion__label">Cómo se distingue una fuga de una fragmentación</span>
+							<p>
+								Si <b>la memoria libre baja</b> de forma sostenida, hay una fuga:
+								algo se reserva y no se devuelve. Si la libre se mantiene pero
+								<b>el mayor bloque contiguo cae</b>, hay fragmentación: el espacio
+								está, pero troceado. Son fallos distintos con correcciones
+								distintas, y las dos cifras juntas los separan.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="memoria-fragmentacion"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+								<span>
+									Las cuatro lecturas de la traza del equipo, puestas juntas. La
+									memoria libre apenas se movió en 31 horas; lo que se desplomó fue
+									el mayor bloque contiguo, hasta caer por debajo de los 40 kB que
+									la conexión cifrada necesita <b>de una pieza</b>. El síntoma
+									aparece en el cifrado, sin relación aparente con la causa.
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-persistencia-y-desgaste.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Persistencia y desgaste</span>
+				</a>
+				<a class="slide-nav__link" href="05-referencia-temporal.html">
+					<span>Referencia temporal del sistema</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

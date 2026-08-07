@@ -1,0 +1,75 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 437.28625 108.432" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 108.432 
+L 437.28625 108.432 
+L 437.28625 0 
+L 0 0 
+L 0 108.432 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 23.613999 71.921032 
+L 144.532057 71.921032 
+L 144.532057 35.437935 
+L 23.613999 35.437935 
+z
+" clip-path="url(#p3397062259)" style="fill: var(--fig-ok); opacity: 0.13; stroke: var(--fig-ok); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 156.233805 71.921032 
+L 277.151863 71.921032 
+L 277.151863 35.437935 
+L 156.233805 35.437935 
+z
+" clip-path="url(#p3397062259)" style="fill: var(--fig-accent); opacity: 0.13; stroke: var(--fig-accent); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 288.85361 71.921032 
+L 409.771669 71.921032 
+L 409.771669 35.437935 
+L 288.85361 35.437935 
+z
+" clip-path="url(#p3397062259)" style="fill: var(--fig-accent); opacity: 0.13; stroke: var(--fig-accent); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(52.767403 47.214605)">configuración</text>
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(59.991778 56.278855)">del equipo</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ok); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="84.073028" y="65.482839" transform="rotate(-0 84.073028 65.482839)">automatizable</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(195.019709 47.25023)">provisión</text>
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(180.570959 56.25948)">de la identidad</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="216.692834" y="65.482839" transform="rotate(-0 216.692834 65.482839)">problema abierto</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(327.639515 47.25023)">provisión</text>
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(318.007015 56.25948)">de las claves</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="349.31264" y="65.482839" transform="rotate(-0 349.31264 65.482839)">problema abierto</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="218.643125" y="20.415484" transform="rotate(-0 218.643125 20.415484)">el proceso en tres piezas</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="218.643125" y="91.235613" transform="rotate(-0 218.643125 91.235613)">dos de las tres siguen dependiendo de configuración manual: ahí está el cuello de botella</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p3397062259">
+   <rect x="19.713416" y="4.32" width="401.76" height="99.792"/>
+  </clipPath>
+ </defs>
+</svg>

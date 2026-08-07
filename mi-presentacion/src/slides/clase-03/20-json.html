@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Serialización en formato JSON · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					05 · Formato y serialización de datos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Serialización en formato JSON
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						Formato de texto que representa datos estructurados como pares de
+						nombre y valor. Lo interpreta tanto un microcontrolador como un
+						servicio web, de modo que el acuerdo sobre el formato deja de
+						definirse en cada extremo y pasa a estar fijado por el estándar.
+					</p>
+				</div>
+
+				<div class="example" data-animate="fade-up">
+					<div class="example__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						Ejemplo
+					</div>
+					<p>
+						Un documento con tres magnitudes y un timestamp en milisegundos
+						desde el arranque:
+					</p>
+					<div class="term mt-2">{"t":23.4,"h":58.1,"p":1013,"ms":48210}</div>
+					<p class="mt-2">
+						Son <b>39 bytes</b> de texto frente a los <b>14 bytes</b> que
+						ocuparían los mismos cuatro valores en binario (dos números en coma
+						flotante de 4 bytes, un entero de 16 bits y una marca de 32 bits). La
+						diferencia es el precio de que el receptor no necesite conocer el
+						orden ni el tamaño de los campos.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg
+						class="icon icon--lg text-[var(--color-warn)]"
+						aria-hidden="true"
+					><use href="/course-icons.svg#i-alert" /></svg>
+					<p class="m-0">
+						<b>La memoria del documento se reserva de antemano.</b> Si la
+						capacidad reservada es inferior a la necesaria, la serialización se
+						trunca <b>sin lanzar ningún error</b>: el emisor cree haber
+						transmitido el documento completo y el receptor recibe un fragmento
+						sintácticamente inválido.
+					</p>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p>
+						Biblioteca <code>ArduinoJson</code>:
+						<code>JsonDocument doc;</code> <code>doc["t"] = 23.4;</code>
+						<code>serializeJson(doc, Serial2);</code> En el receptor,
+						<code>deserializeJson(doc, Serial2)</code> devuelve un código de error
+						que <b>debe comprobarse</b> antes de leer ningún campo.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-codigo-13-trama-verificada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Trama verificada</span>
+				</a>
+				<a class="slide-nav__link" href="21-paper-serializacion.html">
+					<span>Costo de transmitir en un formato legible</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sistema operativo de tiempo real y determinismo · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Sistema operativo de tiempo real y determinismo</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+							Sistema operativo de tiempo real
+						</div>
+						<p>
+							Sistema operativo cuyo planificador garantiza un <b>plazo máximo</b>
+							entre que una tarea queda preparada y recibe el procesador. La
+							garantía es sobre el peor caso, no sobre el promedio.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Se abrevia <b>RTOS</b>, del inglés <i>real-time operating system</i>.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+							Determinismo
+						</div>
+						<p>
+							Propiedad de un sistema cuyo tiempo de respuesta está <b>acotado y es
+							conocido</b>. Un sistema determinista no es necesariamente rápido: es
+							uno cuyo retraso máximo puede calcularse antes de ejecutarlo.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Un sistema que responde en 2 ms el 99 % de las veces y en 400 ms el
+							1 % restante no es determinista.
+						</p>
+					</div>
+				</div>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>Tiempo real estricto</h3>
+						<p>
+							Incumplir el plazo constituye un fallo del sistema, con
+							consecuencias sobre la seguridad o sobre el producto.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Disparo de un airbag, control de un motor de tracción, corte de una
+							prensa ante la detección de un obstáculo.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Tiempo real flexible</h3>
+						<p>
+							Incumplir el plazo degrada la calidad del resultado sin invalidarlo.
+							Se tolera una proporción acotada de incumplimientos.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							Refresco de una pantalla, registro de temperatura cada minuto,
+							transmisión de telemetría a una plataforma.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Dónde se sitúa este curso</span>
+					<p>
+						FreeRTOS sobre ESP32 con el núcleo de Arduino cubre <b>tiempo real
+						flexible</b>. La pila de comunicaciones inalámbricas introduce
+						interrupciones cuya frecuencia no controla el programa, de modo que el
+						peor caso no puede acotarse con rigor. Los proyectos con requisito
+						estricto separan esa función en un microcontrolador dedicado.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-limite-bucle-unico.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Límite del bucle único</span>
+				</a>
+				<a class="slide-nav__link" href="04-definicion-tarea.html">
+					<span>La tarea y su pila de ejecución</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

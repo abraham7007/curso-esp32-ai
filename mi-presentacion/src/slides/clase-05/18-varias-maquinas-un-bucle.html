@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Coexistencia de máquinas independientes en el mismo bucle · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Coexistencia de máquinas independientes en el mismo bucle</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Principio
+							</div>
+							<p>
+								Cada actividad con su propio ritmo lleva su propia máquina, con su
+								variable de estado y su timestamp. El bucle las evalúa todas
+								en cada iteración, y ninguna bloquea a las demás.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Ejemplo
+							</div>
+							<p>
+								Un equipo con tres actividades: muestrear un sensor cada 100 ms,
+								parpadear un indicador cada 500 ms y atender un pulsador con
+								pulsación larga. Tres máquinas, tres variables de estado, un solo
+								bucle.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								El límite aparece cuando dos actividades tienen requisitos
+								temporales incompatibles: una necesita responder en 1 ms y otra
+								ocupa 40 ms por iteración. Ahí el bucle único deja de bastar, y esa
+								es la condición que justifica las tareas de la sesión 6.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">tres máquinas, un bucle</span>
+							</div>
+							<pre><code>void loop() {
+  uint32_t ahora = millis();
+  <span class="hl hl--add">maquinaSensor(ahora);     // estado propio, marca propia</span>
+  <span class="hl hl--add">maquinaIndicador(ahora);</span>
+  <span class="hl hl--add">maquinaPulsador(ahora);</span>
+}
+// Cada función es un switch sobre SU variable de estado.
+// Ninguna espera: todas retornan en microsegundos.</code></pre>
+						</div>
+
+						<div class="blockdiagram">
+							<div class="bd-lane">
+								<span class="bd-lane__label">Sensor</span>
+								<div class="bd-node bd-node--ok"><span class="bd-node__body">REPOSO ⇄ MIDIENDO · periodo 100 ms</span></div>
+							</div>
+							<div class="bd-lane">
+								<span class="bd-lane__label">Indicador</span>
+								<div class="bd-node bd-node--ghost"><span class="bd-node__body">ENCENDIDO ⇄ APAGADO · periodo 500 ms</span></div>
+							</div>
+							<div class="bd-lane">
+								<span class="bd-lane__label">Pulsador</span>
+								<div class="bd-node bd-node--accent"><span class="bd-node__body">SUELTO → PULSADO → LARGA · umbral 1200 ms</span></div>
+							</div>
+						</div>
+						<p class="figure__caption">
+							Las tres máquinas comparten el bucle pero no comparten estado: la
+							pulsación larga no altera el periodo de muestreo.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-codigo-22-cargador-etapas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Cargador por etapas</span>
+				</a>
+				<a class="slide-nav__link" href="19-maquinas-jerarquicas.html">
+					<span>Máquinas jerárquicas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

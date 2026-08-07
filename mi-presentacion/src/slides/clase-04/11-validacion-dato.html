@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Criterios de validez de una lectura · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					03 · Exactitud y muestreo
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Criterios de validez de una lectura
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p class="m-0">
+						Antes de entregar una medida a la aplicación, la capa de adquisición
+						comprueba tres cosas: que el sensor respondió, que el valor no es
+						físicamente imposible y que está dentro del rango admisible del
+						dispositivo. El resultado de esa comprobación es un
+						<b>estado</b> que acompaña al dato, y solo hay tres.
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-3" data-animate="fade-up">
+					<div
+						class="rounded-[var(--radius-lg)] border border-[var(--color-ok)] bg-[var(--color-ok-soft)] p-4"
+					>
+						<h3 class="mb-2 flex items-center gap-2 text-base text-[var(--color-ok)]">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+							Dato válido
+						</h3>
+						<p class="text-sm">
+							La lectura se completó y el valor cae dentro del rango del sensor.
+							<code class="font-mono">read()</code> entrega la medida y
+							<code class="font-mono">status()</code> devuelve
+							<code class="font-mono">OK</code>. Es el único caso en que la
+							aplicación puede usar el número.
+						</p>
+					</div>
+
+					<div
+						class="rounded-[var(--radius-lg)] border border-[var(--color-warn)] bg-[var(--color-warn-soft)] p-4"
+					>
+						<h3 class="mb-2 flex items-center gap-2 text-base text-[var(--color-warn)]">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							Fuera de rango
+						</h3>
+						<p class="text-sm">
+							El sensor respondió pero el valor está fuera de lo que puede
+							medir: −40 a +85 °C en el ejemplo. Entrada analógica flotante,
+							divisor en cortocircuito o magnitud real fuera del alcance del
+							dispositivo. <code class="font-mono">FUERA_DE_RANGO</code>.
+						</p>
+					</div>
+
+					<div
+						class="rounded-[var(--radius-lg)] border border-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4"
+					>
+						<h3 class="mb-2 flex items-center gap-2 text-base text-[var(--color-danger)]">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							Sin respuesta
+						</h3>
+						<p class="text-sm">
+							La transacción no llegó a completarse: el dispositivo I²C no
+							confirmó su dirección o el protocolo propietario agotó su tiempo
+							de espera. No hay medida que entregar.
+							<code class="font-mono">SIN_RESPUESTA</code>.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon text-[var(--color-warn)]" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Sustituir un dato no disponible por 0 propaga un valor plausible que
+						la aplicación no puede distinguir de una medida real: una
+						temperatura de 0 °C es perfectamente creíble, y el fallo del sensor
+						queda invisible hasta que alguien investiga por qué la calefacción
+						se encendió sola.
+					</p>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p class="m-0">
+						La interfaz devuelve el estado por separado, con
+						<code>status()</code>, y no codificado dentro del propio valor. La
+						aplicación comprueba el estado <b>antes</b> de usar la medida, y un
+						sensor sin respuesta se registra como tal, 
+						<code>[ADQ] sensor=bme280 estado=SIN_RESPUESTA</code>, en lugar de
+						sustituirse por un número.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-codigo-16-comparacion-filtros.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Comparación de filtros</span>
+				</a>
+				<a class="slide-nav__link" href="12-resolucion-precision-exactitud.html">
+					<span>Resolución, precisión y exactitud</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

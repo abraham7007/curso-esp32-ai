@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Criterios de elección entre los cuatro protocolos de mensajería · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Naik, N.</b> (2017). Choice of effective messaging protocols for IoT systems: MQTT, CoAP, AMQP and HTTP. <i>2017 IEEE International Systems Engineering Symposium</i>. <code>doi:10.1109/SysEng.2017.8088251</code></p>
+
+					<h2 class="paper__title">Criterios de elección entre los cuatro protocolos de mensajería</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Establecer <b>con qué criterio</b> se elige el protocolo de mensajería de un sistema de IoT.</li>
+									<li>El autor parte de que <b>ninguno de los cuatro</b> cubre todos los requisitos.</li>
+									<li>Análisis documental y sistemático, sin medidas propias sobre hardware.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Cabecera mínima de MQTT: <b>2 bytes</b>, frente a los <b>≈192</b> de una petición HTTP.</li>
+									<li>Con cargas pequeñas, el protocolo <b>pesa más que el dato</b>.</li>
+									<li>HTTP y CoAP usan <b>petición y respuesta</b>: obligan al equipo a preguntar.</li>
+									<li>Tras la traducción de direcciones, el servidor <b>no puede iniciar</b> la conexión.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>HTTP conserva ventaja en <b>interoperabilidad</b>: lo entiende cualquier servicio.</li>
+									<li>Su modelo lo hace <b>inadecuado</b> cuando el servidor necesita alcanzar al equipo.</li>
+									<li>La pregunta correcta no es cuál es mejor, sino <b>cuál conviene a cada escenario</b>.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-cabecera-fraccion"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia con las dos cifras de cabecera. Lo que decide es la fracción del envío que ocupa: con 20 bytes de dato, en HTTP el 90 % es protocolo.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-protocolos-dimensiones"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las dimensiones que compara el autor. Ninguna columna está completa: de ahí que la elección sea por escenario.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-codigo-28-conexion-reintentos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Conexión con reintentos</span>
+				</a>
+				<a class="slide-nav__link" href="11-peticion-respuesta-http.html">
+					<span>Estructura de petición y respuesta</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

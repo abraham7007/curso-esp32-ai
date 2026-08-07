@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 21 · Portón automático con detección de obstáculo · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 21</span>
+					</div>
+
+					<h2 class="code-hour__title">Portón automático con plazo máximo y detección de obstáculo</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Un portón motorizado con cinco estados, dos de ellos transitorios y uno de error. Cada maniobra lleva un plazo máximo: si el fin de carrera no llega a tiempo, la máquina no se queda esperando de forma indefinida con el motor alimentado, sino que pasa a un estado con las salidas apagadas.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>estado transitorio</b> se abandona por un suceso externo que puede no llegar nunca; por eso necesita <b>plazo máximo</b>, un temporizador que al vencer produce su propio evento. Las <b>acciones de entrada</b> se ejecutan una sola vez al llegar al estado, no en cada vuelta. La <b>rama por defecto</b> del <code>switch</code> recoge el par estado-evento que nadie previó.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Declara el estado como <code>enum class</code> con los cinco valores indicados. Los estados ABRIENDO y CERRANDO llevan un plazo máximo de 12000 ms; al vencer, la máquina pasa a ERROR, cuya acción de entrada apaga las dos salidas del motor y enciende la luz de error. La barrera activa durante CERRANDO transita a ABRIENDO. Desde ERROR se sale solo con una pulsación larga del fin de carrera de cierre. La rama por defecto del switch registra el par estado-evento no previsto.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los tres pulsadores y los tres LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del bucle, con el vencimiento del plazo como una comprobación más entre las entradas. Y el <b>diagrama de estados</b> con los cinco estados y las flechas al estado de error dibujadas desde los dos transitorios.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee los fines de carrera en los <b>GPIO 18 y 19</b> y la barrera en el <b>GPIO 21</b>, los tres <code>INPUT_PULLUP</code>. El motor son dos LED en los <b>GPIO 25 y 26</b> y la luz de error va en el <b>GPIO 27</b>.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-pushbutton color="green"></wokwi-pushbutton></span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[SETUP] estado=CERRADO  plazo_max=12000 ms
+[ESTADO] t=2140   CERRADO -&gt; ABRIENDO   abre=1 cierra=0
+[ESTADO] t=7602   ABRIENDO -&gt; ABIERTO   causa=FIN_CARRERA (5462 ms)
+[ESTADO] t=12610  ABIERTO -&gt; CERRANDO   abre=0 cierra=1
+[EVENTO] t=15330  BARRERA  estado=CERRANDO -&gt; ABRIENDO (invierte)
+[ERROR]  t=27331  PLAZO_EXCEDIDO en ABRIENDO  abre=0 cierra=0</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Restar los instantes de las dos últimas líneas: la máquina entró en ABRIENDO a los 15 330 ms y el error salta a los 27 331, exactamente <b>12 001 ms</b> después. Ese cálculo comprueba que el plazo se mide desde la entrada al estado y no desde el arranque. Mirar después qué salidas quedan tras <code>[ERROR]</code>: si alguna sigue en 1, el motor continúa alimentado.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-implementacion-enum-switch.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+					<span>Implementación con enumerado y switch</span>
+				</a>
+				<a class="slide-nav__link" href="15-implementaciones-alternativas.html">
+					<span>Tabla en memoria y punteros a función</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

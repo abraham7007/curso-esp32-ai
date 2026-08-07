@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Problemas frecuentes en firmware de operación continua · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Problemas frecuentes en firmware de operación continua</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>Se reinicia al encender la radio</div>
+						<div class="problem-card__body">
+							<p>El equipo funciona hasta que intenta conectar, y entonces se reinicia una y otra vez.</p>
+							<p><b>Por qué ocurre.</b> El pico de corriente de la radio hunde la tensión de alimentación y dispara la protección de brownout. El código no tiene ningún error.</p>
+							<p><b>Cómo comprobarlo.</b> Leer el reset reason: <code>BROWNOUT</code> lo confirma. Revisar fuente, cable y condensador de desacoplo, no el programa.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Falla una reserva con memoria de sobra</div>
+						<div class="problem-card__body">
+							<p>Una operación falla por falta de memoria mientras el informe dice que quedan casi 200 kB libres.</p>
+							<p><b>Por qué ocurre.</b> Fragmentación: el espacio libre está troceado y no hay ningún bloque contiguo del tamaño pedido.</p>
+							<p><b>Cómo comprobarlo.</b> Comparar memoria libre y mayor bloque contiguo. Si la primera se mantiene y el segundo cae, es fragmentación y no fuga.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>La NVS deja de guardar</div>
+						<div class="problem-card__body">
+							<p>Tras meses de operación, las escrituras dejan de conservarse entre reinicios.</p>
+							<p><b>Por qué ocurre.</b> Se agotaron los ciclos de borrado del sector por escribir con demasiada frecuencia sobre la misma clave.</p>
+							<p><b>Cómo comprobarlo.</b> Calcular escrituras por hora contra los ciclos que admite el sector. Acumular en memoria y volcar por bloques.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>La actualización deja el parque inalcanzable</div>
+						<div class="problem-card__body">
+							<p>Una versión nueva se despliega y los equipos dejan de responder, sin posibilidad de corregir en remoto.</p>
+							<p><b>Por qué ocurre.</b> El firmware nuevo arranca pero no conecta, y se confirmó por el hecho de arrancar en vez de por haber publicado.</p>
+							<p><b>Cómo comprobarlo.</b> Condicionar la confirmación a haber conectado y publicado al menos una vez, y dejar que el plazo venza en caso contrario.</p>
+						</div>
+					</div>
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>La conexión segura falla tras el primer arranque</div>
+						<div class="problem-card__body">
+							<p>El equipo conecta al principio y, tras un corte de alimentación, rechaza todos los certificados.</p>
+							<p><b>Por qué ocurre.</b> Arrancó sin red, no pudo sincronizar la hora y quedó en 1970: toda fecha de validez está en el futuro.</p>
+							<p><b>Cómo comprobarlo.</b> Imprimir la fecha del sistema antes del primer intento seguro y no continuar hasta que supere el año 2020.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-codigo-43-ota-con-reversion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Actualización con reversión</span>
+				</a>
+				<a class="slide-nav__link" href="18-glosario.html">
+					<span>Glosario de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

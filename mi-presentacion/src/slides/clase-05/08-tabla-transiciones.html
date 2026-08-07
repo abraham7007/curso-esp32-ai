@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La tabla de transiciones como diseño y como prueba · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La tabla de transiciones como diseño y como prueba</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Cada fila es un caso de prueba.</strong> La tabla enumera el
+					producto de estados por eventos, de modo que una casilla vacía es una
+					situación cuyo comportamiento nadie ha decidido.
+				</p>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr>
+								<th>Estado actual</th>
+								<th>Evento</th>
+								<th>Guarda</th>
+								<th>Estado siguiente</th>
+								<th>Acción</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>VERDE_VEHICULOS</code></td>
+								<td><code>PULSADOR</code></td>
+								<td><code>t ≥ 8 s</code></td>
+								<td><code>AMBAR</code></td>
+								<td>arrancar temporizador de 3 s</td>
+							</tr>
+							<tr>
+								<td><code>VERDE_VEHICULOS</code></td>
+								<td><code>PULSADOR</code></td>
+								<td><code>t &lt; 8 s</code></td>
+								<td><code>VERDE_VEHICULOS</code></td>
+								<td>registrar solicitud pendiente</td>
+							</tr>
+							<tr>
+								<td><code>AMBAR</code></td>
+								<td><code>PULSADOR</code></td>
+								<td>—</td>
+								<td><code>AMBAR</code></td>
+								<td>ignorar</td>
+							</tr>
+							<tr>
+								<td><code>AMBAR</code></td>
+								<td><code>VENCE_TEMP</code></td>
+								<td>—</td>
+								<td><code>ROJO_CON_PASO</code></td>
+								<td>arrancar temporizador de 10 s</td>
+							</tr>
+							<tr>
+								<td><code>ROJO_CON_PASO</code></td>
+								<td><code>PULSADOR</code></td>
+								<td>—</td>
+								<td><code>ROJO_CON_PASO</code></td>
+								<td>ignorar: ya está atendida</td>
+							</tr>
+							<tr>
+								<td><code>ROJO_CON_PASO</code></td>
+								<td><code>VENCE_TEMP</code></td>
+								<td>—</td>
+								<td><code>VERDE_VEHICULOS</code></td>
+								<td>borrar solicitud pendiente</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Por qué se redacta completa</span>
+					<p>
+						Con 3 estados y 2 eventos hay <b>6 combinaciones</b>, y las seis están
+						en la tabla. Las filas cuya acción es <em>ignorar</em> son tan necesarias
+						como las demás: dejan constancia de que la situación se consideró y se
+						decidió. Una casilla ausente no significa que el evento no llegue,
+						significa que el programa hará algo que nadie especificó.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-simulacion-semaforo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Recorrido del semáforo</span>
+				</a>
+				<a class="slide-nav__link" href="09-codigo-20-semaforo-peatonal.html">
+					<span>La hora del código · Semáforo peatonal</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 399.24 119.52" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 119.52 
+L 399.24 119.52 
+L 399.24 0 
+L 0 0 
+L 0 119.52 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="fill: var(--fig-navy); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="99.588293" y="13.1904" transform="rotate(-0 99.588293 13.1904)">lógica en el ordenador</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ok); font: 11px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="19.562927" y="50.8896" transform="rotate(-0 19.562927 50.8896)">✓</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="42.427317" y="53.257647" transform="rotate(-0 42.427317 53.257647)">cambiar sin recompilar</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-accent); font: 11px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="19.562927" y="81.936" transform="rotate(-0 19.562927 81.936)">✕</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="42.427317" y="84.304047" transform="rotate(-0 42.427317 84.304047)">funciona sin el ordenador</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="text_6">
+    <text style="fill: var(--fig-navy); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="299.651707" y="13.1904" transform="rotate(-0 299.651707 13.1904)">lógica en el microcontrolador</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-accent); font: 11px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="219.626341" y="50.8896" transform="rotate(-0 219.626341 50.8896)">✕</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="242.490732" y="53.257647" transform="rotate(-0 242.490732 53.257647)">cambiar sin recompilar</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-ok); font: 11px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="219.626341" y="81.936" transform="rotate(-0 219.626341 81.936)">✓</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="242.490732" y="84.304047" transform="rotate(-0 242.490732 84.304047)">funciona sin el ordenador</text>
+   </g>
+  </g>
+ </g>
+</svg>

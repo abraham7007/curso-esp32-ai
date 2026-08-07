@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Identificador derivado de la dirección de fabricación · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Identificador derivado de la dirección de fabricación</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Un único origen
+							</div>
+							<p>
+								La <b>dirección MAC</b> viene grabada de fábrica y es única. De
+								ella se derivan, sin que nadie tenga que asignarlos, el nombre de
+								la red de configuración, el nombre local, el identificador de
+								cliente del broker y el número de serie visible.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Por qué importa que sea uno solo</span>
+							<p>
+								Con un origen único, dos unidades <b>nunca coinciden</b> sin que
+								haya que programar cada una con un número distinto en fábrica. Es
+								lo que evita el fallo de identificador duplicado de la sesión 8, y
+								hace que la etiqueta impresa y lo que el dispositivo publica digan
+								lo mismo.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								Emparejamiento por código QR
+							</div>
+							<p>
+								El código impreso en la etiqueta lleva el nombre de la red de
+								configuración y su clave. El usuario lo escanea y el teléfono se une
+								al punto de acceso sin teclear nada: es lo que hace el
+								provisioning accesible a quien no sabe qué es un SSID.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">MAC · 24:6F:28:A4:CF:12</span>
+								<span class="bd-node__body">Grabada en fabricación. Los tres primeros bytes identifican al fabricante.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓ últimos tres bytes</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__body">
+									Red de configuración: <code>ESP32-A4CF12</code><br />
+									Nombre local: <code>esp32-a4cf12.local</code><br />
+									Cliente del broker: <code>esp01-a4cf12</code><br />
+									Número de serie impreso: <code>A4CF12</code>
+								</span>
+							</div>
+						</div>
+
+						<div class="term">[ID] mac=24:6F:28:A4:CF:12
+[ID] ap_ssid=ESP32-A4CF12  host=esp32-a4cf12  cliente=esp01-a4cf12
+[ID] serie impreso en la etiqueta: A4CF12</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-paper-incorporacion-red.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Incorporación a la red</span>
+				</a>
+				<a class="slide-nav__link" href="14-paper-identidad-a-escala.html">
+					<span>Artículo · Identidad a escala</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

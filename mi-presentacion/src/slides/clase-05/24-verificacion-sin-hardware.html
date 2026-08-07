@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Inyección de eventos por el puerto serie · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Inyección de eventos por el puerto serie</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Procedimiento
+							</div>
+							<p>
+								Si la función que produce los eventos admite además una fuente por
+								el puerto serie, la máquina puede recorrerse entera sin tocar el
+								hardware. Un carácter por evento basta.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Qué permite comprobar
+							</div>
+							<p>
+								Recorrer las seis filas de la tabla de transiciones toma segundos, y
+								puede repetirse tras cada cambio. Situaciones que exigirían averiar
+								un sensor, un fin de carrera que no llega, se provocan sin más que
+								no enviar el carácter correspondiente.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Relación con la prueba automatizada</span>
+							<p>
+								Una secuencia de caracteres y la traza que debe producir constituyen
+								un caso de prueba reproducible. Es el primer paso hacia la prueba
+								automatizada del firmware, y no exige más herramientas que el
+								monitor serie.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">dos fuentes, un solo evento</span>
+							</div>
+							<pre><code>Evento leerEvento() {
+  <span class="hl hl--add">if (Serial.available()) {        // fuente de ensayo</span>
+  <span class="hl hl--add">  switch (Serial.read()) {</span>
+  <span class="hl hl--add">    case 'p': return Evento::PULSADOR;</span>
+  <span class="hl hl--add">    case 'a': return Evento::FIN_CARRERA_ABRE;</span>
+  <span class="hl hl--add">  }</span>
+  <span class="hl hl--add">}</span>
+  return leerEntradasFisicas();  // fuente real
+}</code></pre>
+						</div>
+
+						<div class="term">&gt; p
+[FSM] t=1204  VERDE_VEHICULOS --PULSADOR--&gt; VERDE_VEHICULOS  guarda=NO
+&gt; p
+[FSM] t=9310  VERDE_VEHICULOS --PULSADOR--&gt; AMBAR  guarda=SI
+&gt; x
+[FSM] t=9800  evento no reconocido: 'x'</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="23-registro-transiciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>Registro de transiciones</span>
+				</a>
+				<a class="slide-nav__link" href="25-codigo-23-maquina-verificable.html">
+					<span>La hora del código · Máquina verificable</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

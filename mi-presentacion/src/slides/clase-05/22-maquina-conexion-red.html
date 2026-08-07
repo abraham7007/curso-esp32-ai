@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La conexión de red modelada como máquina de estados · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">La conexión de red modelada como máquina de estados</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Por qué se modela así
+							</div>
+							<p>
+								Conectarse a una red no es una operación instantánea ni fiable:
+								tarda un tiempo variable, puede fallar y puede caerse después de
+								haber tenido éxito. Escrita como una espera dentro de
+								<code>setup()</code>, ninguna de esas tres situaciones tiene
+								tratamiento.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>WiFi.begin()</code> retorna de inmediato y no indica éxito;
+								el resultado se consulta con <code>WiFi.status()</code>, que
+								devuelve <code>WL_CONNECTED</code>,
+								<code>WL_CONNECT_FAILED</code> o
+								<code>WL_DISCONNECTED</code>. Ese valor es el evento que alimenta
+								la máquina en cada iteración.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Backoff exponencial entre reintentos</span>
+							<p>
+								El estado <code>ESPERANDO_REINTENTO</code> duplica su plazo en cada
+								fallo consecutivo, de 1 s a un máximo de 60 s. Reintentar cada
+								segundo de forma indefinida consume energía y satura el punto de
+								acceso sin aumentar la probabilidad de éxito.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead>
+									<tr><th>Estado</th><th>Evento</th><th>Siguiente</th></tr>
+								</thead>
+								<tbody>
+									<tr><td><code>DESCONECTADO</code></td><td>arranque</td><td><code>ASOCIANDO</code></td></tr>
+									<tr><td><code>ASOCIANDO</code></td><td><code>WL_CONNECTED</code></td><td><code>CONECTADO</code></td></tr>
+									<tr><td><code>ASOCIANDO</code></td><td>plazo 15 s</td><td><code>ESPERANDO_REINTENTO</code></td></tr>
+									<tr><td><code>ESPERANDO_REINTENTO</code></td><td>vence espera</td><td><code>ASOCIANDO</code></td></tr>
+									<tr><td><code>CONECTADO</code></td><td>enlace perdido</td><td><code>ESPERANDO_REINTENTO</code></td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="term">[RED] t=0      DESCONECTADO -&gt; ASOCIANDO   intento=1
+[RED] t=15000  plazo excedido -&gt; ESPERANDO_REINTENTO  espera=1000 ms
+[RED] t=16000  ESPERANDO_REINTENTO -&gt; ASOCIANDO  intento=2
+[RED] t=31000  plazo excedido -&gt; ESPERANDO_REINTENTO  espera=2000 ms
+[RED] t=48200  ASOCIANDO -&gt; CONECTADO  ip=192.168.1.47  rssi=-63 dBm</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-casos-aplicacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>Cinco sistemas modelados con estados</span>
+				</a>
+				<a class="slide-nav__link" href="23-registro-transiciones.html">
+					<span>Registro de transiciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Costo medido de sincronizar tareas entre los dos núcleos · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Wenzel, V.; Silva, D. L.; Nunes, L. et al.</b> (2023). Analysis of FreeRTOS scheduling on the ESP32 dual-core platform. <i>SBESC / IEEE</i>. <code>doi:10.1109/SBESC60926.2023.10324061</code></p>
+
+					<h2 class="paper__title">Costo medido de sincronizar tareas entre los dos núcleos</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Medir la penalización de ejecutar FreeRTOS sobre una arquitectura de <b>dos núcleos</b>.</li>
+									<li>La adaptación multinúcleo procede de la comunidad y <b>no estaba caracterizada</b>.</li>
+									<li>Medidas sobre el propio ESP32, con el contador de ciclos a 240 MHz y sin instrumentación externa.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Conmutación dentro del <b>mismo núcleo</b>: <b>0,012 ms</b>, con mínimo y máximo iguales a la media.</li>
+									<li>La misma conmutación <b>entre núcleos</b>: <b>190,3 ms</b>.</li>
+									<li>Una tarea programada a 10 ms sale a <b>9,996 ms</b>, con mínimo de 9,632.</li>
+									<li>El planificador cumple el periodo; lo que se desborda es la sincronización.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Dentro de un núcleo la conmutación es <b>estable y despreciable</b>.</li>
+									<li>Entre núcleos alcanza valores que los autores llaman <b>«inesperadamente altos»</b>.</li>
+									<li>Toda tarea sincronizada necesita <b>afinidad fijada</b>: sin ella, el costo es impredecible.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-conmutacion-nucleos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia con las cifras publicadas. Tiempo de conmutación en las dos configuraciones, en escala logarítmica.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-freertos-dos-asuntos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las tres cifras separadas en los dos asuntos que son: el planificador cumple, la sincronización entre núcleos no.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-reparto-nucleos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>Asignación de tareas a los núcleos</span>
+				</a>
+				<a class="slide-nav__link" href="11-ceder-o-retener-procesador.html">
+					<span>Ceder o retener el procesador</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

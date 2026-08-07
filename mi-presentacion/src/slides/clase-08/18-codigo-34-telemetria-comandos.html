@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 34 · Telemetría y comandos con confirmación · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 34</span>
+					</div>
+
+					<h2 class="code-hour__title">Telemetría por variación y comandos con confirmación de ejecución</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Separar telemetría y comandos como flujos con requisitos distintos: la telemetría se publica <b>por variación</b>, con un mensaje de seguridad cada 60 s, y los comandos son <b>idempotentes</b> y se confirman publicando el estado resultante.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Publicar <b>por variación</b> es enviar solo cuando el valor se aparta del último enviado; el <b>mensaje de seguridad</b> periódico evita que el silencio se confunda con una avería. Una orden <b>idempotente</b> deja el mismo resultado se aplique una vez o tres, y comparar su identificador con el último atendido descarta los duplicados que QoS 1 admite. La <b>confirmación</b> es el estado resultante publicado como retenido: dice lo que ocurrió, no lo que se pidió.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y la biblioteca PubSubClient.
+
+<b>2. Firmware.</b> Muestrea el GPIO 34 cada 1000 ms pero publica solo si el valor se aparta más de 0,3 del último enviado, o si han pasado 60000 ms desde la última publicación. La telemetría va con QoS 0 a <code>uni/lab3/esp01/temperatura</code>. Suscríbete a <code>uni/lab3/esp01/comando/led</code> con QoS 1; los comandos llevan un identificador y descartas los repetidos comparándolo con el último atendido. Tras ejecutar, publica el estado resultante en <code>uni/lab3/esp01/estado/led</code> como retained message. Lleva la cuenta de los mensajes enviados y de los que habría enviado una política periódica de 5 s. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la decisión de publicar: variación, plazo de seguridad, enviar o callar. Y los <b>dos flujos enfrentados</b>, con su nivel de servicio y el camino de la confirmación.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> y controla un LED en el <b>GPIO 25</b> con resistencia de 220 Ω mediante los comandos.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="orange"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[TELE] t=5000   valor=23.4  variacion=0.0  -&gt; no se publica
+[TELE] t=12000  valor=23.8  variacion=0.4  -&gt; publica qos=0
+[TELE] t=65000  valor=23.8  seguridad 60 s -&gt; publica qos=0
+[CMD]  t=71200  recibido led=on (qos=1)  id=8f21
+[CMD]  t=71205  ejecutado publica estado/led=on (retenido)
+[CMD]  t=73000  recibido id=8f21  DUPLICADO -&gt; descartado
+[RESUMEN] 1 h: por variacion=41 | periodico habria sido=720</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea es la medida: <b>41 mensajes</b> frente a los 720 de una política periódica, sobre la misma hora y el mismo dato. Sin ella el ahorro sería una afirmación. Mirar también las dos líneas con <code>id=8f21</code>: la segunda se descarta.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-politica-transmision.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					<span>Política de transmisión</span>
+				</a>
+				<a class="slide-nav__link" href="19-paper-latencia-borde-nube.html">
+					<span>Artículo · Latencia y memoria del broker</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dimensionamiento de la pila y detección del desbordamiento · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Dimensionamiento de la pila y detección del desbordamiento</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué ocupa la pila
+							</div>
+							<p>
+								Las variables locales de la tarea y de todas las funciones que
+								llame, más la dirección de retorno y el contexto guardado en cada
+								interrupción. Un arreglo local de 1024 <code>float</code> ocupa
+								<b>4 kB de pila</b>, no del heap.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								Cómo se mide
+							</div>
+							<p>
+								<code>uxTaskGetStackHighWaterMark(handle)</code> devuelve, en
+								palabras, la <b>menor cantidad de pila libre</b> que ha tenido la
+								tarea desde que arrancó. No es el valor actual: es el peor caso
+								observado, que es la magnitud que decide.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Procedimiento de dimensionado</span>
+							<p>
+								Partir de <b>4096 palabras</b>, ejercitar todos los caminos de la
+								tarea (incluidos los de error, que suelen ser los que más
+								consumen), leer la marca y dejar un <b>margen del 30 %</b>. Ajustar
+								sin haber recorrido las rutas de error produce desbordamientos que
+								solo aparecen cuando algo falla.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="term">[PILA] muestreo     asignada=4096  libre_min=2884  uso=1212 (30%)
+[PILA] publicacion  asignada=4096  libre_min= 312  uso=3784 (92%)  &lt;-- ajustada
+[PILA] interfaz     asignada=2048  libre_min=1602  uso= 446 (22%)
+[HEAP] libre=178432  minima_historica=164208  fragmento_mayor=113804</div>
+
+						<div class="problem-card">
+							<div class="problem-card__head">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Síntoma del desbordamiento
+							</div>
+							<div class="problem-card__body">
+								<p>
+									Reinicios sin patrón aparente, a veces tras horas de
+									funcionamiento, con una traza de retorno que apunta a código sin
+									relación con la causa.
+								</p>
+								<p>
+									<b>Por qué ocurre.</b> La tarea escribe más allá de su pila y
+									corrompe la memoria contigua, que pertenece a otra tarea. El
+									fallo se manifiesta donde se lee el dato corrompido, no donde se
+									escribió.
+								</p>
+								<p>
+									<b>Cómo comprobarlo.</b> Imprimir el high water mark de todas las
+									tareas cada pocos segundos. Una que se acerque a cero identifica
+									a la culpable antes de que corrompa nada.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-ceder-o-retener-procesador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					<span>Ceder o retener el procesador</span>
+				</a>
+				<a class="slide-nav__link" href="13-codigo-25-afinidad-nucleos.html">
+					<span>La hora del código · Core affinity</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

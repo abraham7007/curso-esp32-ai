@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Modulación por ancho de pulso · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					03 · Conversión de señales analógicas
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Modulación por ancho de pulso
+				</h1>
+
+				<div class="is-stretch slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<b>PWM</b>: el terminal conmuta entre 0 V y 3,3 V a frecuencia
+								fija. La magnitud controlada es la fracción del periodo en
+								nivel alto, el <b>ciclo de trabajo</b>. La carga responde al
+								valor medio si su constante de tiempo supera el periodo de
+								conmutación.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Núcleo 3.x: <code>ledcAttach(pin, freq, bits)</code>
+								en <code>setup()</code>, luego <code>ledcWrite(pin, valor)</code>.
+								En proyectos con núcleo 2.x: <code>ledcSetup()</code> +
+								<code>ledcAttachPin()</code> + <code>ledcWrite(canal, ...)</code>
+								— la diferencia es la versión en <code>platformio.ini</code>.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La traza es siempre 0 V o 3,3 V, nunca un valor intermedio; la
+								línea discontinua marca el valor medio. Frecuencia y
+								resolución comparten el reloj de 80 MHz del LEDC:
+								2<sup>resolución</sup> × frecuencia ≤ 80 MHz.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="pwm-wave"
+								class="w-full aspect-[9/4]"
+								width="900"
+								height="200"
+								role="img"
+								aria-label="Forma de onda PWM: nivel lógico del terminal en el tiempo, con el valor medio marcado"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="pwm-freq" class="text-sm font-medium">
+									Frecuencia
+								</label>
+								<input
+									type="range"
+									id="pwm-freq"
+									min="500"
+									max="100000"
+									step="500"
+									value="5000"
+								/>
+								<span class="readout" id="pwm-freq-readout">5 000 Hz</span>
+							</div>
+
+							<div class="controls mt-2">
+								<label for="pwm-duty" class="text-sm font-medium">
+									Ciclo de trabajo
+								</label>
+								<input
+									type="range"
+									id="pwm-duty"
+									min="0"
+									max="100"
+									step="1"
+									value="25"
+								/>
+								<span class="readout" id="pwm-duty-readout">25 %</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Periodo
+									</span>
+									<span class="readout" id="pwm-period-out">200 µs</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Valor medio
+									</span>
+									<span class="readout" id="pwm-avg-out">0,825 V</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Resolución
+									</span>
+									<span class="readout" id="pwm-bits-out">13 bits</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Escalones
+									</span>
+									<span class="readout" id="pwm-steps-out">8 192</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-paper-adc-caracterizacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Artículo · Caracterización del ADC integrado</span>
+				</a>
+				<a class="slide-nav__link" href="14-codigo-04-pwm.html">
+					<span>La hora del código · PWM</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			const CLK = 80e6;
+			const VCC = 3.3;
+
+			const freqInput = document.getElementById("pwm-freq");
+			const dutyInput = document.getElementById("pwm-duty");
+			const freqReadout = document.getElementById("pwm-freq-readout");
+			const dutyReadout = document.getElementById("pwm-duty-readout");
+			const periodOut = document.getElementById("pwm-period-out");
+			const avgOut = document.getElementById("pwm-avg-out");
+			const bitsOut = document.getElementById("pwm-bits-out");
+			const stepsOut = document.getElementById("pwm-steps-out");
+			const canvas = document.getElementById("pwm-wave");
+			const ctx = canvas.getContext("2d");
+
+			function miles(n) {
+				return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			}
+
+			function cssVar(name) {
+				return getComputedStyle(document.documentElement)
+					.getPropertyValue(name)
+					.trim();
+			}
+
+			function drawWave(freq, dutyPct) {
+				const w = canvas.width;
+				const h = canvas.height;
+				const top = 26;
+				const bottom = h - 34;
+				const left = 62;
+				const right = w - 20;
+
+				ctx.clearRect(0, 0, w, h);
+				ctx.fillStyle = cssVar("--color-surface");
+				ctx.fillRect(0, 0, w, h);
+
+				const accent = cssVar("--color-accent");
+				const border = cssVar("--color-border");
+				const muted = cssVar("--color-text-muted");
+				const text = cssVar("--color-text");
+
+				// ejes
+				ctx.strokeStyle = border;
+				ctx.lineWidth = 1;
+				ctx.setLineDash([4, 4]);
+				for (const y of [top, bottom]) {
+					ctx.beginPath();
+					ctx.moveTo(left, y);
+					ctx.lineTo(right, y);
+					ctx.stroke();
+				}
+				ctx.setLineDash([]);
+				ctx.strokeStyle = text;
+				ctx.globalAlpha = 0.5;
+				ctx.beginPath();
+				ctx.moveTo(left, top - 14);
+				ctx.lineTo(left, bottom + 14);
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+
+				ctx.fillStyle = muted;
+				ctx.font = "13px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("3,3 V", left - 8, top + 4);
+				ctx.fillText("0 V", left - 8, bottom + 4);
+
+				// tres periodos completos de la señal
+				const duty = dutyPct / 100;
+				const cyclePx = (right - left) / 3;
+				const highPx = cyclePx * duty;
+
+				ctx.strokeStyle = accent;
+				ctx.lineWidth = 2.6;
+				ctx.beginPath();
+				let x = left;
+				ctx.moveTo(x, bottom);
+				for (let i = 0; i < 3; i++) {
+					const xHigh = x + highPx;
+					const xEnd = x + cyclePx;
+					ctx.lineTo(x, top);
+					ctx.lineTo(xHigh, top);
+					ctx.lineTo(xHigh, bottom);
+					ctx.lineTo(xEnd, bottom);
+					x = xEnd;
+				}
+				ctx.stroke();
+
+				// valor medio
+				const avgY = bottom - (bottom - top) * duty;
+				ctx.strokeStyle = cssVar("--color-navy");
+				ctx.lineWidth = 1.6;
+				ctx.setLineDash([6, 4]);
+				ctx.beginPath();
+				ctx.moveTo(left, avgY);
+				ctx.lineTo(right, avgY);
+				ctx.stroke();
+				ctx.setLineDash([]);
+
+				ctx.fillStyle = cssVar("--color-navy");
+				ctx.font = "600 12px system-ui";
+				ctx.textAlign = "left";
+				const avgV = (VCC * duty).toFixed(3);
+				ctx.fillText(`valor medio ≈ ${avgV} V`, left + 6, avgY - 8);
+
+				// leyenda de tiempo
+				const periodUs = (1 / freq) * 1e6;
+				ctx.fillStyle = muted;
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "left";
+				ctx.fillText(
+					`periodo = ${periodUs < 10 ? periodUs.toFixed(2) : Math.round(periodUs)} µs · 3 periodos mostrados`,
+					left,
+					h - 18,
+				);
+			}
+
+			function update() {
+				const f = Number(freqInput.value);
+				const duty = Number(dutyInput.value);
+				const bits = Math.floor(Math.log2(CLK / f));
+				const steps = 2 ** bits;
+				const periodUs = (1 / f) * 1e6;
+				const avgV = (VCC * duty) / 100;
+
+				freqReadout.textContent = `${miles(f)} Hz`;
+				dutyReadout.textContent = `${duty} %`;
+				periodOut.textContent = `${periodUs < 10 ? periodUs.toFixed(2) : miles(Math.round(periodUs))} µs`;
+				avgOut.textContent = `${avgV.toFixed(3).replace(".", ",")} V`;
+				bitsOut.textContent = `${bits} bits`;
+				stepsOut.textContent = miles(steps);
+
+				drawWave(f, duty);
+			}
+
+			freqInput.addEventListener("input", update);
+			dutyInput.addEventListener("input", update);
+			new MutationObserver(() => drawWave(Number(freqInput.value), Number(dutyInput.value))).observe(
+				document.documentElement,
+				{ attributes: true, attributeFilter: ["data-theme"] },
+			);
+			update();
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Formato de la carga útil y operación sin conectividad · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					02 · Plataformas y arquitectura de sistema
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Formato de la carga útil y operación sin conectividad</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="compare">
+							<div class="compare__panel">
+								<h3>JSON</h3>
+								<p>
+									Legible, autodescriptivo y admitido por cualquier herramienta. Una
+									medida ocupa unos <b>48 bytes</b>.
+								</p>
+								<div class="term">{"id":"esp01","t":23.4,"h":61.2}</div>
+							</div>
+							<div class="compare__panel">
+								<h3>Codificación binaria</h3>
+								<p>
+									Compacta pero opaca: hace falta el esquema para interpretarla. La
+									misma medida ocupa <b>10 bytes</b>.
+								</p>
+								<div class="term">65 73 70 30 31 | 00 EA | 02 65</div>
+							</div>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Cuándo compensa el cambio</span>
+							<p>
+								Con un dispositivo publicando cada minuto, la diferencia es de
+								<b>2 MB al año</b>: irrelevante. Con mil dispositivos publicando
+								cada segundo son <b>1,2 TB al año</b>, y ahí sí decide el costo de
+								operación. El criterio es el volumen, no la elegancia del formato.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Almacenar y reenviar
+							</div>
+							<p>
+								Sin enlace, el dispositivo guarda las medidas en local y las envía
+								al recuperarlo. Tres decisiones que hay que tomar antes de
+								programarlo:
+							</p>
+						</div>
+
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Cuánto guarda</span>
+								<span class="bd-node__body">Capacidad finita: al llenarse hay que decidir si se descarta lo más antiguo o lo más reciente.</span>
+							</div>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">Con qué timestamp</span>
+								<span class="bd-node__body">La del instante de la medida, no la del envío. Sin ella el histórico queda mal fechado.</span>
+							</div>
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Cómo evita duplicados</span>
+								<span class="bd-node__body">Un identificador por medida permite al receptor descartar lo que ya tiene tras un reenvío parcial.</span>
+							</div>
+						</div>
+
+						<p class="figure__caption">
+							El timestamp se toma en el dispositivo, lo que exige la hora
+							sincronizada de la sesión anterior y la NVS (memoria no volátil) de la
+							sesión 10.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-paper-latencia-borde-nube.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Latencia y memoria del broker</span>
+				</a>
+				<a class="slide-nav__link" href="21-codigo-35-sistema-completo.html">
+					<span>La hora del código · Sistema completo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

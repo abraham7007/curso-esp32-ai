@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 16 · Comparación de filtros · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 16</span>
+					</div>
+
+					<h2 class="code-hour__title">Comparación de filtros sobre la misma señal</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Muestrear a 50 Hz y emitir en cada línea tres valores del mismo instante: el crudo, la media móvil de ocho muestras y el filtro exponencial. Un giro brusco del cursor separa las tres trazas y deja ver qué cuesta cada filtro.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p>La <b>media móvil</b> promedia las últimas N muestras por igual. El <b>filtro exponencial</b> pondera cada muestra nueva con un factor α y arrastra el resto del pasado: con α = 0,2 responde antes que una media de ocho, y con menos memoria. Ninguno de los dos es gratis: todo suavizado se paga en <b>retardo</b>, y el formato <code>etiqueta:valor</code> permite ver las tres curvas superpuestas en el trazador serie.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Muestrea el GPIO 32 a 50 Hz exactos con temporización no bloqueante basada en millis(); no uses delay(). Calcula en paralelo la media móvil de las últimas 8 muestras y el filtro exponencial con alfa = 0,2. Emite las tres en la misma línea por el puerto serie a 115200 baudios con el formato «crudo:NNNN media:NNNN exp:NNNN», compatible con el trazador serie.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 32.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del muestreo periódico, con los tres filtros alimentándose de la misma muestra. Y una <b>gráfica</b> de las tres señales ante el escalón, con el retardo de cada una acotado.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>Potenciómetro de 10 kΩ con extremos a 3V3 y GND y cursor al <b>GPIO 32</b> (ADC1_CH4). Un giro rápido del cursor produce el escalón que separa las tres trazas.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+																<span class="hw-set__item">
+																	<wokwi-potentiometer></wokwi-potentiometer>
+																	<small>Potenciómetro</small>
+																</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">crudo:2051 media:2049 exp:2048
+crudo:2044 media:2048 exp:2047
+crudo:2057 media:2050 exp:2049
+crudo:3198 media:2193 exp:2279     &lt;- giro rápido del cursor
+crudo:3205 media:2338 exp:2464
+
+crudo:3200 media:3201 exp:3186     &lt;- 8 muestras después</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>Buscar la línea del giro y contar hacia abajo: el <b>crudo</b> salta de inmediato, el <b>exponencial</b> le sigue y la <b>media</b> llega la última, ocho muestras después. Ese desfase es el precio del suavizado, medido en la señal propia y no supuesto de antemano. Con el cursor quieto, comparar la dispersión de las tres columnas: ahí se ve lo que cada filtro compra.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-filtrado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Media móvil y filtro exponencial</span>
+				</a>
+				<a class="slide-nav__link" href="11-validacion-dato.html">
+					<span>Criterios de validez de una lectura</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

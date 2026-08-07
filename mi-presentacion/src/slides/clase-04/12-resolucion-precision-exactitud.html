@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resolución, precisión y exactitud · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+					03 · Exactitud y muestreo
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Resolución, precisión y exactitud
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<b>Resolución</b> (resolution): el escalón más pequeño que el
+								sistema distingue. Doce bits sobre un fondo de escala de 3,3 V
+								dan 4 096 códigos, es decir 0,806 mV por código.
+							</p>
+							<p>
+								<b>Precisión</b> (precision): repetibilidad. Cuánto se parecen
+								entre sí medidas sucesivas de la misma magnitud.
+							</p>
+							<p>
+								<b>Exactitud</b> (accuracy): cercanía de la medida al valor
+								verdadero de la magnitud.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg
+								class="icon icon--lg text-[var(--color-warn)]"
+								aria-hidden="true"
+							><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="m-0">
+								Un conversor de 12 bits no proporciona 12 bits de exactitud: la no
+								linealidad y el desplazamiento de cero dejan una resolución efectiva
+								menor. Informar tres decimales porque el conversor entrega 4 096
+								códigos atribuye a la medida una exactitud que no tiene.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<svg
+								class="w-full h-auto"
+								viewBox="0 0 720 300"
+								font-family="var(--font-sans)"
+								role="img"
+								aria-label="Tres dianas con cinco impactos cada una: agrupados fuera del centro, dispersos alrededor del centro, y agrupados en el centro"
+							>
+								<g>
+									<circle cx="130" cy="115" r="88" fill="var(--color-surface-2)" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="130" cy="115" r="60" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="130" cy="115" r="32" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="130" cy="115" r="9" fill="none" stroke="var(--color-navy)" stroke-width="2" />
+									<circle cx="173" cy="73" r="6" fill="var(--color-accent)" />
+									<circle cx="178" cy="80" r="6" fill="var(--color-accent)" />
+									<circle cx="168" cy="83" r="6" fill="var(--color-accent)" />
+									<circle cx="175" cy="88" r="6" fill="var(--color-accent)" />
+									<circle cx="184" cy="71" r="6" fill="var(--color-accent)" />
+									<text x="130" y="243" text-anchor="middle" font-size="15" font-weight="600" fill="var(--color-text)">Preciso, inexacto</text>
+									<text x="130" y="266" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">Repite el mismo valor,</text>
+									<text x="130" y="284" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">desplazado del verdadero</text>
+								</g>
+								<g>
+									<circle cx="360" cy="115" r="88" fill="var(--color-surface-2)" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="360" cy="115" r="60" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="360" cy="115" r="32" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="360" cy="115" r="9" fill="none" stroke="var(--color-navy)" stroke-width="2" />
+									<circle cx="308" cy="133" r="6" fill="var(--color-accent)" />
+									<circle cx="395" cy="67" r="6" fill="var(--color-accent)" />
+									<circle cx="368" cy="175" r="6" fill="var(--color-accent)" />
+									<circle cx="330" cy="75" r="6" fill="var(--color-accent)" />
+									<circle cx="408" cy="145" r="6" fill="var(--color-accent)" />
+									<text x="360" y="243" text-anchor="middle" font-size="15" font-weight="600" fill="var(--color-text)">Exacto, impreciso</text>
+									<text x="360" y="266" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">El promedio acierta,</text>
+									<text x="360" y="284" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">cada medida no</text>
+								</g>
+								<g>
+									<circle cx="590" cy="115" r="88" fill="var(--color-surface-2)" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="590" cy="115" r="60" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="590" cy="115" r="32" fill="none" stroke="var(--color-border)" stroke-width="1.5" />
+									<circle cx="590" cy="115" r="9" fill="none" stroke="var(--color-navy)" stroke-width="2" />
+									<circle cx="586" cy="118" r="6" fill="var(--color-ok)" />
+									<circle cx="595" cy="112" r="6" fill="var(--color-ok)" />
+									<circle cx="590" cy="123" r="6" fill="var(--color-ok)" />
+									<circle cx="597" cy="121" r="6" fill="var(--color-ok)" />
+									<circle cx="583" cy="110" r="6" fill="var(--color-ok)" />
+									<text x="590" y="243" text-anchor="middle" font-size="15" font-weight="600" fill="var(--color-text)">Preciso y exacto</text>
+									<text x="590" y="266" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">Repite el valor verdadero:</text>
+									<text x="590" y="284" text-anchor="middle" font-size="13" fill="var(--color-text-muted)">calibrado y con poco ruido</text>
+								</g>
+							</svg>
+
+							<div class="sim-caption mt-3">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								<p class="m-0">
+									El centro de la diana es el valor verdadero y cada impacto es
+									una medida. La dispersión entre impactos es la
+									<b>precisión</b>; la distancia del grupo al centro, la
+									<b>exactitud</b>. Aumentar la resolución acerca los impactos
+									entre sí, no acerca el grupo al centro: eso lo hace la
+									calibración.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-validacion-dato.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Criterios de validez de una lectura</span>
+				</a>
+				<a class="slide-nav__link" href="13-muestreo-solapamiento.html">
+					<span>Frecuencia de muestreo y solapamiento</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

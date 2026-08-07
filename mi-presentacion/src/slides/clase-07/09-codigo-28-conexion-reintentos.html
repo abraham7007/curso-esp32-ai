@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 28 · Conexión inalámbrica con reintentos · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 28</span>
+					</div>
+
+					<h2 class="code-hour__title">Conexión inalámbrica con reintentos y backoff exponencial</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> La máquina de gestión de la conexión de la sesión 5 llevada a código, en una tarea propia del <b>núcleo 0</b> que nunca detiene el resto del programa. Una segunda tarea parpadea un LED cada 200 ms para dejar a la vista que el bucle sigue vivo durante la negociación.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><code>WiFi.status()</code> devuelve el estado del enlace, y la tentación es esperarlo dentro de un <code>while</code>: eso bloquea todo el programa. Aquí se consulta <b>una vez por iteración</b> y su resultado es un evento más. El <b>RSSI</b> mide la potencia recibida en dBm, siempre negativa y mejor cuanto más cerca de cero. El <b>código de razón</b> de la desconexión distingue una contraseña incorrecta de un punto de acceso fuera de alcance.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Implementa la conexión como máquina de estados con DESCONECTADO, ASOCIANDO, ESPERANDO y CONECTADO, en una tarea del núcleo 0 con prioridad 2. Nunca uses <code>while (WiFi.status() != WL_CONNECTED)</code>: el estado se consulta una vez por iteración. Plazo de asociación 15000 ms; espera entre reintentos desde 1000 ms, duplicándose hasta 60000 ms, reiniciada al conectar. Al conectar imprime dirección, puerta de enlace, máscara, DNS y RSSI; registra la pérdida de enlace con su código de razón. Una segunda tarea en el núcleo 1 parpadea un LED cada 200 ms y los cuenta. Emite a 115200 baudios y guarda las credenciales en <code>credenciales.h</code>, excluido del control de versiones.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los cuatro LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la tarea de red, con la consulta del estado y el cálculo de la espera como pasos separados. Y el <b>diagrama de estados</b> del enlace junto a su tabla de transiciones, con una fila por flecha.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende tres LED de estado en los <b>GPIO 25, 26 y 27</b> y un cuarto en el <b>GPIO 32</b> que parpadea siempre, todos con resistencia de 220 Ω a masa.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[RED] t=0      DESCONECTADO -&gt; ASOCIANDO   intento=1  ssid=LAB-UNI
+[RED] t=15000  plazo excedido -&gt; ESPERANDO   espera=1000 ms
+[RED] t=18240  ASOCIANDO -&gt; CONECTADO  ip=192.168.1.47  rssi=-58
+[VIVO] t=18400 parpadeos=92  el bucle no se detuvo
+[RED] t=94100  enlace perdido (razon=8) -&gt; ESPERANDO  espera=1000</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[VIVO]</code> es la comprobación del ejercicio: <b>92 parpadeos</b> durante los 18 s de negociación. Si la conexión se hubiera resuelto con una espera dentro de <code>setup()</code>, ese contador valdría cero. Fijarse también en la última línea: la <b>razón 8</b> identifica la causa de la caída, y sin ella una contraseña mal escrita y un punto de acceso apagado se leerían igual.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-interfaz-wifi.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					<span>Interfaz inalámbrica del ESP32</span>
+				</a>
+				<a class="slide-nav__link" href="10-paper-protocolos-mensajeria.html">
+					<span>Artículo · Elección de protocolo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

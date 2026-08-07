@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Referencias · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					Sesión 1 · Fuentes
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">
+					Referencias
+				</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Las cuatro primeras son de acceso abierto.</strong> Se descargan
+					sin suscripción y sin pasar por la biblioteca: el DOI lleva directo al
+					PDF.
+				</p>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="refs">
+						<div class="ref">
+							<span class="ref__body">
+								<span class="ref__title">
+									Characterization and Performance Evaluation of ESP32 for
+									Real-time Synchronized Sensor Networks
+								</span>
+								<span class="ref__meta">
+									Espinosa-Gavira, M. J.; Agüera-Pérez, A.; Palomares-Salas,
+									J. C.; Sierra-Fernández, J. M.; Remigio-Carmona, P.; González
+									de-la-Rosa, J. J. (2024). <i>Procedia Computer Science</i>,
+									237, 261-268. CC BY-NC-ND 4.0.
+								</span>
+								<span class="ref__doi">doi:10.1016/j.procs.2024.05.104</span>
+								<span class="ref__where">Conversión ADC · Ejemplo 03</span>
+							</span>
+						</div>
+
+						<div class="ref">
+							<span class="ref__body">
+								<span class="ref__title">
+									ESP32: QEMU Emulation within a Docker Container
+								</span>
+								<span class="ref__meta">
+									Howard, M.; Irvin, R. B. (2023). Portland State University.
+									<i>arXiv</i>. CC BY 4.0.
+								</span>
+								<span class="ref__doi">arXiv:2303.10204</span>
+								<span class="ref__where">
+									Cadena de construcción · Secuencia de flasheo
+								</span>
+							</span>
+						</div>
+
+						<div class="ref">
+							<span class="ref__body">
+								<span class="ref__title">
+									Benchmarking Large Language Models for Embedded Systems
+									Programming in Microcontroller-Driven IoT Applications
+								</span>
+								<span class="ref__meta">
+									Babiuch, M.; Smutný, P. (2026). VSB - Universidad Técnica de
+									Ostrava. <i>Future Internet</i>, 18(2), 94. CC BY 4.0.
+								</span>
+								<span class="ref__doi">doi:10.3390/fi18020094</span>
+								<span class="ref__where">La hora del código · Diagnóstico</span>
+							</span>
+						</div>
+
+						<div class="ref">
+							<span class="ref__body">
+								<span class="ref__title">
+									EmbedAgent: Benchmarking Large Language Models in Embedded
+									System Development
+								</span>
+								<span class="ref__meta">
+									Xu, R.; Cao, J.; Wu, M.; Zhong, W.; Lu, Y.; He, B.; Han, X.;
+									Cheung, S.-C.; Sun, L. (2026). <i>ICSE '26</i>, Río de
+									Janeiro. CC BY 4.0.
+								</span>
+								<span class="ref__doi">arXiv:2506.11003</span>
+								<span class="ref__where">La hora del código · Wokwi</span>
+							</span>
+						</div>
+					</div>
+
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Documentación técnica
+							</div>
+							<p class="text-sm">
+								<b>ESP32 Series Datasheet</b> y <b>ESP32 Technical Reference
+								Manual</b>, Espressif Systems. Son la fuente de toda cifra
+								eléctrica de esta sesión: corriente por pin, rangos del
+								conversor, pines de arranque.
+							</p>
+							<p class="text-sm">
+								<b>ESP-IDF Programming Guide</b>, Espressif. Documenta el ADC, el
+								controlador LEDC, la tabla de particiones y los códigos de
+								excepción.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p class="text-sm">
+								Las figuras de esta sesión son elaboración propia a partir de los
+								datos publicados. No reproducen las figuras originales: la
+								referencia [1] se distribuye bajo una licencia que permite
+								copiarla íntegra, pero no publicar versiones derivadas.
+							</p>
+						</div>
+					</div>
+								<div class="credito">
+					<span class="credito__autor">Abraham Caso Torres</span>
+					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+					<span>El material del curso; cada artículo citado conserva su propia licencia.</span>
+				</div>
+			</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="32-resumen.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Síntesis de la sesión</span>
+				</a>
+				<span></span>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Punteros y referencias · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+					06 · Composición y memoria de los objetos
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Punteros y referencias, en su uso necesario
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p class="m-0">
+						Una <b>referencia</b> (<i>reference</i>, <code>Sensor&amp;</code>) es
+						otro nombre para un objeto que ya existe. Un <b>puntero</b>
+						(<i>pointer</i>, <code>Sensor*</code>) guarda la dirección de ese
+						objeto y puede no apuntar a ninguno. En este curso ambos tienen un
+						único uso: pasar un objeto a una función sin copiarlo y permitir que
+						la función lo modifique.
+					</p>
+				</div>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-danger)]" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							Paso por valor
+						</h3>
+						<p class="font-mono text-sm m-0 mb-2">void registrar(Sensor s);</p>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-1">
+							<li>
+								La llamada copia el objeto entero: su estado, sus buffers y sus
+								miembros contenidos.
+							</li>
+							<li>
+								La función trabaja sobre la copia. Al retornar, la copia se
+								destruye y el objeto del llamador queda como estaba.
+							</li>
+							<li>Coste de memoria y de tiempo sin efecto observable.</li>
+						</ul>
+					</div>
+
+					<div class="compare__panel">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-ok)]" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+							Paso por referencia
+						</h3>
+						<p class="font-mono text-sm m-0 mb-2">void registrar(Sensor&amp; s);</p>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-1">
+							<li>
+								No hay copia: <code>s</code> es otro nombre del objeto del
+								llamador.
+							</li>
+							<li>
+								Lo que la función escribe en <code>s</code> queda escrito en el
+								original.
+							</li>
+							<li>
+								Si la función solo consulta, se declara
+								<code>const Sensor&amp; s</code> y el compilador impide la
+								escritura.
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<div class="conclusion__label">Criterio operativo</div>
+					<p class="m-0">
+						Referencias por defecto: el objeto siempre existe y la firma lo
+						garantiza. Punteros solo cuando el valor puede legítimamente estar
+						ausente (un <code>Sensor*</code> nulo que significa «sin sensor
+						asignado»), y en ese caso la comprobación
+						<code>if (p != nullptr)</code> forma parte de la función.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg
+						class="icon icon--lg text-[var(--color-warn)]"
+						aria-hidden="true"
+					><use href="/course-icons.svg#i-alert" /></svg>
+					<p class="m-0">
+						Un puntero sin inicializar es la causa de la excepción
+						<code>LoadProhibited</code> vista en la Sesión 1: la traza con
+						<code>EXCVADDR: 0x00000000</code> indica exactamente ese caso, un
+						acceso a través de un puntero que vale cero. Una referencia no
+						admite ese estado, y por eso es la opción por defecto.
+					</p>
+								<div class="credito">
+					<span class="credito__autor">Abraham Caso Torres</span>
+					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+					<span>El material del curso; cada artículo citado conserva su propia licencia.</span>
+				</div>
+			</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-composicion-objetos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Composición: objetos que contienen objetos</span>
+				</a>
+				<a class="slide-nav__link" href="23-pila-vs-heap.html">
+					<span>Pila y heap: dónde vive cada variable</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

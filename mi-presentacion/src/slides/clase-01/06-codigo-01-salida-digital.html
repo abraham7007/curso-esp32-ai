@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 01 · Salida digital periódica · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 01</span>
+					</div>
+
+					<h2 class="code-hour__title">
+						Conmutación periódica de una salida digital
+					</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Un LED que conmuta cada 4 s. Es el ejercicio mínimo que recorre la cadena entera (crear el proyecto, compilar, grabar y leer el puerto serie) y confirma que el entorno funciona antes de que ningún error de programa pueda confundirse con un error de instalación.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p><code>pinMode()</code> fija la <b>dirección</b> de un terminal: si es entrada o salida. <code>digitalWrite()</code> escribe su nivel lógico, alto o bajo. <code>delay()</code> detiene el programa el tiempo indicado, y ahí está su inconveniente: durante esa espera el equipo no atiende nada más. <code>setup()</code> se ejecuta una sola vez al arrancar y <code>loop()</code> se repite mientras haya alimentación.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino. Compílalo y déjalo listo para grabar.
+
+<b>2. Firmware.</b> Configura el GPIO 2 como salida digital y hazlo conmutar con un período de 4 s usando delay(). En cada cambio escribe por el puerto serie a 115200 baudios una línea con el formato exacto «t = N s   GPIO2 = ALTO». Usa solo setup() y loop(), sin librerías externas ni clases.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi al mismo proyecto, con el LED y su resistencia de 220 Ω conectados como en el montaje.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del programa, distinguiendo qué se ejecuta una sola vez al arrancar y qué se repite, y marcando dónde el programa se queda esperando. Y el <b>diagrama de circuito</b> con el ESP32, el LED y su resistencia.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>
+																Ánodo del LED al <b>GPIO 2</b> a través de una resistencia
+																limitadora de 220 Ω; cátodo a masa (GND).
+															</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+																<span class="hw-set__item">
+																	<wokwi-led color="red" value="1"></wokwi-led>
+																	<small>LED</small>
+																</span>
+																<span class="hw-set__item">
+																	<wokwi-resistor value="220"></wokwi-resistor>
+																	<small>220 Ω</small>
+																</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">t = 0 s  GPIO2 = ALTO  (encendido)
+t = 2 s  GPIO2 = BAJO  (apagado)
+t = 4 s  GPIO2 = ALTO  (encendido)
+
+Período: 4 s · Ciclo de trabajo: 50 %</div>
+														</div>
+
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>Comprobar que los instantes de la traza avanzan de <b>2 en 2 s</b> y que el nivel alterna sin saltarse ninguno. Si aparecieran dos líneas seguidas con el mismo nivel, la escritura no está ocurriendo donde parece. Y cronometrar el arranque: entre encender y la primera línea hay un retardo que no es del programa sino del monitor serie al abrir el puerto.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-gpio-restricciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>GPIO: multiplexado y restricciones</span>
+				</a>
+				<a class="slide-nav__link" href="07-caracteristicas-electricas.html">
+					<span>Características eléctricas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

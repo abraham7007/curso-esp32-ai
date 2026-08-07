@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tres formas de esperar y su efecto sobre el procesador · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Tres formas de esperar y su efecto sobre el procesador</h1>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg><code>vTaskDelay()</code></div>
+						<p>
+							Bloquea la tarea y <b>cede el núcleo</b>. El planificador ejecuta
+							otras tareas durante la espera y la reanuda al vencer el plazo.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Resolución de 1 tick = 1 ms. Se escribe
+							<code>vTaskDelay(pdMS_TO_TICKS(20))</code>.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg><code>delay()</code></div>
+						<p>
+							En el núcleo de Arduino sobre ESP32 <b>también cede</b>: internamente
+							llama a <code>vTaskDelay()</code>. Es la excepción, no la regla: en
+							otras placas Arduino ocupa el procesador.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Por debajo de 1 ms no cede: <code>delay(0)</code> retorna sin
+							bloquear.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>Espera activa</div>
+						<p>
+							<code>while (!listo) {}</code> o
+							<code>delayMicroseconds()</code> <b>retienen el núcleo</b>. La tarea
+							sigue preparada y consume su turno completo sin avanzar.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							Admisible solo para esperas de pocos microsegundos exigidas por un
+							periférico.
+						</p>
+					</div>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						Una tarea de prioridad alta con espera activa impide ejecutarse a la
+						<b>tarea de reposo</b>, que es la que alimenta al watchdog de su
+						núcleo. El sistema se reinicia con el mensaje
+						<code>Task watchdog got triggered</code>, y la causa no es el
+						watchdog: es la tarea que nunca cede.
+					</p>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Para un periodo estable, ninguna de las tres</span>
+					<p>
+						<code>vTaskDelay()</code> espera un plazo <em>desde el momento en que se
+						la llama</em>, de modo que el periodo real acumula el tiempo de proceso
+						de cada iteración y deriva. Para un periodo fijo se usa
+						<code>vTaskDelayUntil(&amp;ultimaVez, pdMS_TO_TICKS(10))</code>, que
+						espera <em>hasta</em> un instante absoluto y compensa esa variación.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-paper-freertos-multinucleo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · FreeRTOS sobre dos núcleos</span>
+				</a>
+				<a class="slide-nav__link" href="12-dimensionamiento-pila.html">
+					<span>Dimensionamiento de la pila</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

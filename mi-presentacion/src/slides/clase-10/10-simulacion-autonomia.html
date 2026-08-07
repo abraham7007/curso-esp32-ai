@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Autonomía según el ciclo de trabajo y el modo de reposo · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					02 · Robustez, consumo y actualización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Autonomía según el ciclo de trabajo y el modo de reposo</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Los tres modos
+							</div>
+							<p>
+								<b>Activo</b> con la radio encendida, del orden de 160 mA.
+								<b>Sueño ligero</b>, que conserva la memoria y despierta rápido,
+								unos 0,8 mA. <b>Deep sleep (sueño profundo)</b>, que apaga casi todo y conserva
+								solo la memoria RTC, unos 10 µA.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Con una medida por minuto, pasar de sueño ligero a profundo
+								multiplica la autonomía por más de veinte. Lo que domina no es el
+								consumo activo sino <b>cuánto tiempo se pasa despierto</b>: alargar
+								el periodo entre medidas gana más que optimizar el código.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="aut-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Perfil de corriente de un ciclo de medida, con el tramo activo y el de reposo, y la autonomía resultante en días"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="aut-per" class="text-sm font-medium">Periodo entre medidas</label>
+								<input type="range" id="aut-per" min="10" max="3600" step="10" value="60" />
+								<span class="readout" id="aut-per-lec">60 s</span>
+							</div>
+							<div class="controls mt-2">
+								<label for="aut-act" class="text-sm font-medium">Tiempo despierto</label>
+								<input type="range" id="aut-act" min="200" max="8000" step="100" value="2500" />
+								<span class="readout" id="aut-act-lec">2500 ms</span>
+							</div>
+							<div class="controls mt-2">
+								<label class="flex items-center gap-2 text-sm">
+									<input type="checkbox" id="aut-prof" class="accent-[var(--color-accent)]" checked />
+									deep sleep entre medidas
+								</label>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Corriente media</span>
+									<span class="readout" id="aut-med">7,5 mA</span>
+								</div>
+								<div class="metric__item" id="aut-item-dias">
+									<span class="text-xs text-[var(--color-text-muted)]">Autonomía · 2000 mAh</span>
+									<span class="readout" id="aut-dias">11 días</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Fracción despierto</span>
+									<span class="readout" id="aut-frac">4,2 %</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-codigo-41-diagnostico.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Diagnóstico de arranque</span>
+				</a>
+				<a class="slide-nav__link" href="11-paper-medicion-consumo.html">
+					<span>Artículo · Medición del consumo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Corrientes del orden de las que se miden en el módulo empleado. La
+			// autonomía se calcula con la capacidad nominal, sin descontar el
+			// rendimiento del regulador: la conclusión cualitativa no cambia y el
+			// cálculo queda comprobable a mano.
+			const I_ACTIVO_MA = 160;
+			const I_LIGERO_MA = 0.8;
+			const I_PROFUNDO_MA = 0.01;
+			const BATERIA_MAH = 2000;
+
+			const lienzo = document.getElementById("aut-canvas");
+			const ctx = lienzo.getContext("2d");
+			const dPer = document.getElementById("aut-per");
+			const dAct = document.getElementById("aut-act");
+			const cProf = document.getElementById("aut-prof");
+			const lecPer = document.getElementById("aut-per-lec");
+			const lecAct = document.getElementById("aut-act-lec");
+			const salMed = document.getElementById("aut-med");
+			const salDias = document.getElementById("aut-dias");
+			const salFrac = document.getElementById("aut-frac");
+			const itDias = document.getElementById("aut-item-dias");
+
+			function variable(n) {
+				return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+			}
+			function coma(n, d) {
+				return n.toFixed(d).replace(".", ",");
+			}
+
+			function dibujar(perS, actMs, profundo) {
+				const iReposo = profundo ? I_PROFUNDO_MA : I_LIGERO_MA;
+				const fracAct = actMs / 1000 / perS;
+				const media = I_ACTIVO_MA * fracAct + iReposo * (1 - fracAct);
+
+				const w = lienzo.width;
+				ctx.clearRect(0, 0, w, lienzo.height);
+				const izq = 118;
+				const der = w - 34;
+				const ancho = der - izq;
+				const base = 268;
+				const alto = 170;
+
+				const atenuado = variable("--color-text-muted");
+				const borde = variable("--color-border");
+				const acento = variable("--color-accent");
+				const navy = variable("--color-navy");
+
+				// Escala logarítmica: entre 10 µA y 160 mA hay cuatro órdenes.
+				const yDe = (mA) => {
+					const lo = Math.log10(0.005);
+					const hi = Math.log10(200);
+					return base - ((Math.log10(Math.max(mA, 0.005)) - lo) / (hi - lo)) * alto;
+				};
+
+				// Rejilla de referencia
+				ctx.strokeStyle = borde;
+				ctx.lineWidth = 1;
+				ctx.font = "10px ui-monospace, monospace";
+				ctx.fillStyle = atenuado;
+				ctx.textAlign = "right";
+				for (const mA of [0.01, 0.1, 1, 10, 100]) {
+					const y = yDe(mA);
+					ctx.setLineDash([3, 4]);
+					ctx.beginPath();
+					ctx.moveTo(izq, y);
+					ctx.lineTo(der, y);
+					ctx.stroke();
+					ctx.setLineDash([]);
+					ctx.fillText(mA >= 1 ? `${mA} mA` : `${mA * 1000} µA`, izq - 8, y + 3);
+				}
+
+				// Perfil del ciclo: tramo activo seguido de tramo en reposo
+				const xAct = Math.max(6, ancho * Math.min(0.45, fracAct * 4));
+				ctx.fillStyle = acento;
+				ctx.globalAlpha = 0.22;
+				ctx.fillRect(izq, yDe(I_ACTIVO_MA), xAct, base - yDe(I_ACTIVO_MA));
+				ctx.globalAlpha = 1;
+				ctx.strokeStyle = acento;
+				ctx.lineWidth = 2.4;
+				ctx.beginPath();
+				ctx.moveTo(izq, base);
+				ctx.lineTo(izq, yDe(I_ACTIVO_MA));
+				ctx.lineTo(izq + xAct, yDe(I_ACTIVO_MA));
+				ctx.lineTo(izq + xAct, yDe(iReposo));
+				ctx.lineTo(der, yDe(iReposo));
+				ctx.stroke();
+
+				// Media, como referencia horizontal
+				ctx.strokeStyle = navy;
+				ctx.lineWidth = 1.6;
+				ctx.setLineDash([6, 4]);
+				ctx.beginPath();
+				ctx.moveTo(izq, yDe(media));
+				ctx.lineTo(der, yDe(media));
+				ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = navy;
+				ctx.textAlign = "left";
+				ctx.font = "600 11px system-ui";
+				ctx.fillText(`media ${coma(media, 3)} mA`, izq + 8, yDe(media) - 6);
+
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "center";
+				ctx.fillText("despierto", izq + xAct / 2, base + 18);
+				ctx.fillText(profundo ? "deep sleep" : "sueño ligero", izq + xAct + (ancho - xAct) / 2, base + 18);
+				ctx.textAlign = "left";
+				ctx.fillText(`un ciclo de ${perS} s`, izq, 40);
+
+				return { media, fracAct };
+			}
+
+			function actualizar() {
+				const perS = Number(dPer.value);
+				const actMs = Number(dAct.value);
+				const prof = cProf.checked;
+				lecPer.textContent = perS >= 60 ? `${coma(perS / 60, 1)} min` : `${perS} s`;
+				lecAct.textContent = `${actMs} ms`;
+
+				const { media, fracAct } = dibujar(perS, actMs, prof);
+				const dias = BATERIA_MAH / media / 24;
+				salMed.textContent = `${coma(media, 3)} mA`;
+				salFrac.textContent = `${coma(fracAct * 100, 2)} %`;
+				salDias.textContent =
+					dias >= 365 ? `${coma(dias / 365, 1)} años` : `${Math.round(dias)} días`;
+				itDias.classList.toggle("metric__item--ok", dias >= 365);
+				itDias.classList.toggle("metric__item--warn", dias < 365 && dias >= 30);
+				itDias.classList.toggle("metric__item--bad", dias < 30);
+			}
+
+			for (const el of [dPer, dAct, cProf]) el.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "author": "Ejemplo 3 - Entrada Analogica",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 50,
+      "left": 180,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "esp:3V3", "pot1:VCC", "red", [] ],
+    [ "esp:GND.1", "pot1:GND", "black", [] ],
+    [ "esp:D32", "pot1:SIG", "green", [] ],
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ]
+  ],
+  "dependencies": {}
+}

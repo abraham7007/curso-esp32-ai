@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Métodos y familias de códigos de estado · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Métodos y familias de códigos de estado</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Método</th><th>Operación sobre el recurso</th><th>Repetible sin efecto añadido</th></tr></thead>
+								<tbody>
+									<tr><td><b>GET</b></td><td>Obtener su estado actual</td><td>Sí</td></tr>
+									<tr><td><b>POST</b></td><td>Crear uno nuevo</td><td><b>No</b>: dos envíos crean dos</td></tr>
+									<tr><td><b>PUT</b></td><td>Sustituir uno existente por completo</td><td>Sí</td></tr>
+									<tr><td><b>DELETE</b></td><td>Eliminarlo</td><td>Sí</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								La tercera columna importa cuando hay reintentos. Si un
+								<code>POST</code> vence su plazo de espera, el dispositivo no sabe
+								si llegó: reintentar puede duplicar el registro. Con
+								<code>PUT</code> sobre una ruta que incluye un identificador propio,
+								reintentar es inofensivo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Familia</th><th>Significado</th><th>Qué debe hacer el dispositivo</th></tr></thead>
+								<tbody>
+									<tr><td><b>2xx</b></td><td>La petición se atendió</td><td>Continuar</td></tr>
+									<tr><td><b>4xx</b></td><td>Error en la petición</td><td><b>No reintentar</b>: repetir la misma da lo mismo</td></tr>
+									<tr><td><b>5xx</b></td><td>Error del servidor</td><td>Reintentar con backoff exponencial</td></tr>
+									<tr><td><b>429</b></td><td>Límite de uso superado</td><td>Esperar lo que indique la cabecera y reducir el ritmo</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">La distinción que decide el reintento</span>
+							<p>
+								Un <b>4xx</b> señala un fallo del dispositivo (token caducado, ruta
+								mal escrita, cuerpo con formato incorrecto) y reintentarlo consume
+								energía sin ninguna posibilidad de éxito. Un <b>5xx</b> señala un
+								fallo transitorio del servidor y sí admite reintento.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-codigo-29-diagnostico-enlace.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Diagnóstico del enlace</span>
+				</a>
+				<a class="slide-nav__link" href="14-api-rest.html">
+					<span>Lectura de una API REST</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

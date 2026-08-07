@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Especificación del proyecto integrador · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					06 · Cadena de construcción y grabado
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Especificación del proyecto integrador
+				</h1>
+
+				<div class="is-stretch layout layout--split" data-animate="fade-up">
+					<div class="layout__text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								<b>platformio.ini</b> es el archivo de especificación del
+								proyecto: vive en la raíz, junto a <code>src/</code>, y
+								declara placa, framework, versiones y velocidad del
+								monitor. Es lo que hace reproducible la construcción.
+							</p>
+						</div>
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p>
+								Se edita a mano y se guarda: PlatformIO relee el archivo en
+								la siguiente construcción y resuelve las dependencias antes
+								de compilar <code>src/main.cpp</code>.
+							</p>
+						</div>
+					</div>
+
+					<div class="layout__visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+									platformio.ini
+								</span>
+							</div>
+							<pre>[env:esp32dev]
+platform      = espressif32
+board         = esp32dev
+framework     = arduino
+<span class="hl hl--add">monitor_speed = 115200</span>
+<span class="hl hl--add">lib_deps =
+    beegee-tokyo/DHT sensor library for ESPx@^1.19</span></pre>
+							<ul class="syntax-notes">
+								<li>
+									<span class="syntax-notes__ref">L1</span>
+									<span><code>[env:esp32dev]</code> abre un <b>entorno</b> de
+									construcción. Todo lo que va debajo aplica solo a él, y su
+									nombre es el que aparece en las rutas de salida
+									(<code>.pio/build/esp32dev/</code>) y en
+									<code>pio run -e esp32dev</code>.</span>
+								</li>
+								<li>
+									<span class="syntax-notes__ref">L2–L4</span>
+									<span><code>platform</code> elige el toolchain, <code>board</code> fija pines, tamaño de
+									Flash y tabla de particiones, y <code>framework</code>
+									decide qué API se compila. Cambiar <code>board</code>
+									cambia el mapa de pines del mismo código.</span>
+								</li>
+								<li>
+									<span class="syntax-notes__ref syntax-notes__ref--add">L5</span>
+									<span><code>monitor_speed</code> fija la velocidad con la
+									que el monitor abre el puerto. Si no coincide con el
+									<code>Serial.begin(115200)</code> de
+									<code>src/main.cpp</code>, la traza se ve como caracteres
+									sin sentido.</span>
+								</li>
+								<li>
+									<span class="syntax-notes__ref syntax-notes__ref--add">L6–L7</span>
+									<span><code>lib_deps</code> descarga la librería en
+									<code>.pio/libdeps/esp32dev/</code>; sin esa línea el
+									<code>#include</code> del sensor no compila. El sufijo
+									<code>@^1.19</code> acota a la rama 1.x desde 1.19: sin
+									él se resuelve la última publicada y lo que compila hoy
+									puede fallar semanas después.</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="25-estructura-proyecto.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Estructura de un proyecto de PlatformIO</span>
+				</a>
+				<a class="slide-nav__link" href="27-diagnostico-excepciones.html">
+					<span>Diagnóstico de excepciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

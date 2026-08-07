@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Los cuatro estados de una tarea · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Los cuatro estados de una tarea</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>El planificador es una máquina de estados por tarea.</strong>
+					Es el mismo formalismo de la sesión anterior, aplicado por el sistema
+					operativo en lugar de por el programa.
+				</p>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>En ejecución</div>
+						<p>
+							Ocupa un núcleo. Con dos núcleos hay como máximo <b>dos tareas</b> en
+							este estado a la vez.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Preparada</div>
+						<p>
+							Podría ejecutarse pero otra de prioridad igual o mayor tiene el
+							núcleo. Espera turno, no espera un suceso.
+						</p>
+					</div>
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>Bloqueada</div>
+						<p>
+							Espera un suceso: que venza un plazo, que llegue un mensaje a una
+							cola o que se libere un mutex. <b>No consume procesador.</b>
+						</p>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>Suspendida</div>
+						<p>
+							Fuera del planificador hasta que otra tarea la reanude con
+							<code>vTaskResume()</code>. A diferencia de la bloqueada, ningún
+							suceso la despierta por sí solo.
+						</p>
+					</div>
+
+					<div class="conclusion">
+						<span class="conclusion__label">La distinción que importa</span>
+						<p>
+							Entre <b>preparada</b> y <b>bloqueada</b>. Una tarea que espera con
+							<code>while (!hayDato) {}</code> permanece <em>preparada</em> y
+							consume el núcleo entero sin hacer nada. La misma espera con
+							<code>xQueueReceive()</code> la deja <em>bloqueada</em> y libera el
+							procesador para las demás. Es la diferencia entre un sistema que
+							funciona y uno que consume el 100 % de un núcleo esperando.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-definicion-tarea.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					<span>La tarea y su pila de ejecución</span>
+				</a>
+				<a class="slide-nav__link" href="06-codigo-24-primeras-tareas.html">
+					<span>La hora del código · Dos tareas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

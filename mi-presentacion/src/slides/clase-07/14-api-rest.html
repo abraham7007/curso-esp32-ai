@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lectura de la documentación de una API REST · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Lectura de la documentación de una API REST</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Una <b>API REST</b> expone recursos identificados por una ruta,
+								sobre los que se opera con los métodos de HTTP. El servidor no
+								guarda memoria de peticiones anteriores: cada una lleva toda la
+								información necesaria, incluida la autenticación.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Cuatro datos que buscar en la documentación
+							</div>
+							<p>
+								<b>Punto de acceso</b> con su método y sus parámetros;
+								<b>forma de autenticación</b> y dónde va la credencial;
+								<b>límite de uso</b>, expresado en peticiones por minuto o por día;
+								<b>formato y tamaño</b> de la respuesta. El último decide si la
+								respuesta cabe en memoria.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">El límite de uso se calcula antes de programar</span>
+							<p>
+								Un límite de <b>1000 peticiones diarias</b> admite una consulta cada
+								<b>86 s</b>. Un dispositivo que consulte cada 10 s agota la cuota en
+								2 h 47 min y recibe 429 el resto del día. La división se hace antes
+								de escribir el firmware, no después del primer corte de servicio.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">documentación típica de un punto de acceso</span>
+							</div>
+							<pre><code>GET /data/2.5/weather
+
+Parámetros
+  lat, lon   obligatorios   grados decimales
+  units      opcional       metric | imperial
+  appid      obligatorio    clave de la cuenta
+
+Autenticación  parámetro appid en la consulta
+Límite de uso  60 por minuto · 1 000 000 al mes
+Respuesta      JSON, entre 1,1 kB y 1,4 kB</code></pre>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Una respuesta de 1,4 kB cabe holgadamente en memoria. La lámina de
+								deserialización trata el caso contrario, que es el habitual en
+								servicios que devuelven pronósticos de varios días.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-metodos-codigos-estado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>Métodos y códigos de estado</span>
+				</a>
+				<a class="slide-nav__link" href="15-autenticacion-credenciales.html">
+					<span>Autenticación y credenciales</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

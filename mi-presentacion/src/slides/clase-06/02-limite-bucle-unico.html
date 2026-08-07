@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Límite del bucle único ante requisitos temporales incompatibles · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Límite del bucle único ante requisitos temporales incompatibles</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Dónde falla
+							</div>
+							<p>
+								En un bucle único, el periodo de la actividad más rápida no puede
+								ser menor que la duración de una iteración completa. Basta una
+								actividad lenta para fijar ese límite a todas las demás.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Caso concreto
+							</div>
+							<p>
+								Un equipo que muestrea un acelerómetro a <b>1 kHz</b> (un periodo
+								de 1 ms) y publica por red cada 10 s. La publicación ocupa
+								<b>380 ms</b> entre la conexión y el envío. Durante esos 380 ms el
+								bucle no muestrea: se pierden unas <b>380 muestras</b>.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Por qué no basta con más estados</span>
+							<p>
+								Trocear la publicación en una máquina de estados de veinte etapas
+								reduce el bloqueo, pero obliga a repartir a mano una operación que
+								es secuencial por naturaleza. La complejidad del modelo crece por
+								encima de lo mantenible, y ese es el criterio que justifica el
+								sistema operativo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram">
+							<div class="bd-lane">
+								<span class="bd-lane__label">Bucle único</span>
+								<div class="bd-node bd-node--warn">
+									<span class="bd-node__body">
+										muestrear · muestrear · … · <b>publicar (380 ms)</b> · muestrear
+									</span>
+									<span class="bd-node__meta">380 muestras perdidas en cada publicación</span>
+								</div>
+							</div>
+							<div class="bd-lane">
+								<span class="bd-lane__label">Dos tareas</span>
+								<div class="bd-node bd-node--ok">
+									<span class="bd-node__body">
+										muestreo (prioridad alta) · publicación (prioridad baja, se
+										interrumpe y se reanuda)
+									</span>
+									<span class="bd-node__meta">ninguna muestra perdida</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="figure">
+							<div class="figure__frame" data-figure="periodo-bucle-vs-tareas"></div>
+							<p class="figure__caption">
+								Lo que cambia no es la velocidad media, casi idéntica en ambos, sino
+								el valor máximo. El peor caso es el que decide si se cumple el
+								periodo.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>FreeRTOS y ejecución concurrente</span>
+				</a>
+				<a class="slide-nav__link" href="03-rtos-determinismo.html">
+					<span>Sistema de tiempo real y determinismo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

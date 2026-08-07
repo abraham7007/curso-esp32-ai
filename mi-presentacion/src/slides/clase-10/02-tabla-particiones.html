@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reparto de la memoria Flash entre particiones · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					01 · Memoria, persistencia y tiempo
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Reparto de la memoria Flash entre particiones</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué es y por qué existe
+							</div>
+							<p>
+								La <b>tabla de particiones</b> declara cómo se reparten los 4 MB de
+								la Flash. El gestor de arranque la lee para saber dónde está la
+								aplicación que debe ejecutar.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">La restricción que decide el reparto</span>
+							<p>
+								La OTA (actualización remota) exige <b>dos particiones de aplicación</b>
+								del mismo tamaño: mientras una ejecuta, la otra recibe la versión
+								nueva. Eso reduce a la mitad el espacio disponible para el programa
+								y es lo que hay que decidir <b>antes</b> de empezar, porque cambiar
+								la tabla después borra todo lo guardado.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								Se elige con <code>board_build.partitions</code> en
+								<code>platformio.ini</code>. Con el esquema por omisión, un firmware
+								que supere <b>1,3 MB</b> no cabe, y el error de compilación no dice
+								que falte cambiar el reparto: dice que la sección no entra.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="table-scroll">
+							<table>
+								<thead><tr><th>Partición</th><th>Tamaño típico</th><th>Qué guarda</th></tr></thead>
+								<tbody>
+									<tr><td><code>nvs</code></td><td>20 kB</td><td>Credenciales y configuración, por pares clave-valor</td></tr>
+									<tr><td><code>otadata</code></td><td>8 kB</td><td>Cuál de las dos aplicaciones debe arrancar</td></tr>
+									<tr><td><code>app0</code></td><td>1,3 MB</td><td>Aplicación en ejecución</td></tr>
+									<tr><td><code>app1</code></td><td>1,3 MB</td><td>Destino de la OTA</td></tr>
+									<tr><td><code>spiffs</code></td><td>1,4 MB</td><td>Sistema de archivos: interfaz web y registros</td></tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="figure">
+							<div class="figure__frame" data-figure="tabla-particiones"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+								<span>
+									Los mismos tamaños de la tabla, dibujados a escala sobre los 4 MB.
+									Las dos particiones de aplicación son iguales por obligación y
+									juntas se llevan dos tercios de la Flash.
+								</span>
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								Sin <code>app1</code> no hay OTA posible, y añadirla
+								más tarde obliga a reescribir la tabla, lo que <b>borra la memoria no
+								volátil y el sistema de archivos</b>. En un parque desplegado eso
+								significa perder las credenciales de cada unidad.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Firmware de producción</span>
+				</a>
+				<a class="slide-nav__link" href="03-persistencia-y-desgaste.html">
+					<span>Persistencia y desgaste</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

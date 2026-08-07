@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Portal cautivo: el procedimiento de puesta en marcha · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Portal cautivo: el procedimiento de puesta en marcha</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+								Por qué no se puede grabar la contraseña
+							</div>
+							<p>
+								Las credenciales de red del usuario <b>no pueden estar en el
+								código</b> de un producto distribuido: el fabricante no las conoce,
+								y un binario común a todas las unidades las expondría a quien lo
+								extraiga de cualquiera de ellas.
+							</p>
+						</div>
+
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Portal cautivo
+							</div>
+							<p>
+								Red propia más un servidor de nombres que responde <b>su propia
+								dirección a toda consulta</b>. Con eso, cualquier dirección que el
+								teléfono intente abrir lleva al formulario, y el sistema operativo
+								lo detecta y lo muestra solo.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">1 · Arranque sin credenciales</span>
+								<span class="bd-node__body">Modo punto de acceso con un nombre derivado de la dirección de fabricación.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">2 · Exploración y selección</span>
+								<span class="bd-node__body">El dispositivo lista las redes que ve y el usuario elige la suya y escribe la contraseña.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">3 · Prueba antes de guardar</span>
+								<span class="bd-node__body">Se intenta la conexión y solo si tiene éxito se escribe en NVS.</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">4 · Reinicio en modo estación</span>
+								<span class="bd-node__body">El punto de acceso desaparece. Desde aquí el dispositivo vive en la red del usuario.</span>
+							</div>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">El paso 3 es el que suele faltar</span>
+							<p>
+								Guardar la contraseña <b>sin probarla</b> deja el dispositivo
+								reiniciándose contra una red a la que no puede entrar, y sin portal
+								al que volver. Probar primero convierte un error de tecleo en un
+								mensaje en pantalla.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-api-propia-y-mdns.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>API propia y nombre local</span>
+				</a>
+				<a class="slide-nav__link" href="11-codigo-37-portal-cautivo.html">
+					<span>La hora del código · Portal cautivo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Programación en alto nivel sin atarse a una arquitectura · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Lauwaerts, T.; Marr, S.; De Roover, C.</b> (2024). WARDuino: An embedded WebAssembly virtual machine. <i>Journal of Computer Languages</i> 79, 101268. <code>doi:10.1016/j.cola.2024.101268</code></p>
+
+					<h2 class="paper__title">Programación en alto nivel sin atarse a una arquitectura</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Ver si un microcontrolador admite las herramientas de un <b>lenguaje de alto nivel</b>.</li>
+									<li>Depurador avanzado, sistema de tipos, gestión automática de memoria.</li>
+									<li>Las soluciones previas quedaban <b>atadas a una arquitectura</b> concreta.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>Construyen una <b>máquina virtual de WebAssembly</b> que corre sobre el microcontrolador.</li>
+									<li>Interpreta módulos compilados desde <b>cualquier lenguaje</b> que produzca ese formato.</li>
+									<li>Sobre ella implementan herramientas de desarrollo, incluida la <b>depuración remota</b>.</li>
+									<li>El mismo módulo se ejecuta en microcontroladores distintos <b>sin recompilar</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>La máquina virtual <b>desacopla el programa de la arquitectura</b>.</li>
+									<li>La contrapartida declarada es el <b>costo de interpretar</b>, el mismo que mide el ejemplo 44.</li>
+									<li>Los autores destacan la depuración remota tanto como la portabilidad.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-vm-artefactos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia. Compilando, cada lenguaje se cruza con cada arquitectura; con la máquina virtual se suman en vez de multiplicarse.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-vm-herramientas"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Lo que cada flujo ofrece. La única casilla que gana el compilado es la que el artículo declara como contrapartida.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-simulacion-costo-interpretar.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Costo de interpretar</span>
+				</a>
+				<a class="slide-nav__link" href="08-paper-aislamiento-webassembly.html">
+					<span>Artículo · Aislamiento y despliegue</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

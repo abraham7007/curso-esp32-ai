@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 44 · Reglas interpretadas frente a umbral compilado · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 44</span>
+					</div>
+
+					<h2 class="code-hour__title">Reglas interpretadas frente a umbral compilado en el binario</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> La misma función (encender una salida cuando la magnitud cruza un umbral) resuelta con el valor <b>compilado</b> y con una <b>regla leída de un archivo</b>. Se mide lo que cuesta cada versión al evaluar y lo que tarda cada una en aceptar un cambio de umbral.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Una <b>constante de compilación</b> queda fijada en el binario: cambiarla obliga a compilar y grabar. Un <b>intérprete</b> lee la regla en ejecución, así que el mismo binario admite comportamientos distintos, pero paga la evaluación en cada muestra. Las magnitudes a medir son el <b>tiempo de evaluación</b> y el <b>tiempo de cambio</b>.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, LittleFS y ArduinoJson.
+
+<b>2. Firmware.</b> Implementa las dos versiones seleccionables por constante de compilación. La compilada lleva el umbral como <code>constexpr</code>. La interpretada lee de <code>/reglas.json</code> una lista de reglas con condición y acción, y las evalúa en cada muestra. Mide con <code>esp_timer_get_time()</code> cuánto tarda cada versión en evaluar la condición, y registra el tamaño del binario y la memoria adicional que consume el intérprete. Cronometra además cuánto tarda cada forma de cambiar el umbral, desde la decisión hasta el dispositivo funcionando. Emite a 115200 baudios el resumen comparado.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una muestra en cada versión, uno al lado del otro, con la lectura y evaluación de la regla visible solo en la interpretada. Y las <b>dos rutas de cambio</b> enfrentadas, con sus pasos y sus tiempos.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> y controla un LED en el <b>GPIO 25</b> con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[COMP] umbral compilado=2.00 V  evaluacion=0.4 us binario=284 kB
+[INT]  regla de /reglas.json: si v&gt;2.00 entonces led=1
+[INT]  evaluacion=41 us binario=312 kB  memoria extra=6.2 kB
+[CAMBIO] compilado: editar+compilar+grabar = 94 s
+[CAMBIO] interpretado: subir archivo = 2 s
+[RELACION] interpretado: 100x mas lento, 47x mas rapido de cambiar</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea reúne el compromiso: <b>100 veces más lento</b> al evaluar y <b>47 veces más rápido</b> de cambiar. Ninguna de las dos cifras decide sola. Multiplicar los 41 µs por la frecuencia de muestreo del proyecto propio y comparar con el periodo: si se lleva una fracción apreciable, la ruta interpretada no cabe por mucho que ahorre en el cambio.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-comparacion-modelos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+					<span>Comparación entre los dos modelos</span>
+				</a>
+				<a class="slide-nav__link" href="06-simulacion-costo-interpretar.html">
+					<span>Costo de interpretar</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

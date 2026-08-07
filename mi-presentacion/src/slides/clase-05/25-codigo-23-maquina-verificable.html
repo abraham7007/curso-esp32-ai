@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 23 · Máquina verificable por inyección de eventos · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 23</span>
+					</div>
+
+					<h2 class="code-hour__title">Máquina de conexión verificable por inyección de eventos</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> La máquina que controla la conexión de red, con backoff exponencial entre reintentos y una fuente de eventos que se puede accionar a mano desde el monitor serie. Permite recorrer la máquina entera (incluidas las transiciones de error, que son las que nunca se prueban) sin necesitar un punto de acceso.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b>Inyectar eventos</b> separa la fuente del suceso de su tratamiento: la función que produce el evento acepta el estado real de la radio o un carácter tecleado, y la máquina no distingue. La <b>espera exponencial</b> duplica el tiempo entre reintentos hasta un tope y se reinicia al primer éxito. La <b>cobertura</b> es la cuenta de cuántas flechas de la tabla se recorrieron de verdad.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Implementa la máquina con los estados DESCONECTADO, ASOCIANDO, ESPERANDO_REINTENTO y CONECTADO. La espera entre reintentos parte de 1000 ms, se duplica en cada fallo consecutivo hasta un máximo de 60000 ms, y vuelve al valor inicial al conectar. La función que produce los eventos acepta caracteres por el puerto serie: 'c' conectado, 'f' fallo, 'p' pérdida de enlace. Lleva la cuenta de qué transiciones de la tabla se han recorrido e imprime una línea [COBERTURA] con las que faltan.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los cuatro LED de estado en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del bucle, con la lectura del puerto serie y la del estado de la radio entrando por el mismo punto. Y el <b>diagrama de estados</b> junto a la tabla de transiciones completa, con una fila por flecha.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende cuatro LED de estado en los <b>GPIO 25, 26, 27 y 32</b>, cada uno con su resistencia de 220 Ω. No hace falta más: los eventos de red se inyectan por el monitor serie.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="yellow"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-resistor></wokwi-resistor></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[FSM] t=0     DESCONECTADO --ARRANQUE--&gt; ASOCIANDO  n=1
+&gt; f
+[FSM] t=2100  ASOCIANDO --FALLO--&gt; ESPERANDO  espera=1000 ms
+[FSM] t=3100  ESPERANDO --VENCE--&gt; ASOCIANDO  n=2
+&gt; f
+[FSM] t=4200  ASOCIANDO --FALLO--&gt; ESPERANDO  espera=2000 ms
+&gt; c
+[FSM] t=6300  ASOCIANDO --CONECTADO--&gt; CONECTADO  espera=1000 ms
+[COBERTURA] 7 de 8; falta CONECTADO--PERDIDA--&gt;ESPERANDO</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea es el resultado del ejercicio: <b>7 de 8</b> transiciones recorridas, y dice cuál falta. Provocarla con la tecla 'p' y volver a leerla. Observar además la espera en las dos líneas de <code>ESPERANDO_REINTENTO</code>, 1000 y luego 2000 ms, y comprobar que vuelve a 1000 al conectar: si se quedara en 2000, no se está reiniciando y el siguiente corte de red empezaría ya penalizado.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="24-verificacion-sin-hardware.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					<span>Inyección de eventos por el puerto serie</span>
+				</a>
+				<a class="slide-nav__link" href="26-paper-pn2arduino.html">
+					<span>Artículo · Del modelo gráfico al control</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

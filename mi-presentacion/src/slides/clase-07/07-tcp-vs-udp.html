@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Garantía de entrega frente a menor sobrecarga: TCP y UDP · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Garantía de entrega frente a menor sobrecarga: TCP y UDP</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>TCP</h3>
+						<p>
+							Establece la conexión antes de enviar, numera cada byte, retransmite
+							lo que no se confirma y entrega en orden. El programa recibe lo
+							enviado o un error, nunca datos desordenados.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Costo:</b> 20 bytes de cabecera, tres paquetes de establecimiento
+							antes del primer dato, y memoria por conexión abierta.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>UDP</h3>
+						<p>
+							Envía el paquete y no espera confirmación. Puede perderse, duplicarse
+							o llegar desordenado, y el programa no se entera salvo que lo
+							compruebe él mismo.
+						</p>
+						<p class="text-[length:var(--fs-small)]">
+							<b>Ventaja:</b> 8 bytes de cabecera, sin establecimiento previo y sin
+							estado que mantener.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Criterio de aplicación en proyectos embebidos</span>
+					<p>
+						<b>TCP</b> cuando el dato importa de forma individual: una medida de
+						consumo que se factura, una orden de apertura. <b>UDP</b> cuando el
+						valor se repite pronto y el retraso es peor que la pérdida: telemetría
+						a 100 Hz, sincronización horaria, descubrimiento de dispositivos en la
+						red local. HTTP y MQTT emplean TCP; NTP y mDNS, UDP.
+					</p>
+				</div>
+
+				<div class="warn-box" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<p>
+						TCP garantiza la <b>entrega</b>, no el <b>plazo</b>. Una retransmisión
+						tras un paquete perdido introduce cientos de milisegundos, y el
+						programa no puede acortarlos. Por eso una tarea con requisito temporal
+						estricto nunca debe esperar a una operación de red, criterio que ya
+						decidió el reparto en tareas de la sesión 6.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-traduccion-direcciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Traducción de direcciones (NAT)</span>
+				</a>
+				<a class="slide-nav__link" href="08-interfaz-wifi.html">
+					<span>Interfaz inalámbrica del ESP32</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

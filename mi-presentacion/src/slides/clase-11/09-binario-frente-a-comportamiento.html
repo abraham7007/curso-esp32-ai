@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dos operaciones con riesgos y permisos distintos · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					01 · Compilado frente a interpretado
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Dos operaciones con riesgos y permisos distintos</h1>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th></th><th>Actualizar el binario</th><th>Actualizar el comportamiento</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><b>Qué cambia</b></td><td>La plataforma entera</td><td>Lo que la plataforma ejecuta</td></tr>
+							<tr><td><b>Riesgo</b></td><td>Dejar el equipo inalcanzable</td><td>Comportamiento incorrecto, con el equipo accesible</td></tr>
+							<tr><td><b>Tiempo</b></td><td>Minutos por unidad, más el despliegue</td><td>Segundos</td></tr>
+							<tr><td><b>Reversión</b></td><td>Automática, con dos particiones</td><td>Volver a enviar la versión anterior</td></tr>
+							<tr><td><b>Quién debería poder</b></td><td>Solo el fabricante, con firma</td><td>El integrador o el usuario, según el producto</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Un sistema completo tiene las dos</span>
+					<p>
+						No se elige entre una y otra: se define <b>el ámbito de cada una</b>. La
+						actualización del binario corrige fallos y vulnerabilidades y es
+						privativa del fabricante; la del comportamiento adapta el equipo a cada
+						instalación y puede delegarse. Confundirlas (permitir que quien ajusta un
+						umbral pueda también sustituir el firmware) es un error de diseño de
+						permisos, no de programación.
+					</p>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						Efecto sobre la definición del producto
+					</div>
+					<p>
+						Cuando el firmware pasa a ser plataforma, lo que se vende deja de ser un
+						aparato con funciones fijas y pasa a ser un aparato <b>más el conjunto de
+						comportamientos que admite</b>. Eso cambia el soporte (hay tantas
+						configuraciones como instalaciones) y cambia la garantía, porque no todo
+						lo que el equipo hace lo escribió el fabricante.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-paper-aislamiento-webassembly.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Aislamiento y despliegue</span>
+				</a>
+				<a class="slide-nav__link" href="10-esp-claw.html">
+					<span>ESP-Claw</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

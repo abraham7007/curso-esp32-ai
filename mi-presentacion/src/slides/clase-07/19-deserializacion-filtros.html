@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Extracción de campos de una respuesta que no cabe en memoria · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Extracción de campos de una respuesta que no cabe en memoria</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								El problema
+							</div>
+							<p>
+								Un pronóstico de cinco días son unos <b>200 kB</b> de JSON, y el
+								ESP32 dispone de unos <b>200 kB</b> de memoria libre. Reservar la
+								respuesta completa y su representación en memoria es imposible,
+								aunque solo interesen tres campos.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								<code>ArduinoJson</code> admite un <b>filtro</b>: un documento que
+								describe qué campos conservar. La biblioteca recorre el flujo
+								conforme llega y descarta el resto sin llegar a reservarlo. Se pasa
+								con <code>DeserializationOption::Filter(filtro)</code>.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Se lee del flujo, no de una cadena</span>
+							<p>
+								La clave es pasar <code>http.getStream()</code> en vez de
+								<code>http.getString()</code>. Con la cadena, los 200 kB ya están
+								en memoria antes de que el filtro intervenga y el dispositivo se ha
+								reiniciado.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+								<span class="codepanel__path">filtro sobre el flujo</span>
+							</div>
+							<pre><code>JsonDocument filtro;
+filtro["main"]["temp"] = true;      // solo estos tres
+filtro["main"]["humidity"] = true;
+filtro["name"] = true;
+
+JsonDocument doc;
+deserializeJson(doc, <span class="hl hl--add">http.getStream()</span>,
+                <span class="hl hl--add">DeserializationOption::Filter(filtro)</span>);
+
+float t = doc["main"]["temp"];      // 220 bytes en memoria</code></pre>
+						</div>
+
+						<div class="term">[HTTP] respuesta: 204812 bytes
+[JSON] sin filtro:  reserva estimada 268 kB -&gt; sin memoria, reinicio
+[JSON] con filtro:  reserva real 220 bytes  -&gt; 3 campos extraidos
+[MEM]  libre tras deserializar: 198 440 bytes</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-paper-cifrado-tls.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Costo del cifrado</span>
+				</a>
+				<a class="slide-nav__link" href="20-cuatro-fallos-mismo-sintoma.html">
+					<span>Cuatro fallos, cuatro acciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

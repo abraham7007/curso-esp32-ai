@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Controladores UART del ESP32 · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					02 · UART en el ESP32
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Controladores UART del ESP32
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						El ESP32 dispone de <b>tres controladores UART independientes</b>:
+						UART0, UART1 y UART2. Cada uno tiene su propio generador de velocidad
+						y su memoria intermedia, y puede operar a la vez que los otros dos.
+						UART0 está conectado al conversor USB-serie de la placa y lo usan
+						tanto el monitor como el proceso de flasheo.
+					</p>
+				</div>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr>
+								<th class="w-[6rem]">Controlador</th>
+								<th class="w-[6rem]">Objeto</th>
+								<th class="w-[14rem]">Pines por omisión</th>
+								<th>Disponibilidad</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>UART0</b></td>
+								<td><code>Serial</code></td>
+								<td>GPIO 1 (TX) · GPIO 3 (RX)</td>
+								<td>
+									Ocupado por el monitor serie y por el flasheo. Dedicarlo a
+									otro dispositivo deja la placa sin diagnóstico y sin vía de
+									grabación por USB.
+								</td>
+							</tr>
+							<tr>
+								<td><b>UART1</b></td>
+								<td><code>Serial1</code></td>
+								<td>GPIO 10 (TX) · GPIO 9 (RX)</td>
+								<td>
+									Pines asignables, pero los valores por omisión están
+									conectados a la memoria Flash del módulo: usarlos sin
+									reasignar interrumpe el acceso al programa.
+								</td>
+							</tr>
+							<tr>
+								<td><b>UART2</b></td>
+								<td><code>Serial2</code></td>
+								<td>GPIO 17 (TX) · GPIO 16 (RX)</td>
+								<td>
+									Libre en la placa de evaluación. Es el controlador que usa el
+									curso para el enlace entre placas y para módulos externos.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p class="m-0">
+						<code>Serial2.begin(115200, SERIAL_8N1, 16, 17);</code> fija
+						velocidad, formato y pines de forma explícita. En el ESP32 los pines
+						de UART son asignables por la <b>matriz de conmutación de
+						periféricos</b>, de modo que los números por omisión son una
+						convención de la placa, no una restricción del chip.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-codigo-11-enlace-uart.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La hora del código · Enlace UART</span>
+				</a>
+				<a class="slide-nav__link" href="09-escenarios-uart.html">
+					<span>Escenarios de aplicación del UART</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

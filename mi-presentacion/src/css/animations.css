@@ -1,0 +1,88 @@
+/* Entrance animations. Elements start hidden via [data-animate] and reveal
+   once the "is-visible" class lands (added on load or by an IntersectionObserver). */
+
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(1rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+[data-animate] {
+	opacity: 0;
+}
+
+[data-animate].is-visible {
+	animation-duration: 0.6s;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	animation-fill-mode: forwards;
+	animation-delay: calc(var(--animate-order, 0) * 90ms);
+}
+
+[data-animate="fade-up"].is-visible {
+	animation-name: fade-up;
+}
+
+[data-animate="fade-in"].is-visible {
+	animation-name: fade-in;
+}
+
+[data-animate="scale-in"].is-visible {
+	animation-name: scale-in;
+}
+
+/* Auto-stagger: wrap a group of [data-animate] elements in .stagger and each
+   direct child gets an incrementing delay, no inline style required. */
+.stagger > [data-animate]:nth-child(1) {
+	--animate-order: 0;
+}
+.stagger > [data-animate]:nth-child(2) {
+	--animate-order: 1;
+}
+.stagger > [data-animate]:nth-child(3) {
+	--animate-order: 2;
+}
+.stagger > [data-animate]:nth-child(4) {
+	--animate-order: 3;
+}
+.stagger > [data-animate]:nth-child(5) {
+	--animate-order: 4;
+}
+.stagger > [data-animate]:nth-child(6) {
+	--animate-order: 5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-animate] {
+		opacity: 1;
+	}
+
+	[data-animate].is-visible {
+		animation: none;
+		transform: none;
+	}
+}

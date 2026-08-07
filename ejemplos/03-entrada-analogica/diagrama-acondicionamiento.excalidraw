@@ -1,0 +1,68 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 300, "y": 20, "width": 900, "height": 35, "text": "Acondicionamiento de señal — transformador 12V AC → ESP32 (ADC)", "fontSize": 20, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "text", "x": 40, "y": 95, "width": 380, "height": 20, "text": "⚠ Lado de red — 120/220 VAC (peligro)", "fontSize": 13, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "text", "x": 460, "y": 95, "width": 1000, "height": 20, "text": "Lado seguro — baja tensión, referenciado al GND del ESP32 (0–3.3 V)", "fontSize": 13, "fontFamily": 1, "strokeColor": "#2b8a3e" },
+
+    { "type": "rectangle", "x": 40, "y": 150, "width": 160, "height": 110, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 48, "y": 178, "width": 144, "height": 55, "text": "Red eléctrica\n120/220 VAC\n(toma domiciliaria)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 200, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+
+    { "type": "rectangle", "x": 240, "y": 150, "width": 170, "height": 110, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 248, "y": 172, "width": 154, "height": 68, "text": "Transformador\nreductor a 12V AC\n(aislamiento\ngalvánico)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 410, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+    { "type": "text", "x": 395, "y": 272, "width": 140, "height": 32, "text": "12V AC ≈17Vpico\n(bipolar, aislado)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#495057" },
+
+    { "type": "rectangle", "x": 450, "y": 150, "width": 230, "height": 110, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 458, "y": 160, "width": 214, "height": 25, "text": "Divisor resistivo\n(atenuador + bias)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 458, "y": 205, "width": 214, "height": 45, "text": "R1≈220kΩ en serie\nR2=R3≈10kΩ a 3V3/GND", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 680, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+    { "type": "text", "x": 655, "y": 272, "width": 140, "height": 32, "text": "0–3.3V, centrada\nen ~1.65V", "fontSize": 10, "fontFamily": 1, "strokeColor": "#495057" },
+
+    { "type": "rectangle", "x": 720, "y": 150, "width": 180, "height": 110, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 728, "y": 165, "width": 164, "height": 30, "text": "Filtro pasabajos RC\n(antialiasing)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 728, "y": 210, "width": 164, "height": 35, "text": "C1≈100nF\nfc=1/(2πR·C)", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 900, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+
+    { "type": "rectangle", "x": 940, "y": 150, "width": 190, "height": 110, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 948, "y": 163, "width": 174, "height": 30, "text": "Protección\n(diodos de clamp)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 948, "y": 208, "width": 174, "height": 40, "text": "D1,D2=1N4148\na 3V3 y a GND", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 1130, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+    { "type": "text", "x": 1105, "y": 272, "width": 140, "height": 32, "text": "señal protegida\n0–3.3V", "fontSize": 10, "fontFamily": 1, "strokeColor": "#495057" },
+
+    { "type": "rectangle", "x": 1170, "y": 150, "width": 190, "height": 110, "backgroundColor": "transparent", "strokeStyle": "dashed", "strokeColor": "#868e96" },
+    { "type": "text", "x": 1170, "y": 136, "width": 190, "height": 14, "text": "OPCIONAL (si R1 es grande)", "fontSize": 9, "fontFamily": 1, "strokeColor": "#868e96", "textAlign": "center" },
+    { "type": "text", "x": 1178, "y": 170, "width": 174, "height": 30, "text": "Buffer / seguidor\nde tensión (op-amp)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 1178, "y": 215, "width": 174, "height": 35, "text": "Baja Z de salida;\nmejora precisión ADC", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 1360, "y": 205, "width": 40, "height": 0, "points": [[0,0],[40,0]] },
+
+    { "type": "rectangle", "x": 1400, "y": 140, "width": 170, "height": 130, "backgroundColor": "#d0ebff" },
+    { "type": "text", "x": 1408, "y": 155, "width": 154, "height": 110, "text": "ESP32\nADC1 – GPIO34\n(o GPIO32)\n\nanalogRead()\natenuación 11dB", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 40, "y": 330, "width": 560, "height": 180, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 55, "y": 340, "width": 500, "height": 22, "text": "Valores típicos de referencia", "fontSize": 14, "fontFamily": 1 },
+    { "type": "text", "x": 55, "y": 368, "width": 530, "height": 130, "text": "R1 (serie, atenuador) ≈ 220 kΩ\nR2 = R3 (bias 3V3/GND) ≈ 10 kΩ cada uno\nC1 (filtro RC) ≈ 100 nF\nD1, D2 (clamp) = 1N4148\nNodo de entrada al ADC: 0–3.3 V, centrado en ≈1.65 V", "fontSize": 12, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 620, "y": 330, "width": 560, "height": 180, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 635, "y": 340, "width": 500, "height": 22, "text": "¿Por qué se necesitan estos bloques?", "fontSize": 14, "fontFamily": 1 },
+    { "type": "text", "x": 635, "y": 368, "width": 530, "height": 140, "text": "El ADC del ESP32 sólo admite 0–3.3V, unipolar.\nEl secundario del transformador entrega una señal AC bipolar de mayor amplitud (~±17V pico): sin atenuar y sin bias, dañaría el pin o se leería recortada.\nEl filtro RC evita que ruido/armónicos de la red se aliasen al muestrear.\nLos diodos de clamp son un respaldo de seguridad, dado que la fuente original es la red eléctrica.", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 1200, "y": 330, "width": 370, "height": 180, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 1215, "y": 340, "width": 340, "height": 22, "text": "Notas de configuración (ESP32)", "fontSize": 14, "fontFamily": 1 },
+    { "type": "text", "x": 1215, "y": 368, "width": 340, "height": 140, "text": "Usar un pin de ADC1 (32-39): ADC2 se comparte con el WiFi y falla si el radio está activo.\nConfigurar atenuación 11dB (0-3.3V) con analogSetAttenuation().\nMuestrear a suficiente frecuencia (≥20-50 muestras por ciclo de 50/60Hz) si se busca reconstruir la forma de onda.", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 40, "y": 530, "width": 1530, "height": 150, "backgroundColor": "#ffe3e3", "strokeColor": "#e03131" },
+    { "type": "text", "x": 55, "y": 540, "width": 1200, "height": 22, "text": "⚠ Seguridad — el primario del transformador está conectado a la red eléctrica", "fontSize": 14, "fontFamily": 1, "strokeColor": "#c92a2a" },
+    { "type": "text", "x": 55, "y": 568, "width": 1490, "height": 105, "text": "• Instalar el transformador en una caja aislada, con fusible y sin partes conductoras expuestas.\n• Todo el circuito de acondicionamiento y el ESP32 permanecen del lado SECUNDARIO (aislado); nunca unir el GND del ESP32 al neutro de la red.\n• Verificar con un multímetro que no hay continuidad entre el secundario y tierra/chasis antes de energizar.\n• Usar un transformador certificado (no un bobinado casero) para garantizar el aislamiento galvánico.", "fontSize": 12, "fontFamily": 1, "strokeColor": "#c92a2a" }
+  ]
+}

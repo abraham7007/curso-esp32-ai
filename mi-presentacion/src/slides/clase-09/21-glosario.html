@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glosario de la sesión 9 · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					02 · Requisitos de un producto
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Glosario de la sesión</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="glossary-item">
+						<h3>Punto de acceso <span class="glossary-item__alt">access point</span></h3>
+						<p class="glossary-item__body">Modo en que el dispositivo crea su propia red y reparte direcciones, sin depender de ninguna red existente.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Portal cautivo <span class="glossary-item__alt">captive portal</span></h3>
+						<p class="glossary-item__body">Red propia más un servidor de nombres que responde su propia dirección a toda consulta, de modo que cualquier página abre el formulario de configuración.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Servidor asíncrono <span class="glossary-item__alt">asynchronous server</span></h3>
+						<p class="glossary-item__body">Servidor que atiende en su propia tarea y llama a los manejadores por suceso. El manejador no debe bloquear, igual que una rutina de interrupción.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Ruta <span class="glossary-item__alt">route</span></h3>
+						<p class="glossary-item__body">Asociación de un método y un camino a un manejador. Es la unidad con la que se construye la API del dispositivo.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>mDNS <span class="glossary-item__alt">multicast DNS</span></h3>
+						<p class="glossary-item__body">Publicación de un nombre resoluble dentro de la red local sin servidor de nombres. Sustituye a una dirección que cambia.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Server-Sent Events (SSE) <span class="glossary-item__alt">eventos enviados por el servidor</span></h3>
+						<p class="glossary-item__body">Conexión mantenida en un solo sentido por la que el dispositivo envía actualizaciones cuando las hay.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>WebSocket <span class="glossary-item__alt"></span></h3>
+						<p class="glossary-item__body">Conexión mantenida bidireccional. Permite que el panel también mande órdenes, a costa de un socket por visitante.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Provisioning <span class="glossary-item__alt">aprovisionamiento</span></h3>
+						<p class="glossary-item__body">Procedimiento por el que el dispositivo recibe las credenciales de la red del usuario, que no pueden venir en el firmware.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>NVS <span class="glossary-item__alt">memoria no volátil</span></h3>
+						<p class="glossary-item__body">Región donde se conservan las credenciales y la configuración entre reinicios. Se trata en profundidad en la sesión 10.</p>
+					</div>
+					<div class="glossary-item">
+						<h3>Factory reset <span class="glossary-item__alt">restablecimiento de fábrica</span></h3>
+						<p class="glossary-item__body">Borrado de todo lo que identifica al usuario, conservando lo que identifica al equipo. Es lo que permite el cambio de propietario.</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="22-resumen.html">
+					<span>Resumen de la sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

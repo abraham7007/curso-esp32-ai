@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estructura de una trama UART · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Fundamentos del enlace serie
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Estructura de una trama UART
+				</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Cada carácter viaja envuelto en una <b>trama</b>: un bit de
+								inicio en nivel bajo, los bits de datos, un bit de paridad
+								opcional y uno o más bits de parada en nivel alto. La velocidad
+								en <b>baudios</b> fija la duración de cada bit, y ambos extremos
+								deben usar la misma.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En la práctica
+							</div>
+							<p class="m-0">
+								<code>Serial.begin(115200, SERIAL_8N1)</code>: 8 bits de datos,
+								<code>N</code> sin paridad, 1 bit de parada. Es el formato por
+								omisión del núcleo de Arduino y el que usa el curso.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La línea reposa en nivel alto; el flanco de bajada del bit de
+								inicio avisa al receptor. Los ocho bits de datos salen en orden
+								<b>LSB primero</b>: el bit 0 del carácter es el primero en la
+								línea, no el último.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="uart-frame"
+								class="w-full aspect-[16/5]"
+								width="960"
+								height="300"
+								role="img"
+								aria-label="Cronograma de la línea TX de un enlace UART: nivel de reposo alto, bit de inicio en bajo, ocho bits de datos en orden LSB primero y bit de parada en alto, con el eje de tiempo rotulado"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="uart-char" class="text-sm font-medium">
+									Carácter
+								</label>
+								<select
+									id="uart-char"
+									class="font-mono text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1"
+								>
+									<option value="A">A</option>
+									<option value="K">K</option>
+									<option value="0">0</option>
+									<option value="U">U</option>
+									<option value="a">a</option>
+								</select>
+
+								<label for="uart-baud" class="text-sm font-medium">
+									Velocidad
+								</label>
+								<select
+									id="uart-baud"
+									class="font-mono text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1"
+								>
+									<option value="9600">9 600 baudios</option>
+									<option value="115200" selected>115 200 baudios</option>
+								</select>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Carácter
+									</span>
+									<span class="readout" id="uart-char-out">A</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Binario (MSB→LSB)
+									</span>
+									<span class="readout" id="uart-bin-out">01000001</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Hexadecimal
+									</span>
+									<span class="readout" id="uart-hex-out">0x41</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Tiempo de bit
+									</span>
+									<span class="readout" id="uart-tbit-out">8,68 µs</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">
+										Duración de trama
+									</span>
+									<span class="readout" id="uart-tframe-out">86,8 µs</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-serie-paralelo-duplex.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Transmisión serie, paralela y dúplex</span>
+				</a>
+				<a class="slide-nav__link" href="05-desajuste-baudios.html">
+					<span>Efecto de un desajuste de velocidad</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module">
+			// 12 ranuras: reposo, inicio, b0..b7, parada, reposo.
+			const SLOTS = 12;
+			const NAMES = [
+				"reposo",
+				"inicio",
+				"b0",
+				"b1",
+				"b2",
+				"b3",
+				"b4",
+				"b5",
+				"b6",
+				"b7",
+				"parada",
+				"reposo",
+			];
+
+			const charSel = document.getElementById("uart-char");
+			const baudSel = document.getElementById("uart-baud");
+			const charOut = document.getElementById("uart-char-out");
+			const binOut = document.getElementById("uart-bin-out");
+			const hexOut = document.getElementById("uart-hex-out");
+			const tbitOut = document.getElementById("uart-tbit-out");
+			const tframeOut = document.getElementById("uart-tframe-out");
+			const canvas = document.getElementById("uart-frame");
+			const ctx = canvas.getContext("2d");
+
+			function cssVar(name) {
+				return getComputedStyle(document.documentElement)
+					.getPropertyValue(name)
+					.trim();
+			}
+
+			function coma(value) {
+				return value.replace(".", ",");
+			}
+
+			function bitsOf(code) {
+				const bits = [];
+				for (let i = 0; i < 8; i++) bits.push((code >> i) & 1);
+				return bits;
+			}
+
+			function drawFrame(code, baud) {
+				const w = canvas.width;
+				const h = canvas.height;
+				const left = 96;
+				const right = w - 18;
+				const top = 64;
+				const bottom = 140;
+				const slotW = (right - left) / SLOTS;
+
+				ctx.clearRect(0, 0, w, h);
+				ctx.fillStyle = cssVar("--color-surface");
+				ctx.fillRect(0, 0, w, h);
+
+				const accent = cssVar("--color-accent");
+				const navy = cssVar("--color-navy");
+				const ok = cssVar("--color-ok");
+				const border = cssVar("--color-border");
+				const muted = cssVar("--color-text-muted");
+				const text = cssVar("--color-text");
+
+				const x = (i) => left + i * slotW;
+				const y = (level) => (level ? top : bottom);
+				const bits = bitsOf(code);
+				const levels = [1, 0, ...bits, 1, 1];
+
+				// bandas de campo: inicio, datos, parada
+				ctx.globalAlpha = 0.1;
+				ctx.fillStyle = accent;
+				ctx.fillRect(x(1), top - 18, slotW, bottom - top + 36);
+				ctx.fillStyle = navy;
+				ctx.fillRect(x(2), top - 18, slotW * 8, bottom - top + 36);
+				ctx.fillStyle = ok;
+				ctx.fillRect(x(10), top - 18, slotW, bottom - top + 36);
+				ctx.globalAlpha = 1;
+
+				// guías de nivel
+				ctx.strokeStyle = border;
+				ctx.lineWidth = 1;
+				ctx.setLineDash([4, 4]);
+				for (const laneY of [top, bottom]) {
+					ctx.beginPath();
+					ctx.moveTo(left, laneY);
+					ctx.lineTo(right, laneY);
+					ctx.stroke();
+				}
+				// separadores de ranura
+				for (let i = 0; i <= SLOTS; i++) {
+					ctx.beginPath();
+					ctx.moveTo(x(i), top - 18);
+					ctx.lineTo(x(i), bottom + 18);
+					ctx.stroke();
+				}
+				ctx.setLineDash([]);
+
+				ctx.fillStyle = muted;
+				ctx.font = "12px system-ui";
+				ctx.textAlign = "right";
+				ctx.fillText("alto", left - 10, top + 4);
+				ctx.fillText("bajo", left - 10, bottom + 4);
+
+				ctx.textAlign = "left";
+				ctx.font = "600 13px system-ui";
+				ctx.fillStyle = text;
+				ctx.fillText("línea TX", 18, 34);
+				ctx.font = "12px system-ui";
+				ctx.fillStyle = muted;
+				ctx.fillText(
+					`${baud === 9600 ? "9 600" : "115 200"} baudios · 8 bits de datos · sin paridad · 1 bit de parada`,
+					100,
+					34,
+				);
+
+				// traza
+				ctx.strokeStyle = accent;
+				ctx.lineWidth = 2.8;
+				ctx.beginPath();
+				ctx.moveTo(x(0), y(levels[0]));
+				for (let i = 0; i < SLOTS; i++) {
+					ctx.lineTo(x(i), y(levels[i]));
+					ctx.lineTo(x(i + 1), y(levels[i]));
+				}
+				ctx.stroke();
+
+				// rótulo y valor de cada ranura
+				ctx.textAlign = "center";
+				for (let i = 0; i < SLOTS; i++) {
+					const cx = x(i) + slotW / 2;
+					const isData = i >= 2 && i <= 9;
+					ctx.font = isData ? "600 12px system-ui" : "11px system-ui";
+					let nameColor = muted;
+					if (i === 2) nameColor = accent;
+					else if (isData) nameColor = navy;
+					ctx.fillStyle = nameColor;
+					ctx.fillText(NAMES[i], cx, 164);
+					ctx.font = "700 15px ui-monospace, monospace";
+					ctx.fillStyle = isData ? text : muted;
+					ctx.fillText(String(levels[i]), cx, 186);
+				}
+
+				ctx.font = "600 10px system-ui";
+				ctx.fillStyle = accent;
+				ctx.fillText("LSB · primero", x(2) + slotW / 2, 202);
+				ctx.fillStyle = navy;
+				ctx.fillText("MSB", x(9) + slotW / 2, 202);
+
+				// cota de un tiempo de bit
+				const bitUs = 1e6 / baud;
+				const bitLabel = bitUs.toFixed(2);
+				ctx.strokeStyle = muted;
+				ctx.lineWidth = 1.2;
+				ctx.beginPath();
+				ctx.moveTo(x(3), 220);
+				ctx.lineTo(x(4), 220);
+				ctx.moveTo(x(3), 215);
+				ctx.lineTo(x(3), 225);
+				ctx.moveTo(x(4), 215);
+				ctx.lineTo(x(4), 225);
+				ctx.stroke();
+				ctx.font = "11px system-ui";
+				ctx.fillStyle = muted;
+				ctx.textAlign = "left";
+				ctx.fillText(
+					`T de bit = ${coma(bitLabel)} µs`,
+					x(4) + 8,
+					224,
+				);
+
+				// cota de la trama completa
+				ctx.strokeStyle = text;
+				ctx.lineWidth = 1.4;
+				ctx.beginPath();
+				ctx.moveTo(x(1), 252);
+				ctx.lineTo(x(11), 252);
+				ctx.moveTo(x(1), 246);
+				ctx.lineTo(x(1), 258);
+				ctx.moveTo(x(11), 246);
+				ctx.lineTo(x(11), 258);
+				ctx.stroke();
+
+				const frameUs = 10 * bitUs;
+				const frameLabel =
+					frameUs >= 1000
+						? `${(frameUs / 1000).toFixed(2)} ms`
+						: `${frameUs.toFixed(1)} µs`;
+				ctx.textAlign = "center";
+				ctx.font = "600 12px system-ui";
+				ctx.fillStyle = text;
+				ctx.fillText(
+					`trama de 10 bits = ${coma(frameLabel)}`,
+					(x(1) + x(11)) / 2,
+					274,
+				);
+			}
+
+			function update() {
+				const code = charSel.value.charCodeAt(0);
+				const baud = Number(baudSel.value);
+				const bitUs = 1e6 / baud;
+				const frameUs = 10 * bitUs;
+
+				charOut.textContent = `'${charSel.value}'`;
+				binOut.textContent = code.toString(2).padStart(8, "0");
+				hexOut.textContent = `0x${code.toString(16).toUpperCase().padStart(2, "0")}`;
+				tbitOut.textContent = `${coma(bitUs.toFixed(2))} µs`;
+				tframeOut.textContent =
+					frameUs >= 1000
+						? `${coma((frameUs / 1000).toFixed(2))} ms`
+						: `${coma(frameUs.toFixed(1))} µs`;
+
+				drawFrame(code, baud);
+			}
+
+			charSel.addEventListener("change", update);
+			baudSel.addEventListener("change", update);
+
+			new MutationObserver(() =>
+				drawFrame(charSel.value.charCodeAt(0), Number(baudSel.value)),
+			).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+
+			update();
+
+			for (const el of document.querySelectorAll("[data-animate]")) {
+				el.classList.add("is-visible");
+			}
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

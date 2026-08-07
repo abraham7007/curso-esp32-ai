@@ -1,0 +1,71 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 399.24 125.064" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 125.064 
+L 399.24 125.064 
+L 399.24 0 
+L 0 0 
+L 0 125.064 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="18.193938" transform="rotate(-0 48.538868 18.193938)">✓</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="17.746828" transform="rotate(-0 85.387925 17.746828)">el emisor calcula el campo sobre la carga</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="36.673938" transform="rotate(-0 48.538868 36.673938)">✓</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="36.256047" transform="rotate(-0 85.387925 36.256047)">el receptor lo recalcula y compara</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="55.153937" transform="rotate(-0 48.538868 55.153937)">✓</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="54.85425" transform="rotate(-0 85.387925 54.85425)">sabe si la trama llegó alterada</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="73.633938" transform="rotate(-0 48.538868 73.633938)">✕</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="73.354836" transform="rotate(-0 85.387925 73.354836)">sabe qué bit cambió</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="92.113938" transform="rotate(-0 48.538868 92.113938)">✕</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-muted); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="91.666828" transform="rotate(-0 85.387925 91.666828)">puede reconstruir el dato original</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="48.538868" y="110.593938" transform="rotate(-0 48.538868 110.593938)">✓</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="85.387925" y="110.314836" transform="rotate(-0 85.387925 110.314836)">por eso hay que pedir la retransmisión</text>
+   </g>
+   <g id="patch_2">
+    <path d="M 37.484151 10.015819 
+Q 37.484151 35.736189 37.484151 61.45656 
+" style="fill: none; stroke: var(--fig-ok); stroke-width: 2.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 37.484151 65.454691 
+Q 37.484151 81.934561 37.484151 98.414431 
+" style="fill: none; stroke: var(--fig-accent); stroke-width: 2.5; stroke-linecap: round"/>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-ok); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(22.923231 52.592875) rotate(-90)">detecta</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(22.868231 106.01725) rotate(-90)">no corrige</text>
+   </g>
+  </g>
+ </g>
+</svg>

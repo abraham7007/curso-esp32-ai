@@ -1,0 +1,200 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 357.309141 163.488875" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 163.488875 
+L 357.309141 163.488875 
+L 357.309141 0 
+L 0 0 
+L 0 163.488875 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 7.029141 131.832 
+L 165.726388 131.832 
+L 165.726388 4.32 
+L 7.029141 4.32 
+L 7.029141 131.832 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 7.029141 131.832 
+L 7.029141 4.32 
+" clip-path="url(#p500cdbe592)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="m3e7887bc7f" d="M 0 0 
+L 0 3 
+" style="stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="7.029141" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="7.029141" y="145.218406" transform="rotate(-0 7.029141 145.218406)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 63.706729 131.832 
+L 63.706729 4.32 
+" clip-path="url(#p500cdbe592)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="63.706729" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="63.706729" y="145.218406" transform="rotate(-0 63.706729 145.218406)">5</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 120.384318 131.832 
+L 120.384318 4.32 
+" clip-path="url(#p500cdbe592)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="120.384318" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="120.384318" y="145.218406" transform="rotate(-0 120.384318 145.218406)">10</text>
+     </g>
+    </g>
+    <g id="text_4">
+     <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="86.377764" y="157.488875" transform="rotate(-0 86.377764 157.488875)">veces más rápido que HTTP</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_3">
+    <path d="M 60.986205 83.5596 
+L 144.188905 83.5596 
+L 144.188905 52.5924 
+L 60.986205 52.5924 
+z
+" clip-path="url(#p500cdbe592)" style="fill: var(--fig-ok)"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 18.364658 131.832 
+L 18.364658 4.32 
+" clip-path="url(#p500cdbe592)" style="fill: none; stroke-dasharray: 1,1.65; stroke-dashoffset: 0; stroke: var(--fig-muted)"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 7.029141 131.832 
+L 165.726388 131.832 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="19.49821" y="40.752" transform="rotate(-0 19.49821 40.752)">HTTP = 1×</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="60.986205" y="99.0432" transform="rotate(-0 60.986205 99.0432)">4,76×</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="144.188905" y="99.0432" transform="rotate(-0 144.188905 99.0432)">12,1×</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 194.291893 131.832 
+L 352.989141 131.832 
+L 352.989141 4.32 
+L 194.291893 4.32 
+L 194.291893 131.832 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_4">
+     <g id="line2d_8">
+      <path d="M 194.291893 131.832 
+L 194.291893 4.32 
+" clip-path="url(#p8a9d490cc0)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="194.291893" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="194.291893" y="145.218406" transform="rotate(-0 194.291893 145.218406)">0</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_10">
+      <path d="M 250.969481 131.832 
+L 250.969481 4.32 
+" clip-path="url(#p8a9d490cc0)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="250.969481" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="250.969481" y="145.218406" transform="rotate(-0 250.969481 145.218406)">5</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_12">
+      <path d="M 307.64707 131.832 
+L 307.64707 4.32 
+" clip-path="url(#p8a9d490cc0)" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m3e7887bc7f" x="307.64707" y="131.832" style="fill: var(--fig-muted); stroke: var(--fig-muted); stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="fill: var(--fig-muted); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="307.64707" y="145.218406" transform="rotate(-0 307.64707 145.218406)">10</text>
+     </g>
+    </g>
+    <g id="text_11">
+     <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="273.640517" y="157.195125" transform="rotate(-0 273.640517 157.195125)">% menos de consumo que HTTP</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4"/>
+   <g id="patch_6">
+    <path d="M 262.304999 83.5596 
+L 284.976034 83.5596 
+L 284.976034 52.5924 
+L 262.304999 52.5924 
+z
+" clip-path="url(#p8a9d490cc0)" style="fill: var(--fig-warn)"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 194.291893 131.832 
+L 352.989141 131.832 
+" style="fill: none; stroke: var(--fig-grid); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-warn); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="262.304999" y="99.0432" transform="rotate(-0 262.304999 99.0432)">6 %</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-warn); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="284.976034" y="99.0432" transform="rotate(-0 284.976034 99.0432)">8 %</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p500cdbe592">
+   <rect x="7.029141" y="4.32" width="158.697248" height="127.512"/>
+  </clipPath>
+  <clipPath id="p8a9d490cc0">
+   <rect x="194.291893" y="4.32" width="158.697248" height="127.512"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reparto del costo de sincronización entre la sección crítica y el resto · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Bertogna, M.; Marinoni, M.; Esposito, F.</b> (2020). Non-blocking synchronization protocols for mixed-criticality data sharing. <i>Real-Time Systems</i>. <code>doi:10.1007/s11241-020-09349-w</code></p>
+
+					<h2 class="paper__title">Reparto del costo de sincronización entre la sección crítica y el resto</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Compartir datos entre una parte <b>con plazo</b> y otra sin él, en núcleos distintos.</li>
+									<li>Con un mutex convencional, la parte crítica <b>queda esperando</b> a la que no lo es.</li>
+									<li>Su peor caso pasa a depender de código sobre el que no se tiene control.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li><b>Cinco protocolos no bloqueantes</b> para cuatro escenarios de productor y consumidor.</li>
+									<li>La parte crítica <b>nunca repite</b> una operación: su tiempo queda acotado y pequeño.</li>
+									<li>El costo se traslada por completo a la parte <b>sin plazo</b>, que sí reintenta.</li>
+									<li>Evaluación sobre dos núcleos, con lector o escritor crítico en cada caso.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>No repetir es la condición para que el tiempo de ejecución <b>tenga una cota</b>.</li>
+									<li>La contrapartida asumida es el <b>peor tiempo de respuesta</b> de la parte no crítica.</li>
+									<li>Lo que decide el protocolo es quién escribe y quién tiene el plazo, no el tipo de dato.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-sincronizacion-costo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Modelo propio con los parámetros del eje, no medidas del artículo: con exclusión mutua el peor caso de la parte crítica hereda la espera ajena.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-sincronizacion-casos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Los cuatro escenarios que cubren los cinco protocolos, según el recurso y el lado que tiene el plazo.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-semaforos-grupos-eventos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+					<span>Semáforos y grupos de eventos</span>
+				</a>
+				<a class="slide-nav__link" href="21-mensajes-vs-memoria-compartida.html">
+					<span>Mensajes o memoria compartida</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

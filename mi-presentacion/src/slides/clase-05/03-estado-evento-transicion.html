@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estado, evento y transición · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					01 · Modelado del comportamiento
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Estado, evento y transición</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Tres términos y una regla.</strong> En cada instante hay
+					exactamente un estado activo, y solo un evento puede cambiarlo.
+				</p>
+
+				<div class="layout layout--thirds" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+							Estado
+						</div>
+						<p>
+							Situación en la que el dispositivo permanece hasta que ocurre algo.
+							Determina qué salidas están activas y qué eventos se atienden.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>VERDE_VEHICULOS</code>, <code>AMBAR</code>,
+							<code>ROJO_CON_PASO</code>
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
+							Evento
+						</div>
+						<p>
+							Hecho instantáneo que el sistema observa: un flanco en un terminal,
+							el vencimiento de un temporizador, la llegada de una trama.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>PULSADOR_PEATON</code>, <code>VENCE_TEMPORIZADOR</code>
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+							Transición
+						</div>
+						<p>
+							Paso de un estado a otro provocado por un evento concreto. Es la
+							única forma de cambiar de estado.
+						</p>
+						<p class="text-[length:var(--fs-small)] text-[var(--color-text-muted)]">
+							<code>VERDE — VENCE_TEMPORIZADOR → AMBAR</code>
+						</p>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En el código
+					</div>
+					<p>
+						El estado es una variable de tipo <code>enum class</code>; el evento,
+						un valor devuelto por la función que consulta las entradas; la
+						transición, una asignación a esa variable dentro de un
+						<code>switch</code>. El estado inicial se fija en <code>setup()</code>
+						y es parte de la especificación, no un detalle de implementación.
+					</p>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Aplicaciones habituales</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+						<span>
+							<span class="usecase__name">Cargador de batería por etapas</span>
+							<span class="usecase__what">
+								Corriente constante, tensión constante y mantenimiento son estados:
+								cada uno fija un límite distinto y atiende eventos distintos.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span>
+							<span class="usecase__name">Enlace inalámbrico</span>
+							<span class="usecase__what">
+								Desconectado, asociando, obteniendo dirección y conectado. La
+								pérdida de portadora es un evento que devuelve al primero.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+						<span>
+							<span class="usecase__name">Portón automático</span>
+							<span class="usecase__what">
+								La detección de obstáculo durante el cierre es un evento que
+								invierte el movimiento; sin estado, esa regla no tiene dónde vivir.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-acumulacion-banderas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Acumulación de variables de control</span>
+				</a>
+				<a class="slide-nav__link" href="04-acciones-guardas.html">
+					<span>Acciones y condiciones de guarda</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

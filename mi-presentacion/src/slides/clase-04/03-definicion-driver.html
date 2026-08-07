@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Definición y responsabilidad de un driver · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="30">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Sensores y diseño del driver
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Definición y responsabilidad de un driver
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						<b>Driver</b> (<i>controlador de dispositivo</i>): capa que convierte
+						entre el formato de datos del dispositivo y el formato que necesita
+						la aplicación, <b>sin incorporar lógica de aplicación</b>. Traduce
+						códigos del convertidor, registros o temporizaciones en magnitudes
+						físicas; no decide qué se hace con ellas.
+					</p>
+				</div>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3 class="text-base mb-2">Driver con lógica dentro</h3>
+						<div class="codepanel mb-2">
+							<div class="codepanel__header">
+								<span>SensorTemperatura.cpp</span>
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+							</div>
+							<pre>float SensorTemperatura::leer() {
+  float t = convertir(analogRead(pin_));
+<span class="hl hl--hit">  if (t > 40.0) activarAlarma();</span>  return t;
+}</pre>
+						</div>
+						<p class="text-sm text-[var(--color-text-muted)]">
+							El módulo del sensor decide si hay que activar una alarma. Cambiar
+							el umbral obliga a tocar el driver, y el módulo no se puede
+							reutilizar en otro proyecto donde 40 °C no signifique nada.
+						</p>
+					</div>
+
+					<div class="compare__panel">
+						<h3 class="text-base mb-2">Driver sin lógica</h3>
+						<div class="codepanel mb-2">
+							<div class="codepanel__header">
+								<span>SensorTemperatura.cpp · main.cpp</span>
+								<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+							</div>
+							<pre>float SensorTemperatura::leer() {
+  return convertir(analogRead(pin_));
+}
+// main.cpp — la decisión vive aquí
+<span class="hl hl--add">if (sensor.leer() > kUmbral) alarma.encender();</span></pre>
+						</div>
+						<p class="text-sm text-[var(--color-text-muted)]">
+							El módulo entrega una temperatura en grados. Quién la compara, con
+							qué umbral y con qué consecuencia es competencia de la capa de
+							aplicación, que es la única que cambia entre proyectos.
+						</p>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<p>
+						<span class="conclusion__label">Criterio operativo.</span>
+						Se elige el driver sin lógica: un driver
+						<b>no contiene ningún umbral ni ninguna decisión</b>. La prueba es
+						copiarlo a otro proyecto — si hubiera que cambiar un número que
+						representa una decisión, esa decisión está en el sitio equivocado y
+						pertenece a la capa de aplicación.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-clasificacion-sensores.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Clasificación por modo de lectura</span>
+				</a>
+				<a class="slide-nav__link" href="04-interfaz-comun.html">
+					<span>Interfaz común de la capa de adquisición</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

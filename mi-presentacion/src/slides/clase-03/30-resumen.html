@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Síntesis de la sesión · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--narrow items-center text-center stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					Cierre de sesión
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Síntesis de la sesión</h1>
+
+				<div
+					class="grid grid-cols-1 gap-4 md:grid-cols-3 w-full text-left"
+					data-animate="fade-up"
+				>
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							01
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							Un enlace transporta niveles de tensión; el significado lo aporta
+							un acuerdo previo
+						</h2>
+						<p class="text-sm m-0">
+							Trama, sincronización, direccionamiento y control de errores son
+							los cuatro acuerdos que dos extremos deben compartir. Cada
+							protocolo los resuelve de forma distinta (bit de inicio y baudios
+							en UART, dirección de 7 bits en I²C, línea CS en SPI), pero ninguno
+							puede prescindir de ellos.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							02
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							La elección entre UART, I²C y SPI se decide por número de
+							dispositivos y volumen de datos
+						</h2>
+						<p class="text-sm m-0">
+							Dos extremos y sin dirección, UART. Varios dispositivos lentos con
+							solo dos conductores, I²C. Cuando el tiempo de transferencia domina
+							(una pantalla que se refresca, una memoria que se vuelca), SPI, al
+							precio de una línea CS por dispositivo.
+						</p>
+					</div>
+
+					<div class="card flex flex-col gap-2">
+						<span
+							class="font-display font-extrabold text-6xl text-[var(--color-accent)] opacity-25 leading-none"
+						>
+							03
+						</span>
+						<h2 class="font-display text-lg font-semibold m-0">
+							Sin información redundante, un dato alterado es indistinguible de
+							uno correcto
+						</h2>
+						<p class="text-sm m-0">
+							El campo de verificación es lo que permite al receptor descartar en
+							lugar de aceptar un valor erróneo. Sin él no hay error de
+							comunicación que observar: solo un valor incorrecto dentro de la
+							aplicación.
+						</p>
+					</div>
+				</div>
+
+				<a class="btn btn--secondary" href="/index.html" data-animate="fade-up">
+					Volver al índice del curso ↺
+				</a>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="29-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Terminología de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="31-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

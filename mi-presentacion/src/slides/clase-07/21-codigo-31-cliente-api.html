@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 31 · Cliente de una API con tratamiento de fallos · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 31</span>
+					</div>
+
+					<h2 class="code-hour__title">Cliente de una API pública con los cuatro fallos diferenciados</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Consultar una API pública cada cinco minutos y extraer tres campos. Cada fallo se clasifica en una de las <b>cuatro causas</b> de la lámina anterior y cada una recibe su propio tratamiento, porque no todas se arreglan reintentando.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>filtro de deserialización</b> indica de antemano qué campos interesan, de modo que el resto del documento no llega a ocupar memoria: leyendo de <code>http.getStream()</code> ni siquiera se guarda la respuesta entera. Los códigos <b>4xx</b> señalan un error del cliente (clave inválida, ruta inexistente) y repetir la petición no los corrige; los <b>5xx</b> y los tiempos agotados sí admiten reintento. El <b>dato caducado</b> es el último valor válido con su timestamp, conservado pero señalado.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Consulta una API pública cada 300000 ms y extrae tres campos con un filtro de ArduinoJson leyendo de <code>http.getStream()</code>. Clasifica cada fallo en SIN_RED, SIN_INTERNET, SERVIDOR_MUDO o HTTP_ERROR y aplica el tratamiento de la tabla: los 4xx no se reintentan. El plazo de espera de la petición es de 8000 ms. Conserva el último dato válido con su timestamp y márcalo como caducado si supera los 900 s. La clave va en <code>credenciales.h</code>, excluido del control de versiones. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los cuatro LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de una consulta completa, desde la petición hasta la actualización del dato o su marcado como caducado. Y el <b>árbol de decisión</b> que lleva de una petición fallida a cada una de las cuatro causas, con la comprobación que las distingue.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende cuatro LED en los <b>GPIO 25, 26, 27 y 32</b>, uno por causa de fallo, con resistencia de 220 Ω a masa.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="orange"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[API] t=0       GET /data/2.5/weather intento=1
+[API] t=1204    200 OK  1284 bytes temp=19.4 C  hum=72 %
+[FALLO] t=300000   SIN_RED        reasociar espera=1000 ms
+[FALLO] t=600000   SIN_INTERNET   reintentar consulta
+[FALLO] t=900000   SERVIDOR_MUDO  reintentar espera=2000 ms
+[FALLO] t=1200000  HTTP_401       NO reintentar (token invalido)
+[DATO] ultimo valido hace 900 s -&gt; caducado</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La cuarta línea de fallo es la que cambia el comportamiento: ante un <b>401</b> la acción es <b>no</b> reintentar. Un token caducado no se arregla repitiendo la petición cada cinco minutos durante meses, y esa es la regla que más energía ahorra en un equipo con batería. La última línea muestra la otra decisión: el dato no se borra, se marca <b>caducado</b>, para que el equipo siga sirviendo sin mentir sobre la antigüedad de lo que muestra.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-cuatro-fallos-mismo-sintoma.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					<span>Cuatro fallos, cuatro acciones</span>
+				</a>
+				<a class="slide-nav__link" href="22-paper-mqtt-vs-http.html">
+					<span>Artículo · HTTP frente a MQTT en ESP32</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reparto del procesador entre tres tareas · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Reparto del procesador entre tres tareas</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Qué decide el planificador
+							</div>
+							<p>
+								En cada tick ejecuta la tarea <b>preparada</b> de mayor prioridad.
+								Una tarea bloqueada no compite: no consume procesador aunque su
+								prioridad sea la más alta.
+							</p>
+						</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								Cada carril es una tarea y el color indica su estado: en ejecución,
+								preparada esperando turno, o bloqueada. Al subir la prioridad de la
+								interfaz por encima de la de muestreo, la barra de ocupación del
+								muestreo cae y su periodo deja de cumplirse: es el error de
+								asignación más frecuente, medido.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="card">
+							<canvas
+								id="sch-canvas"
+								class="w-full aspect-[5/2]"
+								width="900"
+								height="360"
+								role="img"
+								aria-label="Tres carriles temporales, uno por tarea, con tramos coloreados según la tarea esté en ejecución, preparada o bloqueada, sobre un eje de tiempo en milisegundos"
+							></canvas>
+
+							<div class="controls mt-3">
+								<label for="sch-prio" class="text-sm font-medium">
+									Prioridad de la tarea de interfaz
+								</label>
+								<input type="range" id="sch-prio" min="1" max="4" step="1" value="1" />
+								<span class="readout" id="sch-prio-lectura">1</span>
+							</div>
+
+							<div class="metric mt-3">
+								<div class="metric__item" id="sch-item-muestreo">
+									<span class="text-xs text-[var(--color-text-muted)]">Muestreo · prio 3</span>
+									<span class="readout" id="sch-muestreo">100 %</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Interfaz</span>
+									<span class="readout" id="sch-interfaz">0 %</span>
+								</div>
+								<div class="metric__item">
+									<span class="text-xs text-[var(--color-text-muted)]">Fondo · prio 1</span>
+									<span class="readout" id="sch-fondo">0 %</span>
+								</div>
+								<div class="metric__item" id="sch-item-plazo">
+									<span class="text-xs text-[var(--color-text-muted)]">Periodo de 10 ms</span>
+									<span class="readout" id="sch-plazo">se cumple</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-planificador-expropiativo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+					<span>Planificador expropiativo</span>
+				</a>
+				<a class="slide-nav__link" href="09-reparto-nucleos.html">
+					<span>Asignación de tareas a los núcleos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			// Modelo de un solo núcleo con planificación expropiativa por
+			// prioridades. Se simula tick a tick, que es exactamente como decide
+			// FreeRTOS: en cada interrupción periódica elige la preparada de mayor
+			// prioridad.
+			const VENTANA_MS = 120;
+			const TAREAS = [
+				{ id: "muestreo", rotulo: "Muestreo", prio: 3, periodo: 10, trabajo: 2, tinta: "--color-ok" },
+				{ id: "interfaz", rotulo: "Interfaz", prio: 1, periodo: 30, trabajo: 12, tinta: "--color-accent" },
+				{ id: "fondo", rotulo: "Fondo", prio: 1, periodo: 40, trabajo: 6, tinta: "--color-navy" },
+			];
+
+			const lienzo = document.getElementById("sch-canvas");
+			const ctx = lienzo.getContext("2d");
+			const deslizador = document.getElementById("sch-prio");
+			const lecturaPrio = document.getElementById("sch-prio-lectura");
+			const salidas = {
+				muestreo: document.getElementById("sch-muestreo"),
+				interfaz: document.getElementById("sch-interfaz"),
+				fondo: document.getElementById("sch-fondo"),
+			};
+			const itemMuestreo = document.getElementById("sch-item-muestreo");
+			const itemPlazo = document.getElementById("sch-item-plazo");
+			const salidaPlazo = document.getElementById("sch-plazo");
+
+			function variable(nombre) {
+				return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim();
+			}
+
+			// Devuelve, para cada milisegundo de la ventana, qué tarea ocupa el
+			// núcleo y en qué estado está cada una.
+			function simular(prioInterfaz) {
+				const estado = TAREAS.map((t) => ({
+					...t,
+					prio: t.id === "interfaz" ? prioInterfaz : t.prio,
+					restante: 0,
+					liberada: 0,
+				}));
+				const traza = [];
+				let peorRetraso = 0;
+				let incumplidos = 0;
+
+				for (let t = 0; t < VENTANA_MS; t++) {
+					for (const tarea of estado) {
+						if (t % tarea.periodo === 0) {
+							// Si al llegar el nuevo periodo aún queda trabajo del
+							// anterior, ese plazo se incumplió. Medirlo solo al terminar
+							// ocultaría justo el caso que la lámina quiere mostrar: una
+							// tarea hambrienta nunca termina y nunca se contaría.
+							if (tarea.id === "muestreo" && tarea.restante > 0) {
+								incumplidos += 1;
+								peorRetraso = Math.max(peorRetraso, t - tarea.liberada);
+							}
+							tarea.restante = tarea.trabajo;
+							tarea.liberada = t;
+						}
+					}
+					const listas = estado.filter((x) => x.restante > 0);
+					listas.sort((a, b) => b.prio - a.prio);
+					const corriendo = listas[0] || null;
+					if (corriendo) {
+						corriendo.restante -= 1;
+						if (corriendo.id === "muestreo" && corriendo.restante === 0) {
+							peorRetraso = Math.max(peorRetraso, t + 1 - corriendo.liberada);
+						}
+					}
+					traza.push({
+						corriendo: corriendo ? corriendo.id : null,
+						preparadas: listas.slice(1).map((x) => x.id),
+					});
+				}
+				return { traza, peorRetraso, incumplidos };
+			}
+
+			function dibujar(prioInterfaz) {
+				const { traza, peorRetraso, incumplidos } = simular(prioInterfaz);
+				const w = lienzo.width;
+				const h = lienzo.height;
+				ctx.clearRect(0, 0, w, h);
+
+				const izq = 132;
+				const der = w - 24;
+				const ancho = der - izq;
+				const px = (t) => izq + (t / VENTANA_MS) * ancho;
+				const altoCarril = 54;
+				const sep = 26;
+				const arriba = 52;
+
+				const borde = variable("--color-border");
+				const atenuado = variable("--color-text-muted");
+				const texto = variable("--color-text");
+
+				const ocupacion = { muestreo: 0, interfaz: 0, fondo: 0 };
+
+				TAREAS.forEach((tarea, i) => {
+					const y = arriba + i * (altoCarril + sep);
+					const tinta = variable(tarea.tinta);
+
+					ctx.fillStyle = variable("--color-surface");
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.roundRect(izq, y, ancho, altoCarril, 6);
+					ctx.fill();
+					ctx.stroke();
+
+					for (let t = 0; t < VENTANA_MS; t++) {
+						const paso = traza[t];
+						const x = px(t);
+						const dx = Math.max(1, px(t + 1) - x);
+						if (paso.corriendo === tarea.id) {
+							ocupacion[tarea.id] += 1;
+							ctx.fillStyle = tinta;
+							ctx.fillRect(x, y + 4, dx, altoCarril - 8);
+						} else if (paso.preparadas.includes(tarea.id)) {
+							ctx.fillStyle = tinta;
+							ctx.globalAlpha = 0.22;
+							ctx.fillRect(x, y + altoCarril / 2 - 5, dx, 10);
+							ctx.globalAlpha = 1;
+						}
+					}
+
+					const prio = tarea.id === "interfaz" ? prioInterfaz : tarea.prio;
+					ctx.fillStyle = texto;
+					ctx.font = "600 13px system-ui";
+					ctx.textAlign = "right";
+					ctx.fillText(tarea.rotulo, izq - 12, y + altoCarril / 2 - 2);
+					ctx.fillStyle = atenuado;
+					ctx.font = "11px ui-monospace, monospace";
+					ctx.fillText(`prio ${prio} · ${tarea.trabajo}/${tarea.periodo} ms`, izq - 12, y + altoCarril / 2 + 14);
+				});
+
+				// Eje de tiempo
+				const ejeY = arriba + 3 * (altoCarril + sep) - sep + 12;
+				ctx.strokeStyle = borde;
+				ctx.beginPath();
+				ctx.moveTo(izq, ejeY);
+				ctx.lineTo(der, ejeY);
+				ctx.stroke();
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px system-ui";
+				ctx.textAlign = "center";
+				for (let t = 0; t <= VENTANA_MS; t += 20) {
+					ctx.beginPath();
+					ctx.moveTo(px(t), ejeY);
+					ctx.lineTo(px(t), ejeY + 5);
+					ctx.stroke();
+					ctx.fillText(`${t}`, px(t), ejeY + 18);
+				}
+				ctx.textAlign = "right";
+				ctx.fillText("tiempo (ms)", der, ejeY - 6);
+
+				ctx.textAlign = "left";
+				ctx.fillStyle = atenuado;
+				ctx.font = "11px system-ui";
+				ctx.fillText("relleno: en ejecución · franja tenue: preparada esperando turno", izq, 26);
+
+				return { ocupacion, peorRetraso, incumplidos };
+			}
+
+			function actualizar() {
+				const prio = Number(deslizador.value);
+				lecturaPrio.textContent = String(prio);
+				const { ocupacion, peorRetraso, incumplidos } = dibujar(prio);
+
+				for (const id of Object.keys(salidas)) {
+					salidas[id].textContent = `${Math.round((ocupacion[id] / VENTANA_MS) * 100)} %`;
+				}
+
+				// El muestreo tiene periodo de 10 ms: si un trabajo sigue pendiente
+				// cuando llega el siguiente, ese plazo se perdió.
+				const cumple = incumplidos === 0;
+				salidaPlazo.textContent = cumple
+					? "se cumple"
+					: `${incumplidos} plazos perdidos`;
+				itemPlazo.classList.toggle("metric__item--ok", cumple);
+				itemPlazo.classList.toggle("metric__item--bad", !cumple);
+				itemMuestreo.classList.toggle("metric__item--ok", cumple);
+				itemMuestreo.classList.toggle("metric__item--bad", !cumple);
+			}
+
+			deslizador.addEventListener("input", actualizar);
+			new MutationObserver(actualizar).observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			actualizar();
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

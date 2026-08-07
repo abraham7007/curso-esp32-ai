@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Por qué la exactitud global no basta · Sesión 12</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+					01 · Fundamentos y restricciones
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Por qué la exactitud global no basta</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								Una exactitud del <b>95 %</b> puede corresponder a un detector que
+								<b>nunca detecta nada</b>: si la anomalía ocurre el 5 % del tiempo,
+								responder siempre «normal» acierta el 95 % de las veces y no sirve
+								para nada.
+							</p>
+						</div>
+
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+								Los dos errores no cuestan lo mismo
+							</div>
+							<p>
+								Un <b>falso negativo</b> en detección de avería deja pasar el fallo:
+								cuesta la máquina. Un <b>falso positivo</b> provoca una revisión
+								innecesaria: cuesta una visita. La relación entre ambos costos es lo
+								que fija el umbral de decisión, y sale de la aplicación.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="metricas-matriz-confusion"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+								<span>
+									El caso del párrafo, con las cuentas hechas sobre mil ventanas. La
+									columna de la derecha está vacía: el detector nunca dice «anomalía».
+									La exactitud sigue siendo del 95 %.
+								</span>
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Las cuatro cifras que hay que dar</span>
+							<p>
+								La <b>matriz de confusión</b> completa, no la exactitud sola. El
+								<b>tiempo de inferencia</b> medido en el dispositivo. La <b>memoria
+								de trabajo</b> que exige. Y la <b>tasa de cada error</b> con su costo
+								en la aplicación. Sin las cuatro, no se puede decidir si el modelo
+								sirve.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-paper-cuantizacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Cuantización y despliegue</span>
+				</a>
+				<a class="slide-nav__link" href="08-paper-benchmark-tinyml.html">
+					<span>Artículo · Comparación entre sistemas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

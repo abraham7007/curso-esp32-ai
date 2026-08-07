@@ -1,0 +1,64 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 421.56 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 421.56 113.976 
+L 421.56 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="fill: var(--fig-accent); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="103.4208" y="14.8536" transform="rotate(-0 103.4208 14.8536)">supervisado</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="42.920177" transform="rotate(-0 12.5784 42.920177)">•</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="29.0952" y="42.223693" transform="rotate(-0 29.0952 42.223693)">ejemplos de funcionamiento normal</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="63.987377" transform="rotate(-0 12.5784 63.987377)">•</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="29.0952" y="63.283276" transform="rotate(-0 29.0952 63.283276)">ejemplos de cada fallo, etiquetados</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-accent); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="12.5784" y="85.054577" transform="rotate(-0 12.5784 85.054577)">•</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="29.0952" y="84.350476" transform="rotate(-0 29.0952 84.350476)">que los fallos ya hayan ocurrido</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ok); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="309.8808" y="14.8536" transform="rotate(-0 309.8808 14.8536)">no supervisado</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-ok); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="219.0384" y="42.920177" transform="rotate(-0 219.0384 42.920177)">•</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-ink); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="235.5552" y="42.223693" transform="rotate(-0 235.5552 42.223693)">ejemplos de funcionamiento normal</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: var(--fig-muted); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="219.0384" y="63.987377" transform="rotate(-0 219.0384 63.987377)">—</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="235.5552" y="63.283276" transform="rotate(-0 235.5552 63.283276)">ejemplos de cada fallo, etiquetados</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: var(--fig-muted); font: 10px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="219.0384" y="85.054577" transform="rotate(-0 219.0384 85.054577)">—</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: start" x="235.5552" y="84.350476" transform="rotate(-0 235.5552 84.350476)">que los fallos ya hayan ocurrido</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="210.78" y="105.44256" transform="rotate(-0 210.78 105.44256)">en un equipo industrial, un conjunto de fallos etiquetados rara vez existe</text>
+   </g>
+  </g>
+ </g>
+</svg>

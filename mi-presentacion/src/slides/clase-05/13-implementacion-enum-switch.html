@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Implementación con tipo enumerado y selección múltiple · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+					02 · Implementación y casos de aplicación
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Implementación con tipo enumerado y selección múltiple</h1>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Forma de referencia
+							</div>
+							<p>
+								El estado se declara como <code>enum class</code> y el bucle
+								resuelve la transición en un <code>switch</code> con un
+								<code>case</code> por estado. Es la forma de referencia hasta unos
+								diez estados; por encima de esa escala conviene la tabla en memoria
+								de la lámina siguiente.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								Por qué <code>enum class</code> y no <code>#define</code>
+							</div>
+							<p>
+								Con <code>enum class</code> el compilador rechaza asignar un entero
+								a la variable de estado y, con
+								<code>-Wswitch</code> activo, advierte de todo <code>case</code>
+								que falte. Una constante numérica no ofrece ninguna de las dos
+								comprobaciones, y ambas son gratuitas.
+							</p>
+						</div>
+
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__path">estructura mínima completa</span>
+							</div>
+							<pre><code>enum class Estado : uint8_t { VERDE, AMBAR, ROJO };
+<span class="hl hl--hit">Estado estado = Estado::VERDE;   // estado inicial declarado</span>
+
+void loop() {
+  Evento e = leerEvento();       // entradas → evento
+  Estado anterior = estado;
+
+  switch (estado) {              // una rama por estado
+    case Estado::VERDE:
+      if (e == Evento::PULSADOR &amp;&amp; millis() - tEntrada &gt;= 8000)
+        estado = Estado::AMBAR;
+      break;
+    case Estado::AMBAR: /* … */ break;
+    case Estado::ROJO:  /* … */ break;
+  }
+
+  <span class="hl hl--add">if (estado != anterior) {     // acciones de entrada, una vez</span>
+  <span class="hl hl--add">  tEntrada = millis(); aplicarSalidas(estado);</span>
+  <span class="hl hl--add">}</span>
+}</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-paper-fsm-dialisis.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Máquina de estados en equipo médico</span>
+				</a>
+				<a class="slide-nav__link" href="14-codigo-21-porton-automatico.html">
+					<span>La hora del código · Portón automático</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Aislamiento de fallos y despliegue seguro sobre dispositivos de bajo consumo · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Wallentowitz, S.; Kersting, B.; Mendez Rial, D.</b> (2022). Potential of WebAssembly for Embedded Systems. <i>MECO 2022</i>, 1-4. <code>doi:10.1109/MECO55406.2022.9797106</code></p>
+
+					<h2 class="paper__title">Aislamiento de fallos y despliegue seguro sobre dispositivos de bajo consumo</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Valorar si una <b>máquina virtual de aplicación</b> resulta adecuada para sistemas embebidos.</li>
+									<li>Dos propiedades interesan en despliegues conectados: <b>aislamiento</b> y <b>portabilidad</b>.</li>
+									<li>El trabajo es una <b>toma de posición razonada</b>, no un estudio experimental.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li>El <b>aislamiento fuerte</b> separa esta tecnología de un intérprete de guiones sin más.</li>
+									<li>El módulo solo accede a <b>lo que el anfitrión le concede</b> de forma explícita.</li>
+									<li>La <b>portabilidad</b> permite reutilizar el trabajo al cambiar de microcontrolador.</li>
+									<li>Revisan los entornos de ejecución disponibles para recursos limitados.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>El conjunto de herramientas disponible la convierte en <b>candidata razonable</b>.</li>
+									<li>Su interés no está solo en cambiar el comportamiento, sino en <b>acotar lo que puede tocar</b>.</li>
+									<li>Conviene leerlo como criterio de decisión, no como medida: no aporta cifras propias.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-aislamiento-modulo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Elaboración propia. La propiedad que separa esta tecnología de un intérprete: el módulo no alcanza lo que no se le concede.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-wasm-propiedades"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las dos propiedades declaradas frente a lo que cada una exige a cambio.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-paper-maquina-virtual-embebida.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Máquina virtual embebida</span>
+				</a>
+				<a class="slide-nav__link" href="09-binario-frente-a-comportamiento.html">
+					<span>Actualizar el binario o el comportamiento</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

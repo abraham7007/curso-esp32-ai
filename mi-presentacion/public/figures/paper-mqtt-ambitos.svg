@@ -1,0 +1,96 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 485.44875 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 485.44875 113.976 
+L 485.44875 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 51.595831 54.88128 
+L 172.51389 54.88128 
+L 172.51389 29.60064 
+L 51.595831 29.60064 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 184.215637 54.88128 
+L 305.133695 54.88128 
+L 305.133695 29.60064 
+L 184.215637 29.60064 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 316.835443 54.88128 
+L 437.753501 54.88128 
+L 437.753501 29.60064 
+L 316.835443 29.60064 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 51.595831 86.48208 
+L 172.51389 86.48208 
+L 172.51389 61.20144 
+L 51.595831 61.20144 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 184.215637 86.48208 
+L 305.133695 86.48208 
+L 305.133695 61.20144 
+L 184.215637 61.20144 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 316.835443 86.48208 
+L 437.753501 86.48208 
+L 437.753501 61.20144 
+L 316.835443 61.20144 
+z
+" clip-path="url(#p64211efcd8)" style="fill: var(--fig-navy); opacity: 0.12; stroke: var(--fig-navy); stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="112.05486" y="44.42096" transform="rotate(-0 112.05486 44.42096)">hogar y edificios</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="244.674666" y="44.46971" transform="rotate(-0 244.674666 44.46971)">industria</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="377.294472" y="44.46971" transform="rotate(-0 377.294472 44.46971)">salud</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="112.05486" y="76.04301" transform="rotate(-0 112.05486 76.04301)">agricultura</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="244.674666" y="76.07051" transform="rotate(-0 244.674666 76.07051)">transporte</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-ink); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="377.294472" y="76.18176" transform="rotate(-0 377.294472 76.18176)">energía</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-navy); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="242.724375" y="14.8536" transform="rotate(-0 242.724375 14.8536)">ámbitos con aplicaciones de MQTT documentadas</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="242.724375" y="106.49592" transform="rotate(-0 242.724375 106.49592)">veinte años analizados: la extensión viene de la simplicidad del modelo, no de superioridad técnica</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p64211efcd8">
+   <rect x="47.695249" y="4.32" width="401.76" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

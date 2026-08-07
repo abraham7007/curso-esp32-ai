@@ -1,0 +1,102 @@
+@import "tailwindcss";
+@import "./variables.css";
+@import "./slides.css";
+@import "./animations.css";
+@import "./components.css";
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: var(--font-sans);
+	color: var(--color-text);
+	background: var(--color-bg);
+	color-scheme: light dark;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-display);
+	color: var(--color-heading);
+	margin: 0;
+}
+
+p {
+	margin: 0;
+}
+
+/* Código en línea dentro de la prosa: `digitalWrite()`, `GPIO 2`, `0x3C`.
+
+   Hasta aquí no tenía tratamiento propio: lo único que lo distinguía del texto
+   era la familia monoespaciada, porque heredaba el mismo #16181d del cuerpo.
+   Medido en pantalla, el color del código y el del texto que lo rodea eran
+   idénticos, y a distancia de proyector un identificador dejaba de verse como
+   tal — que es justo lo que tiene que saltar cuando alguien busca en la lámina
+   la función que va a escribir.
+
+   El color no es el azul marino de las definiciones, y el motivo está medido:
+   el marino contrasta 11,6:1 con el blanco pero solo 1,5:1 con el negro del
+   cuerpo, así que se lee bien y aun así se confunde con el texto vecino. El
+   valor de `--color-code-inline` está elegido por su distancia AL TEXTO, no al
+   fondo. El razonamiento completo, en variables.css.
+
+   El fondo es una veladura del mismo azul —no un gris—, lo bastante tenue para
+   no competir con los bloques destacados y suficiente para acotar el
+   fragmento. La variable tiene su propio valor en tema oscuro, así que la
+   regla vale para los dos sin duplicarse. */
+code {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	font-weight: 500;
+	color: var(--color-code-inline);
+	background: color-mix(in oklab, var(--color-code-inline) 13%, transparent);
+	border-radius: var(--radius-sm);
+	padding: 0.08em 0.36em;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+/* Iconografía monocroma del curso (public/course-icons.svg). GUIA §5:
+   acompañan títulos y etiquetas de bloque, nunca sueltos como adorno. */
+.icon {
+	display: inline-block;
+	/* Dimensionado en em: el icono crece con el texto que acompaña. A 1.2em
+	   quedaba por debajo de la altura de mayúscula del rótulo y se leía como
+	   una viñeta gris; a 1.45em iguala el trazo del texto y se distingue a
+	   distancia de proyector, que es el uso real. */
+	width: 1.45em;
+	height: 1.45em;
+	flex: 0 0 auto;
+	max-width: none;
+	vertical-align: -0.3em;
+	stroke-width: 1.75;
+}
+
+.icon--lg {
+	width: 2em;
+	height: 2em;
+}
+
+.icon--xl {
+	width: 2.75em;
+	height: 2.75em;
+}

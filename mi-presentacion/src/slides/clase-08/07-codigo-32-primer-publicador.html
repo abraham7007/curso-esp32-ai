@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 32 · Publicador y suscriptor sobre el mismo dispositivo · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 32</span>
+					</div>
+
+					<h2 class="code-hour__title">Publicador y suscriptor sobre el mismo dispositivo</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Publicar una lectura cada 5 s y, por la misma conexión, atender comandos que encienden un LED desde el broker. La conexión al broker se modela como máquina de estados, igual que la de red en la sesión anterior.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un <b>asunto</b> (topic) es la ruta jerárquica donde se publica; el comodín <code>#</code> suscribe a toda una rama. El <b>identificador de cliente</b> debe ser único en el broker: si se repite, los dos dispositivos se expulsan mutuamente sin descanso, y derivarlo de la <b>MAC</b> lo garantiza. La función de recepción se ejecuta en un contexto donde no conviene trabajar: copia el mensaje, marca una bandera y devuelve, igual que una rutina de interrupción.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y la biblioteca PubSubClient.
+
+<b>2. Firmware.</b> Conecta al broker con un identificador de cliente derivado de la dirección MAC, para que sea único. Modela la conexión como máquina de estados con reintentos y backoff exponencial, igual que la de red, y no la resuelvas con un bucle de espera. Publica la lectura del GPIO 34 cada 5000 ms en <code>uni/lab3/esp01/temperatura</code> y suscríbete a <code>uni/lab3/esp01/comando/#</code>. La función de recepción solo copia el mensaje a una variable y marca una bandera: el trabajo se hace en el bucle. Emite a 115200 baudios una línea por publicación y por mensaje recibido, con el nombre del asunto y el tamaño.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del bucle, con la recepción marcando la bandera y el tratamiento ocurriendo fuera de ella. Y el <b>árbol de asuntos</b> completo, señalando en cada rama quién publica y quién se suscribe.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> como sensor y controla un LED en el <b>GPIO 25</b> con resistencia de 220 Ω según los comandos recibidos.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[MQTT] conectando a 192.168.1.20:1883  id=esp01-a4cf12
+[MQTT] conectado suscrito a uni/lab3/esp01/comando/#
+[PUB]  t=5000   .../temperatura  &lt;- 23.4  (18 bytes)
+[SUB]  t=9120   .../comando/led  -&gt; "on"   led=1
+[PUB]  t=10000  .../temperatura  &lt;- 23.6  (18 bytes)
+[MQTT] desconectado (rc=-2)  reintento en 1000 ms</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Comparar la línea <code>[SUB]</code> con las de <code>[PUB]</code>: entran y salen mensajes por la <b>misma conexión</b>, sin que el dispositivo pregunte nada. Ese es el cambio respecto de la sesión anterior. La última línea es la que conviene provocar: si aparece una y otra vez con <code>rc=-2</code> cada pocos segundos, casi siempre hay otro equipo usando el mismo identificador de cliente, y el mensaje no lo dice.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-simulacion-comodines.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Alcance de una suscripción</span>
+				</a>
+				<a class="slide-nav__link" href="08-niveles-calidad-servicio.html">
+					<span>Niveles de QoS</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

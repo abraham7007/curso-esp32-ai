@@ -1,0 +1,28 @@
+{
+	"name": "mi-presentacion",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"figuras": "python3 tools/figures/render.py",
+		"check": "node tools/check-slides.mjs",
+		"audit:lexico": "cd src/slides && python3 ../../tools/audit-lexico.py",
+		"audit:editorial": "cd src/slides && python3 ../../tools/audit-editorial.py"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.5",
+		"playwright": "^1.62.0",
+		"vite": "^8.1.1"
+	},
+	"dependencies": {
+		"@tailwindcss/vite": "^4.3.3",
+		"@wokwi/elements": "^1.9.2",
+		"tailwindcss": "^4.3.3"
+	}
+}

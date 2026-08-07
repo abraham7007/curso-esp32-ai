@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Métodos para medir el consumo y por qué la estimación no basta · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite"><b>Guo, Y.; Chen, Y.; Wang, Y. et al.</b> (2021). A Survey of Energy Consumption Measurement in Embedded Systems. <i>IEEE Access</i> 9, 60516-60530. <code>doi:10.1109/ACCESS.2021.3074070</code></p>
+
+					<h2 class="paper__title">Métodos para medir el consumo y por qué la estimación no basta</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>Objetivo</div>
+								<ul class="paper__lista">
+									<li>Ordenar los métodos disponibles para medir <b>cuánta energía consume</b> un sistema embebido.</li>
+									<li>La medida precisa es lo que permite <b>evaluar y comparar</b> diseños.</li>
+									<li>Las revisiones previas del campo <b>carecían de comparación</b> entre métodos.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Resultados</div>
+								<ul class="paper__lista">
+									<li><b>Tres categorías</b>: medida directa, estimación por modelo e híbridos.</li>
+									<li>De cada una se analizan exactitud, resolución y esfuerzo.</li>
+									<li>Solo la <b>medida directa</b> capta el comportamiento del sistema completo.</li>
+									<li>Los modelos sencillos <b>no representan los picos</b> de corriente.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conclusiones</div>
+								<ul class="paper__lista">
+									<li>Las tres responden a <b>compromisos distintos</b> entre exactitud y esfuerzo.</li>
+									<li><b>Ninguna sirve para todo</b>: la elección depende de la fase del diseño.</li>
+									<li>Exactitud y esfuerzo son magnitudes que se intercambian, no un problema resuelto.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-medicion-consumo"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Trazo propio con las corrientes que maneja esta sesión, no medidas del artículo: el valor medio deja fuera los picos.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-consumo-metodos"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las tres categorías en el plano esfuerzo-exactitud. Es una ordenación cualitativa tomada de sus conclusiones.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-simulacion-autonomia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Autonomía con batería</span>
+				</a>
+				<a class="slide-nav__link" href="12-codigo-42-sueno-profundo.html">
+					<span>La hora del código · Deep sleep</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

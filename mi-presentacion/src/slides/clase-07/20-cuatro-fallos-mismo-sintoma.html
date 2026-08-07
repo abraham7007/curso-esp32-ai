@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuatro fallos con el mismo síntoma y cuatro acciones distintas · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Protocolo HTTP y APIs REST
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cuatro fallos con el mismo síntoma y cuatro acciones distintas</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Para el usuario, el dispositivo «no funciona» en los cuatro
+					casos.</strong> Para el firmware son situaciones distintas que exigen
+					respuestas distintas.
+				</p>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Fallo</th><th>Cómo se detecta</th><th>Acción del dispositivo</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>Sin red inalámbrica</b></td>
+								<td><code>WiFi.status() != WL_CONNECTED</code></td>
+								<td>Reintentar la asociación con backoff exponencial. No tocar la capa HTTP.</td>
+							</tr>
+							<tr>
+								<td><b>Red sin salida a internet</b></td>
+								<td>Asociado y con dirección, pero la resolución del nombre falla</td>
+								<td>Mantener el enlace y reintentar la consulta; avisar de red sin salida.</td>
+							</tr>
+							<tr>
+								<td><b>Servidor sin respuesta</b></td>
+								<td>Nombre resuelto, conexión vencida por plazo</td>
+								<td>Reintentar con backoff exponencial; conservar el último dato válido.</td>
+							</tr>
+							<tr>
+								<td><b>Servidor que responde con error</b></td>
+								<td>Código 4xx o 5xx en la respuesta</td>
+								<td><b>4xx:</b> registrar y no reintentar. <b>5xx:</b> reintentar.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Por qué el diagnóstico debe estar en el firmware</span>
+					<p>
+						Un dispositivo instalado en un tejado no admite depuración sobre el
+						terreno. Si la traza distingue los cuatro casos, quien atiende la avería
+						sabe si debe revisar el punto de acceso, la conexión del edificio o la
+						cuenta del servicio. Si solo dice <em>error de red</em>, hay que
+						comprobar las tres.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-deserializacion-filtros.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					<span>Deserialización con filtro</span>
+				</a>
+				<a class="slide-nav__link" href="21-codigo-31-cliente-api.html">
+					<span>La hora del código · Cliente de API</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

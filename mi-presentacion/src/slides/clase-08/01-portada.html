@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sesión 8 · Protocolo MQTT y plataformas de IoT</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<div class="layout layout--wide-left" data-animate="fade-up">
+					<div class="layout__text">
+						<span class="badge">
+							Sesión 8 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
+						</span>
+
+						<h1 class="slide__title">Protocolo MQTT y<br />plataformas de IoT</h1>
+
+						<p class="slide__lede">
+							<strong>Publicación y suscripción como modelo de intercambio.</strong> Arquitectura completa de un sistema supervisado.
+						</p>
+					</div>
+
+					<div class="hero-board">
+						<span class="hero-board__part" aria-hidden="true">
+							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
+						</span>
+						<span class="hero-board__caption">
+							<b>ESP32-WROOM-32</b>
+							DevKit V1
+						</span>
+					</div>
+				</div>
+
+				<div data-animate="fade-up">
+					<div class="usecases-label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						Al terminar la sesión
+					</div>
+					<div class="usecases usecases--rotulos">
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span class="usecase__name">Publicación y suscripción con broker</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+						<span class="usecase__name">Topics, comodines y jerarquía</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+						<span class="usecase__name">QoS, retained y Last Will</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						<span class="usecase__name">TLS y control de acceso por topic</span>
+					</div>
+					</div>
+				</div>
+
+				<a class="btn btn--primary self-center" href="02-limitaciones-http.html" data-animate="fade-up">
+					Empezar →
+				</a>
+
+				<div class="credito">
+					<span class="credito__autor">Abraham Caso Torres</span>
+					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<span></span>
+				<a class="slide-nav__link" href="02-limitaciones-http.html">
+					<span>Limitaciones de HTTP en IoT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

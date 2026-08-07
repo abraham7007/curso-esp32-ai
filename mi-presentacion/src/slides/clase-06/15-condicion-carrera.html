@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Acceso concurrente a un recurso compartido · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Comunicación y sincronización
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Acceso concurrente a un recurso compartido</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Definición
+							</div>
+							<p>
+								Hay <b>condición de carrera</b> cuando el resultado depende del
+								orden en que se intercalan dos tareas. Una operación que en el
+								código fuente parece indivisible se traduce en varias
+								instrucciones, y el planificador puede interrumpir entre ellas.
+							</p>
+						</div>
+
+						<div class="example">
+							<div class="example__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+								Por qué <code>contador++</code> no es indivisible
+							</div>
+							<p>
+								Se compila en tres instrucciones: <b>leer</b> el valor de memoria a
+								un registro, <b>incrementar</b> el registro y <b>escribir</b> el
+								resultado. Si dos tareas leen antes de que ninguna escriba, ambas
+								escriben el mismo valor y un incremento se pierde.
+							</p>
+						</div>
+
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								<code>volatile</code> <b>no resuelve</b> una condición de carrera.
+								Obliga al compilador a releer la variable de memoria, pero no hace
+								indivisible la secuencia de tres instrucciones. Sirve para que el
+								compilador no cachee el valor, no para excluir accesos simultáneos.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="codepanel">
+							<div class="codepanel__header">
+								<span class="codepanel__tag codepanel__tag--no">Así no</span>
+								<span class="codepanel__path">dos tareas, un contador</span>
+							</div>
+							<pre><code>volatile uint32_t cuenta = 0;   // no basta
+
+void tareaA(void *) { for(;;) <span class="hl hl--hit">cuenta++;</span> }
+void tareaB(void *) { for(;;) <span class="hl hl--hit">cuenta++;</span> }
+
+// Tras 1 000 000 de incrementos por tarea,
+// cuenta vale menos de 2 000 000.</code></pre>
+						</div>
+
+						<div class="term">[CARRERA] esperado=2000000  obtenido=1338472  perdidos=661528 (33%)
+[CARRERA] mismo nucleo:    esperado=2000000  obtenido=1994310  perdidos=0.3%
+[MUTEX]   esperado=2000000  obtenido=2000000  perdidos=0</div>
+
+						<div class="sim-caption">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+							<p class="m-0">
+								La segunda línea es la que hace peligroso este fallo: con ambas
+								tareas en el mismo núcleo se pierde el 0,3 %, y el programa parece
+								correcto en el ensayo. El error aparece al repartirlas entre
+								núcleos, meses después.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-paper-sobrecarga-planificador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Sobrecarga del planificador</span>
+				</a>
+				<a class="slide-nav__link" href="16-codigo-26-condicion-carrera.html">
+					<span>La hora del código · Condición de carrera</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

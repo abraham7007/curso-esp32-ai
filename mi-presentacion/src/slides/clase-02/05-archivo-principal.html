@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Función del archivo principal · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="32">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					01 · Organización del proyecto
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Función del archivo principal
+				</h1>
+
+				<p class="slide__subtitle" data-animate="fade-up">
+					<code>main.cpp</code> coordina módulos: los instancia, los inicializa y
+					los hace avanzar. No ejecuta la lógica de ninguno.
+				</p>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="blockdiagram blockdiagram--stack">
+						<div class="bd-node bd-node--warn">
+							<span class="bd-node__title">Monolítico · todo en un archivo</span>
+							<span class="bd-node__body">
+								<code>src/main.cpp</code> acumula, en este orden y sin frontera
+								entre ellos:
+							</span>
+						</div>
+						<span class="bd-arrow" aria-hidden="true">→</span>
+						<div class="bd-node bd-node--ghost">
+							<span class="bd-node__body">
+								variables globales · lógica de lectura · temporizaciones ·
+								control de la salida
+							</span>
+						</div>
+					</div>
+
+					<div class="blockdiagram blockdiagram--stack">
+						<div class="bd-node bd-node--ok">
+							<span class="bd-node__title">Orquestador · delega</span>
+							<span class="bd-node__body">
+								<code>src/main.cpp</code> instancia, llama a <code>begin()</code>
+								y a <code>update()</code>. Nada más.
+							</span>
+						</div>
+						<span class="bd-arrow" aria-hidden="true">→</span>
+						<div class="blockdiagram">
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__body"><code>Led</code></span>
+							</div>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__body"><code>Boton</code></span>
+							</div>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__body"><code>Sensor</code></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="compare items-start" data-animate="fade-up">
+					<div class="codepanel">
+						<div class="codepanel__header">
+							<span class="codepanel__path">src/main.cpp · más de 100 líneas</span>
+							<span class="codepanel__tag codepanel__tag--no">Así no</span>
+						</div>
+						<pre>int pinLed = 2;
+int estadoBtn = 0;
+
+void setup() { pinMode(2, OUTPUT); pinMode(4, INPUT); }
+void loop()  { if (digitalRead(4)) digitalWrite(2, HIGH); ... }</pre>
+						<div class="codepanel__footer">
+							El pin aparece como número suelto en cuatro sitios. Añadir un
+							segundo periférico duplica el patrón en vez de reutilizarlo.
+						</div>
+					</div>
+
+					<div class="codepanel">
+						<div class="codepanel__header">
+							<span class="codepanel__path">src/main.cpp · menos de 25 líneas</span>
+							<span class="codepanel__tag codepanel__tag--si">Así sí</span>
+						</div>
+						<pre>Led   led(2);
+Boton btn(4);
+
+void setup() { led.begin(); btn.begin(); }
+void loop()  { btn.update(); if (btn.wasPressed()) led.toggle(); }</pre>
+						<div class="codepanel__footer">
+							Cada pin se declara una vez, junto al objeto que lo posee. Añadir un
+							periférico son dos líneas más.
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<div class="conclusion__label">Opción adoptada</div>
+					<p>
+						Se adopta el segundo, y con una medida que se puede comprobar:
+						<b>menos de 25 líneas en <code>src/main.cpp</code></b>, con el mismo
+						comportamiento observable que la versión monolítica. Detrás está el
+						<b>principio de responsabilidad única</b> (SRP, single responsibility
+						principle): cada módulo tiene una razón para cambiar, y el punto de
+						entrada no tiene ninguna propia.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-proteccion-inclusion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Include guard</span>
+				</a>
+				<a class="slide-nav__link" href="06-modelo-tres-capas.html">
+					<span>Modelo de tres capas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

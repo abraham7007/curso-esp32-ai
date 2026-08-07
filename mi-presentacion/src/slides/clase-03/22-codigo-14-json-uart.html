@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 14 · Serialización JSON por UART · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 14</span>
+					</div>
+
+					<h2 class="code-hour__title">Serialización de un conjunto de medidas en formato JSON</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> El emisor compone un documento JSON con tres magnitudes y un timestamp, y lo manda por el enlace; el receptor lo interpreta y saca cada campo. La prueba se repite con memoria reservada de menos, para ver qué ocurre.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+																Conceptos clave
+															</h4>
+															<p><b>Serializar</b> es convertir estructuras del programa en una secuencia de bytes que el otro extremo pueda reconstruir. Con un formato estándar, el acuerdo entre extremos lo sostiene una biblioteca en vez de un documento. El precio es la <b>memoria reservada</b>: el analizador necesita espacio proporcional al documento, y si falta, la deserialización falla. Por eso hay que <b>comprobar su código de retorno</b> y no dar el resultado por bueno.</p>
+														</div>
+							<div class="code-hour__section">
+														<h4>
+															<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+															Prompt para el asistente
+														</h4>
+														<div class="prompt-box"><b>1. Proyecto.</b> Parte del proyecto del Ejemplo 13, o crea uno nuevo para la placa esp32dev con el framework Arduino. Declara bblanchon/ArduinoJson en lib_deps de platformio.ini.
+
+<b>2. Firmware.</b> El emisor compone un documento JSON con tres magnitudes y un timestamp en ms desde el arranque y lo envía por Serial2. El receptor lo deserializa y emite cada campo por separado, comprobando siempre el código de retorno. Repite la prueba con capacidad reservada insuficiente y muestra el error.
+
+<b>3. Simulación.</b> Reutiliza la simulación de Wokwi del Ejemplo 13.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de la deserialización, con la comprobación del código de retorno como una bifurcación explícita. Y un <b>diagrama comparativo</b> del mismo dato en JSON y en binario, con los bytes de cada uno contados.</div>
+													</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+																Diagrama de conexión
+															</h4>
+															<p>El mismo enlace UART de los Ejemplos 11 y 13: TX2 (<b>GPIO 17</b>) al RX2 (<b>GPIO 16</b>) de la otra placa, masa común y <code>Serial2</code> a 115 200 baudios.</p>
+															<div class="hw-set mt-3" aria-hidden="true">
+																<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+															</div>
+														</div>
+							<div class="code-hour__section">
+															<h4>
+																<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+																Monitor serial
+															</h4>
+															<div class="term">[TX] {"t":23.4,"h":58.1,"p":1013,"ms":48210}
+[RX] t=23.4 h=58.1 p=1013 ms=48210
+
+--- con capacidad reservada insuficiente ---
+[TX] {"t":23.4,"h":58.1,"p":10
+[RX] error: IncompleteInput</div>
+														</div>
+	<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Análisis
+								</h4>
+								<p>El primer par de líneas va y vuelve completo. En el segundo, la traza del emisor se corta a media cadena y el receptor devuelve <code>IncompleteInput</code>: el error no aparece al enviar sino al interpretar, y solo se ve porque se está comprobando el retorno. Si el programa no lo comprobara, seguiría con campos a cero <b>sin ningún aviso</b>.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-paper-serializacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Costo de transmitir en un formato legible</span>
+				</a>
+				<a class="slide-nav__link" href="23-masa-comun.html">
+					<span>Referencia de masa común</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

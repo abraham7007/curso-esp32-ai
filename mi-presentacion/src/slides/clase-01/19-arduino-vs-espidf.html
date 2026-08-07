@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Núcleo de Arduino frente a ESP-IDF · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					05 · Pila de software y herramientas
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Núcleo de Arduino frente a ESP-IDF
+				</h1>
+
+				<p class="slide__subtitle" data-animate="fade-up">
+					Ambos entornos coexisten: el núcleo de Arduino se ejecuta como un
+					componente más sobre ESP-IDF y comparte con él el mismo sistema
+					operativo de tiempo real. La elección entre uno y otro se resuelve
+					por criterio de proyecto, no por incompatibilidad técnica.
+				</p>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-navy)]" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+							Núcleo de Arduino
+						</h3>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-2">
+							<li>Interfaz uniforme entre familias de microcontroladores.</li>
+							<li>
+								Funciones como <code>pinMode</code>, <code>digitalWrite</code>
+								y <code>analogRead</code> ocultan el registro subyacente.
+							</li>
+							<li>Reduce el tiempo de desarrollo.</li>
+							<li>
+								No expone la totalidad de los parámetros de configuración de
+								cada periférico. <code>ledcAttach(pin, freq, resolución)</code>
+								es una extensión que sí permite fijarlas explícitamente para el
+								PWM.
+							</li>
+						</ul>
+					</div>
+
+					<div class="compare__panel">
+						<h3 class="flex items-center gap-2 text-base mb-2">
+							<svg class="icon text-[var(--color-accent)]" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+							ESP-IDF
+						</h3>
+						<ul class="m-0 pl-[1.1em] text-sm flex flex-col gap-2">
+							<li>Entorno oficial de Espressif.</li>
+							<li>
+								Expone directamente los drivers de cada periférico.
+							</li>
+							<li>
+								Expone la configuración completa de FreeRTOS: prioridad de
+								tarea, core affinity (afinidad de núcleo) y tamaño de pila (stack).
+							</li>
+							<li>
+								Mayor control de bajo nivel, a costa de mayor extensión de
+								código y una curva de aprendizaje más pronunciada.
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="is-stretch slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="conclusion">
+							<div class="conclusion__label">Opción adoptada</div>
+							<p>
+								Se emplea el núcleo de Arduino sobre PlatformIO, que resuelve
+								el arranque y la configuración de periféricos sin escribirlos.
+								Cuando un ejemplo requiere un
+								parámetro no expuesto por el núcleo (la asignación explícita
+								de núcleo a una tarea de FreeRTOS en la Sesión 6, por ejemplo)
+								 se invoca la función de ESP-IDF equivalente desde el mismo
+								archivo, sin abandonar el proyecto de Arduino. Los dos
+								entornos no son alternativas excluyentes.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="arduino-frente-a-espidf"></div>
+							<p class="figure__caption">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+								<span>
+									Los parámetros que nombra la lámina y cuál alcanza cada
+									entorno. Lo que el núcleo no cubre se invoca desde el mismo
+									<code>main.cpp</code>: son <b>capas</b>, no alternativas.
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-pila-software.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Pila de software</span>
+				</a>
+				<a class="slide-nav__link" href="20-herramientas-curso.html">
+					<span>Cadena de herramientas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

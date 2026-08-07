@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Emulación del procesador y composición de la imagen · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+						<span class="paper__label">Artículo de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite">
+						<b>Howard, M.; Irvin, R. B.</b> (2023). ESP32: QEMU Emulation within a
+						Docker Container. <i>arXiv</i>. Maseeh College of Engineering and
+						Computer Science, Portland State University.
+						<code>arXiv:2303.10204</code>
+					</p>
+
+					<h2 class="paper__title">
+						Ejecución del firmware sin el microcontrolador físico
+					</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Ejecutar una aplicación de ESP32 sobre otro equipo con un <b>emulador</b>, sin la placa delante.</li>
+									<li>El emulador reproduce por software el juego de instrucciones <b>Xtensa</b>.</li>
+									<li>Referencia: la misma aplicación verificada antes sobre la placa real.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Ejecuta la aplicación <b>sin errores</b>, de forma nativa y en contenedor.</li>
+									<li>El binario del enlazado <b>no arranca solo</b>: la Flash necesita además gestor de arranque y tabla de particiones.</li>
+									<li>Cubre las cuatro operaciones: compilar, componer la imagen, grabar y ejecutar.</li>
+									<li><b>Una sustitución obligada</b>: sin radio, se recompila contra Ethernet emulada.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>Acorta el ciclo de construcción y prueba, y escala a muchas instancias.</li>
+									<li>Lo emulado <b>no es el dispositivo</b>: la radio queda fuera de lo verificado.</li>
+									<li>Sirve para comprobar lógica y estructura, no para dar por buena una puesta en marcha.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="imagen-flash"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Los tres componentes que deben residir en la Flash para que el binario se ejecute.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-emulacion-sustitucion"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Qué cambia al pasar de la placa al emulador: una sola casilla, y obliga a <b>recompilar</b>.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="23-secuencia-flasheo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Secuencia de flasheo y arranque</span>
+				</a>
+				<a class="slide-nav__link" href="25-estructura-proyecto.html">
+					<span>Estructura de un proyecto de PlatformIO</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

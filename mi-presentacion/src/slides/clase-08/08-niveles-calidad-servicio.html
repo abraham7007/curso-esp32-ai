@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Los tres niveles de QoS y su costo · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					01 · Protocolo MQTT
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Los tres niveles de QoS y su costo</h1>
+
+				<div class="table-scroll" data-animate="fade-up">
+					<table>
+						<thead>
+							<tr><th>Nivel</th><th>Garantía</th><th>Mensajes intercambiados</th><th>Tipo de dato al que corresponde</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><b>QoS 0</b></td>
+								<td>Como máximo una vez. Puede perderse</td>
+								<td>1</td>
+								<td>Medida periódica que se repite pronto: temperatura cada 5 s</td>
+							</tr>
+							<tr>
+								<td><b>QoS 1</b></td>
+								<td>Al menos una vez. Puede duplicarse</td>
+								<td>2</td>
+								<td>Aviso de alarma, cambio de estado: perderlo es peor que repetirlo</td>
+							</tr>
+							<tr>
+								<td><b>QoS 2</b></td>
+								<td>Exactamente una vez</td>
+								<td>4</td>
+								<td>Orden con efecto acumulativo: incrementar un contador de facturación</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="conclusion">
+							<span class="conclusion__label">Criterio de elección</span>
+							<p>
+								La pregunta no es cuánta fiabilidad se desea sino <b>qué pasa si el
+								mensaje se pierde y qué pasa si llega dos veces</b>. Una temperatura
+								perdida se sustituye por la siguiente en 5 s: QoS 0. Una orden de
+								apertura duplicada abre una puerta ya abierta, lo que es inofensivo
+								si la orden es idempotente: QoS 1 basta.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="warn-box">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+							<p>
+								<b>QoS 2 rara vez es la respuesta correcta.</b> Cuadruplica los
+								mensajes y su latencia, y casi siempre resulta más barato hacer la
+								operación idempotente (incluir un identificador de mensaje y
+								descartar el repetido) y quedarse en QoS 1.
+							</p>
+						</div>
+
+						<div class="figure">
+							<div class="figure__frame" data-figure="qos-paquetes"></div>
+							<p class="figure__caption">
+								Subir un nivel duplica el tráfico; subir dos lo cuadruplica. Es el
+								precio de la garantía, y se paga en cada mensaje.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-codigo-32-primer-publicador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Publicador y suscriptor</span>
+				</a>
+				<a class="slide-nav__link" href="09-retenidos-ultima-voluntad.html">
+					<span>Retenidos, Last Will y sesión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

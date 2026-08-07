@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Las cuatro capas recorridas por una sola lectura · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+					01 · Fundamentos de red
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Las cuatro capas recorridas por una sola lectura</h1>
+
+				<p class="slide__lede" data-animate="fade-up">
+					<strong>Cada capa envuelve a la anterior y añade su cabecera.</strong>
+					Seguimos un dato de 12 bytes desde el programa hasta la antena.
+				</p>
+
+				<div class="slide__split" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="blockdiagram blockdiagram--stack">
+							<div class="bd-node bd-node--accent">
+								<span class="bd-node__title">Aplicación · HTTP</span>
+								<span class="bd-node__body">Qué significa el dato. <code>POST /medidas</code> con el cuerpo en JSON.</span>
+								<span class="bd-node__meta">+ unos 180 bytes de cabeceras</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ok">
+								<span class="bd-node__title">Transporte · TCP</span>
+								<span class="bd-node__body">A qué programa del anfitrión va, y con qué garantía de entrega y de orden.</span>
+								<span class="bd-node__meta">+ 20 bytes · puertos origen y destino</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--ghost">
+								<span class="bd-node__title">Red · IP</span>
+								<span class="bd-node__body">A qué equipo de qué red. Es la capa que permite atravesar routers.</span>
+								<span class="bd-node__meta">+ 20 bytes · direcciones origen y destino</span>
+							</div>
+							<span class="bd-arrow" aria-hidden="true">↓</span>
+							<div class="bd-node bd-node--warn">
+								<span class="bd-node__title">Enlace · WiFi 802.11</span>
+								<span class="bd-node__body">A qué equipo del mismo tramo físico. Direcciones MAC y acceso al medio.</span>
+								<span class="bd-node__meta">+ unos 34 bytes · cifrado del enlace</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="figure">
+							<div class="figure__frame" data-figure="capas-sobrecarga"></div>
+							<p class="figure__caption">
+								La cabecera de HTTP pesa quince veces más que el dato que
+								transporta; las tres capas inferiores juntas, algo menos que ella
+								sola.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Consecuencia práctica</span>
+							<p>
+								Enviar 12 bytes cuesta unos 266. Con una publicación por segundo
+								son <b>23 MB al mes</b> de los que solo 1 MB es dato. Esa relación
+								es la que motiva el protocolo de la sesión 8, cuya cabecera mínima
+								son <b>2 bytes</b> frente a los 192 de HTTP.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Redes TCP/IP y protocolo HTTP</span>
+				</a>
+				<a class="slide-nav__link" href="03-simulacion-sobrecarga.html">
+					<span>Rendimiento útil de la transmisión</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

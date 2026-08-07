@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Transmisión serie, paralela y dúplex · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="31">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+					01 · Fundamentos del enlace serie
+				</span>
+
+				<h1
+					class="slide__title slide__title--sm"
+					data-animate="fade-up"
+				>
+					Transmisión serie, paralela y dúplex
+				</h1>
+
+				<div class="def" data-animate="fade-up">
+					<div class="def__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+						Definición
+					</div>
+					<p>
+						Tres pares de propiedades clasifican cualquier enlace: cuántos
+						conductores transportan los bits, de dónde procede la referencia
+						temporal, y en qué sentidos puede circular la información.
+					</p>
+				</div>
+
+				<div
+					class="grid grid-cols-1 gap-4 md:grid-cols-3"
+					data-animate="fade-up"
+				>
+					<div class="card">
+						<h2 class="m-0 text-base font-semibold">Serie · paralelo</h2>
+						<svg
+							class="w-full mt-2 text-[var(--color-text-muted)]"
+							viewBox="0 0 200 82"
+							role="img"
+							aria-label="Arriba, un único conductor con cuatro bits consecutivos en el tiempo; abajo, cuatro conductores que transportan un bit cada uno de forma simultánea"
+						>
+							<text x="0" y="11" font-size="8" fill="currentColor">serie</text>
+							<g class="text-[var(--color-accent)]" stroke="currentColor">
+								<line x1="46" y1="8" x2="198" y2="8" stroke-width="2" />
+								<g stroke-width="1" opacity="0.45">
+									<line x1="46" y1="3" x2="46" y2="14" />
+									<line x1="84" y1="3" x2="84" y2="14" />
+									<line x1="122" y1="3" x2="122" y2="14" />
+									<line x1="160" y1="3" x2="160" y2="14" />
+									<line x1="198" y1="3" x2="198" y2="14" />
+								</g>
+							</g>
+							<g font-size="9" fill="currentColor" text-anchor="middle">
+								<text x="65" y="26">1</text>
+								<text x="103" y="26">0</text>
+								<text x="141" y="26">1</text>
+								<text x="179" y="26">1</text>
+							</g>
+							<text x="0" y="52" font-size="8" fill="currentColor">paralelo</text>
+							<g class="text-[var(--color-navy)]" stroke="currentColor" stroke-width="2">
+								<line x1="46" y1="40" x2="176" y2="40" />
+								<line x1="46" y1="53" x2="176" y2="53" />
+								<line x1="46" y1="66" x2="176" y2="66" />
+								<line x1="46" y1="79" x2="176" y2="79" />
+							</g>
+							<g font-size="9" fill="currentColor">
+								<text x="184" y="43">1</text>
+								<text x="184" y="56">0</text>
+								<text x="184" y="69">1</text>
+								<text x="184" y="82">1</text>
+							</g>
+						</svg>
+						<p class="m-0 mt-2 text-sm text-[var(--color-text-muted)]">
+							Dentro de una placa el paralelo transporta más bits por unidad de
+							tiempo. Fuera de ella domina el serie: un conductor en lugar de
+							ocho y sin desfase entre líneas.
+						</p>
+					</div>
+
+					<div class="card">
+						<h2 class="m-0 text-base font-semibold">Síncrona · asíncrona</h2>
+						<svg
+							class="w-full mt-2 text-[var(--color-text-muted)]"
+							viewBox="0 0 200 82"
+							role="img"
+							aria-label="Arriba, una línea de reloj y una de datos alineadas; abajo, una única línea de datos con la duración de bit acordada de antemano"
+						>
+							<text x="0" y="12" font-size="8" fill="currentColor">reloj</text>
+							<g
+								class="text-[var(--color-navy)]"
+								stroke="currentColor"
+								stroke-width="2"
+								fill="none"
+							>
+								<path
+									d="M46,16 L46,4 L65,4 L65,16 L84,16 L84,4 L103,4 L103,16 L122,16 L122,4 L141,4 L141,16 L160,16 L160,4 L179,4 L179,16 L198,16"
+								/>
+							</g>
+							<text x="0" y="36" font-size="8" fill="currentColor">datos</text>
+							<g
+								class="text-[var(--color-accent)]"
+								stroke="currentColor"
+								stroke-width="2"
+								fill="none"
+							>
+								<path d="M46,40 L46,28 L84,28 L84,40 L122,40 L122,28 L160,28 L160,40 L198,40" />
+							</g>
+							<text x="0" y="64" font-size="8" fill="currentColor">datos</text>
+							<g
+								class="text-[var(--color-accent)]"
+								stroke="currentColor"
+								stroke-width="2"
+								fill="none"
+							>
+								<path d="M46,68 L46,56 L84,56 L84,68 L122,68 L122,56 L160,56 L160,68 L198,68" />
+							</g>
+							<g
+								class="text-[var(--color-text-muted)]"
+								stroke="currentColor"
+								stroke-width="1"
+							>
+								<line x1="46" y1="76" x2="84" y2="76" />
+								<line x1="46" y1="73" x2="46" y2="79" />
+								<line x1="84" y1="73" x2="84" y2="79" />
+							</g>
+							<text x="90" y="79" font-size="7" fill="currentColor">
+								T de bit acordado
+							</text>
+						</svg>
+						<p class="m-0 mt-2 text-sm text-[var(--color-text-muted)]">
+							La transmisión síncrona comparte una línea de reloj que marca cada
+							bit. La asíncrona no la tiene: ambos extremos configuran de
+							antemano la misma duración de bit.
+						</p>
+					</div>
+
+					<div class="card">
+						<h2 class="m-0 text-base font-semibold">Símplex · dúplex</h2>
+						<svg
+							class="w-full mt-2 text-[var(--color-text-muted)]"
+							viewBox="0 0 200 106"
+							role="img"
+							aria-label="Tres enlaces entre dos dispositivos: una sola dirección, ambas direcciones alternadas y ambas direcciones simultáneas"
+						>
+							<g
+								stroke="currentColor"
+								fill="none"
+								stroke-width="1"
+								opacity="0.6"
+							>
+								<rect x="0" y="4" width="20" height="96" rx="4" />
+								<rect x="180" y="4" width="20" height="96" rx="4" />
+							</g>
+							<g font-size="9" fill="currentColor" text-anchor="middle">
+								<text x="10" y="56">A</text>
+								<text x="190" y="56">B</text>
+							</g>
+							<g font-size="7" fill="currentColor">
+								<text x="26" y="14">símplex · una dirección fija</text>
+								<text x="26" y="48">semidúplex · alternadas</text>
+								<text x="26" y="82">full duplex · simultáneas</text>
+							</g>
+							<g class="text-[var(--color-accent)]" fill="currentColor">
+								<rect x="26" y="22" width="142" height="2" />
+								<polygon points="168,18 178,23 168,28" />
+								<rect x="36" y="56" width="132" height="2" />
+								<polygon points="168,52 178,57 168,62" />
+								<polygon points="36,52 26,57 36,62" />
+								<rect x="26" y="90" width="142" height="2" />
+								<polygon points="168,86 178,91 168,96" />
+							</g>
+							<g class="text-[var(--color-navy)]" fill="currentColor">
+								<rect x="36" y="98" width="142" height="2" />
+								<polygon points="36,94 26,99 36,104" />
+							</g>
+						</svg>
+						<p class="m-0 mt-2 text-sm text-[var(--color-text-muted)]">
+							Símplex transmite siempre en el mismo sentido. Semidúplex usa
+							ambos, uno por vez. Full duplex mantiene los dos sentidos
+							activos a la vez.
+						</p>
+					</div>
+				</div>
+
+				<div class="practice" data-animate="fade-up">
+					<div class="practice__label">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						En la práctica
+					</div>
+					<p class="m-0">
+						En el ESP32, <b>UART</b> es asíncrono y full duplex: las líneas TX
+						y RX son independientes. <b>I²C</b> es síncrono y semidúplex: SDA es
+						una sola línea de datos compartida. <b>SPI</b> es síncrono y dúplex
+						completo: MOSI y MISO transportan datos de forma simultánea.
+					</p>
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-parametros-del-enlace.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Los cuatro parámetros de un enlace</span>
+				</a>
+				<a class="slide-nav__link" href="04-trama-uart.html">
+					<span>Estructura de una trama UART</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Recursos servidos desde el sistema de archivos, no desde el código · Sesión 9</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					01 · Servidor web embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Recursos servidos desde el sistema de archivos, no desde el código</h1>
+
+				<div class="compare" data-animate="fade-up">
+					<div class="compare__panel">
+						<h3>HTML como cadena en el código</h3>
+						<p>
+							Cambiar un rótulo obliga a recompilar y regrabar. El HTML ocupa
+							espacio en la partición de aplicación y hay que escapar cada comilla.
+						</p>
+					</div>
+					<div class="compare__panel">
+						<h3>Recursos en el sistema de archivos</h3>
+						<p>
+							Se sustituye el archivo y basta. Los recursos viven en su propia
+							partición y se editan con las herramientas habituales de la web.
+						</p>
+					</div>
+				</div>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text">
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								Los archivos se colocan en <code>data/</code> y se suben con la
+								orden de sistema de archivos de PlatformIO, que es <b>distinta</b>
+								de la de grabar el firmware: son dos particiones y dos
+								operaciones. Olvidar la segunda deja un servidor que responde 404 a
+								todo.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Sin acceso a internet</span>
+							<p>
+								El dispositivo debe presentar su interfaz <b>aunque no haya
+								internet</b>: durante el provisioning (aprovisionamiento) no lo hay por
+								definición. Toda biblioteca externa se incorpora al sistema de
+								archivos; una hoja de estilos traída de un servicio ajeno deja el
+								portal sin formato justo cuando más importa.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="file-tree">
+							<div class="file-tree__row"><span class="file-tree__name">data/www/index.html</span><span class="file-tree__annotation">página del panel</span></div>
+							<div class="file-tree__row"><span class="file-tree__name">data/www/estilo.css</span><span class="file-tree__annotation">comprimido con gzip</span></div>
+							<div class="file-tree__row"><span class="file-tree__name">data/www/panel.js</span><span class="file-tree__annotation">sin dependencias externas</span></div>
+							<div class="file-tree__row"><span class="file-tree__name">src/main.cpp</span><span class="file-tree__annotation">rutas y lógica, sin HTML</span></div>
+						</div>
+
+						<div class="term">$ pio run --target uploadfs     # sistema de archivos
+$ pio run --target upload       # firmware
+[FS] LittleFS montado  usado=48 kB de 1408 kB</div>
+
+						<p class="figure__caption">
+							La compresión con gzip se sirve tal cual: el navegador la descomprime
+							y el dispositivo ahorra el espacio y el tiempo de transmisión.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-codigo-36-panel-servido.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+					<span>La hora del código · Panel servido</span>
+				</a>
+				<a class="slide-nav__link" href="08-actualizacion-datos-interfaz.html">
+					<span>Actualización de datos en la interfaz</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

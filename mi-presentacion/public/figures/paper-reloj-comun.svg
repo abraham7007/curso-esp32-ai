@@ -1,0 +1,167 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 411.31574 153.329794" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 153.329794 
+L 411.31574 153.329794 
+L 411.31574 0 
+L 0 0 
+L 0 153.329794 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path d="M 45.8428 72.540828 
+L 45.8428 51.511863 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 77.079 72.540828 
+L 77.079 51.511863 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 108.315199 72.540828 
+L 108.315199 51.511863 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 139.551399 72.540828 
+L 139.551399 51.511863 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 170.787599 72.540828 
+L 170.787599 51.511863 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 52.714764 110.775311 
+L 52.714764 89.746345 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 83.950963 110.775311 
+L 83.950963 89.746345 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 115.187163 110.775311 
+L 115.187163 89.746345 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 146.423363 110.775311 
+L 146.423363 89.746345 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_10">
+    <path d="M 177.659562 110.775311 
+L 177.659562 89.746345 
+" clip-path="url(#p21d3dff53c)" style="fill: none; stroke: var(--fig-accent); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-accent); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="97.382529" y="11.518594" transform="rotate(-0 97.382529 11.518594)">relojes independientes</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="38.03375" y="64.446268" transform="rotate(-0 38.03375 64.446268)">placa 1</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="38.03375" y="102.680751" transform="rotate(-0 38.03375 102.680751)">placa 2</text>
+   </g>
+   <g id="patch_2">
+    <path d="M 111.436438 122.245656 
+Q 111.75193 122.245656 112.067422 122.245656 
+" style="fill: none; stroke: var(--fig-accent); stroke-linecap: round"/>
+    <path d="M 115.036438 124.045656 
+L 111.436438 122.245656 
+L 115.036438 120.445656 
+" style="fill: none; stroke: var(--fig-accent); stroke-linecap: round"/>
+    <path d="M 108.467422 120.445656 
+L 112.067422 122.245656 
+L 108.467422 124.045656 
+" style="fill: none; stroke: var(--fig-accent); stroke-linecap: round"/>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(86.917392 126.019284)">desfase que</text>
+    <text style="fill: var(--fig-accent); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace" transform="translate(89.175009 134.48069)">nadie mide</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="line2d_11">
+    <path d="M 263.309222 72.540828 
+L 263.309222 51.511863 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_12">
+    <path d="M 294.545422 72.540828 
+L 294.545422 51.511863 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 325.781621 72.540828 
+L 325.781621 51.511863 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 357.017821 72.540828 
+L 357.017821 51.511863 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_15">
+    <path d="M 388.254021 72.540828 
+L 388.254021 51.511863 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_16">
+    <path d="M 263.309222 110.775311 
+L 263.309222 89.746345 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_17">
+    <path d="M 294.545422 110.775311 
+L 294.545422 89.746345 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_18">
+    <path d="M 325.781621 110.775311 
+L 325.781621 89.746345 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 357.017821 110.775311 
+L 357.017821 89.746345 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 388.254021 110.775311 
+L 388.254021 89.746345 
+" clip-path="url(#p7540fee4d5)" style="fill: none; stroke: var(--fig-ok); stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ok); font: 9px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="314.848951" y="11.518594" transform="rotate(-0 314.848951 11.518594)">reloj de muestreo común</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="255.500172" y="64.446268" transform="rotate(-0 255.500172 64.446268)">placa 1</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-muted); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: end" x="255.500172" y="102.680751" transform="rotate(-0 255.500172 102.680751)">placa 2</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-ok); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="325.781621" y="129.892552" transform="rotate(-0 325.781621 129.892552)">mismo instante en las dos</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p21d3dff53c">
+   <rect x="5.23574" y="38.129794" width="184.293578" height="110.88"/>
+  </clipPath>
+  <clipPath id="p7540fee4d5">
+   <rect x="222.702162" y="38.129794" width="184.293578" height="110.88"/>
+  </clipPath>
+ </defs>
+</svg>

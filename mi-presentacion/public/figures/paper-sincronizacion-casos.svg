@@ -1,0 +1,86 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 399.24 119.52" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 119.52 
+L 399.24 119.52 
+L 399.24 0 
+L 0 0 
+L 0 119.52 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 12.132 57.5424 
+L 191.808 57.5424 
+L 191.808 29.8224 
+L 12.132 29.8224 
+z
+" clip-path="url(#p01e3382ebb)" style="fill: var(--fig-ok); opacity: 0.13; stroke: var(--fig-ok); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 207.432 57.5424 
+L 387.108 57.5424 
+L 387.108 29.8224 
+L 207.432 29.8224 
+z
+" clip-path="url(#p01e3382ebb)" style="fill: var(--fig-ok); opacity: 0.13; stroke: var(--fig-ok); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 12.132 90.8064 
+L 191.808 90.8064 
+L 191.808 63.0864 
+L 12.132 63.0864 
+z
+" clip-path="url(#p01e3382ebb)" style="fill: var(--fig-ok); opacity: 0.13; stroke: var(--fig-ok); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 207.432 90.8064 
+L 387.108 90.8064 
+L 387.108 63.0864 
+L 207.432 63.0864 
+z
+" clip-path="url(#p01e3382ebb)" style="fill: var(--fig-ok); opacity: 0.13; stroke: var(--fig-ok); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="101.97" y="39.2472" transform="rotate(-0 101.97 39.2472)">dato compartido</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="101.97" y="50.8896" transform="rotate(-0 101.97 50.8896)">lector con plazo</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="297.27" y="39.2472" transform="rotate(-0 297.27 39.2472)">dato compartido</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="297.27" y="50.8896" transform="rotate(-0 297.27 50.8896)">escritor con plazo</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="101.97" y="72.5112" transform="rotate(-0 101.97 72.5112)">cola compartida</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="101.97" y="84.1536" transform="rotate(-0 101.97 84.1536)">lector con plazo</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="297.27" y="72.5112" transform="rotate(-0 297.27 72.5112)">cola compartida</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: var(--fig-muted); font: 7.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="297.27" y="84.1536" transform="rotate(-0 297.27 84.1536)">escritor con plazo</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: var(--fig-ink); font: 8.5px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="199.62" y="15.408" transform="rotate(-0 199.62 15.408)">cinco protocolos para estos cuatro casos</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: var(--fig-accent); font: 8px 'IBM Plex Mono', 'DejaVu Sans Mono', monospace; text-anchor: middle" x="199.62" y="111.8736" transform="rotate(-0 199.62 111.8736)">la parte con plazo nunca reintenta; la otra sí</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p01e3382ebb">
+   <rect x="4.32" y="4.32" width="390.6" height="110.88"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 42 · Nodo por lotes con deep sleep · Sesión 10</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="20">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 42</span>
+					</div>
+
+					<h2 class="code-hour__title">Nodo alimentado por batería con deep sleep y estado conservado</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Medir cada 60 s durmiendo entre medidas. El contador de ciclos y el acumulador viven en <b>memoria RTC</b>, que sobrevive al deep sleep; cada diez medidas el equipo se conecta, publica el lote y vuelve a dormir.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>El <b>deep sleep</b> no es una pausa: apaga casi todo el SoC y al despertar el programa empieza otra vez por <code>setup()</code>, así que una variable normal vuelve a cero. <code>RTC_DATA_ATTR</code> coloca la variable en la <b>memoria RTC</b>, la única que se mantiene alimentada. Encender la <b>radio</b> cuesta más que las diez medidas juntas, y de ahí que se publique por lotes.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Declara con <code>RTC_DATA_ATTR</code> un contador de ciclos y un acumulador de muestras: son las únicas variables que sobreviven al deep sleep. En cada despertar, lee el GPIO 34, acumula y vuelve a dormir con <code>esp_deep_sleep_start()</code> hasta completar 60 s de ciclo. Cada diez ciclos, conecta a la red, publica el lote y reinicia el acumulador. No enciendas la radio en los ciclos que no publican. Registra la causa del despertar, el tiempo despierto de cada ciclo y la fracción resultante, y calcula la corriente media con las cifras de la lámina de autonomía.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y el LED en el GPIO 25.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> de un despertar, con la bifurcación entre acumular y publicar. Y el <b>ciclo completo</b> con sus fases (despertar, medir, decidir, dormir) y el tiempo que ocupa cada una.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b> y enciende un LED en el <b>GPIO 25</b> con resistencia de 220 Ω solo mientras está despierto.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[WAKE] causa=DEEPSLEEP  ciclo=7 de 10  despierto=312 ms
+[RTC]  acumulador conservado: 7 muestras media parcial=23.4
+[SLEEP] durmiendo 59688 ms corriente estimada=10 uA
+[WAKE] causa=DEEPSLEEP  ciclo=10 de 10 -&gt; toca publicar
+[RED]  conectado en 2140 ms publicado lote de 10 muestras
+[CICLO] despierto=2452 de 60000 ms = 4.1 %  media=6.6 mA</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La última línea reúne el ejercicio: el equipo está despierto el <b>4,1 %</b> del tiempo y la corriente media queda en 6,6 mA. Repetir el cálculo publicando en cada ciclo y comparar. Vigilar también la línea <code>[RTC]</code>: si el acumulador volviera a cero en cada despertar, la variable no está en memoria RTC y el lote no se completará nunca.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-paper-medicion-consumo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Medición del consumo</span>
+				</a>
+				<a class="slide-nav__link" href="13-actualizacion-remota.html">
+					<span>OTA</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

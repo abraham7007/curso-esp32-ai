@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Asignación de tareas a los dos núcleos · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="28">
+		<main class="slide slide--start">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+					01 · Tareas y planificador
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Asignación de tareas a los dos núcleos</h1>
+
+				<div class="slide__split is-stretch" data-animate="fade-up">
+					<div class="slide__split-text is-spread">
+						<div class="def">
+							<div class="def__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+								Reparto por omisión
+							</div>
+							<p>
+								El <b>núcleo 0</b> (PRO_CPU) atiende la pila de comunicaciones
+								inalámbricas; el <b>núcleo 1</b> (APP_CPU) ejecuta
+								<code>setup()</code> y <code>loop()</code>. Ese reparto lo fija el
+								núcleo de Arduino, no el hardware.
+							</p>
+						</div>
+
+						<div class="practice">
+							<div class="practice__label">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+								En el código
+							</div>
+							<p>
+								El último parámetro de
+								<code>xTaskCreatePinnedToCore()</code> fija el núcleo: <code>0</code>,
+								<code>1</code> o <code>tskNO_AFFINITY</code> para dejar que el
+								planificador decida. <b>La tercera opción tiene un costo medido</b>
+								que se examina en la lámina siguiente.
+							</p>
+						</div>
+
+						<div class="conclusion">
+							<span class="conclusion__label">Criterio de reparto</span>
+							<p>
+								Lo que tiene requisito temporal estricto va al <b>núcleo 1</b>,
+								lejos de las interrupciones de la radio. Lo que usa la red va al
+								<b>núcleo 0</b>, donde ya reside la pila que va a invocar.
+							</p>
+						</div>
+					</div>
+
+					<div class="slide__split-visual">
+						<div class="blockdiagram">
+							<div class="bd-lane">
+								<span class="bd-lane__label">Núcleo 0 · PRO_CPU</span>
+								<div class="bd-node bd-node--warn">
+									<span class="bd-node__body">Pila WiFi y Bluetooth · interrupciones de la radio · tareas de comunicación</span>
+									<span class="bd-node__meta">carga variable, no controlada por el programa</span>
+								</div>
+							</div>
+							<div class="bd-lane">
+								<span class="bd-lane__label">Núcleo 1 · APP_CPU</span>
+								<div class="bd-node bd-node--ok">
+									<span class="bd-node__body">setup() y loop() · tareas de adquisición y control</span>
+									<span class="bd-node__meta">carga que sí se conoce y se puede acotar</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="term">[NUCLEO] tarea=muestreo      afinidad=1  ejecuciones=10000  nucleo_real=1
+[NUCLEO] tarea=publicacion   afinidad=0  ejecuciones=12     nucleo_real=0
+[NUCLEO] tarea=diagnostico   afinidad=libre  ejecuciones=500  nucleo_real=0/1</div>
+
+						<p class="figure__caption">
+							La tercera tarea alterna de núcleo entre ejecuciones. Es legal y a
+							veces conveniente, pero deja de ser gratuito en cuanto la tarea se
+							sincroniza con otra.
+						</p>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-simulacion-planificador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+					<span>Reparto del procesador</span>
+				</a>
+				<a class="slide-nav__link" href="10-paper-freertos-multinucleo.html">
+					<span>Artículo · FreeRTOS sobre dos núcleos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

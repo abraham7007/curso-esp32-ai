@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuatro modos de fallo característicos del código generado · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content stagger is-spread">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title slide__title--sm" data-animate="fade-up">Cuatro modos de fallo característicos del código generado</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>Registros y funciones inexistentes</div>
+						<div class="problem-card__body">
+							<p>
+								Se invoca una función que no existe en esta versión de la biblioteca,
+								o un registro de otra variante del chip.
+							</p>
+							<p>
+								<b>Cómo se detecta.</b> El compilador lo rechaza. Es el modo más
+								benigno de los cuatro, porque no llega a ejecutarse.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>Cumplimiento aparente</div>
+						<div class="problem-card__body">
+							<p>
+								El código hace lo que se pidió pero incumple un requisito temporal:
+								bloquea donde no debe, o consulta donde hacía falta una interrupción.
+							</p>
+							<p>
+								<b>Cómo se detecta.</b> Solo midiendo sobre el hardware. Compila,
+								ejecuta y supera cualquier prueba funcional.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Dependencias innecesarias</div>
+						<div class="problem-card__body">
+							<p>
+								Se incorpora una biblioteca entera para algo que resolvían diez
+								líneas. El binario crece y con él la superficie de ataque.
+							</p>
+							<p>
+								<b>Cómo se detecta.</b> Revisando las inclusiones y comparando el
+								tamaño del binario antes y después.
+							</p>
+						</div>
+					</div>
+
+					<div class="problem-card">
+						<div class="problem-card__head"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Credenciales expuestas</div>
+						<div class="problem-card__body">
+							<p>
+								La clave aparece escrita en el código, o la validación del certificado
+								se deshabilita «para que funcione».
+							</p>
+							<p>
+								<b>Cómo se detecta.</b> Buscando cadenas literales y llamadas que
+								relajen la verificación. Nunca falla una prueba por esto.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion" data-animate="fade-up">
+					<span class="conclusion__label">Procedimiento de revisión de código que no se ha escrito</span>
+					<p>
+						Leerlo entero antes de ejecutarlo; comprobar que cada función invocada
+						existe en la versión que usa el proyecto; <b>medir sobre el hardware</b>
+						lo que tenga requisito temporal; revisar las inclusiones y el tamaño del
+						binario; y buscar credenciales literales y verificaciones relajadas. Tres
+						de los cuatro modos superan la compilación y las pruebas.
+					</p>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-paper-calidad-codigo-generado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+					<span>Artículo · Calidad del código generado</span>
+				</a>
+				<a class="slide-nav__link" href="16-codigo-45-verificar-lo-generado.html">
+					<span>La hora del código · Verificar lo generado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

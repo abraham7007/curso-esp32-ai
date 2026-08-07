@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 35 · Sistema completo con panel y reenvío diferido · Sesión 8</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="25">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 35</span>
+					</div>
+
+					<h2 class="code-hour__title">Sistema completo con panel de visualización y reenvío diferido</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Reunir la sesión entera en un sistema con panel: telemetría agregada por minuto, comandos con confirmación, y las medidas tomadas sin enlace <b>guardadas y reenviadas</b> con su timestamp original cuando la red vuelve.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p><b>Agregar</b> es sustituir muchas muestras por una que las resume (media, mínimo, máximo y cuántas eran), y es lo que separa reducir tráfico de perder información. Un <b>arreglo circular</b> guarda las últimas N agregaciones sobreescribiendo las más viejas; contar los <b>descartes</b> es lo que impide que el sistema aparente no haber perdido nada. El <b>timestamp original</b> viaja con cada medida: fechar en el momento del reenvío convertiría el corte en un salto falso de todos los valores.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino, la biblioteca PubSubClient y ArduinoJson.
+
+<b>2. Firmware.</b> Muestrea el GPIO 34 cada 1000 ms y publica una agregación por minuto con media, mínimo, máximo y número de muestras, en JSON y con timestamp del reloj sincronizado. Sin broker, guarda las agregaciones en un arreglo circular de 60 posiciones contando los descartes. Al recuperar el enlace reenvía lo acumulado, conservando la marca original y un identificador por medida. Atiende comandos idempotentes con QoS 1 y confirma publicando el estado resultante como retenido. Emite a 115200 baudios el resumen de mensajes enviados frente a una política periódica.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 34 y los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del ciclo completo, con la rama que lleva al almacenamiento local y la que reenvía al volver el enlace. Y la <b>arquitectura</b> (dispositivo, broker, plataforma, panel y usuario) con el sentido de la telemetría y el de los comandos por separado.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> lee un potenciómetro en el <b>GPIO 34</b>, controla un LED de comando en el <b>GPIO 25</b> y otro de estado del enlace en el <b>GPIO 26</b>, ambos con resistencia de 220 Ω.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-potentiometer></wokwi-potentiometer></span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="red"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[AGRE] t=60000  n=60  media=23.6  min=23.1  max=24.2  -&gt; 1 msg
+[CORTE] broker no responde -&gt; almacenamiento local
+[LOCAL] guardadas 14 agregaciones capacidad=60  descartes=0
+[REENV] enlace vuelve tras 842 s: 14 msg con marca original
+[RESUMEN] 1 h: enviados=41  periodico=720  ahorro=94 %</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>La línea <code>[LOCAL]</code>: 14 agregaciones guardadas sobre una capacidad de 60 y <b>descartes = 0</b>. Ese cero es la afirmación de que no se perdió nada; si el corte hubiera durado más de una hora dejaría de serlo, y el sistema tiene que decirlo en vez de aparentar. En <code>[REENV]</code>, comprobar que los 14 mensajes llevan la <b>marca original</b>: si llevaran la del reenvío, las 842 s de corte aparecerían en el panel como un salto instantáneo de todos los valores.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-formato-carga-y-sin-red.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+					<span>Formato de la carga y operación sin red</span>
+				</a>
+				<a class="slide-nav__link" href="22-problemas-frecuentes.html">
+					<span>Problemas frecuentes</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

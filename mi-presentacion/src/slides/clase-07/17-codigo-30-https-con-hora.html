@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Código 30 · Conexión segura con hora sincronizada · Sesión 7</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="27">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="code-hour" data-animate="fade-up">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 30</span>
+					</div>
+
+					<h2 class="code-hour__title">Conexión segura con hora sincronizada y certificado verificado</h2>
+
+					<div class="code-hour__intro">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+						<p><b>Sobre el proyecto.</b> Establecer una conexión HTTPS con validación completa del certificado. Se intenta primero <b>sin</b> sincronizar la hora, para ver el error que produce, y se mide la memoria libre antes, durante y después de la negociación.</p>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair-alt">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>Conceptos clave</h4>
+								<p>Un certificado tiene <b>fechas de validez</b>, así que verificarlo exige que el equipo sepa qué día es: al arrancar cree estar en 1970 y todo certificado le parece futuro. <code>configTime()</code> pone la hora por NTP. <code>client.setCACert()</code> carga el certificado raíz con el que se comprueba la cadena; <code>setInsecure()</code> se salta esa comprobación y deja el cifrado sin autenticación, que es justamente lo que no se quiere.</p>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Prompt para el asistente</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Tras conectar a la red, intenta primero una conexión HTTPS <b>sin</b> sincronizar la hora y registra el error que devuelve. Sincroniza después por NTP con <code>configTime()</code>, espera a que la fecha del sistema supere el año 2020 y repite la conexión, esta vez con el certificado raíz incorporado mediante <code>client.setCACert()</code>. Nunca uses <code>setInsecure()</code>. Registra la memoria libre antes, durante y después de la negociación con <code>ESP.getFreeHeap()</code>, y su mínimo histórico. Emite a 115200 baudios.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con los dos LED en los GPIO indicados.
+
+<b>4. Diagramas.</b> Entrega dos en Excalidraw. El <b>diagrama de flujo</b> del arranque, con la comprobación de la fecha como una condición previa a la conexión segura. Y la <b>secuencia</b> red, hora, certificado y petición, señalando qué error aparece si se altera ese orden.</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>Diagrama de conexión</h4>
+								<p>El <b>ESP32</b> enciende dos LED en los <b>GPIO 25 y 26</b> con resistencia de 220 Ω: el primero indica hora válida y el segundo, certificado verificado.</p>
+									<div class="hw-set">
+										<span class="hw-set__item hw-set__board">
+											<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+											<small>ESP32-WROOM-32</small>
+										</span>
+										<span class="hw-set__item"><wokwi-led color="green"></wokwi-led></span>
+										<span class="hw-set__item"><wokwi-led color="blue"></wokwi-led></span>
+									</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>Monitor serial</h4>
+								<div class="term">[BOOT] fecha del sistema = 1970-01-01 00:00:00
+[TLS]  sin hora -&gt; error -0x2700 certificado no valido todavia
+[NTP]  sincronizado: 2026-07-28 14:22:05 UTC en 842 ms
+[TLS]  negociacion completada en 1842 ms cadena verificada
+[MEM]  antes=214512  durante=163208  minimo=161940  despues=198744
+[HTTP] 200 OK  1284 bytes</div>
+							</div>
+
+							<div class="code-hour__section">
+								<h4><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>Análisis</h4>
+								<p>Las dos primeras líneas son el ejercicio: el equipo cree estar en <b>1970</b> y por eso el certificado le parece «no válido todavía». Nada en ese mensaje menciona la hora, y ahí está la dificultad. Mirar después la línea <code>[MEM]</code>: la negociación se lleva unos <b>51 kB</b> y el mínimo queda en 161 940. Esa es la cifra que hay que tener libre antes de añadir HTTPS a un proyecto que ya funciona.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-https-microcontrolador.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+					<span>HTTPS en un microcontrolador</span>
+				</a>
+				<a class="slide-nav__link" href="18-paper-cifrado-tls.html">
+					<span>Artículo · Costo del cifrado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+		</script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

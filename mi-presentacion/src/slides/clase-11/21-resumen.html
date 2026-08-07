@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resumen de la sesión 11 · Sesión 11</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content stagger">
+				<span class="badge" data-animate="fade-up">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+					02 · Agentes de IA en el flujo embebido
+				</span>
+
+				<h1 class="slide__title" data-animate="fade-up">Lo que queda establecido</h1>
+
+				<div class="layout layout--split-even" data-animate="fade-up">
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>Compilado e interpretado</div>
+						<p>
+							Interpretar comportamiento intercambia tiempo de ejecución por tiempo
+							de cambio. La elección se hace con las dos cifras medidas.
+						</p>
+						<p>
+							Actualizar el binario y actualizar el comportamiento son operaciones
+							distintas, con riesgos y permisos distintos. Un sistema completo tiene
+							las dos y declara el ámbito de cada una.
+						</p>
+					</div>
+
+					<div class="def">
+						<div class="def__label"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>Agentes</div>
+						<p>
+							La IA como herramienta de desarrollo y como componente en operación
+							son dos problemas distintos: verificar lo generado, frente a acotar lo
+							que puede tocar.
+						</p>
+						<p>
+							Requisitos, arquitectura, seguridad, validación sobre hardware y
+							responsabilidad <b>no se delegan</b>, y ninguna se cubre generando más
+							código.
+						</p>
+					</div>
+				</div>
+
+				<div class="usecases is-stretch" data-animate="fade-up">
+					<span class="usecases-label">Lo que se lleva a la sesión siguiente</span>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+						<span>
+							<span class="usecase__name">El modelo como artefacto aparte</span>
+							<span class="usecase__what">
+								En la sesión 12 el modelo de aprendizaje automático es comportamiento
+								externo con su propio despliegue y versionado.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+						<span>
+							<span class="usecase__name">Verificar lo que no se ha escrito</span>
+							<span class="usecase__what">
+								Un modelo entrenado tampoco se lee: se comprueba con métricas, que es
+								el asunto de la sesión 12.
+							</span>
+						</span>
+					</div>
+					<div class="usecase">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+						<span>
+							<span class="usecase__name">Margen de actuación</span>
+							<span class="usecase__what">
+								Acotar lo que una decisión automática puede hacer vale igual para un
+								agente que para un modelo de inferencia.
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-glosario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+					<span>Glosario de la sesión</span>
+				</a>
+				<a class="slide-nav__link" href="22-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-paper" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

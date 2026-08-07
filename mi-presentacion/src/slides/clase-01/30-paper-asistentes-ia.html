@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fiabilidad del código generado por asistentes · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body data-deck-total="33">
+		<main class="slide">
+			<div class="slide__content slide__content--flush stagger">
+				<div class="paper" data-animate="fade-up">
+					<div class="paper__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+						<span class="paper__label">Artículos de referencia</span>
+						<span class="paper__license">Acceso abierto · CC BY 4.0</span>
+						<span class="paper__fuente">Figuras propias a partir de las cifras publicadas</span>
+					</div>
+
+					<p class="paper__cite">
+						<b>Babiuch, M.; Smutný, P.</b> (2026). Benchmarking LLMs for Embedded
+						Systems Programming. <i>Future Internet</i>, 18(2), 94.
+						<code>doi:10.3390/fi18020094</code> · <b>Xu, R. et al.</b> (2026).
+						EmbedAgent. <i>ICSE '26</i>. <code>arXiv:2506.11003</code>
+					</p>
+
+					<h2 class="paper__title">
+						Fiabilidad del código generado según la complejidad de la tarea
+					</h2>
+
+					<div class="paper__body paper__body--figuras">
+						<div class="paper__notes">
+							<div class="paper__section">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Objetivo
+								</div>
+								<ul class="paper__lista">
+									<li>Medir hasta qué complejidad es fiable el firmware que genera un modelo de lenguaje.</li>
+									<li>Primer trabajo: <b>27 modelos</b> sobre ocho escenarios de complejidad creciente.</li>
+									<li>Segundo: banco de <b>126 casos</b> de programación embebida, resueltos en una pasada.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--resultados">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									Resultados
+								</div>
+								<ul class="paper__lista">
+									<li>Los modelos con solución utilizable caen de <b>23 a 3</b> de 27 al llegar a la integración completa.</li>
+									<li>Fallo dominante: <b>librerías inexistentes</b>. Un 21,7 % en modelos abiertos, 5,2 % en cerrados.</li>
+									<li>Con el esquema del circuito y los errores del compilador, el acierto sube del <b>53,1 % al 65,1 %</b>.</li>
+								</ul>
+							</div>
+
+							<div class="paper__section paper__section--conclusiones">
+								<div class="paper__section-label">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
+									Conclusiones
+								</div>
+								<ul class="paper__lista">
+									<li>Una sola pasada <b>basta para tareas modulares</b> y no basta para integraciones.</li>
+									<li>La respuesta no es dejar de generar, sino <b>dar contexto y verificar</b>.</li>
+									<li>La librería inventada la detecta el compilador al primer intento: el fallo más frecuente es también el más barato de atrapar.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="paper__figuras">
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-llm-limites"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span><b>Izquierda:</b> modelos con solución utilizable según crece la complejidad. <b>Derecha:</b> acierto del mejor modelo.</span>
+								</p>
+							</div>
+
+							<div class="figure">
+								<div class="figure__frame" data-figure="paper-llm-causas"></div>
+								<p class="figure__caption">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chart" /></svg>
+									<span>Las dos cifras que lo explican: la causa del fallo y cuánto se recupera con contexto.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="29-problemas-frecuentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Problemas frecuentes</span>
+				</a>
+				<a class="slide-nav__link" href="31-glosario.html">
+					<span>Glosario</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>
