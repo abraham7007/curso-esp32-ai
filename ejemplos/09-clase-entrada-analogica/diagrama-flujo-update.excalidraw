@@ -1,0 +1,70 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 150, "y": 20, "width": 550, "height": 30, "text": "Diagrama de Flujo del Método update() — Media Móvil (N muestras)", "fontSize": 18, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 230, "y": 70, "width": 300, "height": 45, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 240, "y": 78, "width": 280, "height": 30, "text": "Entrada a update()\nmuestra = analogRead(pin)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 115, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "rectangle", "x": 230, "y": 140, "width": 300, "height": 45, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 240, "y": 148, "width": 280, "height": 30, "text": "suma -= buffer[indice]\n(retirar la muestra que sale de la ventana)", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 185, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "rectangle", "x": 230, "y": 210, "width": 300, "height": 45, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 240, "y": 218, "width": 280, "height": 30, "text": "buffer[indice] = muestra\nsuma += muestra", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 255, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "rectangle", "x": 230, "y": 280, "width": 300, "height": 40, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 240, "y": 291, "width": 280, "height": 20, "text": "indice = (indice + 1) % N", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 320, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "diamond", "x": 220, "y": 345, "width": 320, "height": 65, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 240, "y": 367, "width": 280, "height": 30, "text": "¿cuenta < N?\n(¿la ventana aún no está llena?)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 540, "y": 377, "width": 50, "height": 0, "points": [[0,0],[50,0]] },
+    { "type": "text", "x": 545, "y": 357, "width": 30, "height": 20, "text": "SÍ", "fontSize": 12, "fontFamily": 1 },
+    { "type": "rectangle", "x": 590, "y": 355, "width": 170, "height": 45, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 598, "y": 363, "width": 154, "height": 30, "text": "cuenta++\n(la ventana está creciendo)", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 380, "y": 410, "width": 0, "height": 35, "points": [[0,0],[0,35]] },
+    { "type": "text", "x": 390, "y": 415, "width": 30, "height": 20, "text": "NO", "fontSize": 12, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 230, "y": 445, "width": 300, "height": 45, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 240, "y": 453, "width": 280, "height": 30, "text": "crudo = muestra", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 490, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "rectangle", "x": 230, "y": 515, "width": 300, "height": 45, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 240, "y": 523, "width": 280, "height": 30, "text": "promedio = suma / cuenta", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 380, "y": 560, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "rectangle", "x": 280, "y": 585, "width": 200, "height": 40, "backgroundColor": "#ffd8a8" },
+    { "type": "text", "x": 290, "y": 596, "width": 180, "height": 20, "text": "Salida de update()", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "text", "x": 100, "y": 665, "width": 600, "height": 20, "text": "Ventana circular de N=16 muestras (buffer[])", "fontSize": 15, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 230, "y": 685, "width": 140, "height": 25, "text": "índice actual\n(próxima escritura)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#e8590c", "textAlign": "center" },
+
+    { "type": "rectangle", "x": 100, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 105, "y": 730, "width": 40, "height": 16, "text": "buf[0]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 155, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 160, "y": 730, "width": 40, "height": 16, "text": "buf[1]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 210, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 215, "y": 730, "width": 40, "height": 16, "text": "buf[2]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 265, "y": 715, "width": 50, "height": 45, "backgroundColor": "#ffd8a8" },
+    { "type": "text", "x": 270, "y": 730, "width": 40, "height": 16, "text": "buf[3]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 320, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 325, "y": 730, "width": 40, "height": 16, "text": "buf[4]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 375, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 380, "y": 730, "width": 40, "height": 16, "text": "buf[5]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 430, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 435, "y": 730, "width": 40, "height": 16, "text": "buf[6]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 485, "y": 715, "width": 50, "height": 45, "backgroundColor": "#e9ecef" },
+    { "type": "text", "x": 490, "y": 730, "width": 40, "height": 16, "text": "buf[7]", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 540, "y": 728, "width": 80, "height": 20, "text": "… (N=16)", "fontSize": 12, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 100, "y": 780, "width": 500, "height": 45, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 112, "y": 788, "width": 476, "height": 30, "text": "suma = Σ buffer[i]  (i = 0 .. cuenta-1)\npromedio = suma / cuenta    (cuenta ≤ N, satura en N=16)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" }
+  ]
+}
