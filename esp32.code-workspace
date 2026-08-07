@@ -26,6 +26,12 @@
 		},
 		{
 			"path": "ejemplos/07-clase-boton-antirrebote"
+		},
+		{
+			"path": "ejemplos/08-leds-intermitentes-multitarea"
+		},
+		{
+			"path": "ejemplos/09-clase-entrada-analogica"
 		}
 	],
 	"settings": {}

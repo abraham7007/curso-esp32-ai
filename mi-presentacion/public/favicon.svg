@@ -1,49 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-	<title>ESP32</title>
+	<title>LED</title>
 	<!--
-		Módulo ESP32-WROOM: la pantalla metálica con la antena impresa encima.
-		Tres decisiones vienen de mirarlo rasterizado a 16 px, que es el tamaño
-		real de la pestaña y el único que decide si un favicon sirve:
+		LED de 5 mm: cúpula, pestaña y dos patas. Es lo primero que el
+		estudiante hace parpadear en el curso, y sobre todo es una forma que
+		sobrevive a 16 px, que es el tamaño real de la pestaña del navegador y
+		el único que decide si un favicon sirve.
 
-		  · Dos dientes de antena con trazo 3, no cuatro con trazo 2,4. Los
-		    finos caen por debajo del píxel y se funden en un borrón rojo.
-		  · Un hueco franco entre la antena y la pantalla. Pegados, el trazo
-		    parecía hundirse dentro del cuerpo en lugar de posarse encima.
-		  · Los contactos van DENTRO del cuerpo, no recortando el borde
-		    inferior: recortándolo, la silueta se leía como un peine.
+		Antes hubo un módulo ESP32-WROOM aquí: más literal, pero su antena y
+		sus contactos caían por debajo del píxel y se empastaban. También se
+		descartó un LED con destellos radiales —a 16 px los rayos se funden
+		con el cuerpo y queda un borrón con púas— y uno sin patas, legible
+		pero indistinguible de una bola sobre una base.
 
-		Colores institucionales, no el morado del rayo de Vite que venía por
-		defecto. El bloque <style> aclara el cuerpo en tema oscuro: un favicon
-		vive en su propio documento y no ve las variables de la página.
+		Colores institucionales. El bloque <style> aclara las patas en tema
+		oscuro: un favicon vive en su propio documento y no ve las variables
+		de la página.
 	-->
 	<style>
-		.cuerpo { fill: #1f3864; }
-		.contacto { fill: #ffffff; opacity: .5; }
-		.antena { stroke: #c8102e; }
+		.bulbo { fill: #c8102e; }
+		.patas { fill: #1f3864; }
+		.brillo { fill: #ffffff; opacity: .5; }
 		@media (prefers-color-scheme: dark) {
-			.cuerpo { fill: #e3e9f6; }
-			.contacto { fill: #1f3864; opacity: .45; }
-			.antena { stroke: #ff4d67; }
+			.bulbo { fill: #ff4d67; }
+			.patas { fill: #dfe6f4; }
 		}
 	</style>
 
-	<!-- antena impresa: meandro de dos dientes, separado de la pantalla -->
-	<path
-		class="antena"
-		d="M4.5 10v-6h7.5v6h7.5v-6h7.5"
-		fill="none"
-		stroke-width="3"
-		stroke-linecap="butt"
-		stroke-linejoin="miter"
-	/>
+	<!-- cúpula del encapsulado -->
+	<path class="bulbo" d="M7 20.5V13a9 9 0 0 1 18 0v7.5z" />
+	<circle class="brillo" cx="12.6" cy="11.6" r="2.6" />
 
-	<!-- pantalla metálica del módulo -->
-	<rect class="cuerpo" x="2.5" y="13.5" width="27" height="16" rx="3" />
-
-	<!-- contactos, dentro del cuerpo: dan carácter de componente sin
-	     morder la silueta -->
-	<rect class="contacto" x="6" y="25" width="3.5" height="2" rx="0.5" />
-	<rect class="contacto" x="12" y="25" width="3.5" height="2" rx="0.5" />
-	<rect class="contacto" x="18" y="25" width="3.5" height="2" rx="0.5" />
-	<rect class="contacto" x="24" y="25" width="2" height="2" rx="0.5" />
+	<!-- pestaña y patas -->
+	<rect class="patas" x="5.5" y="20.5" width="21" height="3.2" rx="1.2" />
+	<rect class="patas" x="11" y="23.7" width="3" height="6.3" rx="1.2" />
+	<rect class="patas" x="18" y="23.7" width="3" height="6.3" rx="1.2" />
 </svg>
