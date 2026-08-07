@@ -1,37 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-	<title>ESP32</title>
+	<title>Módulo ESP32</title>
 	<!--
-		El SoC como chip: cuerpo cuadrado y ocho patas gruesas. Mismo motivo
-		que el icono i-chip del curso, en versión maciza.
+		Módulo ESP32-WROOM: la pantalla y la antena impresa de meandro.
 
-		Todo rasgo mide 4 unidades o más, que a 16 px —el tamaño real de la
+		Negro fijo, sin regla de tema. Una versión anterior invertía el color
+		en tema oscuro y aparecía en blanco, que no era lo pedido.
+
+		Ningún rasgo baja de 4 unidades, que a 16 px —el tamaño real de la
 		pestaña, y el único que decide si un favicon sirve— son 2 px enteros.
-		Esa es la regla que hundió los intentos anteriores: la antena de
-		meandro del módulo WROOM y las patas del LED caían por debajo del
-		píxel y se empastaban.
+		Esa es la regla que hundió los intentos previos: la antena de trazo
+		2,4 y las patas del LED caían por debajo del píxel y se empastaban.
 
-		También se descartaron, comparándolas rasterizadas: la silueta maciza
-		del módulo, que se lee como una fiambrera, y la de antena en negativo,
-		cuyos huecos superiores parecen almenas de castillo.
-
-		El bloque <style> invierte el color en tema oscuro: un favicon vive en
-		su propio documento y no ve las variables de la página.
+		Se descartaron, comparándolas rasterizadas: la placa DevKit vertical,
+		que con sus contactos claros se lee como una calculadora, y la
+		variante con almenas laterales, cuyas patas solo ensucian a 16 px.
 	-->
-	<style>
-		.chip { fill: #14181f; }
-		@media (prefers-color-scheme: dark) { .chip { fill: #eef1f6; } }
-	</style>
-
-	<!-- cuerpo del encapsulado -->
-	<rect class="chip" x="7" y="7" width="18" height="18" rx="2.5" />
-
-	<!-- patas: dos por cada lado -->
-	<rect class="chip" x="1" y="10" width="6" height="4" rx="1" />
-	<rect class="chip" x="1" y="18" width="6" height="4" rx="1" />
-	<rect class="chip" x="25" y="10" width="6" height="4" rx="1" />
-	<rect class="chip" x="25" y="18" width="6" height="4" rx="1" />
-	<rect class="chip" x="10" y="1" width="4" height="6" rx="1" />
-	<rect class="chip" x="18" y="1" width="4" height="6" rx="1" />
-	<rect class="chip" x="10" y="25" width="4" height="6" rx="1" />
-	<rect class="chip" x="18" y="25" width="4" height="6" rx="1" />
+	<g fill="#14181f">
+		<!-- antena impresa: meandro de dos dientes -->
+		<path
+			d="M4 13V5h8v8h8V5h8"
+			fill="none"
+			stroke="#14181f"
+			stroke-width="4"
+			stroke-linecap="butt"
+			stroke-linejoin="miter"
+		/>
+		<!-- pantalla metálica del módulo -->
+		<rect x="3" y="15" width="26" height="14" rx="2.5" />
+	</g>
 </svg>
