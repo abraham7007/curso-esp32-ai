@@ -1,37 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-	<title>LED</title>
+	<title>ESP32</title>
 	<!--
-		LED de 5 mm: cúpula, pestaña y dos patas. Es lo primero que el
-		estudiante hace parpadear en el curso, y sobre todo es una forma que
-		sobrevive a 16 px, que es el tamaño real de la pestaña del navegador y
-		el único que decide si un favicon sirve.
+		El SoC como chip: cuerpo cuadrado y ocho patas gruesas. Mismo motivo
+		que el icono i-chip del curso, en versión maciza.
 
-		Antes hubo un módulo ESP32-WROOM aquí: más literal, pero su antena y
-		sus contactos caían por debajo del píxel y se empastaban. También se
-		descartó un LED con destellos radiales —a 16 px los rayos se funden
-		con el cuerpo y queda un borrón con púas— y uno sin patas, legible
-		pero indistinguible de una bola sobre una base.
+		Todo rasgo mide 4 unidades o más, que a 16 px —el tamaño real de la
+		pestaña, y el único que decide si un favicon sirve— son 2 px enteros.
+		Esa es la regla que hundió los intentos anteriores: la antena de
+		meandro del módulo WROOM y las patas del LED caían por debajo del
+		píxel y se empastaban.
 
-		Colores institucionales. El bloque <style> aclara las patas en tema
-		oscuro: un favicon vive en su propio documento y no ve las variables
-		de la página.
+		También se descartaron, comparándolas rasterizadas: la silueta maciza
+		del módulo, que se lee como una fiambrera, y la de antena en negativo,
+		cuyos huecos superiores parecen almenas de castillo.
+
+		El bloque <style> invierte el color en tema oscuro: un favicon vive en
+		su propio documento y no ve las variables de la página.
 	-->
 	<style>
-		.bulbo { fill: #c8102e; }
-		.patas { fill: #1f3864; }
-		.brillo { fill: #ffffff; opacity: .5; }
-		@media (prefers-color-scheme: dark) {
-			.bulbo { fill: #ff4d67; }
-			.patas { fill: #dfe6f4; }
-		}
+		.chip { fill: #14181f; }
+		@media (prefers-color-scheme: dark) { .chip { fill: #eef1f6; } }
 	</style>
 
-	<!-- cúpula del encapsulado -->
-	<path class="bulbo" d="M7 20.5V13a9 9 0 0 1 18 0v7.5z" />
-	<circle class="brillo" cx="12.6" cy="11.6" r="2.6" />
+	<!-- cuerpo del encapsulado -->
+	<rect class="chip" x="7" y="7" width="18" height="18" rx="2.5" />
 
-	<!-- pestaña y patas -->
-	<rect class="patas" x="5.5" y="20.5" width="21" height="3.2" rx="1.2" />
-	<rect class="patas" x="11" y="23.7" width="3" height="6.3" rx="1.2" />
-	<rect class="patas" x="18" y="23.7" width="3" height="6.3" rx="1.2" />
+	<!-- patas: dos por cada lado -->
+	<rect class="chip" x="1" y="10" width="6" height="4" rx="1" />
+	<rect class="chip" x="1" y="18" width="6" height="4" rx="1" />
+	<rect class="chip" x="25" y="10" width="6" height="4" rx="1" />
+	<rect class="chip" x="25" y="18" width="6" height="4" rx="1" />
+	<rect class="chip" x="10" y="1" width="4" height="6" rx="1" />
+	<rect class="chip" x="18" y="1" width="4" height="6" rx="1" />
+	<rect class="chip" x="10" y="25" width="4" height="6" rx="1" />
+	<rect class="chip" x="18" y="25" width="4" height="6" rx="1" />
 </svg>
