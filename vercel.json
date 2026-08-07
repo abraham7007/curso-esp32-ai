@@ -1,0 +1,7 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"installCommand": "cd mi-presentacion && npm install",
+	"buildCommand": "cd mi-presentacion && npm run build",
+	"outputDirectory": "mi-presentacion/dist",
+	"cleanUrls": false
+}

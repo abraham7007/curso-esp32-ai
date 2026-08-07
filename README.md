@@ -36,15 +36,30 @@ que tras crear o renombrar una lámina hay que reiniciar el servidor.
 
 ## Despliegue en Vercel
 
-El sitio no está en la raíz del repositorio, así que hay que indicárselo:
+**No hay que configurar nada en el panel.** El sitio no está en la raíz del
+repositorio, y de eso se encarga `vercel.json`:
 
-- **Root Directory:** `mi-presentacion`
-- **Framework Preset:** Vite
-- **Build Command:** `npm run build`
-- **Output Directory:** `dist`
+```json
+{
+  "installCommand": "cd mi-presentacion && npm install",
+  "buildCommand": "cd mi-presentacion && npm run build",
+  "outputDirectory": "mi-presentacion/dist",
+  "cleanUrls": false
+}
+```
 
-Vercel detecta Vite solo; lo único que hay que fijar a mano es el *Root
-Directory*.
+Basta con importar el repositorio y desplegar, dejando **Root Directory en su
+valor por defecto**. Si se cambia a `mi-presentacion`, Vercel deja de leer este
+archivo y detecta Vite por su cuenta: también funciona, pero entonces el ajuste
+vive en el panel y no en el repositorio.
+
+`cleanUrls` va en `false` a propósito. La navegación entre láminas usa enlaces
+relativos terminados en `.html`, y activarlo convertiría cada paso de lámina en
+una redirección.
+
+> **Si el despliegue devuelve `404: NOT_FOUND`**, es que Vercel está sirviendo la
+> raíz del repositorio, donde no hay ningún `index.html`. Comprueba que
+> `vercel.json` esté en la raíz y vuelve a desplegar.
 
 ## Proyectos PlatformIO
 
