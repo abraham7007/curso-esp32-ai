@@ -1,0 +1,68 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 15, "width": 700, "height": 30, "text": "Diagrama de Flujo del loop() — Puente Serial <-> Serial2 sin bloqueo", "fontSize": 18, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 330, "y": 60, "width": 120, "height": 40, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 340, "y": 70, "width": 100, "height": 20, "text": "loop()", "fontSize": 15, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 390, "y": 100, "width": 0, "height": 30, "points": [[0,0],[0,30]] },
+
+    { "type": "text", "x": 100, "y": 140, "width": 450, "height": 20, "text": "Dirección A: Monitor -> Enlace  (Serial -> Serial2)", "fontSize": 14, "fontFamily": 1, "strokeColor": "#1971c2" },
+    { "type": "diamond", "x": 100, "y": 170, "width": 280, "height": 55, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 110, "y": 188, "width": 260, "height": 25, "text": "¿Serial.available() > 0?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 380, "y": 197, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
+    { "type": "text", "x": 385, "y": 177, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
+    { "type": "rectangle", "x": 440, "y": 170, "width": 280, "height": 55, "backgroundColor": "#d0ebff" },
+    { "type": "text", "x": 448, "y": 178, "width": 264, "height": 40, "text": "Serial2.write(Serial.read())\n(un byte; se repite mientras\nhaya bytes disponibles)", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 240, "y": 225, "width": 0, "height": 30, "points": [[0,0],[0,30]] },
+    { "type": "text", "x": 250, "y": 228, "width": 30, "height": 20, "text": "NO", "fontSize": 11, "fontFamily": 1 },
+    { "type": "text", "x": 100, "y": 265, "width": 400, "height": 20, "text": "(sin datos: continúa de inmediato hacia B)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#868e96" },
+
+    { "type": "text", "x": 100, "y": 310, "width": 500, "height": 20, "text": "Dirección B: Enlace -> Monitor  (Serial2 -> Serial, con prefijo)", "fontSize": 14, "fontFamily": 1, "strokeColor": "#2b8a3e" },
+    { "type": "diamond", "x": 100, "y": 340, "width": 280, "height": 55, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 110, "y": 358, "width": 260, "height": 25, "text": "¿Serial2.available() > 0?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 380, "y": 367, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
+    { "type": "text", "x": 385, "y": 347, "width": 60, "height": 20, "text": "NO ->\nfin", "fontSize": 10, "fontFamily": 1 },
+
+    { "type": "arrow", "x": 240, "y": 395, "width": 0, "height": 30, "points": [[0,0],[0,30]] },
+    { "type": "text", "x": 250, "y": 398, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 100, "y": 425, "width": 280, "height": 40, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 108, "y": 433, "width": 264, "height": 24, "text": "c = Serial2.read()", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 240, "y": 465, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "diamond", "x": 100, "y": 490, "width": 280, "height": 55, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 110, "y": 508, "width": 260, "height": 25, "text": "¿inicioLineaRx?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 380, "y": 517, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
+    { "type": "text", "x": 385, "y": 497, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
+    { "type": "rectangle", "x": 440, "y": 490, "width": 280, "height": 55, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 448, "y": 498, "width": 264, "height": 40, "text": "Serial.print(\"[recibido] \")\ninicioLineaRx = false", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 240, "y": 545, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+    { "type": "text", "x": 250, "y": 548, "width": 30, "height": 20, "text": "NO", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 100, "y": 575, "width": 280, "height": 40, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 108, "y": 583, "width": 264, "height": 24, "text": "Serial.write(c)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 240, "y": 615, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
+
+    { "type": "diamond", "x": 100, "y": 640, "width": 280, "height": 55, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 110, "y": 658, "width": 260, "height": 25, "text": "¿c == '\\n'?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 380, "y": 667, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
+    { "type": "text", "x": 385, "y": 647, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
+    { "type": "rectangle", "x": 440, "y": 640, "width": 280, "height": 55, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 448, "y": 648, "width": 264, "height": 40, "text": "inicioLineaRx = true\n(la próxima línea llevará prefijo)", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "text", "x": 100, "y": 705, "width": 450, "height": 20, "text": "NO: continúa (seguimos dentro de la misma línea)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#868e96" },
+    { "type": "text", "x": 100, "y": 730, "width": 500, "height": 20, "text": "El while de B se repite mientras Serial2 tenga bytes; agotado, loop() vuelve a A.", "fontSize": 10, "fontFamily": 1, "strokeColor": "#868e96" },
+
+    { "type": "rectangle", "x": 100, "y": 770, "width": 720, "height": 55, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 112, "y": 778, "width": 696, "height": 40, "text": "Ninguna dirección usa delay() ni bloquea: cada while sólo drena los bytes ya presentes en el buffer y cede el\nturno de inmediato, así ambos sentidos del enlace se atienden en cada vuelta de loop() sin que uno espere al otro.", "fontSize": 12, "fontFamily": 1, "textAlign": "center" }
+  ]
+}

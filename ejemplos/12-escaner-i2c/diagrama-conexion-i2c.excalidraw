@@ -1,0 +1,53 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 15, "width": 750, "height": 30, "text": "Diagrama de Conexión — Bus I2C con dos dispositivos (SDA=21, SCL=22)", "fontSize": 19, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 50, "y": 150, "width": 160, "height": 260, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 80, "y": 260, "width": 100, "height": 40, "text": "ESP32\n(DevKit)", "fontSize": 15, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "line", "x": 250, "y": 90, "width": 640, "height": 0, "points": [[0,0],[640,0]], "strokeColor": "#e03131", "strokeWidth": 2 },
+    { "type": "text", "x": 210, "y": 80, "width": 60, "height": 20, "text": "3V3", "fontSize": 13, "fontFamily": 1, "strokeColor": "#e03131" },
+
+    { "type": "line", "x": 250, "y": 520, "width": 640, "height": 0, "points": [[0,0],[640,0]], "strokeColor": "#212529", "strokeWidth": 2 },
+    { "type": "text", "x": 210, "y": 522, "width": 60, "height": 20, "text": "GND", "fontSize": 13, "fontFamily": 1, "strokeColor": "#212529" },
+
+    { "type": "line", "x": 210, "y": 250, "width": 680, "height": 0, "points": [[0,0],[680,0]], "strokeColor": "#1971c2", "strokeWidth": 3 },
+    { "type": "text", "x": 60, "y": 232, "width": 140, "height": 20, "text": "SDA (GPIO 21)", "fontSize": 13, "fontFamily": 1, "strokeColor": "#1971c2" },
+
+    { "type": "line", "x": 210, "y": 310, "width": 680, "height": 0, "points": [[0,0],[680,0]], "strokeColor": "#f59f00", "strokeWidth": 3 },
+    { "type": "text", "x": 60, "y": 315, "width": 140, "height": 20, "text": "SCL (GPIO 22)", "fontSize": 13, "fontFamily": 1, "strokeColor": "#f59f00" },
+
+    { "type": "rectangle", "x": 300, "y": 110, "width": 30, "height": 130, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 335, "y": 150, "width": 90, "height": 40, "text": "4.7 kΩ\n(pull-up SDA)", "fontSize": 10, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 380, "y": 110, "width": 30, "height": 190, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 415, "y": 190, "width": 90, "height": 40, "text": "4.7 kΩ\n(pull-up SCL)", "fontSize": 10, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 560, "y": 130, "width": 190, "height": 190, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 575, "y": 195, "width": 160, "height": 50, "text": "OLED SSD1306\nDirección 0x3C", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 800, "y": 130, "width": 190, "height": 190, "backgroundColor": "#ffd8a8" },
+    { "type": "text", "x": 815, "y": 195, "width": 160, "height": 50, "text": "Sensor I2C (BMP180)\nDirección 0x77", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "line", "x": 655, "y": 250, "width": 0, "height": 40, "points": [[0,0],[0,40]], "strokeColor": "#1971c2", "strokeWidth": 2 },
+    { "type": "line", "x": 655, "y": 310, "width": 0, "height": 30, "points": [[0,0],[0,30]], "strokeColor": "#f59f00", "strokeWidth": 2 },
+    { "type": "line", "x": 610, "y": 90, "width": 0, "height": 40, "points": [[0,0],[0,40]], "strokeColor": "#e03131", "strokeWidth": 2 },
+    { "type": "line", "x": 700, "y": 320, "width": 0, "height": 200, "points": [[0,0],[0,200]], "strokeColor": "#212529", "strokeWidth": 2 },
+
+    { "type": "line", "x": 895, "y": 250, "width": 0, "height": 40, "points": [[0,0],[0,40]], "strokeColor": "#1971c2", "strokeWidth": 2 },
+    { "type": "line", "x": 895, "y": 310, "width": 0, "height": 30, "points": [[0,0],[0,30]], "strokeColor": "#f59f00", "strokeWidth": 2 },
+    { "type": "line", "x": 850, "y": 90, "width": 0, "height": 40, "points": [[0,0],[0,40]], "strokeColor": "#e03131", "strokeWidth": 2 },
+    { "type": "line", "x": 940, "y": 320, "width": 0, "height": 200, "points": [[0,0],[0,200]], "strokeColor": "#212529", "strokeWidth": 2 },
+
+    { "type": "text", "x": 630, "y": 100, "width": 80, "height": 20, "text": "VCC", "fontSize": 10, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "text", "x": 705, "y": 415, "width": 80, "height": 20, "text": "GND", "fontSize": 10, "fontFamily": 1, "strokeColor": "#212529" },
+    { "type": "text", "x": 870, "y": 100, "width": 80, "height": 20, "text": "VCC", "fontSize": 10, "fontFamily": 1, "strokeColor": "#e03131" },
+    { "type": "text", "x": 945, "y": 415, "width": 80, "height": 20, "text": "GND", "fontSize": 10, "fontFamily": 1, "strokeColor": "#212529" },
+
+    { "type": "rectangle", "x": 60, "y": 560, "width": 900, "height": 90, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 75, "y": 568, "width": 870, "height": 75, "text": "Bus I2C: dos únicas líneas (SDA y SCL) compartidas por todos los dispositivos; cada uno responde solo a su\ndirección de 7 bits. Las resistencias de pull-up (4.7 kΩ típico) llevan ambas líneas a 3V3 en reposo — los\ndispositivos las bajan a GND (salida en colector/drenador abierto) para comunicar. GND debe ser común a todos.", "fontSize": 12, "fontFamily": 1, "textAlign": "center" }
+  ]
+}

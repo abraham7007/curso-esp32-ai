@@ -1,0 +1,35 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 15, "width": 650, "height": 30, "text": "Diagrama de Bloques — Led, Boton y EntradaAnalogica orquestadas por main.cpp", "fontSize": 16, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 60, "y": 90, "width": 260, "height": 180, "backgroundColor": "#fff3bf", "strokeColor": "#f59f00" },
+    { "type": "text", "x": 70, "y": 98, "width": 240, "height": 20, "text": "Clase Boton  (pin = 4)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 70, "y": 125, "width": 240, "height": 135, "text": "Público:\n+ begin(): void\n+ update(): void\n+ fuePulsado(): bool\n\nPrivado: pinMode, digitalRead,\nmillis (antirrebote 30 ms)", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 520, "y": 90, "width": 280, "height": 180, "backgroundColor": "#d0ebff", "strokeColor": "#1971c2" },
+    { "type": "text", "x": 530, "y": 98, "width": 260, "height": 20, "text": "Clase EntradaAnalogica  (pin = 32, N = 16)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 530, "y": 125, "width": 260, "height": 135, "text": "Público:\n+ update(): void\n+ leerCrudo(): uint16_t\n+ leerVoltios(): float\n\nPrivado: analogRead,\nbuffer circular, media móvil", "fontSize": 11, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 290, "y": 430, "width": 260, "height": 170, "backgroundColor": "#d3f9d8", "strokeColor": "#2b8a3e" },
+    { "type": "text", "x": 300, "y": 438, "width": 240, "height": 20, "text": "Clase Led  (pin = 2)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 300, "y": 465, "width": 240, "height": 125, "text": "Público:\n+ begin(): void\n+ on() / off(): void\n+ toggle(): bool\n+ isOn(): bool\n+ escribirPWM(duty): void\n\nPrivado: pinMode/digitalWrite,\nledcAttach/ledcWrite (5kHz, 8 bits)", "fontSize": 10, "fontFamily": 1 },
+
+    { "type": "rectangle", "x": 310, "y": 250, "width": 220, "height": 100, "backgroundColor": "#e9ecef", "strokeColor": "#343a40" },
+    { "type": "text", "x": 320, "y": 258, "width": 200, "height": 20, "text": "main.cpp (orquestador)", "fontSize": 13, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 320, "y": 282, "width": 200, "height": 60, "text": "estado: bool automatico\nuint8_t dutyPrevio", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 320, "y": 200, "width": 10, "height": 90, "points": [[0,0],[-10,90]] },
+    { "type": "text", "x": 150, "y": 210, "width": 190, "height": 35, "text": "fuePulsado(): bool\n(evento de pulsación)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#e8590c", "textAlign": "center" },
+
+    { "type": "arrow", "x": 520, "y": 200, "width": 10, "height": 90, "points": [[0,0],[10,90]] },
+    { "type": "text", "x": 545, "y": 210, "width": 200, "height": 35, "text": "leerVoltios(): float\n(0.000 - 3.300 V)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#1971c2", "textAlign": "center" },
+
+    { "type": "arrow", "x": 420, "y": 350, "width": 0, "height": 80, "points": [[0,0],[0,80]] },
+    { "type": "text", "x": 430, "y": 365, "width": 200, "height": 35, "text": "escribirPWM(duty)\n(duty = voltios/3.3 * 255)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#2b8a3e", "textAlign": "center" },
+
+    { "type": "text", "x": 90, "y": 630, "width": 620, "height": 45, "text": "Las tres clases no se conocen entre sí: Boton y EntradaAnalogica no llaman a Led directamente.\nToda la coordinación (el estado automatico, el mapeo voltios->duty) vive en main.cpp.", "fontSize": 12, "fontFamily": 1, "strokeColor": "#495057", "textAlign": "center" }
+  ]
+}

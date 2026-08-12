@@ -32,6 +32,15 @@
 		},
 		{
 			"path": "ejemplos/09-clase-entrada-analogica"
+		},
+		{
+			"path": "ejemplos/10-modo-manual-automatico"
+		},
+		{
+			"path": "ejemplos/11-enlace-uart2-cruzado"
+		},
+		{
+			"path": "ejemplos/12-escaner-i2c"
 		}
 	],
 	"settings": {}

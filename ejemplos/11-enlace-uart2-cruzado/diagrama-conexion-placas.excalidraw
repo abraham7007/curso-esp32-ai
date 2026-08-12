@@ -1,0 +1,47 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 20, "width": 700, "height": 30, "text": "Diagrama de Conexión — Enlace UART2 cruzado entre dos ESP32", "fontSize": 20, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 80, "y": 100, "width": 220, "height": 300, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 130, "y": 115, "width": 120, "height": 40, "text": "ESP32 #1\n(mismo firmware)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 620, "y": 100, "width": 220, "height": 300, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 670, "y": 115, "width": 120, "height": 40, "text": "ESP32 #2\n(mismo firmware)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "line", "x": 80, "y": 230, "width": 220, "height": 0, "points": [[0,0],[220,0]], "strokeColor": "#adb5bd", "strokeStyle": "dashed" },
+    { "type": "text", "x": 90, "y": 190, "width": 200, "height": 20, "text": "GPIO 17 = TX2", "fontSize": 13, "fontFamily": 1 },
+    { "type": "text", "x": 90, "y": 260, "width": 200, "height": 20, "text": "GPIO 16 = RX2", "fontSize": 13, "fontFamily": 1 },
+
+    { "type": "line", "x": 620, "y": 230, "width": 220, "height": 0, "points": [[0,0],[220,0]], "strokeColor": "#adb5bd", "strokeStyle": "dashed" },
+    { "type": "text", "x": 650, "y": 190, "width": 200, "height": 20, "text": "GPIO 17 = TX2", "fontSize": 13, "fontFamily": 1 },
+    { "type": "text", "x": 650, "y": 260, "width": 200, "height": 20, "text": "GPIO 16 = RX2", "fontSize": 13, "fontFamily": 1 },
+
+    { "type": "arrow", "x": 300, "y": 190, "width": 320, "height": 100, "points": [[0,0],[320,100]], "strokeColor": "#f76707", "strokeWidth": 3 },
+    { "type": "text", "x": 350, "y": 145, "width": 220, "height": 20, "text": "TX2 (#1) -> RX2 (#2)", "fontSize": 12, "fontFamily": 1, "strokeColor": "#f76707", "textAlign": "center" },
+
+    { "type": "arrow", "x": 620, "y": 190, "width": 320, "height": 100, "points": [[0,0],[-320,100]], "strokeColor": "#1971c2", "strokeWidth": 3 },
+    { "type": "text", "x": 350, "y": 300, "width": 220, "height": 20, "text": "TX2 (#2) -> RX2 (#1)", "fontSize": 12, "fontFamily": 1, "strokeColor": "#1971c2", "textAlign": "center" },
+
+    { "type": "line", "x": 80, "y": 340, "width": 760, "height": 0, "points": [[0,0],[760,0]], "strokeColor": "#212529", "strokeWidth": 3 },
+    { "type": "text", "x": 400, "y": 345, "width": 160, "height": 20, "text": "GND común", "fontSize": 13, "fontFamily": 1, "strokeColor": "#212529", "textAlign": "center" },
+    { "type": "text", "x": 90, "y": 315, "width": 100, "height": 20, "text": "GND", "fontSize": 12, "fontFamily": 1 },
+    { "type": "text", "x": 650, "y": 315, "width": 100, "height": 20, "text": "GND", "fontSize": 12, "fontFamily": 1 },
+
+    { "type": "line", "x": 80, "y": 260, "width": 0, "height": 60, "points": [[0,0],[0,60]], "strokeColor": "#212529", "strokeWidth": 2 },
+    { "type": "line", "x": 840, "y": 260, "width": 0, "height": 60, "points": [[0,0],[0,60]], "strokeColor": "#212529", "strokeWidth": 2 },
+
+    { "type": "rectangle", "x": 80, "y": 420, "width": 220, "height": 60, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 90, "y": 435, "width": 200, "height": 30, "text": "USB -> PC\nMonitor serie #1 (115200)", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 190, "y": 400, "width": 0, "height": 20, "points": [[0,0],[0,20]] },
+
+    { "type": "rectangle", "x": 620, "y": 420, "width": 220, "height": 60, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 630, "y": 435, "width": 200, "height": 30, "text": "USB -> PC\nMonitor serie #2 (115200)", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 730, "y": 400, "width": 0, "height": 20, "points": [[0,0],[0,20]] },
+
+    { "type": "rectangle", "x": 100, "y": 520, "width": 720, "height": 70, "strokeColor": "#495057", "backgroundColor": "#f8f9fa" },
+    { "type": "text", "x": 112, "y": 528, "width": 696, "height": 55, "text": "Cruce obligatorio: el TX de una placa debe ir al RX de la otra (nunca TX-TX ni RX-RX).\nLa masa (GND) debe unirse entre ambas placas: sin referencia común de 0V, los niveles UART no son fiables.\nUART0 (pines 1/3, USB) queda libre para el monitor de cada placa; el enlace usa UART2 (pines 16/17).", "fontSize": 12, "fontFamily": 1, "textAlign": "center" }
+  ]
+}
