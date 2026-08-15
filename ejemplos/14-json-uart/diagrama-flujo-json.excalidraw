@@ -1,0 +1,19 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 15, "width": 600, "height": 30, "text": "Flujo de Serialización JSON (Creación)", "fontSize": 20, "fontFamily": 1, "textAlign": "center" },
+    { "type": "rectangle", "x": 150, "y": 80, "width": 500, "height": 60, "backgroundColor": "#e8f3ff" },
+    { "type": "text", "x": 160, "y": 95, "width": 480, "height": 30, "text": "1. Crear Documento en Memoria (StaticJsonDocument)", "fontSize": 16, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 400, "y": 140, "width": 0, "height": 40, "points": [[0,0],[0,40]] },
+    { "type": "rectangle", "x": 150, "y": 180, "width": 500, "height": 60, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 160, "y": 195, "width": 480, "height": 30, "text": "2. Leer Sensores (Temperatura, Humedad, etc.)", "fontSize": 16, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 400, "y": 240, "width": 0, "height": 40, "points": [[0,0],[0,40]] },
+    { "type": "rectangle", "x": 150, "y": 280, "width": 500, "height": 60, "backgroundColor": "#fff3bf" },
+    { "type": "text", "x": 160, "y": 295, "width": 480, "height": 30, "text": "3. Asignar valores al Documento (doc[\"temp\"] = 25)", "fontSize": 16, "fontFamily": 1, "textAlign": "center" },
+    { "type": "arrow", "x": 400, "y": 340, "width": 0, "height": 40, "points": [[0,0],[0,40]] },
+    { "type": "rectangle", "x": 150, "y": 380, "width": 500, "height": 60, "backgroundColor": "#ffe3e3" },
+    { "type": "text", "x": 160, "y": 395, "width": 480, "height": 30, "text": "4. Serializar a Texto y Enviar por Serial (serializeJson)", "fontSize": 16, "fontFamily": 1, "textAlign": "center" }
+  ]
+}

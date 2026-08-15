@@ -41,6 +41,33 @@
 		},
 		{
 			"path": "ejemplos/12-escaner-i2c"
+		},
+		{
+			"path": "ejemplos/12b-limite-sensores-i2c"
+		},
+		{
+			"path": "ejemplos/12c-enlace-i2c"
+		},
+		{
+			"path": "ejemplos/13-trama-uart-checksum"
+		},
+		{
+			"path": "ejemplos/14-json-uart"
+		},
+		{
+			"path": "ejemplos/15-escaner-wifi"
+		},
+		{
+			"path": "ejemplos/16-cliente-http-bitcoin"
+		},
+		{
+			"path": "ejemplos/16b-cliente-http-oled-cripto"
+		},
+		{
+			"path": "ejemplos/17-astros-oled"
+		},
+		{
+			"path": "ejemplos/18-clima-openweathermap"
 		}
 	],
 	"settings": {}

@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "author": "Ejemplo 12b - Escáner I2C con múltiples sensores BMP",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "board-bmp180",
+      "id": "bmp1",
+      "top": -150,
+      "left": 350,
+      "attrs": {}
+    },
+    {
+      "type": "board-bmp180",
+      "id": "bmp2",
+      "top": 0,
+      "left": 350,
+      "attrs": {}
+    },
+    {
+      "type": "board-bmp180",
+      "id": "bmp3",
+      "top": 149.44,
+      "left": 345.86,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:3V3",
+      "bmp1:VCC",
+      "red",
+      []
+    ],
+    [
+      "esp:GND.1",
+      "bmp1:GND",
+      "black",
+      [
+        "h378.7",
+        "v-285.43"
+      ]
+    ],
+    [
+      "esp:D21",
+      "bmp1:SDA",
+      "blue",
+      [
+        "h330.7",
+        "v-180.13"
+      ]
+    ],
+    [
+      "esp:D22",
+      "bmp1:SCL",
+      "green",
+      [
+        "h349.9",
+        "v-160.83"
+      ]
+    ],
+    [
+      "esp:3V3",
+      "bmp2:VCC",
+      "red",
+      []
+    ],
+    [
+      "esp:GND.1",
+      "bmp2:GND",
+      "black",
+      [
+        "h378.7",
+        "v-135.43"
+      ]
+    ],
+    [
+      "esp:D21",
+      "bmp2:SDA",
+      "blue",
+      [
+        "h330.7",
+        "v-30.13"
+      ]
+    ],
+    [
+      "esp:D22",
+      "bmp2:SCL",
+      "green",
+      []
+    ],
+    [
+      "esp:3V3",
+      "bmp3:VCC",
+      "red",
+      []
+    ],
+    [
+      "esp:GND.1",
+      "bmp3:GND",
+      "black",
+      [
+        "h378.7",
+        "v14.01"
+      ]
+    ],
+    [
+      "esp:D21",
+      "bmp3:SDA",
+      "blue",
+      [
+        "h330.7",
+        "v119.31"
+      ]
+    ],
+    [
+      "esp:D22",
+      "bmp3:SCL",
+      "green",
+      [
+        "h349.9",
+        "v139.17"
+      ]
+    ],
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

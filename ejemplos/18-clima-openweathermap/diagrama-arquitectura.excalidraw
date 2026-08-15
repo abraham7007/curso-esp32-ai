@@ -1,0 +1,28 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 20, "width": 700, "height": 30, "text": "Arquitectura de Conexión: APIs Privadas y Autenticación", "fontSize": 20, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 100, "y": 150, "width": 180, "height": 80, "backgroundColor": "#ffec99" },
+    { "type": "text", "x": 110, "y": 160, "width": 160, "height": 60, "text": "Servidor OpenWeather\n(Protegido)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+    
+    { "type": "text", "x": 110, "y": 115, "width": 160, "height": 20, "text": "🔒 Requiere Pase (API Key)", "fontSize": 12, "fontFamily": 1, "strokeColor": "#e03131", "textAlign": "center" },
+
+    { "type": "arrow", "x": 420, "y": 170, "width": -140, "height": 0, "points": [[0,0],[-140,0]] },
+    { "type": "text", "x": 290, "y": 140, "width": 110, "height": 20, "text": "GET URL+?appid=123", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+    
+    { "type": "arrow", "x": 280, "y": 210, "width": 140, "height": 0, "points": [[0,0],[140,0]] },
+    { "type": "text", "x": 300, "y": 220, "width": 110, "height": 20, "text": "JSON con Clima", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 420, "y": 130, "width": 160, "height": 120, "backgroundColor": "#d0ebff" },
+    { "type": "text", "x": 430, "y": 180, "width": 140, "height": 20, "text": "ESP32 (Cliente)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 580, "y": 190, "width": 150, "height": 0, "points": [[0,0],[150,0]] },
+    { "type": "text", "x": 600, "y": 160, "width": 110, "height": 20, "text": "I2C\n(SDA/SCL)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 730, "y": 150, "width": 150, "height": 80, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 740, "y": 180, "width": 130, "height": 20, "text": "Pantalla OLED\n(Interfaz Local)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" }
+  ]
+}

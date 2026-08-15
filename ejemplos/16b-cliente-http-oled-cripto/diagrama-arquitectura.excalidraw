@@ -1,0 +1,25 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    { "type": "text", "x": 100, "y": 20, "width": 600, "height": 30, "text": "Arquitectura de Conexión y Conceptos (Ej. 16b)", "fontSize": 20, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 100, "y": 150, "width": 150, "height": 80, "backgroundColor": "#ffec99" },
+    { "type": "text", "x": 110, "y": 180, "width": 130, "height": 20, "text": "API CoinGecko\n(Internet)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 250, "y": 190, "width": 150, "height": 0, "points": [[0,0],[150,0]] },
+    { "type": "text", "x": 270, "y": 160, "width": 110, "height": 20, "text": "WiFi / HTTP GET\nJSON (Lento)", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 400, "y": 130, "width": 160, "height": 120, "backgroundColor": "#d0ebff" },
+    { "type": "text", "x": 410, "y": 180, "width": 140, "height": 20, "text": "Microcontrolador\nESP32 (Cerebro)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "arrow", "x": 560, "y": 190, "width": 150, "height": 0, "points": [[0,0],[150,0]] },
+    { "type": "text", "x": 580, "y": 160, "width": 110, "height": 20, "text": "Bus I2C\n(SDA/SCL) Rápido", "fontSize": 12, "fontFamily": 1, "textAlign": "center" },
+
+    { "type": "rectangle", "x": 710, "y": 150, "width": 150, "height": 80, "backgroundColor": "#d3f9d8" },
+    { "type": "text", "x": 720, "y": 180, "width": 130, "height": 20, "text": "Pantalla OLED\n(Interfaz Local)", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
+    
+    { "type": "text", "x": 100, "y": 300, "width": 760, "height": 50, "text": "Concepto clave: El ESP32 funciona como puente o 'Edge Device'. Extrae información compleja de internet (JSON gigantesco),\nla procesa, y entrega resultados procesados a hardware local (I2C OLED).", "fontSize": 14, "fontFamily": 1, "textAlign": "center" }
+  ]
+}

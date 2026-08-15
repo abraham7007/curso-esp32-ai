@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "author": "Ejemplo 13 - Trama UART con Checksum",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp1",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp2",
+      "top": 0,
+      "left": 400,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "esp1:D17", "esp2:D16", "orange", [] ],
+    [ "esp2:D17", "esp1:D16", "blue", [] ],
+    [ "esp1:GND.1", "esp2:GND.1", "black", [] ],
+
+    [ "esp1:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp1:RX0", "$serialMonitor:TX", "", [] ],
+    [ "esp2:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp2:RX0", "$serialMonitor:TX", "", [] ]
+  ],
+  "dependencies": {}
+}

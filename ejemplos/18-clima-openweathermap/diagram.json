@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "author": "Ejemplo 18 - Estacion Meteorologica OpenWeatherMap",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": -30,
+      "left": 200,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "esp:3V3", "oled1:VCC", "red", [] ],
+    [ "esp:GND.1", "oled1:GND", "black", [] ],
+    [ "esp:D21", "oled1:SDA", "blue", [] ],
+    [ "esp:D22", "oled1:SCL", "green", [] ]
+  ],
+  "dependencies": {}
+}
