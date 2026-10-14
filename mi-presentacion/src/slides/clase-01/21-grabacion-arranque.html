@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grabación y arranque · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Entorno de desarrollo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Entrada al <em>modo de descarga</em> con GPIO 0 en bajo
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Auto-reset</b>: DTR y RTS del conversor USB-serie controlan EN y GPIO 0. Con GPIO 0 en alto, el reset arranca la aplicación.
+							</p>
+						</div>
+						<div class="lecturas grid grid-flow-col grid-rows-2" data-paso="1">
+							<span class="lectura">0x1000 <small>gestor de arranque</small></span>
+							<span class="lectura">0x8000 <small>tabla de particiones</small></span>
+							<span class="lectura">0xE000 <small>boot_app0 (selector OTA)</small></span>
+							<span class="lectura">0x10000 <small>aplicación</small></span>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<button type="button" class="btn btn--secondary" id="play-btn">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+								Reproducir secuencia
+							</button>
+							<span class="lectura lectura--fin" id="lectura">GPIO 0 = 0 al subir EN</span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="timing"
+								role="img"
+								aria-label="Cronograma de EN y GPIO 0 durante la entrada al modo de descarga, eje horizontal en milisegundos"
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: ¿qué indica al chip que debe recibir un programa
+					nuevo en lugar de ejecutar el que ya tiene? El nivel de GPIO 0 en el
+					instante en que sale del reset. Reproducir la secuencia y señalar la
+					línea discontinua.
+				</p>
+				<p>
+					Después, mostrar las cuatro direcciones: esptool escribe cuatro
+					imágenes. boot_app0 indica qué partición de aplicación arrancar, dato
+					que usan las actualizaciones OTA.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<i>Upload</i> en PlatformIO llama a <code>esptool.py write_flash</code>
+						con las cuatro imágenes y sus direcciones. Tiempos típicos de esptool:
+						EN en bajo ~100 ms y GPIO 0 en bajo ~50 ms más. Antes de los datos,
+						esptool carga en SRAM un cargador auxiliar más rápido que el de la ROM.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li><b>Puerto ocupado</b>: el monitor serie y la grabación comparten el mismo puerto, que admite un solo cliente. Cerrar el monitor antes de grabar.</li>
+						<li>«Failed to connect»: placa sin circuito de auto-reset; mantener pulsado BOOT al iniciar la grabación.</li>
+						<li>Con un cable USB solo de carga, el puerto no aparece en el sistema.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-proyecto-platformio.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Proyecto PlatformIO</span>
+				</a>
+				<a class="slide-nav__link" href="22-codigo-05-memoria-wifi.html">
+					<span>Ejemplo 05 · Costo del WiFi</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// Transiciones [t_ms, nivel]. Secuencia idealizada del auto-reset de
+			// esptool: EN baja (reset); GPIO 0 baja mientras EN sigue en bajo; EN
+			// sube con GPIO 0 todavía en bajo (instante de muestreo); GPIO 0 vuelve.
+			const EN = [[0, 1], [50, 0], [150, 1]];
+			const IO0 = [[0, 1], [100, 0], [200, 1]];
+			const T_MAX = 300;
+			const T_MUESTREO = 150;
+			const FASES = [
+				[0, 50, "programa"],
+				[50, 150, "reset"],
+				[150, 300, "modo de descarga (ROM)"],
+			];
+
+			const btn = document.getElementById("play-btn");
+			const lectura = document.getElementById("lectura");
+			const nivel = (pts, t) => pts.filter(([tt]) => tt <= t).at(-1)[1];
+
+			// undefined = reposo (cronograma completo); número = instante del barrido
+			let barrido;
+
+			const lienzo = lienzoAdaptable(document.getElementById("timing"), (ctx, w, h) => {
+				const fs = Math.max(20, Math.min(30, h * 0.05, w * 0.027));
+				const fsChico = Math.max(20, fs * 0.85);
+				const L = fs * 7.5, R = fs * 1.8;
+				const x = (t) => L + (t / T_MAX) * (w - L - R);
+				const fg = token("--color-code-fg");
+				const dim = token("--color-code-dim");
+				const borde = token("--color-code-border");
+				const mono = (peso, tam) => `${peso} ${tam}px 'IBM Plex Mono', monospace`;
+
+				ctx.fillStyle = token("--color-code-bg");
+				ctx.fillRect(0, 0, w, h);
+				ctx.textBaseline = "middle";
+
+				// Franja de fases
+				const yFase = h * 0.05, hFase = fs * 2;
+				ctx.font = mono(600, fs);
+				for (const [a, b, nombre] of FASES) {
+					const activa = barrido === undefined || barrido >= a;
+					ctx.fillStyle = borde;
+					ctx.globalAlpha = activa ? 1 : 0.35;
+					ctx.fillRect(x(a) + 2, yFase, x(b) - x(a) - 4, hFase);
+					ctx.globalAlpha = 1;
+					ctx.fillStyle = activa ? fg : dim;
+					ctx.textAlign = "center";
+					// el rótulo se encoge si no cabe en su franja
+					const ancho = x(b) - x(a) - fs * 0.6;
+					const tam = Math.min(fs, (fs * ancho) / ctx.measureText(nombre).width);
+					ctx.font = mono(600, tam);
+					ctx.fillText(nombre, (x(a) + x(b)) / 2, yFase + hFase / 2);
+					ctx.font = mono(600, fs);
+				}
+
+				// Carriles
+				const yEje = h * 0.84;
+				const top = yFase + hFase + fs * 1.5;
+				const alto = (yEje - fs * 1.5 - top) / 2;
+				const carriles = [
+					["EN", EN, top + alto * 0.12, top + alto * 0.78, token("--color-accent")],
+					["GPIO 0", IO0, top + alto * 1.12, top + alto * 1.78, token("--color-warn")],
+				];
+				ctx.strokeStyle = borde;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 8]);
+				for (const [, , hi, lo] of carriles) {
+					for (const y of [hi, lo]) {
+						ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(w - R, y); ctx.stroke();
+					}
+				}
+				ctx.setLineDash([]);
+				ctx.textAlign = "left";
+				for (const [nombre, pts, hi, lo, color] of carriles) {
+					ctx.fillStyle = color;
+					ctx.font = mono(600, fs * 1.1);
+					ctx.fillText(nombre, fs * 0.7, (hi + lo) / 2 - fs * 0.6);
+					ctx.fillStyle = dim;
+					ctx.font = mono(500, fsChico);
+					ctx.fillText("3,3 V / 0 V", fs * 0.7, (hi + lo) / 2 + fs * 0.7);
+
+					ctx.strokeStyle = color;
+					ctx.lineWidth = Math.max(3, h * 0.01);
+					ctx.lineJoin = "round";
+					ctx.beginPath();
+					ctx.moveTo(x(0), pts[0][1] ? hi : lo);
+					for (let i = 1; i < pts.length; i++) {
+						const [t, v] = pts[i];
+						ctx.lineTo(x(t), pts[i - 1][1] ? hi : lo);
+						ctx.lineTo(x(t), v ? hi : lo);
+					}
+					ctx.lineTo(x(T_MAX), pts.at(-1)[1] ? hi : lo);
+					ctx.stroke();
+				}
+
+				// Eje de tiempo
+				ctx.strokeStyle = dim;
+				ctx.fillStyle = dim;
+				ctx.lineWidth = 2;
+				ctx.beginPath(); ctx.moveTo(L, yEje); ctx.lineTo(w - R, yEje); ctx.stroke();
+				ctx.font = mono(500, fsChico);
+				ctx.textAlign = "center";
+				for (let t = 0; t <= T_MAX; t += 50) {
+					ctx.beginPath(); ctx.moveTo(x(t), yEje - fs * 0.35); ctx.lineTo(x(t), yEje + fs * 0.35); ctx.stroke();
+					ctx.fillText(String(t), x(t), yEje + fs * 1.3);
+				}
+				ctx.textAlign = "left";
+				ctx.fillText("t (ms)", fs * 0.7, yEje + fs * 1.3);
+
+				// Instante de muestreo
+				const yIni = yFase + hFase + fs * 0.5;
+				ctx.strokeStyle = fg;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([8, 6]);
+				ctx.beginPath(); ctx.moveTo(x(T_MUESTREO), yIni); ctx.lineTo(x(T_MUESTREO), yEje); ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = fg;
+				ctx.font = mono(600, fs);
+				ctx.textAlign = "left";
+				ctx.fillText("← la ROM lee GPIO 0", x(T_MUESTREO) + fs * 0.5, top + alto * 0.95);
+
+				// Barrido
+				if (barrido !== undefined) {
+					ctx.lineWidth = 4;
+					ctx.beginPath(); ctx.moveTo(x(barrido), yIni); ctx.lineTo(x(barrido), yEje); ctx.stroke();
+				}
+			});
+
+			const leer = (t) => `t = ${Math.round(t)} ms · EN = ${nivel(EN, t)} · GPIO 0 = ${nivel(IO0, t)}`;
+
+			let anim = null;
+			btn.addEventListener("click", () => {
+				if (anim !== null) return;
+				btn.disabled = true;
+				const inicio = performance.now();
+				const dur = 3000;
+				const paso = (now) => {
+					barrido = Math.min(Math.max(0, ((now - inicio) / dur) * T_MAX), T_MAX);
+					lectura.textContent = leer(barrido);
+					if (barrido < T_MAX) {
+						lienzo.redibujar();
+						anim = requestAnimationFrame(paso);
+					} else {
+						anim = null;
+						barrido = undefined;
+						btn.disabled = false;
+						lienzo.redibujar();
+						lectura.textContent = "GPIO 0 = 0 al subir EN";
+					}
+				};
+				anim = requestAnimationFrame(paso);
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 21 · Colores · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="19">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s4b-apilado s6n-hoja">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-neural" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 21</span>
+					</div>
+
+					<h2 class="code-hour__title">El color de un objeto, clasificado en la placa por una red cuantizada a int8</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Dos entornos: captura e inferencia.</span>
+								<span class="deliverable__file"><span class="s3-archivo">platformio.ini</span> · <span class="s3-archivo">src/captura/</span> · <span class="s3-archivo">src/inferencia/</span> · <span class="s3-archivo">include/model.h</span></span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-neural" /></svg>
+							<div>
+								<span class="deliverable__name">Entrenamiento</span>
+								<span class="deliverable__what">En Colab, sin simulación.</span>
+								<span class="deliverable__file"><span class="s3-archivo">colores_tinyml_colab.ipynb</span> · <span class="s3-archivo">salida_entrenamiento.txt</span></span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo y camino completo.</span>
+								<span class="deliverable__file"><span class="s3-archivo">diagrama-flujo.excalidraw</span> · <span class="s3-archivo">diagrama-pipeline.excalidraw</span></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<ol class="s6n-pasos">
+									<li><b>Capturar.</b> <code>pio run -e captura -t upload</code> → un CSV por color</li>
+									<li><b>Entrenar.</b> Colab: subir los CSV, «Ejecutar todas» → <code>include/model.h</code></li>
+									<li><b>Inferir.</b> <code>pio run -e inferencia -t upload</code> → LED del color</li>
+								</ol>
+							</div>
+							<div class="code-hour__section s6n-montaje">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<svg class="s3-esquema s6n-placa" role="img" aria-label="Arduino Nano 33 BLE Sense Rev2 conectada al PC por USB; resaltados el sensor de color APDS9960 y el LED RGB" viewBox="0 0 460 196" width="460" height="196"><rect class="s6n-pcb" x="101.7" y="50.0" width="341.4" height="140.7" rx="4" /><circle class="s6n-agujero" cx="110.8" cy="59.1" r="6.2" /><circle class="s6n-agujero" cx="434.0" cy="59.1" r="6.2" /><circle class="s6n-agujero" cx="110.8" cy="181.6" r="6.2" /><circle class="s6n-agujero" cx="434.0" cy="181.6" r="6.2" /><rect class="s6n-pad" x="120.7" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="120.7" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="140.9" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="140.9" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="161.0" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="161.0" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="181.2" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="181.2" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="201.4" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="201.4" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="221.6" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="221.6" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="241.7" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="241.7" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="261.9" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="261.9" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="282.1" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="282.1" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="302.3" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="302.3" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="322.4" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="322.4" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="342.6" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="342.6" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="362.8" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="362.8" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="383.0" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="383.0" y="171.9" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="403.1" y="51.6" width="17.2" height="17.2" rx="1" /><rect class="s6n-pad" x="403.1" y="171.9" width="17.2" height="17.2" rx="1" /><path class="s6n-cable" d="M0 120.2 H76.0" /><rect class="s6n-clavija" x="74.0" y="111.2" width="18" height="18" rx="2" /><text class="s6n-rot" x="2" y="104.2">USB</text><text class="s6n-rot s6n-rot--mut" x="2" y="150.2">al PC</text><rect class="s6n-lata" x="90.0" y="90.6" width="44.2" height="59.3" rx="3" /><rect class="s6n-ventana" x="93.1" y="104.1" width="10.4" height="32.2" rx="2" /><rect class="s6n-lata" x="177.9" y="104.6" width="22.9" height="30.7" rx="3" /><circle class="s6n-chip" cx="189.3" cy="119.9" r="7.3" /><rect class="s6n-chip" x="205.7" y="143.9" width="13.0" height="16.9" rx="1" /><rect class="s6n-smd" x="146.7" y="83.3" width="13.0" height="9.4" rx="1" /><rect class="s6n-smd" x="143.6" y="108.0" width="22.9" height="12.0" rx="1" /><rect class="s6n-smd" x="210.6" y="122.8" width="13.0" height="6.8" rx="1" /><rect class="s6n-smd" x="210.6" y="133.5" width="13.0" height="6.8" rx="1" /><rect class="s6n-smd" x="184.4" y="145.7" width="6.8" height="12.0" rx="1" /><rect class="s6n-smd" x="194.3" y="145.7" width="6.8" height="12.0" rx="1" /><rect class="s6n-smd" x="232.0" y="133.5" width="9.4" height="18.2" rx="1" /><rect class="s6n-smd" x="357.3" y="161.8" width="13.0" height="6.8" rx="1" /><rect class="s6n-smd" x="111.6" y="73.7" width="11.7" height="5.7" rx="1" /><rect class="s6n-smd" x="111.6" y="161.3" width="11.7" height="5.7" rx="1" /><rect class="s6n-chip" x="237.7" y="82.0" width="18.2" height="23.4" rx="1" /><rect class="s6n-chip" x="272.0" y="93.2" width="12.5" height="13.0" rx="1" /><rect class="s6n-chip" x="233.0" y="110.1" width="24.4" height="20.8" rx="1" /><rect class="s6n-chip s6n-usado" x="262.4" y="111.4" width="31.2" height="18.2" rx="1" /><rect class="s6n-chip" x="296.2" y="101.0" width="23.4" height="31.2" rx="1" /><rect class="s6n-chip" x="247.3" y="142.6" width="15.9" height="15.6" rx="1" /><circle class="s6n-ventana" cx="268.4" cy="120.5" r="4.2" /><circle class="s6n-ventana" cx="287.6" cy="120.5" r="4.2" /><circle class="s6n-ventana" cx="307.4" cy="109.3" r="3.9" /><rect class="s6n-led s6n-usado" x="307.4" y="86.7" width="7.8" height="10.4" rx="1" /><rect class="s6n-lata" x="323.0" y="80.7" width="120.1" height="79.3" rx="3" /><text class="s6n-rot s6n-rot--mut" x="383.0" y="122.3" text-anchor="middle">nRF52840</text><path class="s6n-guia" d="M278.0 111.4 V16 H264.0" /><text class="s6n-rot s6n-rot--acc" x="258.0" y="23" text-anchor="end">APDS9960</text><path class="s6n-guia" d="M311.3 86.7 V16 H325.3" /><text class="s6n-rot s6n-rot--acc" x="331.3" y="23">LED RGB</text></svg>
+								<p>La placa sola, por USB; el objeto, casi tocando el APDS9960. Sirve igual en Rev1 y Rev2.</p>
+							</div>
+							<section aria-label="Salida esperada de la captura" class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="s6n-fila">
+									<figure class="s3-monitor s6n-captura">
+										<figcaption>Captura · CSV</figcaption>
+										<div class="term">r,g,b
+<span class="s6n-var">0.552,0.241,0.207</span>
+<span class="s6n-var">0.548,0.244,0.208</span>
+⋮</div>
+									</figure>
+									<p class="s3-remedio s4b-aviso s6n-aviso">
+										<b>int8.</b> La entrada se cuantiza con <code>q = round(x / scale) + zero_point</code>, de −128 a 127. Como en el 20: primera compilación de 10&nbsp;min o más y un <code>model.h</code> de datos <b>sintéticos</b> que hay que reemplazar.
+									</p>
+								</div>
+							</section>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO: nano33ble, Arduino, 115200; entornos captura e inferencia; Arduino_APDS9960@1.0.4 y, en inferencia, solo Chirale_TensorFLowLite@2.0.0.
+<b>2. Firmware.</b> Con proximidad 0, r, g y b entre su suma: la captura los imprime en CSV; la inferencia los cuantiza (scale, zero_point), invoca la red y enciende el LED del color, o lo apaga bajo el 80 %.
+<b>3. Entrenamiento.</b> Colab: red 3 → 8 → 3 cuantizada a int8 → model.h.
+<b>4. Diagramas.</b> Excalidraw: flujo y camino completo.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> ArduTFLite solo admite float; el int8 va directo a TensorFlow Lite Micro (Chirale).
+								</p>
+							</div>
+							<figure class="s3-monitor s6n-inferencia">
+								<figcaption>Inferencia · <span class="s6n-var">marcado</span>: depende del objeto</figcaption>
+								<div class="term">[INICIO] Ejemplo 21 - clasificador de colores int8 (TensorFlow Lite Micro)
+[MODELO] model.h: 2360 bytes en flash, arena usada <span class="s6n-var">…</span> de 4096 bytes
+[MODELO] entrada int8 scale=0.003922 zero_point=-128
+[MODELO] salida  int8 scale=0.003906 zero_point=-128
+[MODELO] listo. Acerca un objeto rojo, verde o azul hasta casi tocar el sensor.
+[OBJETO 1] r=<span class="s6n-var">0.552</span> g=<span class="s6n-var">0.241</span> b=<span class="s6n-var">0.207</span> -&gt; int8 [<span class="s6n-var">13</span>, <span class="s6n-var">-67</span>, <span class="s6n-var">-75</span>], inferencia en <span class="s6n-var">…</span> us
+  rojo: <span class="s6n-var">99.61</span> %
+  verde: <span class="s6n-var">0.00</span> %
+  azul: <span class="s6n-var">0.00</span> %
+  -&gt; <span class="s6n-var">rojo (LED rojo)</span></div>
+							</figure>
+						</div>
+					</div>
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Que la cuantización es parte del modelo: la placa convierte 0,552, 0,241 y 0,207 en [13, −67, −75] con su scale y su zero_point, y la red recibe solo esos bytes.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué responde la red con r=0.400 g=0.350 b=0.250? Respuesta: 25,00 % rojo, 74,22 % verde y 0,39 % azul; ninguno llega al 80 % y el LED queda apagado («dudoso»). Normalizar por la suma elimina el efecto del brillo: el mismo objeto con más o menos luz da casi las mismas proporciones. Con 59 parámetros, el int8 (2 360 bytes) ocupa más que el float32 (1 992), porque los metadatos ocupan casi todo el archivo; en el 20, int8 dividiría por 3,6. Los CSV del proyecto son sintéticos, y el reparto al azar de lecturas de una misma tanda da una exactitud optimista; la prueba se hace con otra tanda u otra luz. La arena usada y los µs se leen en la placa.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>tflite::GetModel(model)</code>, <code>MicroInterpreter(modelo, resolver, arena, TAM_ARENA)</code>, <code>AllocateTensors()</code>, <code>input(0)-&gt;params.scale</code> y <code>Invoke()</code>. En el cuaderno: <code>optimizations = [tf.lite.Optimize.DEFAULT]</code>, <code>representative_dataset</code> e <code>inference_input_type = tf.int8</code>. Compilado: 129 696 bytes de flash.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Copiar el float al tensor int8 sin cuantizar: la red recibe ceros.</li><li>Copiar el <code>model.h</code> float del 20: el sketch se detiene con «El modelo no es int8».</li><li>Otro orden en <code>CLASSES</code> y <code>CLASES</code>.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-20-gestos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 20 · Gestos</span>
+				</a>
+				<a class="slide-nav__link" href="16-medir-chip.html">
+					<span>Medir en el chip</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

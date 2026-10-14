@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Sesión 4 · Adquisición de datos: drivers, eventos e interrupciones</title>
+		<title>Sesión 4 · WiFi y consumo de APIs HTTP</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,81 +14,93 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="30">
-		<main class="slide">
-			<div class="slide__content stagger">
-				<div class="layout layout--wide-left" data-animate="fade-up">
-					<div class="layout__text">
-						<span class="badge">
-							Sesión 4 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
-						</span>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<div class="crece s4a-portada-grid">
+					<div class="s4a-portada-grid__tit flex flex-col gap-6">
+						<p class="slide__lede">Sesión 4 · Fundamentos de ESP32 + AI</p>
+						<h1 class="slide__title">WiFi y consumo de <em>APIs</em> HTTP</h1>
+					</div>
 
-						<h1 class="slide__title">Adquisición de datos:<br />drivers, eventos e interrupciones</h1>
+					<ol class="puntos agenda s4a-agenda">
+						<li><div>Enlace WiFi<span>modo estación, señal y canales</span></div></li>
+						<li><div>Red e Internet<span>IP, DNS, idas y vueltas y NAT</span></div></li>
+						<li><div>HTTP<span>petición, códigos de estado y HTTPS</span></div></li>
+						<li><div>Datos en pantalla<span>campos útiles, dos ritmos y listas</span></div></li>
+						<li><div>APIs con clave<span>documentación, cuota y secretos</span></div></li>
+						<li><div>Robustez<span>las cuatro causas de «sin dato»</span></div></li>
+					</ol>
 
-						<p class="slide__lede">
-							<strong>Diseño de drivers y tratamiento de la señal.</strong> Eventos, interrupciones y temporizadores por hardware.
+					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
+						<p>
+							<a class="btn btn--primary" href="02-wifi-estacion.html">Empezar →</a>
 						</p>
+						<div class="credito">
+							<span class="credito__autor">Abraham Caso Torres</span>
+							<span>PIT 2026 · OTI-UNI</span>
+							<a
+								class="credito__licencia"
+								href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+								rel="license noopener"
+								target="_blank"
+								>CC BY-NC-SA 4.0</a
+							>
+						</div>
 					</div>
 
-					<div class="hero-board">
-						<span class="hero-board__part" aria-hidden="true">
-							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
-						</span>
-						<span class="hero-board__caption">
-							<b>ESP32-WROOM-32</b>
-							DevKit V1
-						</span>
-					</div>
-				</div>
-
-				<div data-animate="fade-up">
-					<div class="usecases-label">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						Al terminar la sesión
-					</div>
-					<div class="usecases usecases--rotulos">
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
-						<span class="usecase__name">Interfaz común de sensor</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-						<span class="usecase__name">Calibración, media móvil y filtro</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
-						<span class="usecase__name">Polling frente a interrupción</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
-						<span class="usecase__name">ISR y temporizador por hardware</span>
-					</div>
-					</div>
-				</div>
-
-				<a class="btn btn--primary self-center" href="02-clasificacion-sensores.html" data-animate="fade-up">
-					Empezar →
-				</a>
-
-				<div class="credito">
-					<span class="credito__autor">Abraham Caso Torres</span>
-					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
-						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+					<figure class="s2-uml s4a-portada" aria-label="Respuesta real de api.coingecko.com al ejemplo 16: línea de estado HTTP/1.1 200 OK, seis cabeceras (fecha, Content-Type application/json, Transfer-Encoding chunked, Cache-Control max-age=30, Age 13 y Server cloudflare), una línea en blanco y el cuerpo JSON con el precio del bitcoin en dólares, 83257">
+						<p class="s2-uml__nombre">Respuesta</p>
+						<ul>
+							<li><span class="s4a-portada__estado">HTTP/1.1 200 OK</span></li>
+							<li class="s4a-portada__cab">Date: Tue, 13 Oct 2026 …</li>
+							<li class="s4a-portada__cab">Content-Type: application/json</li>
+							<li class="s4a-portada__cab">Transfer-Encoding: chunked</li>
+							<li class="s4a-portada__cab">Cache-Control: max-age=30, …</li>
+							<li class="s4a-portada__cab">Age: 13</li>
+							<li class="s4a-portada__cab">Server: cloudflare</li>
+						</ul>
+						<p class="s4a-portada__cuerpo">{"bitcoin":{"usd":83257}}</p>
+						<figcaption>api.coingecko.com · ejemplo 16</figcaption>
+					</figure>
 				</div>
 			</div>
 
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<span></span>
-				<a class="slide-nav__link" href="02-clasificacion-sensores.html">
-					<span>Clasificación por modo de lectura</span>
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-				</a>
-			</nav>
+			<aside class="notas">
+				<p>
+					Presentar el recorrido en seis tramos: cómo entra el ESP32 en la red
+					WiFi; qué dirección recibe y cómo encuentra un servidor por su nombre;
+					qué viaja en una petición HTTP; cómo se pasa del JSON a la pantalla OLED;
+					qué cambia cuando la API pide clave; y por qué «sin dato» tiene varias
+					causas. Pregunta de predicción: el texto de la derecha llegó al ESP32 desde un servidor en otro continente; ¿cuántas idas y vueltas por la red hicieron falta antes de recibirlo? Fueron cinco, con HTTPS y TLS 1.2; el recuento está en la lámina 06.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Punto de partida</h4>
+					<p>
+						Se da por conocido: <code>millis()</code> y dos ritmos en un mismo
+						<code>loop()</code> (sesión 2, lámina 09), JSON con ArduinoJson (sesión 3,
+						láminas 20 y 21), la OLED SSD1306 en 0x3C por I²C (sesión 3, lámina 09) y
+						los tiempos de espera (sesión 3, lámina 23).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplos 15 (escáner WiFi), 16 y 16b (precio del bitcoin, en el monitor y
+						en la OLED), 17 (astronautas en órbita) y 18 (clima con clave de API).
+					</p>
+					<h4>La figura</h4>
+					<p>
+						Respuesta real de CoinGecko a la petición del ejemplo 16 (13 de octubre de
+						2026), recortada a seis de sus 25 cabeceras. El precio cambia en cada
+						consulta.
+					</p>
+				</div>
+			</details>
 		</main>
 
 		<script type="module" src="../../js/deck.js"></script>
-		<script type="module">
-			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
-		</script>
 	</body>
 </html>

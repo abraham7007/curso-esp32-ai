@@ -30,7 +30,8 @@ void loop() {
     }
 
     char resumen[40];
-    snprintf(resumen, sizeof(resumen), "[I2C] %d dispositivos encontrados", encontrados);
+    snprintf(resumen, sizeof(resumen), "[I2C] %d %s", encontrados,
+             encontrados == 1 ? "dispositivo encontrado" : "dispositivos encontrados");
     Serial.println(resumen);
 
     delay(5000);  // Repite el escaneo cada 5 s

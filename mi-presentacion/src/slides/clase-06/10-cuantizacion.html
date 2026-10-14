@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuantización · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Despliegue</span>
+
+				<h1 class="slide__title slide__title--sm">
+					int8 guarda cada peso en un <em>byte</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Cuantización</b> (<i>quantization</i>): cada real se guarda como un
+								entero de 8 bits. Cada tensor lleva su <code>scale</code> y su
+								<code>zero_point</code>.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Modelo de gestos: 36&nbsp;547 parámetros ocupan <b>146&nbsp;KB</b> en
+								float32 y unos <b>37&nbsp;KB</b> en int8. CMSIS-NN, además, acelera
+								el cálculo.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>real = (q − zero_point) × scale</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Valor real</span>
+								<input type="range" id="valor" min="0" max="1000" step="1" value="700" />
+								<output id="valor-out" for="valor" class="s6c-ancho s6c-ancho--medio">0,26000</output>
+							</label>
+							<fieldset class="mandos__grupo" aria-label="Tipo de tensor">
+								<span class="s6c-rotulo">Tensor</span>
+								<button type="button" class="btn btn--primary" data-rango="0" aria-pressed="true">pesos</button>
+								<button type="button" class="btn btn--secondary" data-rango="1" aria-pressed="false">activaciones</button>
+							</fieldset>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="cuant"
+								role="img"
+								aria-label="Arriba, la cuenta completa con el valor elegido: scale, zero_point, q, el valor reconstruido y el error. Debajo, el eje real del tensor alineado con el eje entero. Para los pesos (simétrico, de −0,5 a 0,5) el cero real cae en q = 0 y los niveles van de −127 a 127, con scale = 0,5 / 127 = 0,00394; para las activaciones (asimétrico, de 0 a 6) el cero cae en q = −128 y scale = 6 / 255 = 0,0235. Fuera del rango los valores saturan. En medio, una ampliación con los niveles vecinos: el valor real se guarda en el nivel más cercano, con un error de como mucho scale/2. Abajo, los 32 bits del float32 frente a los 8 bits del int8: los 36 547 parámetros del modelo de gestos pasan a ocupar unos 37 KB en lugar de 146 KB; el archivo int8 completo, con sesgos y escalas, mide 40 872 B."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: los pesos de una capa van de −0,5 a 0,5 y se guardan en 255 niveles. ¿Cuál es el mayor error que se comete al guardar un peso? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: medio escalón. scale = 0,5 / 127 = 0,00394; el valor se redondea al nivel más cercano, así que el error nunca supera scale/2 = 0,00197. Llevar el valor fuera del rango: q se queda en 127 o en −127 (satura) y el error ya no está acotado. Por eso la conversión necesita un conjunto de calibración representativo (100 a 500 muestras) que fije el rango de las activaciones.
+				</p>
+				<p>
+					Pulsar «activaciones»: tras ReLU no hay negativos, así que el rango es asimétrico, de 0 a 6, y el zero_point vale −128 para no desperdiciar la mitad de los niveles.
+				</p>
+				<p>
+					Modelo de gestos (ejemplo 20): 36&nbsp;547 parámetros × 4&nbsp;B = 146&nbsp;KB en float32; en int8, unos 37&nbsp;KB de pesos. El archivo .tflite int8 real, con los sesgos en int32, las escalas y la descripción del grafo, mide 40&nbsp;872&nbsp;B. LiteRT anuncia 4 veces menos memoria y 3 o más veces más velocidad; la mejora de velocidad procede de los núcleos CMSIS-NN del Cortex-M4F. Tras cuantizar hay que volver a medir la exactitud.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Especificación de LiteRT: pesos int8 <b>simétricos</b> en [−127, 127] con
+						zero_point = 0; activaciones <b>asimétricas</b> en [−128, 127]; sesgos en
+						int32. Conversión:
+						<code>converter.optimizations = [tf.lite.Optimize.DEFAULT]</code> y
+						<code>converter.representative_dataset</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 21: modelo de colores cuantizado a int8 frente al float32 del
+						ejemplo 20; la diferencia se ve en el tamaño de <code>model.h</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Calibrar con datos que no cubren el rango real, con lo que los valores fuera de él saturan.</li>
+						<li>No reevaluar la exactitud tras cuantizar.</li>
+						<li>Dejar la entrada en float32 en un modelo int8 sin cuantizarla con su scale.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-audio-espectrograma.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Audio</span>
+				</a>
+				<a class="slide-nav__link" href="11-metricas.html">
+					<span>Métricas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const coma = (x, d) => x.toFixed(d).replace(".", ",").replace(/^-/, "−");
+			const ent = (n) => String(n).replace(/^-/, "−");
+
+			// Especificación de LiteRT: pesos simétricos en [−127, 127] (zero_point = 0),
+			// activaciones asimétricas en [−128, 127].
+			const RANGOS = [
+				[-0.5, 0.5, -127, 127],
+				[0, 6, -128, 127],
+			];
+			const EXT = 0.15; // el deslizador sale un 15 % por cada lado: saturación
+
+			let R = 0;
+			let pos = 700;
+
+			// Cuantización asimétrica de LiteRT (activaciones int8).
+			function cuantizar(x, [mn, mx, QMIN, QMAX]) {
+				const scale = (mx - mn) / (QMAX - QMIN);
+				const zp = clamp(QMIN, Math.round(QMIN - mn / scale), QMAX);
+				const q = clamp(QMIN, Math.round(x / scale) + zp, QMAX);
+				const rec = (q - zp) * scale;
+				return { scale, zp, q, rec, QMIN, QMAX, err: Math.abs(x - rec), satura: q === QMIN || q === QMAX ? Math.abs(x - rec) > scale / 2 + 1e-12 : false };
+			}
+			const valorDe = (p, [mn, mx]) => {
+				const span = mx - mn;
+				return mn - EXT * span + (p / 1000) * span * (1 + 2 * EXT);
+			};
+			const decimales = (scale) => clamp(0, 2 - Math.floor(Math.log10(scale)), 5);
+
+			function bitsFloat32(x) {
+				const dv = new DataView(new ArrayBuffer(4));
+				dv.setFloat32(0, x);
+				return dv.getUint32(0).toString(2).padStart(32, "0");
+			}
+			const bitsInt8 = (q) => (q & 0xff).toString(2).padStart(8, "0");
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			// Texto en tramos de distinto color, alineado a la izquierda.
+			function tramos(ctx, partes, x, y, fs, maxW) {
+				let f = fs;
+				const medir = () => {
+					let total = 0;
+					for (const [s, , peso, fam] of partes) {
+						ctx.font = `${peso} ${f}px ${fam}`;
+						total += ctx.measureText(s).width;
+					}
+					return total;
+				};
+				while (f > MIN_FS && medir() > maxW) f -= 1;
+				if (medir() > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(partes.map((p) => p[0]).join(""));
+				}
+				let cx = x;
+				for (const [s, color, peso, fam] of partes) {
+					ctx.font = `${peso} ${f}px ${fam}`;
+					ctx.fillStyle = color;
+					ctx.textAlign = "left";
+					ctx.textBaseline = "middle";
+					ctx.fillText(s, cx, y);
+					cx += ctx.measureText(s).width;
+				}
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					surface: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warnSoft: token("--color-warn-soft"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.04, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const rango = RANGOS[R];
+				const [mn, mx, QMIN, QMAX] = rango;
+				const span = mx - mn;
+				const x = valorDe(pos, rango);
+				const k = cuantizar(x, rango);
+				const d = decimales(k.scale);
+				const H = c.heading;
+				const S = SANS;
+				const M = MONO;
+
+				// --- Fila 1: la cuenta con números ---
+				const y1 = fs * 1.0;
+				tramos(
+					ctx,
+					[
+						["scale = ", c.muted, 600, S],
+						[mn < 0 ? `${coma(mx, 1)} / 127 = ${coma(k.scale, d)}` : `${ent(mx)} / 255 = ${coma(k.scale, d)}`, H, 700, M],
+						["   zero_point = ", c.muted, 600, S],
+						[ent(k.zp), H, 700, M],
+						["   q = ", c.muted, 600, S],
+						[ent(k.q), c.acento, 700, M],
+					],
+					m,
+					y1,
+					fs * 1.05,
+					w - 2 * m,
+				);
+				const y2 = fs * 2.45;
+				tramos(
+					ctx,
+					[
+						["reconstruido = ", c.muted, 600, S],
+						[`(${ent(k.q)} − ${k.zp < 0 ? `(${ent(k.zp)})` : ent(k.zp)}) × ${coma(k.scale, d)} = ${coma(k.rec, d)}`, H, 700, M],
+						["   error = ", c.muted, 600, S],
+						[coma(k.err, d), k.satura ? c.acento : c.ok, 700, M],
+						[k.satura ? "  > scale/2: satura" : `  ≤ scale/2 = ${coma(k.scale / 2, d)}`, k.satura ? c.acento : c.ok, 700, M],
+					],
+					m,
+					y2,
+					fs * 1.05,
+					w - 2 * m,
+				);
+
+				// --- Fila 2: eje real alineado con el eje entero ---
+				const ax0 = m + fs * 6.6;
+				const ax1 = w - m - fs * 0.6;
+				const extMin = mn - EXT * span;
+				const extMax = mx + EXT * span;
+				const XR = (v) => ax0 + ((v - extMin) / (extMax - extMin)) * (ax1 - ax0);
+				const XQ = (q) => XR((q - k.zp) * k.scale);
+				const yR = fs * 5.1;
+				const yQ = yR + clamp(fs * 3.2, h * 0.16, fs * 5);
+				// Zonas de saturación.
+				ctx.fillStyle = c.acentoSoft;
+				ctx.globalAlpha = 0.6;
+				ctx.fillRect(ax0, yR - fs * 0.8, XR(mn) - ax0, yQ - yR + fs * 1.6);
+				ctx.fillRect(XR(mx), yR - fs * 0.8, ax1 - XR(mx), yQ - yR + fs * 1.6);
+				ctx.globalAlpha = 1;
+				// Líneas que unen niveles (cada 32).
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1;
+				for (let q = QMIN; q <= QMAX + 1; q += 32) {
+					const qq = Math.min(q, QMAX);
+					ctx.beginPath();
+					ctx.moveTo(XQ(qq), yR);
+					ctx.lineTo(XQ(qq), yQ);
+					ctx.stroke();
+				}
+				// Ejes.
+				for (const [y, rot] of [
+					[yR, "real"],
+					[yQ, "q (int8)"],
+				]) {
+					ctx.strokeStyle = c.muted;
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					ctx.moveTo(ax0, y);
+					ctx.lineTo(ax1, y);
+					ctx.stroke();
+					texto(ctx, rot, m, y, fs * 0.9, c.heading, 700, "left", S, ax0 - m - fs * 0.4);
+				}
+				// Peine con los 256 niveles en el eje real.
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 1;
+				for (let q = QMIN; q <= QMAX; q++) {
+					ctx.beginPath();
+					ctx.moveTo(XQ(q), yR - fs * 0.3);
+					ctx.lineTo(XQ(q), yR);
+					ctx.stroke();
+				}
+				// Rótulos de los dos ejes.
+				const rotR = [
+					[mn, ent(mn)],
+					[mx, ent(mx)],
+				];
+				if (mn < 0) rotR.push([0, "0"]);
+				for (const [v, s] of rotR) texto(ctx, s.replace(".", ","), XR(v), yR - fs * 1.0, fs * 0.85, c.muted, 600, "center", M);
+				const rotQ = [
+					[QMIN, ent(QMIN)],
+					[QMAX, "127"],
+				];
+				if (k.zp !== QMIN) rotQ.push([k.zp, `zero_point ${ent(k.zp)}`]);
+				for (const [q, s] of rotQ) texto(ctx, s, XQ(q), yQ + fs * 0.85, fs * 0.85, q === k.zp ? c.navy : c.muted, q === k.zp ? 700 : 600, "center", M);
+				if (k.zp === QMIN) texto(ctx, "= zero_point", XQ(QMIN) + fs * 2.1, yQ + fs * 0.85, fs * 0.85, c.navy, 700, "left", M);
+				// El 0 real cae exacto en zero_point.
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 5]);
+				ctx.beginPath();
+				ctx.moveTo(XR(0), yR);
+				ctx.lineTo(XQ(k.zp), yQ);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				// El valor elegido y su q.
+				const xv = XR(x);
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(xv, yR);
+				ctx.lineTo(XQ(k.q), yQ);
+				ctx.stroke();
+				ctx.fillStyle = c.acento;
+				for (const [px, py] of [
+					[xv, yR],
+					[XQ(k.q), yQ],
+				]) {
+					ctx.beginPath();
+					ctx.arc(px, py, fs * 0.38, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				// Rótulos de saturación encima de la línea del valor, con fondo propio.
+				for (const [a, b] of [
+					[ax0, XR(mn)],
+					[XR(mx), ax1],
+				]) {
+					ctx.font = `700 ${Math.max(fs * 0.85, MIN_FS)}px ${S}`;
+					const an = ctx.measureText("satura").width + fs * 0.5;
+					const cx = (a + b) / 2;
+					ctx.fillStyle = c.bg;
+					ctx.fillRect(cx - an / 2, (yR + yQ) / 2 - fs * 0.55, an, fs * 1.1);
+					texto(ctx, "satura", cx, (yR + yQ) / 2, fs * 0.85, c.acento, 700, "center", S, b - a - 4);
+				}
+
+				// --- Fila 3: ampliación alrededor del valor ---
+				const zy0 = yQ + fs * 2.3;
+				const zy1 = h - fs * 5.6;
+				const zx0 = ax0;
+				const zx1 = ax1;
+				const NIV = 3; // niveles a cada lado
+				const centro = k.satura ? k.q : clamp(QMIN + NIV, k.q, QMAX - NIV);
+				const ZX = (v) => zx0 + ((v - ((centro - NIV - 0.6 - k.zp) * k.scale)) / ((2 * NIV + 1.2) * k.scale)) * (zx1 - zx0);
+				const zym = (zy0 + zy1) / 2;
+				texto(ctx, `ampliación · niveles separados scale = ${coma(k.scale, d)}`, m, zy0 + fs * 0.1, fs * 0.85, c.heading, 700, "left", S, w - 2 * m);
+				ctx.save();
+				ctx.beginPath();
+				ctx.rect(zx0, zy0 + fs * 0.6, zx1 - zx0, zy1 - zy0);
+				ctx.clip();
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(zx0, zym);
+				ctx.lineTo(zx1, zym);
+				ctx.stroke();
+				for (let q = centro - NIV; q <= centro + NIV; q++) {
+					if (q < QMIN || q > QMAX) continue;
+					const px = ZX((q - k.zp) * k.scale);
+					if (q === k.q && !k.satura) {
+						// Celda de redondeo: todo valor dentro va a este nivel.
+						ctx.fillStyle = c.okSoft;
+						ctx.fillRect(ZX((q - k.zp - 0.5) * k.scale), zy0 + fs * 0.9, ZX((q - k.zp + 0.5) * k.scale) - ZX((q - k.zp - 0.5) * k.scale), zy1 - zy0 - fs * 0.6);
+					}
+					ctx.strokeStyle = c.navy;
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					ctx.moveTo(px, zym - fs * 0.7);
+					ctx.lineTo(px, zym + fs * 0.7);
+					ctx.stroke();
+					texto(ctx, `q ${ent(q)}`, px, zym + fs * 1.35, fs * 0.82, q === k.q ? c.acento : c.muted, q === k.q ? 700 : 600, "center", M);
+				}
+				ctx.restore();
+				// Valor real y reconstruido.
+				const pxR = clamp(zx0 + 6, ZX(x), zx1 - 6);
+				const pxQ = ZX(k.rec);
+				ctx.fillStyle = c.navy;
+				ctx.beginPath();
+				ctx.arc(pxQ, zym, fs * 0.42, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.fillStyle = c.acento;
+				ctx.beginPath();
+				ctx.arc(pxR, zym - fs * 1.15, fs * 0.38, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(pxR, zym - fs * 1.15);
+				ctx.lineTo(pxR, zym);
+				ctx.stroke();
+				const derecha = pxR < (zx0 + zx1) / 2;
+				texto(ctx, `real ${coma(x, d)}`, pxR + (derecha ? fs * 0.7 : -fs * 0.7), zym - fs * 1.15, fs * 0.85, c.acento, 700, derecha ? "left" : "right", M);
+				texto(ctx, k.satura ? "fuera del rango: el error crece sin límite" : "dentro de la celda verde: error ≤ scale/2", zx1, zy0 + fs * 0.1, fs * 0.82, k.satura ? c.acento : c.ok, 600, "right", S, (zx1 - zx0) * 0.45);
+
+				// --- Fila 4: bytes ---
+				const by = h - fs * 4.4;
+				const bitsF = bitsFloat32(x);
+				const bitsQ = bitsInt8(k.q);
+				const ancho = (ax1 - ax0) / 32;
+				const celH = fs * 1.25;
+				const rotB = [
+					["float32 · 4 B", bitsF, by, (i) => (i === 0 ? c.acentoSoft : i < 9 ? c.navySoft : c.surface)],
+					["int8 · 1 B", bitsQ, by + celH + fs * 0.9, () => c.okSoft],
+				];
+				for (const [rot, bits, y, color] of rotB) {
+					texto(ctx, rot, m, y + celH / 2, fs * 0.85, c.heading, 700, "left", S, ax0 - m - fs * 0.3);
+					for (let i = 0; i < bits.length; i++) {
+						const bx = ax0 + i * ancho;
+						ctx.fillStyle = color(i);
+						ctx.fillRect(bx + 1, y, ancho - 2, celH);
+						if (ancho > fs * 0.75) texto(ctx, bits[i], bx + ancho / 2, y + celH / 2, fs * 0.82, c.heading, 600, "center", M);
+					}
+				}
+				// Campos del float32: signo, exponente y mantisa.
+				for (const [a, b, rot] of [
+					[0, 1, "s"],
+					[1, 9, "exponente"],
+					[9, 32, "mantisa"],
+				]) {
+					texto(ctx, rot, ax0 + ((a + b) / 2) * ancho, by - fs * 0.6, fs * 0.8, c.muted, 600, "center", S, (b - a) * ancho + fs);
+				}
+				const yI = by + celH + fs * 0.9;
+				texto(ctx, "÷ 4 · pesos del modelo de gestos: 146 KB en float32, ~37 KB en int8", ax0 + 8 * ancho + fs * 0.8, yI + celH / 2, fs * 0.9, c.ok, 700, "left", S, ax1 - ax0 - 8 * ancho - fs);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("cuant"), dibujar);
+			const ctrl = document.getElementById("valor");
+			const out = document.getElementById("valor-out");
+			const botones = [...document.querySelectorAll("[data-rango]")];
+
+			function render() {
+				pos = Number(ctrl.value);
+				const rango = RANGOS[R];
+				const k = cuantizar(valorDe(pos, rango), rango);
+				out.textContent = coma(valorDe(pos, rango), decimales(k.scale));
+				for (const b of botones) {
+					const activo = Number(b.dataset.rango) === R;
+					b.classList.toggle("btn--primary", activo);
+					b.classList.toggle("btn--secondary", !activo);
+					b.setAttribute("aria-pressed", String(activo));
+				}
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					R = Number(b.dataset.rango);
+					render();
+				});
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

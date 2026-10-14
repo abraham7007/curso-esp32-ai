@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Sesión 6 · FreeRTOS: ejecución concurrente sobre dos núcleos</title>
+		<title>Sesión 6 · TinyML y Edge AI: inferencia en microcontroladores</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,79 +14,161 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="28">
-		<main class="slide">
-			<div class="slide__content stagger">
-				<div class="layout layout--wide-left" data-animate="fade-up">
-					<div class="layout__text">
-						<span class="badge">
-							Sesión 6 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
-						</span>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<div class="crece s4a-portada-grid">
+					<div class="s4a-portada-grid__tit flex flex-col gap-6">
+						<p class="slide__lede">Sesión 6 · Fundamentos de ESP32 + AI</p>
+						<h1 class="slide__title">TinyML y Edge AI: inferencia en <em>microcontroladores</em></h1>
+					</div>
 
-						<h1 class="slide__title">FreeRTOS: ejecución<br />concurrente sobre dos núcleos</h1>
+					<ol class="puntos agenda s4a-agenda s5a-agenda">
+						<li><div>Fundamentos de TinyML<span>nube, borde y extremo; energía, aplicaciones y flujo</span></div></li>
+						<li><div>Redes y datos<span>neurona, parámetros, ventana del IMU y audio</span></div></li>
+						<li><div>Despliegue<span>cuantización int8 y métricas</span></div></li>
+						<li><div>Placa y herramientas<span>Nano 33 BLE Sense Rev2, TensorFlow Lite Micro y medidas en el chip</span></div></li>
+						<li><div>Límites<span>sesgo de los datos, privacidad y deriva</span></div></li>
+					</ol>
 
-						<p class="slide__lede">
-							<strong>Tareas y planificador.</strong> Comunicación y sincronización entre tareas.
+					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
+						<p>
+							<a class="btn btn--primary" href="02-nube-borde-extremo.html">Empezar →</a>
 						</p>
+						<div class="credito">
+							<span class="credito__autor">Abraham Caso Torres</span>
+							<span>PIT 2026 · OTI-UNI</span>
+							<a
+								class="credito__licencia"
+								href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+								rel="license noopener"
+								target="_blank"
+								>CC BY-NC-SA 4.0</a
+							>
+						</div>
 					</div>
 
-					<div class="hero-board">
-						<span class="hero-board__part" aria-hidden="true">
-							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
-						</span>
-						<span class="hero-board__caption">
-							<b>ESP32-WROOM-32</b>
-							DevKit V1
-						</span>
-					</div>
-				</div>
+					<figure class="s6a-portada">
+						<svg class="s4a-svg" viewBox="0 0 1090 870" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dibujo de la cara superior de la Arduino Nano 33 BLE Sense Rev2: el conector micro-USB a la izquierda, dos filas de 15 pines en los bordes largos, los cinco sensores en el centro (resaltados en rojo) y, a la derecha, el módulo NINA-B306 con el microcontrolador nRF52840 y su antena Bluetooth. Debajo, cuatro cifras: 64 MHz con un núcleo Cortex-M4F, 256 KB de RAM, 1 MB de flash y 5 sensores en la placa.">
+						<g transform="translate(-17.6 -15.6) scale(0.8)">
+							<rect class="s6a-pcb" x="67" y="22" width="1313" height="541" rx="14" />
+							<circle class="s6a-agujero" cx="102" cy="57" r="24" />
+							<circle class="s6a-agujero" cx="1345" cy="57" r="24" />
+							<circle class="s6a-agujero" cx="102" cy="528" r="24" />
+							<circle class="s6a-agujero" cx="1345" cy="528" r="24" />
+							<rect class="s6a-pad" x="140.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="140.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="217.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="217.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="295.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="295.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="372.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="372.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="450.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="450.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="528.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="528.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="605.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="605.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="683.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="683.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="760.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="760.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="838.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="838.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="916.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="916.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="993.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="993.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1071.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1071.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1148.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1148.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1226.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1226.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-lata" x="22" y="178" width="170" height="228" rx="6" />
+							<rect class="s6a-ventana" x="34" y="230" width="40" height="124" rx="4" />
+							<rect class="s6a-lata" x="360" y="232" width="88" height="118" rx="6" />
+							<circle class="s6a-chip" cx="404" cy="291" r="28" />
+							<rect class="s6a-chip" x="467" y="383" width="50" height="65" rx="3" />
+							<rect class="s6a-led" x="240" y="150" width="50" height="36" rx="3" />
+							<rect class="s6a-led" x="228" y="245" width="88" height="46" rx="3" />
+							<rect class="s6a-led" x="486" y="302" width="50" height="26" rx="3" />
+							<rect class="s6a-led" x="486" y="343" width="50" height="26" rx="3" />
+							<rect class="s6a-led" x="385" y="390" width="26" height="46" rx="3" />
+							<rect class="s6a-led" x="423" y="390" width="26" height="46" rx="3" />
+							<rect class="s6a-led" x="568" y="343" width="36" height="70" rx="3" />
+							<rect class="s6a-led" x="1050" y="452" width="50" height="26" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="590" y="145" width="70" height="90" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="722" y="188" width="48" height="50" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="572" y="253" width="94" height="80" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="685" y="258" width="120" height="70" rx="3" />
+							<circle class="s6a-ventana" cx="708" cy="293" r="16" />
+							<circle class="s6a-ventana" cx="782" cy="293" r="16" />
+							<rect class="s6a-chip s6a-chip--sensor" x="815" y="218" width="90" height="120" rx="3" />
+							<circle class="s6a-ventana" cx="858" cy="250" r="15" />
+							<rect class="s6a-chip s6a-chip--sensor" x="627" y="378" width="61" height="60" rx="3" />
+							<rect class="s6a-led" x="105" y="113" width="45" height="22" rx="3" />
+							<rect class="s6a-led" x="105" y="450" width="45" height="22" rx="3" />
+							<rect class="s6a-led s6a-led--rgb" x="858" y="163" width="30" height="40" rx="3" />
+							<rect class="s6a-lata" x="918" y="140" width="462" height="305" rx="8" />
+							<path class="ln ln--fina ln--mut" d="M1262 160 V425 M1290 205 L1340 250 V335 L1290 380" />
+						</g>
+						<text class="mid b" x="850" y="180" font-size="44">nRF52840</text>
+						<text class="mid mut" x="850" y="234" font-size="38">NINA-B306</text>
+						<text class="sans mid mut" x="850" y="284" font-size="38">Bluetooth 5</text>
 
-				<div data-animate="fade-up">
-					<div class="usecases-label">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						Al terminar la sesión
-					</div>
-					<div class="usecases usecases--rotulos">
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
-						<span class="usecase__name">Tareas, prioridades y planificador</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
-						<span class="usecase__name">Afinidad de núcleo en el ESP32</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
-						<span class="usecase__name">Colas, mutex y semáforos</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
-						<span class="usecase__name">Dimensionado de pila por tarea</span>
-					</div>
-					</div>
-				</div>
+						<text class="sans b" x="0" y="500" font-size="52">Arduino Nano 33 BLE Sense Rev2</text>
 
-				<a class="btn btn--primary self-center" href="02-limite-bucle-unico.html" data-animate="fade-up">
-					Empezar →
-				</a>
-
-				<div class="credito">
-					<span class="credito__autor">Abraham Caso Torres</span>
-					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
-						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+						<text class="acc b" x="0" y="596" font-size="72">64 MHz</text>
+						<text class="sans mut" x="0" y="672" font-size="50">Cortex-M4F con FPU</text>
+						<text class="acc b" x="560" y="596" font-size="72">256 KB</text>
+						<text class="sans mut" x="560" y="672" font-size="50">de RAM</text>
+						<text class="acc b" x="0" y="780" font-size="72">1 MB</text>
+						<text class="sans mut" x="0" y="856" font-size="50">de flash</text>
+						<text class="acc b" x="560" y="780" font-size="72">5</text>
+						<text class="sans mut" x="560" y="856" font-size="50">sensores</text>
+					</svg>
+					</figure>
 				</div>
 			</div>
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<span></span>
-				<a class="slide-nav__link" href="02-limite-bucle-unico.html">
-					<span>Límite del bucle único</span>
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
-				</a>
-			</nav>
+
+			<aside class="notas">
+				<p>
+					Hasta la sesión 5 el ESP32 medía, mostraba y enviaba a la nube. En esta sesión el microcontrolador clasifica la señal en el propio chip: ejecuta una red neuronal entrenada con datos y reconoce un gesto o un color sin conexión. Recorrer los cinco tramos: qué es TinyML y para qué sirve, cómo es una red por dentro, cómo cabe en el chip, qué placa y herramientas se usan, y dónde están sus límites.
+				</p>
+				<p>
+					La placa de esta sesión es la Arduino Nano 33 BLE Sense Rev2, con un nRF52840 y cinco sensores soldados. Wokwi no simula este chip, así que se trabaja con la placa real, desde PlatformIO como en el resto de sesiones.
+				</p>
+				<p>
+					Pregunta de predicción: el ESP32 de las sesiones 1 a 5 tiene 520 KB de SRAM; esta placa, 256 KB. ¿Cabe en ella una red neuronal que reconozca gestos? Respuesta: sí. La red del ejemplo 20 tiene 36 547 parámetros (146 188 bytes en float; su <code>model.h</code> ocupa 148 380 bytes de flash) y el ejemplo de gestos de ArduTFLite, compilado con PlatformIO, ocupa 58,5 KB de RAM. Se calcula en las láminas 07 y 16.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Punto de partida</h4>
+					<p>
+						Se da por conocido: PlatformIO y el <code>platformio.ini</code> (sesión 1),
+						las librerías y las clases en C++ (sesión 2), el bus I²C (sesión 3) y
+						enviar datos a la nube (sesiones 4 y 5).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 20 (gestos con el IMU, red en float) y ejemplo 21 (colores con
+						el APDS-9960, red cuantizada a int8). Los dos capturan datos en la placa,
+						entrenan en Google Colab y ejecutan la red con TensorFlow Lite Micro.
+					</p>
+					<h4>La figura</h4>
+					<p>
+						Cara superior según la topología del datasheet ABX00069; los sensores,
+						resaltados en rojo, se detallan en la lámina 12. Placa sin conector de
+						pines: ABX00069; con pines: ABX00070.
+					</p>
+				</div>
+			</details>
 		</main>
-		<script type="module">
-			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
-		</script>
 
 		<script type="module" src="../../js/deck.js"></script>
 	</body>

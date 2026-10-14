@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Estado del programa · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Integración</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Un <em>bool</em> fija el modo del programa
+				</h1>
+
+				<div class="rd estados crece">
+					<p class="estados__inicio">
+						<code>bool automatico = false;</code>
+						<span>setup() imprime <code>[MODO] MANUAL</code></span>
+					</p>
+
+					<section class="estado is-activo" data-estado="manual" aria-label="Estado manual">
+						<p class="estado__nombre">Manual</p>
+						<code class="estado__var">automatico == false</code>
+						<ul class="estado__hace">
+							<li>no llama a escribirPWM() y el LED conserva su último brillo</li>
+							<li>no imprime nada</li>
+						</ul>
+					</section>
+
+					<div class="transiciones">
+						<p class="transicion transicion--ida" data-tr="ida">
+							<code>boton.fuePulsado()</code>
+							<span>imprime <code>[MODO] AUTOMATICO</code></span>
+						</p>
+						<div class="transiciones__centro">
+							<code class="transiciones__linea">automatico = !automatico;</code>
+							<button class="btn btn--primary" type="button" data-pulsar>Pulsar el botón (GPIO 4)</button>
+						</div>
+						<p class="transicion transicion--vuelta" data-tr="vuelta">
+							<code>boton.fuePulsado()</code>
+							<span>imprime <code>[MODO] MANUAL</code></span>
+						</p>
+					</div>
+
+					<section class="estado" data-estado="auto" aria-label="Estado automático">
+						<p class="estado__nombre">Automático</p>
+						<code class="estado__var">automatico == true</code>
+						<ul class="estado__hace">
+							<li>duty = voltios / 3,3 × 255</li>
+							<li>led.escribirPWM(duty)</li>
+							<li>imprime <code>[AUTO]</code> cuando el <i>duty</i> cambia</li>
+						</ul>
+					</section>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					El programa del ejemplo 10 tiene dos comportamientos, que dependen del
+					valor de <code>automatico</code>. La línea
+					<code>automatico = !automatico;</code> hace las dos transiciones.
+					Pulsar el botón de la lámina para recorrerlas. Pregunta de predicción:
+					¿qué hace el LED al volver a MANUAL? Respuesta: mantiene el último
+					ciclo de trabajo, porque loop() deja de escribirlo. Con tres o más
+					modos se usa un <code>enum</code> en lugar de un <code>bool</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>if (boton.fuePulsado()) automatico = !automatico;</code> y luego
+						<code>if (automatico) { … }</code>. <code>fuePulsado()</code> devuelve
+						<code>true</code> una sola vez por pulsación, así que cada pulsación
+						cambia el modo exactamente una vez.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						<code>src/main.cpp</code> del ejemplo 10. <code>dutyPrevio</code> es
+						estado auxiliar que evita repetir la línea <code>[AUTO]</code>.
+						<code>(uint8_t)(v / 3.3 * 255)</code> trunca: 1,65 V da 127.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Leer el pin crudo con <code>digitalRead()</code> en vez de
+						<code>fuePulsado()</code>: mientras se mantiene pulsado, el modo
+						cambia en cada vuelta.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-referencias.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Referencias</span>
+				</a>
+				<a class="slide-nav__link" href="20-codigo-10-manual-automatico.html">
+					<span>Ejemplo 10 · Orquestación</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			const boton = document.querySelector("[data-pulsar]");
+			const manual = document.querySelector('[data-estado="manual"]');
+			const auto = document.querySelector('[data-estado="auto"]');
+			const ida = document.querySelector('[data-tr="ida"]');
+			const vuelta = document.querySelector('[data-tr="vuelta"]');
+			let automatico = false;
+
+			// Igual que main.cpp: una pulsación invierte la variable.
+			boton.addEventListener("click", () => {
+				automatico = !automatico;
+				manual.classList.toggle("is-activo", !automatico);
+				auto.classList.toggle("is-activo", automatico);
+				ida.classList.toggle("is-recorrida", automatico);
+				vuelta.classList.toggle("is-recorrida", !automatico);
+			});
+		</script>
+	</body>
+</html>

@@ -14,80 +14,82 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="33">
-		<main class="slide">
-			<div class="slide__content stagger">
-				<div class="layout layout--wide-left" data-animate="fade-up">
-					<div class="layout__text">
-						<span class="badge">
-							Sesión 1 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
-						</span>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<div class="crece grid grid-cols-3 gap-16">
+					<div class="col-span-2 flex flex-col justify-between gap-8 min-h-0">
+						<div class="flex flex-col gap-6">
+							<p class="slide__lede">Sesión 1 · Fundamentos de ESP32 + AI</p>
+							<h1 class="slide__title">
+								Arquitectura del ESP32 y <em>entorno de desarrollo</em>
+							</h1>
+						</div>
 
-						<h1 class="slide__title">Arquitectura del ESP32<br />y entorno de desarrollo</h1>
+						<ol class="puntos agenda">
+							<li><div>Hardware del ESP32<span>bloques funcionales y memoria</span></div></li>
+							<li><div>Entradas y salidas<span>digital, ADC y PWM</span></div></li>
+							<li><div>Entorno de desarrollo<span>PlatformIO y simulación en Wokwi</span></div></li>
+						</ol>
 
-						<p class="slide__lede">
-							<strong>Arquitectura interna del sistema en chip.</strong> Cadena de construcción y grabado del firmware.
-						</p>
+						<div class="flex flex-col gap-6 portada-pie">
+							<p>
+								<a class="btn btn--primary" href="02-sistema-en-un-chip.html">Empezar →</a>
+							</p>
+							<div class="credito">
+								<span class="credito__autor">Abraham Caso Torres</span>
+								<span>PIT 2026 · OTI-UNI</span>
+								<a
+									class="credito__licencia"
+									href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+									rel="license noopener"
+									target="_blank"
+									>CC BY-NC-SA 4.0</a
+								>
+							</div>
+						</div>
 					</div>
 
-					<div class="hero-board">
+					<div class="hero-board hero-board--alta">
 						<span class="hero-board__part" aria-hidden="true">
 							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
 						</span>
-						<span class="hero-board__caption">
-							<b>ESP32-WROOM-32</b>
-							DevKit V1
-						</span>
+						<span class="hero-board__caption"><b>DevKit V1</b></span>
 					</div>
-				</div>
-
-				<div data-animate="fade-up">
-					<div class="usecases-label">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						Al terminar la sesión
-					</div>
-					<div class="usecases usecases--rotulos">
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
-						<span class="usecase__name">Bloques funcionales y mapa de memoria</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bolt" /></svg>
-						<span class="usecase__name">GPIO: strapping pins y restricciones</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-						<span class="usecase__name">Cadena de construcción y grabado</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-						<span class="usecase__name">Informe de memoria y backtrace</span>
-					</div>
-					</div>
-				</div>
-
-				<a class="btn btn--primary self-center" href="02-clasificacion-dispositivo.html" data-animate="fade-up">
-					Empezar →
-				</a>
-
-				<div class="credito">
-					<span class="credito__autor">Abraham Caso Torres</span>
-					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
-						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
 				</div>
 			</div>
 
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="/index.html">
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
-					<span>Índice del curso</span>
-				</a>
-			</nav>
+			<aside class="notas">
+				<p>
+					Presentar el recorrido de la sesión en tres tramos: qué hay dentro del
+					chip, cómo se comunica con el exterior y cómo llega el programa hasta
+					él. Preguntar quién ha programado antes un Arduino, como punto de
+					comparación para la lámina siguiente.
+				</p>
+				<p>
+					Pregunta de predicción: el rótulo ESP32-WROOM-32 de la cápsula metálica,
+					¿corresponde al chip o al módulo? Corresponde al módulo; el chip ESP32
+					va dentro de la cápsula.
+				</p>
+			</aside>
 		</main>
 
 		<script type="module" src="../../js/deck.js"></script>
 		<script type="module">
 			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+
+			// La cápsula metálica es el módulo, no el chip: se rotula como tal.
+			await customElements.whenDefined("wokwi-esp32-devkit-v1");
+			for (const placa of document.querySelectorAll("wokwi-esp32-devkit-v1")) {
+				await placa.updateComplete;
+				const t = [...placa.shadowRoot.querySelectorAll("text")].find(
+					(n) => n.textContent.trim() === "ESP32",
+				);
+				if (!t) continue;
+				t.setAttribute("font-size", "9.5px");
+				t.setAttribute("text-anchor", "middle");
+				t.innerHTML = '<tspan x="52.5" y="56">ESP32-</tspan><tspan x="52.5" y="69">WROOM-32</tspan>';
+			}
 		</script>
 	</body>
 </html>

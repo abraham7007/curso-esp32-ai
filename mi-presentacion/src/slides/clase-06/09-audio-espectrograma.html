@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Audio · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Redes y datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El audio entra a la red como <em>espectrograma</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Espectrograma</b>: la señal se corta en <b>ventanas</b> cortas y a
+								cada una se le aplica la <b>FFT</b>, que da la energía de cada
+								frecuencia. Cada ventana es una columna.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Palabra clave en TFLM (<i>micro_speech</i>): 1&nbsp;s a 16&nbsp;kHz,
+								ventanas de 30&nbsp;ms cada 20&nbsp;ms y 40 bandas mel.
+								<b>MFCC</b> añade un paso más sobre esas bandas.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>49 × 40 = 1 960 entradas</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Palabra sintética de la señal">
+								<span class="s6c-rotulo">Palabra</span>
+								<button type="button" class="btn btn--primary" data-palabra="0" aria-pressed="true">sube</button>
+								<button type="button" class="btn btn--secondary" data-palabra="1" aria-pressed="false">baja</button>
+								<button type="button" class="btn btn--secondary" data-palabra="2" aria-pressed="false">un tono</button>
+							</fieldset>
+							<label class="control">
+								<span>Ventana</span>
+								<input type="range" id="ventana" min="0" max="48" step="1" value="14" />
+								<output id="ventana-out" for="ventana" class="s6c-ancho s6c-ancho--medio">280 ms</output>
+							</label>
+							<span class="lectura"><small>pico </small><span id="l-pico" class="s6c-ancho">500 Hz</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="audio"
+								role="img"
+								aria-label="Arriba, un segundo de señal sintética a 16 kHz: una palabra de dos tonos, 500 Hz y después 1500 Hz, cada uno con sus armónicos, entre dos silencios; un rectángulo marca la ventana elegida de 30 ms. Abajo a la izquierda, esa ventana ampliada (480 muestras) con la forma de la ventana de Hann. En el centro, su FFT en vertical: energía de cada frecuencia, con el pico en 500 Hz y los armónicos en 1000 y 1500 Hz. A la derecha, el espectrograma de 49 ventanas por 40 bandas mel: dos franjas horizontales que suben de altura a mitad de la palabra; la columna de la ventana elegida va recuadrada."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: la palabra «sube» es un tono grave seguido de uno agudo, y «baja», al revés. ¿Cómo se verá cada una en el espectrograma? Recoger respuestas antes de pulsar los botones.
+				</p>
+				<p>
+					Respuesta: en «sube», una franja que salta hacia arriba a mitad de la palabra; en «baja», hacia abajo. En la forma de onda de arriba las dos palabras se parecen a simple vista, y en el espectrograma se distinguen por el sentido del salto. Por eso la red de palabras clave recibe una imagen de 49 × 40 en lugar de 16&nbsp;000 muestras.
+				</p>
+				<p>
+					Mover la ventana: en el silencio la FFT queda plana; dentro de un tono aparecen picos en la frecuencia del tono y en sus armónicos. Las bandas mel son estrechas en graves y anchas en agudos, según la resolución en frecuencia del oído humano. La señal es sintética; la voz real tiene muchas más componentes.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<i>micro_speech</i> (TFLM): 16&nbsp;kHz, ventana de 30&nbsp;ms, paso de
+						20&nbsp;ms, 40 bandas mel en escala logarítmica, 49 ventanas por segundo.
+						<b>MFCC</b> (<i>mel-frequency cepstral coefficients</i>) aplica además una
+						DCT a esas bandas y suele usar 25&nbsp;ms cada 10&nbsp;ms.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Palabras clave («yes»/«no» en <i>micro_speech</i>), bloques MFCC y MFE de
+						Edge Impulse; el micrófono PDM de la Nano 33 BLE Sense entrega las
+						muestras.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Calcular el espectrograma en el chip con parámetros distintos a los del entrenamiento.</li>
+						<li>Dar la señal cruda a una red pequeña.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-caracteristicas-imu.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ventana IMU</span>
+				</a>
+				<a class="slide-nav__link" href="10-cuantizacion.html">
+					<span>Cuantización</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const miles = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+			// Parámetros de micro_speech (TFLM): 16 kHz, 30 ms cada 20 ms, 40 bandas mel.
+			const FS_A = 16000;
+			const N = FS_A; // 1 s
+			const VLEN = 480; // 30 ms
+			const PASO = 320; // 20 ms
+			const NV = 49;
+			const NFFT = 512;
+			const NB = 40;
+			const F_LO = 125;
+			const F_HI = 7500;
+
+			// Palabras sintéticas: [inicio s, fin s, frecuencia Hz].
+			const PALABRAS = [
+				[
+					[0.15, 0.5, 500],
+					[0.5, 0.85, 1500],
+				],
+				[
+					[0.15, 0.5, 1500],
+					[0.5, 0.85, 500],
+				],
+				[[0.15, 0.85, 1000]],
+			];
+
+			function azar(semilla) {
+				let s = semilla;
+				return () => {
+					s = (s + 0x6d2b79f5) | 0;
+					let t = Math.imul(s ^ (s >>> 15), 1 | s);
+					t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+					return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+				};
+			}
+
+			function senal(tramos) {
+				const r = azar(7);
+				const x = new Float32Array(N);
+				for (let n = 0; n < N; n++) {
+					const t = n / FS_A;
+					let v = (r() - 0.5) * 0.04;
+					for (const [t0, t1, f] of tramos) {
+						if (t < t0 || t >= t1) continue;
+						// Envolvente con subida y caída de 20 ms.
+						const env = Math.min(1, (t - t0) / 0.02, (t1 - t) / 0.02);
+						v += env * (0.6 * Math.sin(2 * Math.PI * f * t) + 0.25 * Math.sin(4 * Math.PI * f * t) + 0.12 * Math.sin(6 * Math.PI * f * t));
+					}
+					x[n] = v;
+				}
+				return x;
+			}
+
+			function fft(re, im) {
+				const n = re.length;
+				for (let i = 1, j = 0; i < n; i++) {
+					let bit = n >> 1;
+					for (; j & bit; bit >>= 1) j ^= bit;
+					j ^= bit;
+					if (i < j) {
+						[re[i], re[j]] = [re[j], re[i]];
+						[im[i], im[j]] = [im[j], im[i]];
+					}
+				}
+				for (let len = 2; len <= n; len <<= 1) {
+					const ang = (-2 * Math.PI) / len;
+					for (let i = 0; i < n; i += len) {
+						for (let k = 0; k < len / 2; k++) {
+							const wr = Math.cos(ang * k);
+							const wi = Math.sin(ang * k);
+							const ar = re[i + k + len / 2];
+							const ai = im[i + k + len / 2];
+							const tr = ar * wr - ai * wi;
+							const ti = ar * wi + ai * wr;
+							re[i + k + len / 2] = re[i + k] - tr;
+							im[i + k + len / 2] = im[i + k] - ti;
+							re[i + k] += tr;
+							im[i + k] += ti;
+						}
+					}
+				}
+			}
+
+			const mel = (f) => 1127 * Math.log(1 + f / 700);
+			const deMel = (m) => 700 * (Math.exp(m / 1127) - 1);
+			const M_LO = mel(F_LO);
+			const M_HI = mel(F_HI);
+			// Bordes de las 40 bandas triangulares.
+			const bordes = [];
+			for (let i = 0; i <= NB + 1; i++) bordes.push(deMel(M_LO + ((M_HI - M_LO) * i) / (NB + 1)));
+			const HANN = Float32Array.from({ length: VLEN }, (_, n) => 0.5 - 0.5 * Math.cos((2 * Math.PI * n) / (VLEN - 1)));
+
+			function analizar(x) {
+				const espectros = [];
+				const bandas = [];
+				for (let v = 0; v < NV; v++) {
+					const re = new Float64Array(NFFT);
+					const im = new Float64Array(NFFT);
+					for (let n = 0; n < VLEN; n++) re[n] = x[v * PASO + n] * HANN[n];
+					fft(re, im);
+					const pot = new Float64Array(NFFT / 2 + 1);
+					for (let k = 0; k <= NFFT / 2; k++) pot[k] = re[k] * re[k] + im[k] * im[k];
+					espectros.push(pot);
+					const e = new Float64Array(NB);
+					for (let b = 0; b < NB; b++) {
+						const [fa, fc, fb] = [bordes[b], bordes[b + 1], bordes[b + 2]];
+						for (let k = 0; k <= NFFT / 2; k++) {
+							const f = (k * FS_A) / NFFT;
+							const peso = f < fa || f > fb ? 0 : f <= fc ? (f - fa) / (fc - fa) : (fb - f) / (fb - fc);
+							e[b] += peso * pot[k];
+						}
+					}
+					bandas.push(e);
+				}
+				return { espectros, bandas };
+			}
+
+			let P = 0;
+			let V = 14;
+			let x = senal(PALABRAS[P]);
+			let an = analizar(x);
+
+			const dB = (p) => 10 * Math.log10(p + 1e-6);
+			function pico(v) {
+				const pot = an.espectros[v];
+				let kmax = 1;
+				for (let k = 1; k < pot.length; k++) if (pot[k] > pot[kmax]) kmax = k;
+				return dB(pot[kmax]) > 10 ? (kmax * FS_A) / NFFT : null;
+			}
+
+			function texto(ctx, s, x0, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x0, y);
+				return ctx.measureText(s).width;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					surface: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					navy: token("--color-navy"),
+					ok: token("--color-ok"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const t0v = V * PASO; // muestra inicial de la ventana
+
+				// ===== Fila 1: la señal completa =====
+				ctx.font = `600 ${Math.max(fs * 0.82, MIN_FS)}px ${MONO}`;
+				const ejeY = ctx.measureText("8 000").width + fs * 0.9;
+				const sx0 = m + ejeY;
+				const sx1 = w - m;
+				texto(ctx, "Señal: 1 s a 16 kHz, 16 000 muestras", m, fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, w * 0.5);
+				const sy0 = fs * 1.9;
+				const sy1 = h * 0.28;
+				const sym = (sy0 + sy1) / 2;
+				const amp = (sy1 - sy0) / 2 / 1.0;
+				const SX = (n) => sx0 + (n / N) * (sx1 - sx0);
+				// Ventana elegida.
+				ctx.fillStyle = c.acento;
+				ctx.globalAlpha = 0.18;
+				ctx.fillRect(SX(t0v), sy0 - fs * 0.2, SX(t0v + VLEN) - SX(t0v), sy1 - sy0 + fs * 0.4);
+				ctx.globalAlpha = 1;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 2;
+				ctx.strokeRect(SX(t0v), sy0 - fs * 0.2, SX(t0v + VLEN) - SX(t0v), sy1 - sy0 + fs * 0.4);
+				// Forma de onda: mínimo y máximo por columna de píxeles.
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				const cols = Math.floor(sx1 - sx0);
+				for (let i = 0; i < cols; i++) {
+					const a = Math.floor((i / cols) * N);
+					const b = Math.floor(((i + 1) / cols) * N);
+					let lo = 1;
+					let hi = -1;
+					for (let n = a; n < b; n++) {
+						lo = Math.min(lo, x[n]);
+						hi = Math.max(hi, x[n]);
+					}
+					ctx.moveTo(sx0 + i + 0.5, sym - hi * amp * 0.95);
+					ctx.lineTo(sx0 + i + 0.5, sym - lo * amp * 0.95);
+				}
+				ctx.stroke();
+				for (const ms of [0, 250, 500, 750, 1000]) {
+					texto(ctx, `${ms} ms`, SX((ms / 1000) * N), sy1 + fs * 0.75, fs * 0.82, c.muted, 600, ms === 1000 ? "right" : ms === 0 ? "left" : "center", MONO);
+				}
+
+				// ===== Fila 2 =====
+				const y0 = sy1 + fs * 2.9;
+				const y1 = h - fs * 1.6;
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(m, y0 - fs * 0.9);
+				ctx.lineTo(w - m, y0 - fs * 0.9);
+				ctx.stroke();
+
+				// Columna A: la ventana ampliada.
+				const ax0 = m;
+				const ax1 = w * 0.25;
+				texto(ctx, `Ventana ${V + 1} de ${NV} · 30 ms`, ax0, y0, fs * 0.95, c.acento, 700, "left", SANS, ax1 - ax0);
+				const ay0 = y0 + fs * 1.2;
+				const ay1 = y1 - fs * 1.4;
+				const aym = (ay0 + ay1) / 2;
+				const aamp = (ay1 - ay0) / 2;
+				const AX = (n) => ax0 + (n / (VLEN - 1)) * (ax1 - ax0);
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.moveTo(ax0, aym);
+				ctx.lineTo(ax1, aym);
+				ctx.stroke();
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 5]);
+				for (const sg of [1, -1]) {
+					ctx.beginPath();
+					for (let n = 0; n < VLEN; n += 4) {
+						const yy = aym - sg * HANN[n] * aamp * 0.95;
+						if (n === 0) ctx.moveTo(AX(n), yy);
+						else ctx.lineTo(AX(n), yy);
+					}
+					ctx.stroke();
+				}
+				ctx.setLineDash([]);
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				for (let n = 0; n < VLEN; n++) {
+					const yy = aym - x[t0v + n] * HANN[n] * aamp * 0.95;
+					if (n === 0) ctx.moveTo(AX(n), yy);
+					else ctx.lineTo(AX(n), yy);
+				}
+				ctx.stroke();
+				texto(ctx, "480 muestras × Hann", (ax0 + ax1) / 2, y1 - fs * 0.5, fs * 0.82, c.muted, 600, "center", SANS, ax1 - ax0);
+
+				// Eje de frecuencia compartido (escala mel) para la FFT y el espectrograma.
+				const fy0 = y0 + fs * 1.2;
+				const fy1 = y1 - fs * 1.4;
+				const FY = (f) => fy1 - ((mel(clamp(F_LO, f, F_HI)) - M_LO) / (M_HI - M_LO)) * (fy1 - fy0);
+
+				// Columna B: FFT de la ventana, en vertical.
+				const bx0 = w * 0.29 + ejeY;
+				const bx1 = w * 0.43;
+				texto(ctx, "FFT", (bx0 + bx1) / 2, y0, fs * 0.95, c.heading, 700, "center", SANS, bx1 - bx0);
+				for (const f of [250, 500, 1000, 2000, 4000]) {
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.moveTo(bx0, FY(f));
+					ctx.lineTo(bx1, FY(f));
+					ctx.stroke();
+					texto(ctx, f >= 1000 ? `${miles(f)}` : String(f), bx0 - fs * 0.35, FY(f), fs * 0.82, c.muted, 600, "right", MONO);
+				}
+				texto(ctx, "Hz", bx0 - fs * 0.35, fy0 + fs * 0.2, fs * 0.82, c.muted, 700, "right", SANS);
+				const pot = an.espectros[V];
+				const DBMAX = 50;
+				const DBMIN = -30;
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				let primero = true;
+				for (let k = 4; k <= NFFT / 2; k++) {
+					const f = (k * FS_A) / NFFT;
+					if (f > F_HI) break;
+					const xv = bx0 + clamp(0, (dB(pot[k]) - DBMIN) / (DBMAX - DBMIN), 1) * (bx1 - bx0);
+					if (primero) ctx.moveTo(xv, FY(f));
+					else ctx.lineTo(xv, FY(f));
+					primero = false;
+				}
+				ctx.stroke();
+				const fp = pico(V);
+				if (fp) {
+					ctx.fillStyle = c.acento;
+					ctx.beginPath();
+					ctx.arc(bx1 - fs * 0.3, FY(fp), fs * 0.35, 0, Math.PI * 2);
+					ctx.fill();
+				}
+				texto(ctx, "energía →", (bx0 + bx1) / 2, y1 - fs * 0.5, fs * 0.82, c.muted, 600, "center", SANS, bx1 - bx0);
+
+				// Columna C: espectrograma mel.
+				const cx0 = w * 0.47 + ejeY;
+				const cx1 = w - m;
+				texto(ctx, "Espectrograma: 49 ventanas × 40 bandas mel", cx0, y0, fs * 0.95, c.heading, 700, "left", SANS, cx1 - cx0);
+				let emax = Number.NEGATIVE_INFINITY;
+				for (const e of an.bandas) for (const v of e) emax = Math.max(emax, dB(v));
+				const cw = (cx1 - cx0) / NV;
+				ctx.fillStyle = c.surface;
+				ctx.fillRect(cx0, fy0, cx1 - cx0, fy1 - fy0);
+				for (let v = 0; v < NV; v++) {
+					for (let b = 0; b < NB; b++) {
+						const i = clamp(0, (dB(an.bandas[v][b]) - (emax - 45)) / 45, 1);
+						if (i <= 0) continue;
+						ctx.fillStyle = c.navy;
+						ctx.globalAlpha = i;
+						const ya = FY(bordes[b + 2]);
+						const yb = FY(bordes[b]);
+						// Cada banda ocupa su tramo central en el eje mel.
+						const ym1 = FY(bordes[b + 1]);
+						const yTop = (ya + ym1) / 2;
+						const yBot = (yb + ym1) / 2;
+						ctx.fillRect(cx0 + v * cw, yTop, cw + 0.5, yBot - yTop + 0.5);
+					}
+				}
+				ctx.globalAlpha = 1;
+				for (const f of [250, 500, 1000, 2000, 4000]) {
+					texto(ctx, f >= 1000 ? `${miles(f)}` : String(f), cx0 - fs * 0.35, FY(f), fs * 0.82, c.muted, 600, "right", MONO);
+				}
+				texto(ctx, "Hz", cx0 - fs * 0.35, fy0 + fs * 0.2, fs * 0.82, c.muted, 700, "right", SANS);
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 3;
+				ctx.strokeRect(cx0 + V * cw, fy0 - 2, cw, fy1 - fy0 + 4);
+				for (const ms of [0, 500, 1000]) {
+					texto(ctx, `${ms} ms`, cx0 + (ms / 1000) * (cx1 - cx0), y1 - fs * 0.5, fs * 0.82, c.muted, 600, ms === 0 ? "left" : ms === 1000 ? "right" : "center", MONO);
+				}
+				// Flechas entre columnas.
+				texto(ctx, "→", (ax1 + bx0 - ejeY) / 2, aym, fs * 1.3, c.acento, 700, "center", SANS);
+				texto(ctx, "→", (bx1 + cx0 - ejeY) / 2, aym, fs * 1.3, c.acento, 700, "center", SANS);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("audio"), dibujar);
+			const ctrl = document.getElementById("ventana");
+			const out = document.getElementById("ventana-out");
+			const lPico = document.getElementById("l-pico");
+			const botones = [...document.querySelectorAll("[data-palabra]")];
+
+			function render() {
+				V = Number(ctrl.value);
+				out.textContent = `${V * 20} ms`;
+				const fp = pico(V);
+				lPico.textContent = fp ? `${miles(Math.round(fp / 10) * 10)} Hz` : "silencio";
+				for (const b of botones) {
+					const activo = Number(b.dataset.palabra) === P;
+					b.classList.toggle("btn--primary", activo);
+					b.classList.toggle("btn--secondary", !activo);
+					b.setAttribute("aria-pressed", String(activo));
+				}
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					P = Number(b.dataset.palabra);
+					x = senal(PALABRAS[P]);
+					an = analizar(x);
+					render();
+				});
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

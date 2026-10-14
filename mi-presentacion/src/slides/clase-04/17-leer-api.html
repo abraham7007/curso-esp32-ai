@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Leer la API · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · APIs con clave</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La API se prueba <em>antes</em> que el firmware
+				</h1>
+
+				<div class="def">
+					<p><code>curl -i</code>, desde el computador, muestra el código, las cabeceras y el cuerpo. Un fallo en curl descarta al ESP32 como causa.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Terminal con tres órdenes curl reales. CoinGecko: HTTP 2 200, cache-control max-age 30 y s-maxage 60, cuerpo bitcoin usd 83257. open-notify: HTTP 1.1 200, 587 bytes, lista people y number 12. OpenWeatherMap con Lima, PE y una clave falsa: 401 Unauthorized, Invalid API key. Debajo, una tabla con lo que se lee en la documentación de cada API: endpoint, autenticación, límite de uso y formato.">
+						<!-- terminal -->
+						<rect class="s4d-term" x="0" y="0" width="1600" height="392" rx="12" />
+						<text class="s4d-term-t" x="24" y="38" font-size="24"><tspan class="s4d-term-p">$</tspan> curl -i "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&amp;vs_currencies=usd"</text>
+						<text class="s4d-term-ok" x="24" y="72" font-size="24">HTTP/2 200 <tspan class="s4d-term-d">· cache-control: max-age=30, public, must-revalidate, s-maxage=60</tspan></text>
+						<text class="s4d-term-t" x="24" y="106" font-size="24">{"bitcoin":{"usd":83257}}</text>
+
+						<text class="s4d-term-t" x="24" y="158" font-size="24"><tspan class="s4d-term-p">$</tspan> curl -i http://api.open-notify.org/astros.json</text>
+						<text class="s4d-term-ok" x="24" y="192" font-size="24">HTTP/1.1 200 OK <tspan class="s4d-term-d">· Content-Length: 587</tspan></text>
+						<text class="s4d-term-t" x="24" y="226" font-size="24">{"people": [{"craft": "ISS", "name": "Oleg Kononenko"}, …], "number": 12, "message": "success"}</text>
+
+						<text class="s4d-term-t" x="24" y="278" font-size="24"><tspan class="s4d-term-p">$</tspan> curl -i "https://api.openweathermap.org/data/2.5/weather?q=Lima,PE&amp;units=metric&amp;appid=CLAVE_FALSA"</text>
+						<text class="s4d-term-mal" x="24" y="312" font-size="24">HTTP/1.1 401 Unauthorized</text>
+						<text class="s4d-term-t" x="24" y="346" font-size="24">{"cod":401, "message": "Invalid API key. Please see https://openweathermap.org/faq#error401 …"}</text>
+						<g data-paso="1">
+							<text class="s4d-term-mal" x="1576" y="312" font-size="24" text-anchor="end">← 401 reproducido sin firmware</text>
+						</g>
+
+						<!-- qué leer en la documentación -->
+						<text class="sans mut" x="12" y="430" font-size="26">en la documentación →</text>
+						<text class="sans" x="330" y="430" font-size="28" font-weight="700">endpoint</text>
+						<text class="sans" x="700" y="430" font-size="28" font-weight="700">autenticación</text>
+						<text class="sans" x="990" y="430" font-size="28" font-weight="700">límite de uso</text>
+						<text class="sans" x="1300" y="430" font-size="28" font-weight="700">formato</text>
+						<path class="ln ln--fina" d="M0 458 H1600" />
+
+						<rect class="s4d-fila" x="0" y="470" width="1600" height="72" rx="6" />
+						<text class="sans" x="12" y="506" font-size="28" font-weight="700">CoinGecko</text>
+						<text x="330" y="506" font-size="24">/api/v3/simple/price</text>
+						<text class="sans" x="700" y="506" font-size="26">sin clave</text>
+						<text class="sans" x="990" y="506" font-size="26">por IP, sin cifra</text>
+						<text class="sans" x="1300" y="506" font-size="26">JSON · 25 B</text>
+
+						<text class="sans" x="12" y="582" font-size="28" font-weight="700">open-notify</text>
+						<text x="330" y="582" font-size="24">/astros.json <tspan class="warn">(solo HTTP)</tspan></text>
+						<text class="sans" x="700" y="582" font-size="26">ninguna</text>
+						<text class="sans" x="990" y="582" font-size="26">no publicado</text>
+						<text class="sans" x="1300" y="582" font-size="26">JSON · 587 B</text>
+
+						<rect class="s4d-fila" x="0" y="622" width="1600" height="72" rx="6" />
+						<text class="sans" x="12" y="658" font-size="28" font-weight="700">OpenWeatherMap</text>
+						<text x="330" y="658" font-size="24">/data/2.5/weather</text>
+						<text class="sans acc" x="700" y="658" font-size="26">appid en la URL</text>
+						<text class="sans" x="990" y="658" font-size="26">60/min · 1 M/mes</text>
+						<text class="sans" x="1300" y="658" font-size="26">JSON · °C (metric)</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con una clave inventada, ¿qué código devuelve OpenWeatherMap a curl? Devuelve 401 Unauthorized. Las tres órdenes se ejecutaron tal cual; repetirlas en clase. La primera muestra la cabecera cache-control: el navegador puede guardar la respuesta 30 s y la caché compartida (CDN) 60 s, y con consultas más rápidas el dato no se actualiza antes. La segunda funciona solo por HTTP, porque open-notify no atiende el puerto 443. La tercera reproduce el 401 sin placa, sin WiFi y sin compilar. Antes de escribir firmware se responden las cuatro columnas:
+					qué ruta, cómo se autentica, cuántas peticiones admite y qué devuelve.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>curl -i URL</code> muestra cabeceras y cuerpo;
+						<code>curl -s -o /dev/null -w "%{http_code}" URL</code>, solo el código.
+						La URL que responde bien en <code>curl</code> se copia tal cual al
+						<code>http.begin()</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplos 16 y 16b (CoinGecko, sin clave), 17 (open-notify, HTTP) y 18
+						(OpenWeatherMap, clave propia). Límites de OpenWeatherMap: plan gratuito, 60
+						llamadas por minuto y 1 000 000 al mes. CoinGecko sin clave limita por IP, y
+						en Wokwi la IP de salida es compartida.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Una clave nueva de OpenWeatherMap tarda en activarse y devuelve 401 las primeras horas.</li>
+						<li>Probar primero en el firmware, donde un 401 se confunde con un fallo de red.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-codigo-17-astros.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 17 · Astronautas</span>
+				</a>
+				<a class="slide-nav__link" href="18-limite-uso.html">
+					<span>Cuota</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

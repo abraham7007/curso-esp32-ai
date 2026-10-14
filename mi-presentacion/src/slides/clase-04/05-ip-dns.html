@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IP y DNS · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Red e Internet</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Dirección IP, <em>DNS</em> y puerto
+				</h1>
+
+				<div class="def">
+					<p>Al conectarse, el ESP32 recibe del router una IP privada (<b>DHCP</b>). El <b>DNS</b> devuelve la IP pública de un servidor a partir de su nombre.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia con cuatro participantes: ESP32, router con DHCP, servidor DNS y api.coingecko.com. Paso 1, dirección: el ESP32 solicita una dirección y el router le asigna 10.13.37.2, que se lee con WiFi.localIP(). Paso 2, nombre: el ESP32 consulta api.coingecko.com y el DNS responde 104.20.41.132, lo que hace WiFi.hostByName(). Paso 3, puerto: el ESP32 abre conexión con 104.20.41.132 en el puerto 443, el de HTTPS; HTTP usa el 80.">
+						<!-- participantes -->
+						<rect class="caja caja--acc" x="220" y="10" width="240" height="90" rx="14" />
+						<text class="mid b" x="340" y="55" font-size="36">ESP32</text>
+						<rect class="caja caja--navy" x="610" y="10" width="300" height="90" rx="14" />
+						<text class="mid navy b" x="760" y="40" font-size="30">Router</text>
+						<text class="mid sans" x="760" y="76" font-size="24">servidor DHCP</text>
+						<rect class="caja" x="1000" y="10" width="260" height="90" rx="14" />
+						<text class="mid b" x="1130" y="55" font-size="30">DNS</text>
+						<rect class="caja" x="1345" y="10" width="230" height="90" rx="14" />
+						<text class="mid b" x="1460" y="40" font-size="22">api.coingecko</text>
+						<text class="mid b" x="1460" y="72" font-size="22">.com</text>
+
+						<path class="ln ln--vida" d="M340 100 V 610 M760 100 V 610 M1130 100 V 610 M1460 100 V 610" />
+
+						<!-- etapas -->
+						<text class="sans b" x="0" y="200" font-size="32">Dirección</text>
+						<text class="mut" x="0" y="240" font-size="24">DHCP</text>
+						<text class="sans b" x="0" y="385" font-size="32">Nombre</text>
+						<text class="mut" x="0" y="425" font-size="24">DNS</text>
+						<text class="sans b" x="0" y="540" font-size="32">Puerto</text>
+						<text class="mut" x="0" y="580" font-size="24">TCP</text>
+						<path class="ln ln--fina ln--mut" d="M0 300 H 1600 M0 480 H 1600" />
+
+						<!-- 1 · DHCP -->
+						<text class="mid sans" x="550" y="146" font-size="26">solicitud DHCP</text>
+						<path class="ln" d="M346 176 H 748" />
+						<path class="rel" d="M754 176 L 738 167 L 738 185 Z" />
+						<text class="mid acc b" x="550" y="226" font-size="34">10.13.37.2</text>
+						<path class="ln ln--acc" d="M754 260 H 352" />
+						<path class="rel-acc" d="M346 260 L 362 251 L 362 269 Z" />
+						<text class="navy" x="790" y="260" font-size="26">WiFi.localIP()</text>
+						<text class="sans mut" x="790" y="218" font-size="24">IP privada</text>
+
+						<!-- 2 · DNS -->
+						<text class="mid" x="550" y="330" font-size="26">consulta api.coingecko.com</text>
+						<path class="ln" d="M346 360 H 1118" />
+						<path class="rel" d="M1124 360 L 1108 351 L 1108 369 Z" />
+						<text class="mid acc b" x="550" y="410" font-size="34">104.20.41.132</text>
+						<path class="ln ln--acc" d="M1124 444 H 352" />
+						<path class="rel-acc" d="M346 444 L 362 435 L 362 453 Z" />
+						<text class="navy" x="1160" y="444" font-size="26">WiFi.hostByName()</text>
+
+						<!-- 3 · puerto -->
+						<text class="mid b" x="550" y="534" font-size="32">104.20.41.132 : <tspan class="acc">443</tspan></text>
+						<path class="ln" d="M346 584 H 1448" />
+						<path class="rel" d="M1454 584 L 1438 575 L 1438 593 Z" />
+						<text class="mid b" x="945" y="514" font-size="26">443 = HTTPS</text>
+						<text class="mid b" x="945" y="550" font-size="26">80 = HTTP</text>
+						<text class="mid sans mut" x="1295" y="514" font-size="24">el puerto identifica</text>
+						<text class="mid sans mut" x="1295" y="550" font-size="24">el servicio</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: el ESP32 conoce el nombre <code>api.coingecko.com</code> y los paquetes se dirigen a direcciones numéricas; ¿qué servicio entrega la IP del servidor? La entrega el DNS. Recorrer las tres franjas:
+					la IP propia llega por DHCP al conectarse; la del servidor, por DNS
+					antes de cada conexión; el puerto sale de la URL (https → 443).
+				</p>
+				<p>
+					La IP del ESP32 es privada, válida dentro de la red local; la lámina 07 muestra qué ocurre con ella al salir a Internet. La IP del servidor cambia: CoinGecko está detrás de Cloudflare y el DNS devuelve varias.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>WiFi.localIP()</code>, <code>WiFi.gatewayIP()</code> y
+						<code>WiFi.dnsIP()</code> muestran lo que entregó el DHCP.
+						<code>WiFi.hostByName("api.coingecko.com", ip)</code> devuelve 1 si el
+						DNS respondió. <code>HTTPClient</code> hace la consulta DNS por su cuenta
+						dentro de <code>http.GET()</code>.
+					</p>
+					<h4>Las cifras</h4>
+					<p>
+						10.13.37.2 es la IP en Wokwi desde VS Code (pasarela privada incluida);
+						en wokwi.com, 10.10.0.2. En una red doméstica suele ser 192.168.x.x. 104.20.41.132
+						es una de las respuestas del DNS el 13/10/2026; cambia.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>Fijar la IP del servidor en el código; cuando cambia, la petición falla sin un mensaje que lo explique.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-codigo-15-escaner.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 15 · Escáner WiFi</span>
+				</a>
+				<a class="slide-nav__link" href="06-viaje-peticion.html">
+					<span>Idas y vueltas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

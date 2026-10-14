@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 09 · Media móvil · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 09</span>
+					</div>
+
+					<h2 class="code-hour__title">Un potenciómetro filtrado con una media de 16 muestras</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Clase con búfer en el heap.</span>
+								<span class="deliverable__file">platformio.ini · lib/EntradaAnalogica/ · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Potenciómetro en el GPIO 32.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de update() y cronograma.</span>
+								<span class="deliverable__file">diagrama-flujo-update.excalidraw · cronograma-media-movil.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Publicar cada 100 ms la lectura cruda del GPIO 32 y su media de 16 muestras.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Potenciómetro con los extremos a 3V3 y GND; cursor al <b>GPIO 32</b> (entrada analógica, ADC1 canal 4), como en el Ejemplo 03.</p>
+								<div class="hw-set hw-set--amplio-hd mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-potentiometer></wokwi-potentiometer>
+										<small>Potenciómetro</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">
+Iniciando media movil de ADC (N=16, GPIO 32)
+[ADC] crudo=2048 promedio=2048 v=1.650
+...
+[ADC] crudo=4095 promedio=2175 v=1.753
+[ADC] crudo=4095 promedio=2303 v=1.856
+...
+[ADC] crudo=4095 promedio=4095 v=3.300</div>
+								<p class="mt-2">Ventana llena con 2048 (16 líneas iguales); después, el cursor pasa al máximo.</p>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, con la clase en lib/EntradaAnalogica/.
+
+<b>2. Firmware.</b> EntradaAnalogica(uint8_t pin, uint8_t n) reserva un búfer circular con new uint16_t[n]; el destructor lo libera con delete[]. update() toma una muestra con analogRead() y divide una suma corriente entre las muestras acumuladas (máximo n). Expone uint16_t leerCrudo() y float leerVoltios() = promedio * 3.3 / 4095. main.cpp usa el GPIO 32 y N = 16, imprime una línea vacía y «Iniciando media movil de ADC (N=16, GPIO 32)» y, cada 100 ms, «[ADC] crudo=%4d promedio=%4d v=%.3f».
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro: extremos a 3V3 y GND, cursor al GPIO 32.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de update() con el índice circular y un cronograma de crudo y promedio ante un salto, con el retraso de 1,6 s.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Una muestra por llamada mantiene <code>update()</code> corta y deja el ritmo de muestreo a <code>loop()</code>. Dividir entre las muestras acumuladas evita una rampa falsa desde 0 al arrancar.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Promediar N muestras atenúa el ruido e introduce un retraso; con N = 16 a 10 Hz, la salida tarda 1,6 s en seguir un salto.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Antes de girar el cursor. Pregunta de predicción: ¿cuánto tardará el promedio en llegar a 4095? Respuesta: 16 vueltas de 100 ms. El promedio sube 127 o 128 códigos por línea, un dieciseisavo del salto de 2047. Wokwi no añade ruido al potenciómetro; en placa real el crudo oscila y el promedio oscila mucho menos. El promedio de la traza se reconstruye en main.cpp desde leerVoltios() con roundf().</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>La suma corriente cuesta una resta y una suma por muestra, sea cual sea N. <code>_suma</code> es <code>uint32_t</code>: 16 × 4095 = 65 520 cabe en 16 bits y N = 17 supera ese límite.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Recorrer las N muestras dentro de <code>update()</code>: N lecturas por vuelta.</li><li>Copiar el objeto por valor: dos destructores liberan el mismo búfer.</li><li>Dividir siempre entre N, con lo que el promedio arranca con una rampa desde 0.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-pila-heap.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Pila y heap</span>
+				</a>
+				<a class="slide-nav__link" href="18-referencias.html">
+					<span>Referencias</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

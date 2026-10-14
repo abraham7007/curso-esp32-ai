@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Niveles lógicos · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">06 · Robustez</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El ESP32 <em>no</em> tolera 5 V en sus entradas
+				</h1>
+
+				<div class="def">
+					<p>Para recibir 5 V, el ESP32 necesita adaptación; al emitir, decide el umbral de nivel alto (V<sub>IH</sub>) del receptor.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dos casos. Caso 1: un módulo de 5 V conectado directo a una entrada del ESP32 supera el tope de 3,6 V; con un divisor de 10 y 20 kilohmios llegan 3,3 V; en I²C hace falta un adaptador bidireccional con MOSFET. Caso 2: escala de 0 a 5 V; la salida en alto del ESP32 está entre 2,64 y 3,3 V; supera el umbral de 2,0 V de una entrada TTL o 74HCT, queda justa frente a los 3,0 V de un Arduino Uno y no alcanza los 3,5 V de un 74HC.">
+						<!-- caso 1: 5 V hacia el ESP32 -->
+						<text class="sans dan" x="20" y="32" font-size="32">Caso 1 · módulo de 5 V → ESP32</text>
+
+						<rect class="caja" x="20" y="100" width="220" height="150" rx="12" />
+						<text class="sans mid" x="130" y="155" font-size="30">módulo</text>
+						<text class="sans mid" x="130" y="198" font-size="30">de 5 V</text>
+						<rect class="caja" x="540" y="100" width="210" height="150" rx="12" />
+						<text class="sans mid" x="645" y="155" font-size="30">ESP32</text>
+						<text class="mid mut" x="645" y="198" font-size="24">entrada</text>
+						<path class="ln ln--dan" d="M240 175 H540" />
+						<path class="ln ln--dan" d="M366 149 L414 201 M414 149 L366 201" />
+						<text class="mid dan" x="390" y="122" font-size="34">5 V</text>
+						<text class="mid mut" x="390" y="232" font-size="24">tope: 3,6 V</text>
+
+						<g>
+							<text class="sans ok" x="20" y="330" font-size="28">con divisor 10 kΩ / 20 kΩ</text>
+							<rect class="caja" x="20" y="380" width="220" height="130" rx="12" />
+							<text class="sans mid" x="130" y="445" font-size="30">módulo 5 V</text>
+							<rect class="caja" x="540" y="380" width="210" height="130" rx="12" />
+							<text class="sans mid" x="645" y="445" font-size="30">ESP32</text>
+							<path class="ln" d="M240 445 H290" />
+							<polyline class="ln" points="290,445 300,425 320,465 340,425 360,465 380,425 400,465 410,445" />
+							<path class="ln" d="M410 445 H540" />
+							<circle class="punto" cx="470" cy="445" r="8" />
+							<path class="ln" d="M470 445 V485" />
+							<polyline class="ln" points="470,485 450,495 490,515 450,535 490,555 450,575 470,585" />
+							<path class="ln" d="M470 585 V615 M435 615 H505 M447 631 H493 M459 647 H481" />
+							<text class="mid" x="350" y="400" font-size="28">10 kΩ</text>
+							<text x="505" y="535" font-size="28">20 kΩ</text>
+							<text class="mid ok" x="475" y="400" font-size="32">3,3 V</text>
+							<text class="mut" x="20" y="688" font-size="24">I²C: adaptador bidireccional con MOSFET</text>
+						</g>
+
+						<path class="ln ln--fina ln--mut" d="M800 10 V690" />
+
+						<!-- caso 2: el ESP32 hacia una entrada de 5 V -->
+						<text class="sans warn" x="840" y="32" font-size="32">Caso 2 · ESP32 → entrada de 5 V</text>
+						<text class="ok" x="840" y="80" font-size="26">salida en 1 del ESP32: 2,64–3,3 V</text>
+
+						<rect class="barra--ok" x="920" y="290" width="250" height="70" fill-opacity="0.6" />
+						<path class="ln ln--fina" d="M900 110 V640" />
+						<path class="ln ln--fina" d="M890 640 H910 M890 534 H910 M890 428 H910 M890 322 H910 M890 216 H910 M890 110 H910" />
+						<text class="fin mut" x="880" y="640" font-size="24">0 V</text>
+						<text class="fin mut" x="880" y="534" font-size="24">1 V</text>
+						<text class="fin mut" x="880" y="428" font-size="24">2 V</text>
+						<text class="fin mut" x="880" y="322" font-size="24">3 V</text>
+						<text class="fin mut" x="880" y="216" font-size="24">4 V</text>
+						<text class="fin mut" x="880" y="110" font-size="24">5 V</text>
+
+						<!-- umbrales V_IH de tres receptores -->
+						<text class="mut" x="1185" y="200" font-size="24">umbral del receptor</text>
+						<path class="ln ln--dan" d="M920 269 H1170" />
+						<path class="ln ln--warn" d="M920 322 H1170" />
+						<path class="ln ln--ok" d="M920 428 H1170" />
+						<text x="1185" y="262" font-size="24">74HC · 3,5 V · <tspan class="dan">no</tspan></text>
+						<text x="1185" y="330" font-size="24">Arduino Uno · 3,0 V · <tspan class="warn">justo</tspan></text>
+						<text x="1185" y="428" font-size="24">TTL, 74HCT · 2,0 V · <tspan class="ok">sí</tspan></text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con un Arduino Uno y un ESP32 enlazados por UART,
+					¿qué cable es el peligroso, el TX del Uno o el del ESP32? Respuesta: el
+					del Uno, que pone 5 V en el RX del ESP32, por encima del tope de 3,6 V de
+					la sesión 1 (lámina 07). Un divisor 10 kΩ / 20 kΩ deja 3,3 V. En sentido
+					contrario no hay daño, pero la lectura depende del umbral del receptor:
+					los 2,64 V mínimos del ESP32 superan 2,0 V (TTL) y no llegan a 3,5 V
+					(74HC). El Uno pide 3,0 V: suele funcionar, sin margen garantizado.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Divisor: V<sub>sal</sub> = 5 V × 20 / (10 + 20) = 3,33 V. Sirve para
+						una señal lenta y unidireccional (RX de UART). Para I²C, adaptador
+						bidireccional con MOSFET (BSS138) y pull-ups a 3,3 V y a 5 V en cada
+						lado; para señales rápidas, un traductor de nivel (74LVC245, TXS0108E).
+					</p>
+					<h4>Dónde buscarlo</h4>
+					<p>
+						Hoja de datos del ESP32, tabla 5-3: V<sub>IH</sub> ≥ 0,75 × VDD,
+						V<sub>OH</sub> ≥ 0,8 × VDD (2,64 V a 3,3 V). En el receptor, su propia
+						tabla de V<sub>IH</sub>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Conectar 5 V para comprobar si la entrada lo soporta: el daño puede ser progresivo y no inmediato.</li>
+						<li>Olvidar la masa común: sin ella, los umbrales no tienen referencia.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-codigo-14-json.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 14 · JSON</span>
+				</a>
+				<a class="slide-nav__link" href="23-timeouts.html">
+					<span>Timeouts</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

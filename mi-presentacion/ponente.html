@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Vista del ponente · Fundamentos de ESP32 + AI</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="./src/css/base.css" />
+		<link rel="stylesheet" href="./src/css/ponente.css" />
+	</head>
+	<body class="ponente">
+		<!-- VISTA DEL PONENTE.
+
+		     Se abre con la tecla N desde cualquier lámina y se lleva a la pantalla
+		     del portátil, no al proyector. Las láminas le envían por un
+		     BroadcastChannel su título, sus notas, los pasos revelados y la
+		     siguiente lámina; desde aquí las flechas avanzan y retroceden la
+		     presentación. Así las notas nunca se proyectan. -->
+		<header class="ponente__cabecera">
+			<span class="ponente__pos" id="pos">—</span>
+			<span class="ponente__reloj" id="reloj">00:00</span>
+			<button type="button" class="btn btn--secondary" id="reiniciar">Reiniciar tiempo</button>
+		</header>
+
+		<main class="ponente__cuerpo">
+			<section>
+				<p class="ponente__rotulo">Lámina actual</p>
+				<h1 class="ponente__titulo" id="titulo">Esperando una lámina…</h1>
+				<p class="ponente__pasos" id="pasos"></p>
+			</section>
+
+			<section class="ponente__notas" id="notas">
+				<p>
+					Abre o recarga cualquier lámina de la presentación: su título y sus
+					notas aparecerán aquí.
+				</p>
+			</section>
+
+			<section>
+				<p class="ponente__rotulo">Siguiente</p>
+				<p class="ponente__siguiente" id="siguiente">—</p>
+			</section>
+		</main>
+
+		<footer class="ponente__pie">
+			<button type="button" class="btn btn--secondary" id="atras">← Anterior</button>
+			<span>Flechas o espacio: controlan la presentación desde aquí</span>
+			<button type="button" class="btn btn--primary" id="adelante">Siguiente →</button>
+		</footer>
+
+		<script type="module" src="./src/js/ponente.js"></script>
+	</body>
+</html>

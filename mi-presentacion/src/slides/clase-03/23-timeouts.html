@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Timeouts · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">06 · Robustez</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una espera sin <em>límite</em> bloquea el programa
+				</h1>
+
+				<div class="def">
+					<p>Con <i>timeout</i>, una lectura sin respuesta devuelve el control al programa al vencer el plazo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Línea temporal de 0 a 2000 milisegundos. Sin límite: el loop gira hasta los 300 ms, pide un dato y queda esperando para siempre; el LED y el botón dejan de atenderse. Con timeout de 200 ms: la lectura espera de 300 a 500 ms, vuelve con 0 bytes, reintenta de 800 a 1000 ms, vuelve otra vez con 0 y el programa pasa al estado sin enlace mientras el loop sigue girando. Debajo, las funciones: Serial2.setTimeout, por defecto 1000 ms; Wire.setTimeOut, por defecto 50 ms, con endTransmission igual a 5 al agotarse; y endTransmission distinto de 0, con 2 para NACK.">
+						<!-- carril 1: sin límite -->
+						<text class="sans dan" x="20" y="36" font-size="32">Sin límite</text>
+						<text x="320" y="36" font-size="26">while (Serial2.available() == 0) { }</text>
+						<text class="fin mut" x="280" y="110" font-size="24">loop()</text>
+						<path class="ln ln--fina" d="M300 92 V128 M363 92 V128 M426 92 V128 M489 92 V128" />
+						<rect class="barra--dan" x="489" y="70" width="1071" height="80" rx="8" />
+						<text class="dan" x="512" y="110" font-size="26">LED y botón congelados</text>
+						<text class="mid dan" x="1520" y="110" font-size="44">∞</text>
+
+						<!-- eje y suceso -->
+						<path class="ln ln--fina ln--acc" d="M489 56 V160 M489 232 V385" stroke-dasharray="8 8" />
+						<path class="ln ln--fina ln--mut" d="M300 385 H1560 M300 375 V395 M615 375 V395 M930 375 V395 M1245 375 V395 M1560 375 V395" />
+						<text class="mid mut" x="300" y="414" font-size="24">0</text>
+						<text class="mid mut" x="615" y="414" font-size="24">500</text>
+						<text class="mid mut" x="930" y="414" font-size="24">1000</text>
+						<text class="mid mut" x="1245" y="414" font-size="24">1500</text>
+						<text class="mid mut" x="1530" y="414" font-size="24">2000 ms</text>
+						<text class="mid acc" x="489" y="446" font-size="26">pide un dato</text>
+						<text class="fin mut" x="1580" y="456" font-size="22">Wire: núcleo Arduino-ESP32 2.x</text>
+
+						<!-- carril 2: con timeout -->
+						<text class="sans ok" x="20" y="206" font-size="32">Con timeout</text>
+						<text x="320" y="206" font-size="26">Serial2.setTimeout(200);  Serial2.readBytes(buf, 6);</text>
+						<text class="fin mut" x="280" y="280" font-size="24">loop()</text>
+							<path class="ln ln--fina" d="M300 262 V298 M363 262 V298 M426 262 V298 M489 262 V298 M615 262 V298 M678 262 V298 M741 262 V298 M804 262 V298 M930 262 V298 M993 262 V298 M1056 262 V298 M1119 262 V298 M1182 262 V298 M1245 262 V298 M1308 262 V298 M1371 262 V298 M1434 262 V298 M1497 262 V298 M1560 262 V298" />
+							<rect class="barra--warn" x="489" y="240" width="126" height="80" rx="8" />
+							<rect class="barra--warn" x="804" y="240" width="126" height="80" rx="8" />
+							<text class="mid warn" x="552" y="280" font-size="24">200 ms</text>
+							<text class="mid warn" x="867" y="280" font-size="24">200 ms</text>
+							<g data-paso="1">
+							<text x="622" y="346" font-size="24">0 bytes → reintenta</text>
+							<text x="937" y="346" font-size="24">0 otra vez → «sin enlace»</text>
+						</g>
+
+						<!-- las funciones -->
+						<path class="ln ln--fina ln--mut" d="M20 478 H1580" />
+						<text class="navy" x="20" y="524" font-size="28">Serial2.setTimeout(200)</text>
+						<text class="mut" x="20" y="580" font-size="26">200 ms (por defecto, 1000)</text>
+						<text class="navy" x="560" y="524" font-size="28">Wire.setTimeOut(20)</text>
+						<text class="mut" x="560" y="580" font-size="26">20 ms (por defecto, 50) → 5</text>
+						<text class="navy" x="1100" y="524" font-size="28">endTransmission() != 0</text>
+						<text class="mut" x="1100" y="580" font-size="26">2 = NACK: nadie contesta</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de comentar el segundo carril: si se
+					desconecta el cable a mitad de una petición, ¿qué hace el LED que parpadea
+					con <code>millis()</code>? Respuesta: con el <code>while</code> sin
+					límite, el LED se queda en el estado en que estaba porque
+					<code>loop()</code> no vuelve. Con <code>setTimeout(200)</code>,
+					<code>readBytes()</code> espera como mucho 200 ms y devuelve 0; el
+					programa reintenta una vez y pasa a un estado de error explícito. En I²C
+					la espera tiene un límite de 50 ms, útil solo si el programa comprueba el
+					valor de <code>endTransmission()</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>Serial2.setTimeout(ms)</code> limita <code>readBytes()</code>,
+						<code>readStringUntil()</code> y <code>parseInt()</code>; las tres
+						devuelven lo que llegó, que puede ser nada. <code>Wire.setTimeOut(ms)</code>
+						(con O mayúscula) limita cada transacción I²C;
+						<code>endTransmission()</code>: 0 bien, 2 cualquier NACK, 4 otro error, 5
+						tiempo agotado. Con <code>Wire.setTimeOut(20)</code>, un bus bloqueado
+						devuelve 5 tras 20 ms en vez de 50.
+					</p>
+					<h4>Versión</h4>
+					<p>
+						Los códigos de <code>endTransmission()</code> y <code>Wire.setTimeOut()</code>
+						corresponden al núcleo Arduino-ESP32 2.x, el que instala PlatformIO con
+						<code>platform = espressif32</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 12c: <code>textoErrorI2C()</code> traduce el código y el
+						programa sigue. Ejemplo 13: el receptor nunca espera; solo lee lo que
+						<code>available()</code> anuncia.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Timeout más corto que la respuesta real del dispositivo.</li>
+						<li>Reintentar sin límite de intentos: el programa queda igual de bloqueado.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="22-niveles-logicos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>3,3 V y 5 V</span>
+				</a>
+				<a class="slide-nav__link" href="24-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

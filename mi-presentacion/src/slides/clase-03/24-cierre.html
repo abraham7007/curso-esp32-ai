@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title">Resumen de la <em>sesión 3</em></h1>
+
+				<ol class="puntos crece justify-evenly">
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Enlace serie</p>
+							<p class="slide__lede col-span-3">Misma velocidad y formato en ambos extremos, TX y RX cruzados y masa común.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Elección de bus</p>
+							<p class="slide__lede col-span-3">UART, dos extremos; I²C, varios dispositivos con dirección; SPI, volumen alto con un CS por chip.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Trama</p>
+							<p class="slide__lede col-span-3">La cabecera marca el inicio, la longitud el tamaño y el checksum detecta alteraciones.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Robustez</p>
+							<p class="slide__lede col-span-3">Adaptar las señales de 5 V y fijar un timeout en cada espera.</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="def">
+					<p>
+						<b>Documentación de referencia</b> ·
+						<a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/api/serial.html" target="_blank" rel="noopener">Arduino-ESP32: UART (Serial)</a>
+						·
+						<a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/api/i2c.html" target="_blank" rel="noopener">Arduino-ESP32: I²C (Wire)</a>
+						·
+						<a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/uart.html" target="_blank" rel="noopener">ESP-IDF: controlador UART</a>
+						·
+						<a href="https://arduinojson.org/v6/doc/" target="_blank" rel="noopener">ArduinoJson 6</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, idea por idea: ¿qué ejemplo de hoy la demuestra?
+					Respuesta: el enlace del ejemplo 11, que no transmite con TX a TX; los
+					tres BMP180 del 12b, que el escáner ve como uno, y la pantalla que por SPI
+					se refresca casi 30 veces más rápido; la trama <code>AA 00 06 … DA</code>
+					del 13, que se rechaza al cambiar un byte; el divisor de 3,3 V y el
+					<code>endTransmission()</code> que devuelve 2 en lugar de bloquear el
+					programa. La documentación enlazada es la fuente de toda API citada hoy.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos de la sesión</h4>
+					<ul>
+						<li><b>Baudio</b>: símbolos por segundo; en UART, bits por segundo (115 200).</li>
+						<li><b>8N1</b>: 8 bits de datos, sin paridad, 1 bit de parada; LSB primero.</li>
+						<li><b>Dúplex</b> (<i>full duplex</i>): los dos sentidos a la vez, cada uno por su hilo.</li>
+						<li><b>Maestro / esclavo</b>: quien inicia la transacción y genera el reloj / quien responde a su dirección.</li>
+						<li><b>ACK / NACK</b>: el receptor I²C baja SDA para confirmar un byte; si no la baja, NACK.</li>
+						<li><b>Drenador abierto</b>: salida que solo tira a 0; el 1 lo pone la pull-up.</li>
+						<li><b>CS</b> (<i>chip select</i>): línea SPI que, en 0, elige un dispositivo.</li>
+						<li><b>Trama</b> (<i>frame</i>): cabecera, identificador, longitud, carga y checksum.</li>
+						<li><b>Checksum</b>: suma de los bytes protegidos módulo 256 que el receptor recalcula.</li>
+						<li><b>Serialización</b>: convertir datos en bytes para transmitirlos (JSON, binario).</li>
+						<li><b>Adaptador de nivel</b> (<i>level shifter</i>): traduce 5 V ↔ 3,3 V.</li>
+						<li><b>Timeout</b>: tiempo máximo de espera antes de dar la respuesta por perdida.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="23-timeouts.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Timeouts</span>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

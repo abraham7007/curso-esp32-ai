@@ -1,0 +1,169 @@
+/* Estilos propios de la sesión 5 (modo ponencia). Todo prefijado .ponencia. */
+
+/* sesión 5 agente C: simulaciones 02, 03, 08 y 12.
+   Lecturas de ancho fijo: los mandos no saltan al cambiar la cifra. */
+.ponencia .s5c-ancho,
+.ponencia .mandos .lectura > .s5c-ancho {
+	display: inline-block;
+	min-width: 9ch;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.ponencia .mandos .lectura > .s5c-ancho--largo {
+	min-width: 12ch;
+	text-align: left;
+}
+
+.ponencia .mandos .lectura > .s5c-ancho--corto,
+.ponencia .mandos .control > .s5c-ancho--corto {
+	min-width: 5ch;
+}
+
+.ponencia .s5c-mal {
+	color: var(--color-accent);
+}
+
+.ponencia .s5c-bien {
+	color: var(--color-ok);
+}
+
+.ponencia .mandos .s5c-rotulo {
+	font-size: var(--fs-body);
+	color: var(--color-text-muted);
+}
+/* fin sesión 5 agente C */
+
+/* sesión 5 agente A: láminas 01, 04, 05, 06 y 07.
+   Reutilizan las clases de dibujo de la sesión 4 (.s4a-svg, .s4a-portada…);
+   aquí solo lo propio. Texto SVG que debe conservar espacios (código alineado). */
+.ponencia .s5a-pre {
+	white-space: pre;
+}
+
+/* 01: el monitor serie tiene líneas de hasta 44 caracteres (la de 4·01, 31):
+   la tarjeta toma todo el ancho de su columna y la letra baja un punto. */
+.ponencia .s5a-portada {
+	max-width: none;
+	align-self: stretch;
+	font-size: max(1.15rem, calc(var(--rd-u) * 2.8));
+}
+
+/* Revisión: sin hueco entre título y agenda. La agenda (5 tramos, más corta
+   que la de 4·01) se reparte en todo el alto de su fila, y la tarjeta del
+   monitor ocupa ese mismo alto con sus líneas repartidas. */
+.ponencia .s4a-portada-grid > .s5a-agenda {
+	align-self: stretch;
+	justify-content: space-between;
+}
+
+.ponencia .s5a-portada ul {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+/* sesión 5 agente B: «Panel» (09) y «La hora del código» del Ejemplo 19 (10).
+   La 10 reutiliza el esquema de montaje (.s3-esquema) y la salida a todo el
+   ancho de las sesiones 3 y 4; lo propio es el símbolo del LED y el reparto
+   de los dos monitores. La 09 dibuja la consola de Blynk en un .s3d-svg. */
+.ponencia--trabajo .s5b-led {
+	fill: var(--color-danger-soft);
+	stroke: var(--color-danger);
+	stroke-width: 2.5;
+	stroke-linejoin: round;
+}
+
+.ponencia--trabajo .s5b-led__barra,
+.ponencia--trabajo .s5b-led__luz {
+	fill: none;
+	stroke: var(--color-danger);
+	stroke-width: 2.5;
+	stroke-linecap: round;
+}
+
+/* 10: el prompt toma más ancho; el monitor, en una columna. */
+.ponencia--trabajo .s5b-blynk .code-hour__body--pair {
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.ponencia--trabajo .s5b-blynk .s4b-esquema {
+	width: clamp(14rem, 20vw, 24rem);
+}
+
+.ponencia--trabajo .s5b-blynk.s4b-compacto .code-hour__stack:first-child .term {
+	font-size: clamp(0.8rem, 0.86vw, 1.1rem);
+	line-height: 1.4;
+}
+
+/* 09: cada paso de la consola en su panel; el Gauge, con su arco. */
+.ponencia .s3d-svg .s5b-panel {
+	fill: var(--color-surface);
+	stroke: var(--color-border);
+	stroke-width: 2;
+}
+
+.ponencia .s3d-svg .s5b-arco {
+	fill: none;
+	stroke: var(--color-surface-2);
+	stroke-width: 22;
+}
+
+.ponencia .s3d-svg .s5b-arco--valor {
+	stroke: var(--color-accent);
+}
+
+/* 10: a 1080p sobra el hueco entre Montaje y Salida: se da al monitor. */
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo
+		.s5b-blynk.s4b-compacto
+		.code-hour__stack:first-child
+		.term {
+		font-size: 1.2rem;
+		line-height: 1.44;
+	}
+}
+
+/* 09: la hoja de trabajo de la consola usa la cabecera de .code-hour; el
+   dibujo de los cinco pasos ocupa todo el cuerpo. */
+.ponencia--trabajo .s5b-consola {
+	display: flex;
+	flex: 1 1 0;
+	min-height: 0;
+}
+
+.ponencia--trabajo .s5b-consola > .s3d-svg {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* fin sesión 5 agente B */
+
+/* sesión 5 agente D: láminas 11, 13, 14, 15, 16 y 17.
+   Los diagramas reutilizan .s3d-svg (sesión 3) y .s4d-* (sesión 4);
+   aquí solo lo propio: las vueltas del loop como peine de marcas. */
+.ponencia .s3d-svg .s5d-ticks {
+	fill: none;
+	stroke: var(--color-text-muted);
+	stroke-width: 24;
+	stroke-dasharray: 2 8.25;
+}
+
+/* 14: un punto por envío periódico (cada 30 s = 61,5 unidades). */
+.ponencia .s3d-svg .s5d-peine {
+	fill: none;
+	stroke: var(--color-navy);
+	stroke-width: 18;
+	stroke-linecap: round;
+	stroke-dasharray: 0 61.5;
+}
+
+/* 17: el número 01–05 se centra con la palabra (la fila ya va centrada);
+   con la línea base quedaba descolgado, y alinear la fila por la base
+   la alargaba hasta montarse sobre «Sesión 6» a 1440×900. */
+.ponencia .s5d-cierre > li {
+	align-items: center;
+}
+/* fin sesión 5 agente D */

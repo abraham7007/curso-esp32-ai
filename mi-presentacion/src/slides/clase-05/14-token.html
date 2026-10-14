@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Token · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Seguridad y estado</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Token fuera del código y transmitido <em>cifrado</em>
+				</h1>
+
+				<div class="def">
+					<p>El token da acceso a los datos y a las órdenes. Sigue el esquema de la clave de 4 · 19, y además se verifica el certificado.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del ejemplo 19: include/secrets.h, que no se sube; include/secrets.example.h, src/main.cpp y .gitignore, que sí se suben; el .gitignore lista include/secrets.h. A la derecha, secrets.h define BLYNK_AUTH_TOKEN con el token real de 32 caracteres; secrets.example.h, con TU_TOKEN_AQUI, al que el servidor responde Invalid auth token. En el centro, main.cpp incluye secrets.h si existe y, si no, la plantilla, antes de la cabecera BlynkSimpleEsp32_SSL.h. Abajo, el mensaje de entrada HW_LOGIN: por el puerto 80, con BlynkSimpleEsp32.h, la cabecera 1D 00 01 00 20 y el token legibles en la red; por el 443, con BlynkSimpleEsp32_SSL.h, todo cifrado con TLS y el certificado del servidor verificado, Certificate OK.">
+						<!-- árbol del proyecto -->
+						<text class="sans mut" x="0" y="20" font-size="26">19-blynk-dashboard-iot/</text>
+						<text x="0" y="66" font-size="28">include/</text>
+						<text class="acc" x="40" y="108" font-size="28">secrets.h</text>
+						<text class="sans acc" x="560" y="108" font-size="26" text-anchor="end">✗ no se sube</text>
+						<text x="40" y="150" font-size="28">secrets.example.h</text>
+						<text class="sans ok" x="560" y="150" font-size="26" text-anchor="end">✓ se sube</text>
+						<text x="0" y="192" font-size="28">src/main.cpp</text>
+						<text class="sans ok" x="560" y="192" font-size="26" text-anchor="end">✓ se sube</text>
+						<text x="0" y="234" font-size="28">.gitignore</text>
+						<text class="sans ok" x="560" y="234" font-size="26" text-anchor="end">✓ se sube</text>
+						<text class="mut" x="40" y="272" font-size="24">↳ contiene: include/secrets.h</text>
+						<path class="ln ln--fina ln--mut" d="M14 84 V150 H34 M14 108 H34" />
+
+						<!-- los dos archivos del token -->
+						<rect class="caja caja--acc" x="620" y="0" width="980" height="126" rx="12" />
+						<text class="sans acc" x="644" y="36" font-size="26">include/secrets.h · las 3 líneas de «Device Info»</text>
+						<text x="644" y="86" font-size="28">#define BLYNK_AUTH_TOKEN "<tspan class="acc">token de 32 caracteres</tspan>"</text>
+						<rect class="caja" x="620" y="152" width="980" height="126" rx="12" />
+						<text class="sans mut" x="644" y="188" font-size="26">include/secrets.example.h · plantilla versionada → «Invalid auth token»</text>
+						<text x="644" y="238" font-size="28">#define BLYNK_AUTH_TOKEN "TU_TOKEN_AQUI"</text>
+
+						<!-- main.cpp -->
+						<rect class="caja" x="0" y="320" width="1600" height="150" rx="12" />
+						<text class="sans mut" x="24" y="352" font-size="26">src/main.cpp · las credenciales van antes de la cabecera de Blynk</text>
+						<text x="24" y="396" font-size="27">#if __has_include("secrets.h")  #include "secrets.h"  #else  #include "secrets.example.h"</text>
+						<text x="24" y="440" font-size="27">#include &lt;<tspan class="ok">BlynkSimpleEsp32_SSL.h</tspan>&gt;<tspan class="mut">   // blynk.cloud:443</tspan></text>
+
+						<!-- el mensaje de entrada en la red -->
+						<text class="sans mut" x="0" y="512" font-size="26">El primer mensaje: HW_LOGIN (29 = 0x1D), id 1, longitud 32, y el token.</text>
+						<text class="sans dan" x="0" y="566" font-size="30" font-weight="700">puerto 80</text>
+						<text class="mut" x="0" y="600" font-size="22">BlynkSimpleEsp32.h</text>
+						<rect class="barra--dan" x="330" y="546" width="1270" height="60" rx="8" />
+						<text class="dan" x="352" y="576" font-size="26">1D 00 01 00 20  ‹token de 32 caracteres›  ← legible en la red</text>
+						<text class="sans ok" x="0" y="652" font-size="30" font-weight="700">puerto 443</text>
+						<text class="mut" x="0" y="686" font-size="22">BlynkSimpleEsp32_SSL.h</text>
+						<rect class="barra--ok" x="330" y="632" width="1270" height="60" rx="8" />
+						<text class="ok" x="352" y="662" font-size="26">▮▮▮▮ TLS: login, datos y órdenes cifrados · «Certificate OK»</text>
+
+						<!-- qué hacer si se filtró -->
+							<text class="sans" x="0" y="738" font-size="28">Token filtrado: borrarlo del archivo no lo invalida; <tspan class="acc">si no se puede regenerar, borrar el dispositivo y crear otro</tspan>.</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si el token ya se subió al repositorio, ¿basta
+					con borrarlo? Recoger respuestas antes de leer la última línea.
+				</p>
+				<p>
+					Respuesta: no. El token queda en el historial; hay que regenerarlo y, si la
+					consola no ofrece regenerarlo, borrar el dispositivo y crear otro, con token
+					nuevo.
+				</p>
+				<p>
+					Es el mismo esquema que la clave de OpenWeatherMap (sesión 4 · 19):
+					secrets.h fuera de git, plantilla versionada y un <code>__has_include</code>
+					para que el proyecto recién clonado compile y el servidor responda «Invalid
+					auth token». Lo propio de Blynk: las macros deben existir antes de incluir
+					su cabecera (la biblioteca lee <code>BLYNK_TEMPLATE_ID</code> con un
+					<code>#ifdef</code>), por eso el bloque va primero.
+				</p>
+				<p>
+					Abajo, el motivo del puerto 443: el primer mensaje lleva el token completo,
+					y con <code>BlynkSimpleEsp32.h</code> se transmite en claro por el puerto
+					80, al alcance de cualquier equipo de la misma red. La versión SSL carga el
+					certificado raíz incluido en la biblioteca (<code>setCACert</code>) y lo
+					comprueba; a diferencia de 4 · 11, un servidor suplantado tampoco obtiene el
+					token.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>cp include/secrets.example.h include/secrets.h</code> y pegar
+						<code>BLYNK_TEMPLATE_ID</code>, <code>BLYNK_TEMPLATE_NAME</code> y
+						<code>BLYNK_AUTH_TOKEN</code> de la pestaña «Device Info». Cabecera
+						del mensaje: tipo 1 B, id 2 B, longitud 2 B (lámina 07).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19: <code>.gitignore</code> con <code>include/secrets.h</code> y <code>BlynkSimpleEsp32_SSL.h</code>.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Incluir la cabecera de Blynk antes que <code>secrets.h</code>: compila, pero <code>BLYNK_TEMPLATE_ID</code> ya no se envía al servidor.</li>
+						<li>Compartir una captura de «Device Info» con el token visible.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-telemetria-comandos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Dos sentidos</span>
+				</a>
+				<a class="slide-nav__link" href="15-estado-real.html">
+					<span>Estado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

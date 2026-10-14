@@ -12,7 +12,16 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 const char* ssid = "Wokwi-GUEST";
 const char* password = "";
-// URL consultando dos criptomonedas al mismo tiempo
+// Tope de espera para conectarse al WiFi. Si se agota, se reinicia la placa:
+// sin red este programa no tiene nada que hacer, y el reinicio vuelve a
+// intentarlo desde cero con la pila WiFi limpia.
+const unsigned long WIFI_TIMEOUT_MS = 20000;
+
+// URL consultando dos criptomonedas al mismo tiempo.
+// OJO: es https, pero no le damos ningún certificado a HTTPClient. En ese caso
+// la conexión va cifrada pero SIN verificar la identidad del servidor (equivale
+// a WiFiClientSecure::setInsecure()). Sirve para aprender; en un producto real
+// hay que cargar el certificado raíz con http.begin(url, certificadoCA).
 const char* url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,dogecoin&vs_currencies=usd";
 
 float precioBTC = 0.0;
@@ -20,7 +29,7 @@ float precioDOGE = 0.0;
 bool datosObtenidos = false;
 
 unsigned long ultimoFetch = 0;
-const unsigned long INTERVALO_FETCH = 20000; // Bajar datos cada 20 segundos
+const unsigned long INTERVALO_FETCH = 60000; // Bajar datos cada 60 s: la CDN de CoinGecko repite el precio hasta 60 s (s-maxage=60)
 
 unsigned long ultimoCambioPantalla = 0;
 const unsigned long INTERVALO_PANTALLA = 5000; // Cambiar moneda mostrada cada 5 segundos
@@ -46,7 +55,20 @@ void setup() {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
     
+    unsigned long inicio = millis();
     while (WiFi.status() != WL_CONNECTED) {
+        // Si pasan 20 s sin conectar, avisar y reiniciar (no esperar para siempre)
+        if (millis() - inicio >= WIFI_TIMEOUT_MS) {
+            Serial.println("\n[WiFi] Sin conexión tras 20 s. Revisa el SSID, la contraseña o la cobertura.");
+            Serial.println("[WiFi] Reiniciando la placa en 5 s para volver a intentarlo...");
+            display.clearDisplay();
+            display.setCursor(0, 20);
+            display.println("Sin WiFi tras 20 s");
+            display.println("Reiniciando...");
+            display.display();
+            delay(5000);
+            ESP.restart();
+        }
         delay(500);
         Serial.print(".");
     }
@@ -75,7 +97,7 @@ void actualizarPreciosHTTP() {
                 precioDOGE = doc["dogecoin"]["usd"];
                 datosObtenidos = true;
                 
-                // Mostrar en el Monitor Serial como requeriste
+                // Mostrar en el Monitor Serial
                 Serial.println("\n--- NUEVOS DATOS (CoinGecko) ---");
                 Serial.printf("Bitcoin (BTC): $%.2f USD\n", precioBTC);
                 Serial.printf("Dogecoin (DOGE): $%.4f USD\n", precioDOGE);
@@ -83,8 +105,12 @@ void actualizarPreciosHTTP() {
             } else {
                 Serial.println("Error parseando JSON");
             }
-        } else {
+        } else if (httpCode > 0) {
+            // El servidor respondió, pero no con 200 (p. ej. 429 = demasiadas peticiones)
             Serial.printf("Error HTTP: %d\n", httpCode);
+        } else {
+            // Código negativo: ni siquiera hubo respuesta (DNS, TLS, tiempo agotado...)
+            Serial.printf("Error HTTP: %d (%s)\n", httpCode, HTTPClient::errorToString(httpCode).c_str());
         }
         http.end();
     }
@@ -121,11 +147,14 @@ void refrescarPantallaOLED() {
 }
 
 void loop() {
-    // Tarea 1: Consultar a internet de forma espaciada (cada 20s)
+    // Tarea 1: Consultar a internet de forma espaciada (cada 60 s)
     if (millis() - ultimoFetch >= INTERVALO_FETCH || ultimoFetch == 0) {
         actualizarPreciosHTTP();
         // Forzar la actualización visual inmediata tras recibir nuevos datos
         refrescarPantallaOLED(); 
+        // Reiniciar también el reloj de la pantalla: así la moneda recién pintada
+        // (BTC en el primer ciclo) se ve los 5 s completos antes de alternar
+        ultimoCambioPantalla = millis();
         ultimoFetch = millis();
     }
     

@@ -15,282 +15,83 @@
 
 		<link rel="stylesheet" href="/src/css/base.css" />
 	</head>
-	<body>
+	<body class="ponencia indice">
 		<main class="slide slide--start">
-			<div class="slide__content stagger">
-				<span class="badge" data-animate="fade-up">
-					PIT 2026 · Cursos Gratuitos OTI-UNI · Universidad Nacional de
-					Ingeniería
-				</span>
-				<h1 class="slide__title" data-animate="fade-up">
-					Fundamentos de ESP32 + AI
-				</h1>
-				<div
-					class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 w-full"
-					data-animate="fade-up"
-				>
-					<p class="slide__subtitle m-0">
-						Edición 10 · Material interactivo de las 12 sesiones del curso.
-					</p>
-					<a
-						class="btn btn--primary shrink-0 py-2!"
-						href="https://github.com/abraham7007/curso-esp32-ai"
-						target="_blank"
-						rel="noopener"
-					>
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-						Repositorio y ejemplos
-					</a>
-				</div>
-
-				<div
-					class="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3 w-full"
-					data-animate="fade-up"
-				>
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-01/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							01
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Arquitectura del ESP32 y entorno
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Arquitectura del SoC · Construcción y flasheo
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-02/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							02
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Arquitectura de software y proyectos
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Separación de responsabilidades · POO en periféricos
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-03/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							03
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Protocolos de comunicación entre dispositivos
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								UART · Buses I²C y SPI · Serialización
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-04/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							04
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Adquisición de datos e interrupciones
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Drivers y señal · Interrupciones y temporizadores
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-05/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							05
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Máquinas de estados finitos
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Modelado por estados · Implementación y casos
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-06/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							06
-						</span>
-						<span>
-							<span class="block font-semibold">
-								FreeRTOS sobre dos núcleos
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Tareas y planificador · Sincronización
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-07/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							07
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Redes TCP/IP y HTTP: el ESP32 como cliente
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Direccionamiento y WiFi · HTTP y APIs REST
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-08/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							08
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Protocolo MQTT y plataformas de IoT
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Mecanismos de MQTT · Plataformas de IoT
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-09/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							09
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Servidor web embebido y paso a producto
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Servidor web y modos · Requisitos de producto
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-10/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							10
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Firmware de producción y actualización remota
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Memoria y persistencia · Consumo, seguridad y OTA
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-11/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							11
-						</span>
-						<span>
-							<span class="block font-semibold">
-								Compilado, interpretado y agentes de IA
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Compilado frente a interpretado · Agentes de IA
-							</span>
-						</span>
-					</a>
-
-					<a
-						class="card flex items-start gap-4"
-						href="/src/slides/clase-12/01-portada.html"
-					>
-						<span
-							class="font-display text-3xl font-extrabold text-[var(--color-accent)] opacity-40"
-						>
-							12
-						</span>
-						<span>
-							<span class="block font-semibold">
-								TinyML y Edge AI en microcontroladores
-							</span>
-							<span class="block text-sm text-[var(--color-text-muted)]">
-								Fundamentos y restricciones · Flujo de trabajo
-							</span>
-						</span>
-					</a>
-				</div>
-
-				<div class="sim-caption" data-animate="fade-up">
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
-					<p class="m-0 text-sm">
-						<b>Para proyectar en clase</b>, abrir cualquier sesión y pulsar el
-						botón de pantalla completa: la presentación se mantiene a pantalla
-						completa al avanzar de lámina. También se puede entrar directamente
-						desde
+			<div class="slide__content">
+				<header class="indice__cabecera">
+					<div class="indice__titulos">
+						<span class="badge">PIT 2026 · Cursos gratuitos OTI-UNI</span>
+						<h1 class="slide__title">Fundamentos de <em>ESP32</em> + AI</h1>
+						<p class="slide__lede">Edición 10 · seis sesiones</p>
+					</div>
+					<div class="indice__acciones">
+						<a class="btn btn--primary" href="/presentar.html#/src/slides/clase-01/01-portada.html">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-play" /></svg>
+							Modo presentación
+						</a>
 						<a
-							class="underline"
-							href="/presentar.html#/src/slides/clase-01/01-portada.html"
+							class="btn btn--secondary"
+							href="https://github.com/abraham7007/curso-esp32-ai"
+							target="_blank"
+							rel="noopener"
 						>
-							el modo presentación
-						</a>. Las flechas del teclado recorren la sesión.
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+							Repositorio y ejemplos
+						</a>
+					</div>
+				</header>
+
+				<nav class="indice__sesiones crece" aria-label="Sesiones del curso">
+					<a class="sesion" href="/src/slides/clase-01/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg></span>
+						<span class="sesion__num">Sesión 01</span>
+						<span class="sesion__titulo">Arquitectura del ESP32 y entorno de desarrollo</span>
+					</a>
+					<a class="sesion" href="/src/slides/clase-02/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-code" /></svg></span>
+						<span class="sesion__num">Sesión 02</span>
+						<span class="sesion__titulo">Firmware modular en C++</span>
+					</a>
+					<a class="sesion" href="/src/slides/clase-03/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg></span>
+						<span class="sesion__num">Sesión 03</span>
+						<span class="sesion__titulo">Comunicación entre dispositivos</span>
+					</a>
+					<a class="sesion" href="/src/slides/clase-04/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wifi" /></svg></span>
+						<span class="sesion__num">Sesión 04</span>
+						<span class="sesion__titulo">WiFi y consumo de APIs HTTP</span>
+					</a>
+					<a class="sesion" href="/src/slides/clase-05/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cloud" /></svg></span>
+						<span class="sesion__num">Sesión 05</span>
+						<span class="sesion__titulo">Protocolo MQTT y plataformas de IoT</span>
+					</a>
+					<a class="sesion" href="/src/slides/clase-06/01-portada.html">
+						<span class="sesion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-neural" /></svg></span>
+						<span class="sesion__num">Sesión 06</span>
+						<span class="sesion__titulo">TinyML y Edge&nbsp;AI: inferencia en microcontroladores</span>
+					</a>
+				</nav>
+
+				<footer class="indice__pie">
+					<p>
+						<kbd>→</kbd> avanza · <kbd>N</kbd> notas del ponente en otra ventana ·
+						<kbd>D</kbd> «Para estudiar» · pantalla completa desde el botón
+						superior o el modo presentación.
 					</p>
-				</div>
+					<div class="credito">
+						<span class="credito__autor">Abraham Caso Torres</span>
+						<span>PIT 2026 · OTI-UNI</span>
+						<a
+							class="credito__licencia"
+							href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+							rel="license noopener"
+							target="_blank"
+							>CC BY-NC-SA 4.0</a
+						>
+					</div>
+				</footer>
 			</div>
 		</main>
 

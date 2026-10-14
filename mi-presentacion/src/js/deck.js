@@ -188,19 +188,136 @@ function initKeyboardNav() {
 			.querySelector(".slide__content a.btn--primary[href$='.html']")
 			?.getAttribute("href");
 
+	const pasos = initPasos();
+
+	const avanzar = () => {
+		if (pasos.siguiente()) return;
+		if (next) window.location.href = next;
+	};
+	const retroceder = () => {
+		if (pasos.anterior()) return;
+		// La lámina anterior se abre con todos sus pasos ya visibles: se
+		// vuelve a donde se dejó, no al principio de su secuencia.
+		if (prev) window.location.href = `${prev}#fin`;
+	};
+
+	const ponente = initPonente(links, { avanzar, retroceder }, pasos);
+	document.addEventListener("paso", ponente.anunciar);
+	ponente.anunciar();
+
 	document.addEventListener("keydown", (e) => {
 		if (e.metaKey || e.ctrlKey || e.altKey) return;
 		const tag = document.activeElement?.tagName;
 		if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
 
-		if ((e.key === "ArrowRight" || e.key === "PageDown") && next) {
-			window.location.href = next;
-		} else if ((e.key === "ArrowLeft" || e.key === "PageUp") && prev) {
-			window.location.href = prev;
+		if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+			// El espacio sobre un botón o un enlace es su propia pulsación.
+			if (e.key === " " && (tag === "BUTTON" || tag === "A")) return;
+			e.preventDefault();
+			avanzar();
+		} else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+			e.preventDefault();
+			retroceder();
 		} else if (e.key === "Home") {
 			window.location.href = "/index.html";
+		} else if (e.key === "N" && e.shiftKey) {
+			// Respaldo sin segunda pantalla: notas superpuestas en la lámina.
+			document.body.classList.toggle("show-notas");
+		} else if (e.key === "n") {
+			ponente.abrir();
+		} else if (e.key === "d" || e.key === "D") {
+			const detalles = [...document.querySelectorAll("details.detalle")];
+			const abrir = detalles.some((d) => !d.open);
+			for (const d of detalles) d.open = abrir;
 		}
 	});
+}
+
+/* Vista del ponente (ponente.html). La tecla N la abre en otra ventana, que
+   se lleva a la pantalla del portátil: las notas no se proyectan nunca. La
+   lámina le anuncia su estado por un BroadcastChannel cada vez que carga o
+   revela un paso, y obedece sus órdenes de avanzar y retroceder. */
+function initPonente(links, acciones, pasos) {
+	const canal =
+		"BroadcastChannel" in window ? new BroadcastChannel("esp32-ponente") : null;
+	const anunciar = () => {
+		if (!canal) return;
+		const { mostrados: pasosMostrados, total: pasosTotal } = pasos.estado();
+		const pos = deckPosition();
+		canal.postMessage({
+			tipo: "estado",
+			titulo:
+				document.querySelector(".slide__title, .code-hour__title")?.innerText ||
+				document.title,
+			notas: document.querySelector(".notas")?.innerHTML || "",
+			posicion: pos ? `${pos.index} / ${pos.total}` : "",
+			pasosMostrados,
+			pasosTotal,
+			siguiente: links[1]?.innerText.trim() || "",
+		});
+	};
+
+	canal?.addEventListener("message", ({ data }) => {
+		if (data?.tipo === "pedir-estado") anunciar();
+		if (data?.tipo === "orden" && data.orden === "avanzar") acciones.avanzar();
+		if (data?.tipo === "orden" && data.orden === "retroceder")
+			acciones.retroceder();
+	});
+
+	return {
+		anunciar,
+		abrir() {
+			window.open("/ponente.html", "esp32-ponente", "width=960,height=720");
+		},
+	};
+}
+
+/* Revelado por pasos. Los elementos con data-paso="N" empiezan ocultos y se
+   muestran por grupos, en orden de N, con → / AvPág / espacio. Mientras
+   quede un paso por mostrar, avanzar no cambia de lámina; retroceder oculta
+   el último grupo mostrado. Sin elementos data-paso, no hace nada y el
+   teclado navega como siempre. */
+function initPasos() {
+	const elementos = [...document.querySelectorAll("[data-paso]")];
+	const grupos = [...new Set(elementos.map((el) => Number(el.dataset.paso)))]
+		.filter(Number.isFinite)
+		.sort((a, b) => a - b);
+	let mostrados = 0;
+
+	const aplicar = () => {
+		const visibles = new Set(grupos.slice(0, mostrados));
+		for (const el of elementos) {
+			el.classList.toggle("is-shown", visibles.has(Number(el.dataset.paso)));
+		}
+		document.dispatchEvent(
+			new CustomEvent("paso", { detail: { mostrados, total: grupos.length } }),
+		);
+	};
+
+	if (window.location.hash === "#fin") mostrados = grupos.length;
+	aplicar();
+
+	// Al imprimir o exportar a PDF no se puede pulsar: se muestra todo.
+	window.addEventListener("beforeprint", () => {
+		mostrados = grupos.length;
+		aplicar();
+	});
+
+	return {
+		estado: () => ({ mostrados, total: grupos.length }),
+		siguiente() {
+			if (mostrados >= grupos.length) return false;
+			mostrados += 1;
+			aplicar();
+			return true;
+		},
+		anterior() {
+			if (mostrados <= 0) return false;
+			mostrados -= 1;
+			aplicar();
+			return true;
+		},
+	};
 }
 
 /* Figuras generadas con Python. El marcado solo declara cuál quiere:

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuota de uso · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · APIs con clave</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La cuota de la API fija el <em>intervalo</em> mínimo
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Superada la <b>cuota</b>, el servidor responde <b>429</b>
+								(<i>Too Many Requests</i>) en vez del dato.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Plan gratuito de OpenWeatherMap: 60&nbsp;por minuto y 1&nbsp;000&nbsp;000
+								al mes (openweathermap.org/price).
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>al mes = placas × 2 592 000 s / T</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Intervalo</span>
+								<input type="range" id="intervalo" min="0" max="12" step="1" value="1" />
+								<output id="intervalo-out" for="intervalo" class="s4c-ancho s4c-ancho--corto">2 s</output>
+							</label>
+							<fieldset class="mandos__grupo" aria-label="Placas que comparten la misma clave">
+								<span class="s4c-rotulo">Placas con la misma clave</span>
+								<button type="button" class="btn btn--primary" data-placas="1" aria-pressed="true">1</button>
+								<button type="button" class="btn btn--secondary" data-placas="10" aria-pressed="false">10</button>
+								<button type="button" class="btn btn--secondary" data-placas="100" aria-pressed="false">100</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>al mes </small><span id="l-mes" class="s4c-ancho s4c-ancho--largo">1 296 000</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="cuota"
+								role="img"
+								aria-label="Arriba, el consumo de la cuota gratuita de OpenWeatherMap por minuto y por mes como porcentaje del límite, con la zona de respuesta 429 por encima del 100 %. Abajo, tres minutos de consultas a CoinGecko con el intervalo elegido sobre las ventanas de 60 s en que la CDN sirve la misma respuesta guardada: solo la primera consulta de cada ventana puede traer un precio nuevo."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con la clave gratuita de OpenWeatherMap, ¿cada
+					cuántos segundos como mínimo puede consultar una placa encendida todo el
+					mes? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: unos 2,6 s. El límite por minuto permitiría 1 s, y el mensual es el más restrictivo: 2 592 000 s al mes / 1 000 000 ≈ 2,6 s. Con 2 s la cuota se agota a los 23 días y llegan respuestas 429. Pulsar «10» y «100»: la cuota se cuenta por clave; cien placas con la misma clave a 60 s la superan.
+				</p>
+				<p>
+					Abajo, CoinGecko (sin clave, límite variable): su respuesta lleva
+					<code>cache-control: max-age=30, public, must-revalidate,
+					s-maxage=60</code>. El ESP32 no guarda copia; el dato repetido viene de la CDN (Cloudflare), que sirve la misma copia hasta 60 s (<code>s-maxage</code>). Con consultas cada 2 s llega el mismo precio unas 30 veces seguidas. Los ejemplos 16, 16b, 17 y 18 consultan cada 60 s.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						El intervalo se controla con <code>millis()</code> (sesión 2). Ante un 429, se espera más y no se reintenta en bucle. Cifras de OpenWeatherMap
+						tomadas de openweathermap.org/price (plan Free, octubre de 2026);
+						pueden cambiar.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						CoinGecko (sin clave: límite variable) pasa por una CDN que guarda la
+						respuesta hasta 60 s (<code>s-maxage=60</code>, cabecera
+						<code>age</code>); su documentación indica actualización cada 60 s en
+						la API pública. <code>max-age=30</code> solo afecta a clientes con
+						caché, como un navegador; <code>HTTPClient</code> no tiene.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Compartir una clave entre muchas placas y agotar la cuota común.</li>
+						<li>Consultar más rápido de lo que el dato cambia.</li>
+						<li>Tratar el 429 como un fallo de red.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-leer-api.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Documentación</span>
+				</a>
+				<a class="slide-nav__link" href="19-clave-api.html">
+					<span>Clave</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const miles = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+
+			// OpenWeatherMap, plan Free (openweathermap.org/price, octubre de 2026).
+			const LIMITE_MIN = 60;
+			const LIMITE_MES = 1000000;
+			const SEG_MES = 30 * 86400;
+			// CoinGecko: la CDN guarda la respuesta hasta 60 s (s-maxage=60).
+			const CACHE = 60;
+			const VENTANA = 180;
+			const INTERVALOS = [1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 120, 300, 600];
+
+			let intervalo = 2;
+			let placas = 1;
+
+			const porMinuto = () => (placas * 60) / intervalo;
+			const porMes = () => (placas * SEG_MES) / intervalo;
+			const etiquetaT = (t) => (t < 60 ? `${t} s` : `${t / 60} min`);
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = fs;
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.04, w * 0.0145), 28);
+				const m = fs * 1.2;
+				const anchoRot = fs * 7.5;
+				const x0 = m + anchoRot;
+				ctx.font = `700 ${fs * 0.9}px ${MONO}`;
+				const anchoLect = ctx.measureText("129 600 000 · 12 960 %").width;
+				const x1 = w - m - anchoLect - fs * 0.8;
+
+				// --- Panel 1: cuota de OpenWeatherMap (0 a 200 % del límite) ---
+				const tMin = Math.ceil((placas * SEG_MES * 10) / LIMITE_MES) / 10;
+				texto(ctx, "OpenWeatherMap · plan gratuito", m, fs * 1.1, fs * 1.05, c.heading, 700, "left", SANS, w * 0.5);
+				texto(ctx, `intervalo mínimo con ${placas} ${placas === 1 ? "placa" : "placas"}: ${coma(tMin, 1)} s`, w - m, fs * 1.1, fs, c.navy, 700, "right", SANS, w * 0.45);
+
+				const X = (pct) => x0 + (clamp(0, pct, 200) / 200) * (x1 - x0);
+				const yA = fs * 2.4;
+				const hBarra = fs * 1.7;
+				const filas = [
+					{ rot: "por minuto", v: porMinuto(), lim: LIMITE_MIN },
+					{ rot: "por mes", v: porMes(), lim: LIMITE_MES },
+				];
+				const yFila = (i) => yA + fs * 1.5 + i * (hBarra + fs * 0.6);
+				const yFinA = yFila(2) - fs * 0.4;
+
+				// Zona 429.
+				ctx.fillStyle = c.acentoSoft;
+				ctx.fillRect(X(100), yA, X(200) - X(100), yFinA - yA);
+				texto(ctx, "429 Too Many Requests", (X(100) + X(200)) / 2, yA + fs * 0.75, fs * 0.95, c.acento, 700, "center", MONO, X(200) - X(100) - 12);
+
+				for (const [i, f] of filas.entries()) {
+					const y = yFila(i);
+					const pct = (f.v / f.lim) * 100;
+					const pasa = pct > 100;
+					texto(ctx, f.rot, m, y + hBarra / 2, fs, c.heading, 700, "left", SANS, anchoRot - fs * 0.4);
+					ctx.fillStyle = pasa ? c.acento : c.navy;
+					ctx.globalAlpha = 0.85;
+					ctx.fillRect(x0, y + hBarra * 0.18, X(pct) - x0, hBarra * 0.64);
+					ctx.globalAlpha = 1;
+					if (pct > 200) texto(ctx, "»", X(200) - fs * 0.5, y + hBarra / 2, fs * 1.2, c.surface, 700, "center", MONO);
+					const lectura = `${f.v < 10 ? coma(f.v, 1) : miles(f.v)} · ${pct < 10 ? coma(pct, 1) : miles(pct)} %`;
+					texto(ctx, lectura, w - m, y + hBarra / 2, fs * 0.9, pasa ? c.acento : c.heading, 700, "right", MONO, w - m - x1 - fs * 0.6);
+				}
+				// Línea del 100 % y escala.
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(X(100), yA - fs * 0.2);
+				ctx.lineTo(X(100), yFinA + fs * 0.2);
+				ctx.stroke();
+				texto(ctx, "0 %", X(0), yFinA + fs * 0.75, fs * 0.85, c.muted, 600, "left", MONO);
+				texto(ctx, "200 %", X(200), yFinA + fs * 0.75, fs * 0.85, c.muted, 600, "right", MONO);
+				texto(ctx, "100 % = 60 por minuto · 1 000 000 al mes", X(100), yFinA + fs * 0.75, fs * 0.85, c.acento, 700, "center", SANS, (X(100) - X(0)) * 1.4);
+
+				// --- Panel 2: CoinGecko y la copia de 60 s de su CDN ---
+				const yB = yFinA + fs * 2.4;
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(m, yB - fs * 0.6);
+				ctx.lineTo(w - m, yB - fs * 0.6);
+				ctx.stroke();
+				texto(ctx, "CoinGecko · la CDN sirve la misma respuesta (s-maxage=60)", m, yB + fs * 0.5, fs * 1.05, c.heading, 700, "left", SANS, w * 0.55);
+
+				const tx0 = m;
+				const tx1 = w - m;
+				const T = (t) => tx0 + (t / VENTANA) * (tx1 - tx0);
+				const yBanda = yB + fs * 1.6;
+				const yEje = h - fs * 1.9;
+				const hBanda = yEje - yBanda;
+				// Ventanas de la CDN: solo se rotula precio donde hay alguna consulta.
+				const consultas = [];
+				for (let t = 0; t < VENTANA; t += intervalo) consultas.push(t);
+				let letra = 0;
+				for (let k = 0; k < VENTANA / CACHE; k++) {
+					ctx.fillStyle = k % 2 ? c.surface : c.okSoft;
+					ctx.fillRect(T(k * CACHE), yBanda, T((k + 1) * CACHE) - T(k * CACHE), hBanda);
+					const hay = consultas.some((t) => Math.floor(t / CACHE) === k);
+					const rot = hay ? `precio ${"ABC"[letra++]}` : "sin consultas";
+					texto(ctx, rot, T(k * CACHE + CACHE / 2), yBanda + fs * 0.75, fs * 0.9, hay ? c.ok : c.muted, 700, "center", MONO, T(CACHE) - T(0) - 8);
+				}
+
+				// Peticiones como barras: alta y verde la primera de cada ventana (dato
+				// nuevo), baja y gris las que reciben la misma copia.
+				const yLey = yBanda + hBanda - fs * 0.9;
+				const yBase = yLey - fs * 1.1;
+				const yTope = yBanda + fs * 1.7;
+				const separacion = ((tx1 - tx0) * intervalo) / VENTANA;
+				const ancho = clamp(2, separacion * 0.55, fs * 0.6);
+				let total = 0;
+				let nuevas = 0;
+				let ventanaVista = -1;
+				for (const t of consultas) {
+					const k = Math.floor(t / CACHE);
+					const nueva = k !== ventanaVista;
+					ventanaVista = k;
+					total++;
+					if (nueva) nuevas++;
+					const alto = (yBase - yTope) * (nueva ? 1 : 0.45);
+					ctx.fillStyle = nueva ? c.ok : c.muted;
+					ctx.globalAlpha = nueva ? 1 : 0.55;
+					ctx.fillRect(T(t) + 2, yBase - alto, ancho, alto);
+					ctx.globalAlpha = 1;
+				}
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(tx0, yBase);
+				ctx.lineTo(tx1, yBase);
+				ctx.stroke();
+
+				// Leyenda bajo las barras.
+				const lado = fs * 0.75;
+				ctx.fillStyle = c.ok;
+				ctx.fillRect(tx0 + fs * 0.4, yLey - lado / 2, lado, lado);
+				const a1 = texto(ctx, "precio nuevo", tx0 + fs * 1.5, yLey, fs * 0.9, c.heading, 600, "left", SANS);
+				const xl2 = tx0 + fs * 1.5 + a1 + fs * 1.6;
+				ctx.fillStyle = c.muted;
+				ctx.globalAlpha = 0.55;
+				ctx.fillRect(xl2 - lado / 2, yLey - lado / 2, lado, lado);
+				ctx.globalAlpha = 1;
+				texto(ctx, "la misma copia, servida por la CDN", xl2 + fs * 0.7, yLey, fs * 0.9, c.heading, 600, "left", SANS, tx1 - xl2 - fs);
+
+				for (let t = 0; t <= VENTANA; t += CACHE) {
+					texto(ctx, `${t} s`, T(t), yEje + fs * 0.8, fs * 0.85, c.muted, 600, t === 0 ? "left" : t === VENTANA ? "right" : "center", MONO);
+				}
+				const repes = total - nuevas;
+				const resumen = `3 min: ${total} ${total === 1 ? "consulta" : "consultas"}, ${nuevas} ${nuevas === 1 ? "nueva" : "nuevas"}${repes ? `, ${repes} repetidas` : ""}`;
+				texto(ctx, resumen, w - m, yB + fs * 0.5, fs, repes ? c.acento : c.ok, 700, "right", SANS, w * 0.42);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("cuota"), dibujar);
+			const ctrl = document.getElementById("intervalo");
+			const out = document.getElementById("intervalo-out");
+			const lMes = document.getElementById("l-mes");
+			const botones = [...document.querySelectorAll("[data-placas]")];
+
+			function render() {
+				intervalo = INTERVALOS[Number(ctrl.value)];
+				out.textContent = etiquetaT(intervalo);
+				const mes = porMes();
+				lMes.textContent = miles(mes);
+				lMes.classList.toggle("s4c-mal", mes > LIMITE_MES || porMinuto() > LIMITE_MIN);
+				for (const b of botones) {
+					const on = Number(b.dataset.placas) === placas;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lienzo.redibujar();
+			}
+			ctrl.addEventListener("input", render);
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					placas = Number(b.dataset.placas);
+					render();
+				});
+			}
+			render();
+		</script>
+	</body>
+</html>

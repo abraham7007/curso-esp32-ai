@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pines virtuales · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Pines virtuales</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Un pin <em>virtual</em> une un widget con una función
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								V0 y V1 son canales con nombre (<i>datastreams</i>) entre panel y
+								firmware, ajenos a los GPIO. La librería entrega cada orden a una
+								función; cada dato sale con una llamada.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>BLYNK_WRITE(V0)</code> · <code>Blynk.virtualWrite(V1, t)</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Recorrido paso a paso">
+								<button type="button" class="btn btn--secondary" id="b-inicio">Desde el inicio</button>
+								<button type="button" class="btn btn--primary" id="b-siguiente">Siguiente paso</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>paso </small><span id="l-paso" class="s5c-ancho s5c-ancho--corto">10</span><small> de 10</small></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="pines"
+								role="img"
+								aria-label="Dos recorridos en cinco zonas: panel, Blynk.Cloud, Internet, firmware del ESP32 (dos columnas) y placa. Arriba, la orden: el widget Switch escribe 1 en el datastream V0, la nube envía una trama HARDWARE con vw 0 1, la librería llama a BLYNK_WRITE(V0), que ejecuta digitalWrite(15, 1) y enciende el LED. Abajo, el dato: BlynkTimer llama cada 30 s a sendSensorData(), que ejecuta Blynk.virtualWrite(V1, 23.4); sale una trama HARDWARE con vw 1 23.400, la nube la guarda en el datastream V1 y el widget Gauge muestra 23.4 °C."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: en el firmware no hay ningún <code>if</code> que
+					consulte el estado del Switch. ¿Quién llama a <code>BLYNK_WRITE(V0)</code>,
+					y cuándo? Recoger respuestas antes de pulsar «Desde el inicio».
+				</p>
+				<p>
+					Respuesta: la librería, dentro de <code>Blynk.run()</code>, cuando llega por
+					la conexión abierta una trama para V0. Recorrer los 10 pasos. Arriba (pasos
+					1 a 5): Switch → datastream V0 → trama HARDWARE con <code>vw 0 1</code> →
+					<code>BLYNK_WRITE(V0)</code> → <code>digitalWrite(15, 1)</code> → LED. Abajo
+					(6 a 10): el temporizador llama a <code>sendSensorData()</code> cada 30 s y
+					<code>virtualWrite(V1, 23.4)</code> recorre el camino inverso hasta el
+					Gauge.
+				</p>
+				<p>
+					El nombre V0 no tiene relación con el GPIO 15: el vínculo lo escribe el
+					programador dentro de la función. El mismo V0 podría mover un relé o un
+					servo sin cambios en el panel. En la trama, los campos del cuerpo van
+					separados por un byte 0 (lámina 7).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>BLYNK_WRITE(V0) { int v = param.asInt(); … }</code> recibe;
+						<code>param.asFloat()</code> y <code>param.asStr()</code> leen otros
+						tipos. <code>Blynk.virtualWrite(V1, valor)</code> envía. El datastream
+						fija tipo y rango (V0 entero 0–1, V1 <i>double</i> 0–50 °C, lámina 9).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19: V0 enciende el LED del GPIO 15; V1 recibe la temperatura cada 30 s.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Escribir <code>BLYNK_WRITE</code> dentro de <code>loop()</code>, cuando se define fuera, como función independiente.</li>
+						<li>Llamar a <code>virtualWrite</code> en cada vuelta del <code>loop()</code> (inundación).</li>
+						<li>Usar en el código un pin virtual que no existe como datastream.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-protocolo-blynk.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Protocolo</span>
+				</a>
+				<a class="slide-nav__link" href="09-configurar-panel.html">
+					<span>Panel</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+
+			// Nodos por fila y columna (0 = panel … 5 = placa).
+			const ORDEN = [
+				{ tipo: "switch" },
+				{ l1: "Datastream V0", l2: "entero 0–1", fam: SANS, valor: "valor = 1", antes: "valor = 0" },
+				{ l1: "HARDWARE (20)", celdas: ["vw", "0", "1"] },
+				{ l1: "BLYNK_WRITE(V0)", l2: "param.asInt() = 1", l2antes: "param.asInt()", fam2: MONO },
+				{ l1: "digitalWrite", l2: "(15, 1)", l2antes: "(15, valor)", fam2: MONO },
+				{ tipo: "led" },
+			];
+			const DATO = [
+				{ tipo: "gauge" },
+				{ l1: "Datastream V1", l2: "double 0–50 °C", fam: SANS, valor: "valor = 23.4", antes: "valor = —" },
+				{ l1: "HARDWARE (20)", celdas: ["vw", "1", "23.400"] },
+				{ l1: "Blynk.virtualWrite", l2: "(V1, 23.4)", l2antes: "(V1, t)", fam2: MONO },
+				{ l1: "sendSensorData()", l2: "t = 23.4", l2antes: "t = …", fam2: MONO },
+				{ l1: "BlynkTimer", l2: "cada 30 s", fam: MONO, fam2: SANS },
+			];
+			const PASOS = [
+				"El usuario pulsa el Switch: el panel escribe 1 en el datastream V0.",
+				"Blynk.Cloud guarda el valor y lo envía por la conexión que abrió el ESP32.",
+				"Llega una trama HARDWARE con «vw 0 1»; Blynk.run() la procesa.",
+				"La librería llama a BLYNK_WRITE(V0): param.asInt() vale 1.",
+				"digitalWrite(15, 1) pone el GPIO 15 a 3,3 V: el LED rojo se enciende.",
+				"BlynkTimer llama a sendSensorData() cada 30 s.",
+				"sendSensorData() calcula 23.4 y llama a Blynk.virtualWrite(V1, 23.4).",
+				"Sale una trama HARDWARE con «vw 1 23.400» hacia la nube.",
+				"Blynk.Cloud guarda 23.4 en el datastream V1 (historial).",
+				"El widget Gauge enlazado a V1 muestra 23.4 °C.",
+			];
+			const TOTAL = PASOS.length;
+			const RESUMEN = "V0: Switch → BLYNK_WRITE(V0) → LED · V1: virtualWrite → datastream → Gauge";
+
+			let paso = TOTAL; // arranca con los dos recorridos completos
+			let avance = 1;
+			let animacion = 0;
+			let recorrido = false; // false = resumen; true = se está recorriendo paso a paso
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function caja(ctx, x, y, w, h, r, relleno, borde, grosor = 2) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				if (borde) {
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = grosor;
+					ctx.stroke();
+				}
+			}
+
+			function flecha(ctx, x0, y0, x1, y1, color, grosor, punta) {
+				ctx.strokeStyle = color;
+				ctx.fillStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(x0, y0);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+				const ang = Math.atan2(y1 - y0, x1 - x0);
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x1 - punta * Math.cos(ang - 0.4), y1 - punta * Math.sin(ang - 0.4));
+				ctx.lineTo(x1 - punta * Math.cos(ang + 0.4), y1 - punta * Math.sin(ang + 0.4));
+				ctx.closePath();
+				ctx.fill();
+			}
+
+			// Estado de cada flecha: 0 pendiente, 0…1 animándose, 1 hecha.
+			function estadoFlecha(k) {
+				if (k < paso - 1) return 1;
+				if (k === paso - 1) return avance;
+				return 0;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0135), 27);
+				const m = fs * 0.9;
+				const gap = clamp(fs * 1.3, w * 0.02, fs * 2.4);
+				// El firmware lleva los nombres más largos: sus columnas son más anchas.
+				const PESOS = [0.9, 1, 1, 1.25, 1.1, 0.75];
+				const unidad = (w - 2 * m - 5 * gap) / PESOS.reduce((a, b) => a + b, 0);
+				const anchoCol = (i) => PESOS[i] * unidad;
+				const X = (i) => m + PESOS.slice(0, i).reduce((a, b) => a + b, 0) * unidad + i * gap;
+
+				// Cabeceras de grupo de columnas.
+				const grupos = [
+					[0, 0, "Panel (web o app)"],
+					[1, 1, "Blynk.Cloud"],
+					[2, 2, "Internet · TLS 443"],
+					[3, 4, "Firmware del ESP32"],
+					[5, 5, "Placa"],
+				];
+				const yCab = fs * 1.0;
+				for (const [a, b, rot] of grupos) {
+					const xa = X(a);
+					const xb = X(b) + anchoCol(b);
+					texto(ctx, rot, (xa + xb) / 2, yCab, fs, c.heading, 700, "center", SANS, xb - xa);
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					ctx.moveTo(xa, yCab + fs * 0.85);
+					ctx.lineTo(xb, yCab + fs * 0.85);
+					ctx.stroke();
+				}
+
+				const yCap = h - fs * 1.6; // centro de la explicación
+				const top = yCab + fs * 1.5;
+				const hRot = fs * 1.5;
+				const hNodo = (yCap - fs * 1.6 - top - 2 * hRot - fs * 0.6) / 2;
+				const filas = [
+					{ nodos: ORDEN, y: top + hRot, rot: "Orden: del Switch al LED →", base: 0, tono: c.acento },
+					{ nodos: DATO, y: top + hRot * 2 + hNodo + fs * 0.6, rot: "← Dato: del sensor al Gauge", base: 5, tono: c.navy },
+				];
+
+				for (const [fi, f] of filas.entries()) {
+					const derecha = fi === 0;
+					texto(ctx, f.rot, derecha ? X(0) : X(5) + anchoCol(5), f.y - hRot * 0.5, fs, f.tono, 700, derecha ? "left" : "right", SANS);
+					for (const [i, nodo] of f.nodos.entries()) {
+						// Orden de visita: fila 0 de 0 a 5; fila 1 de 5 a 0.
+						const orden = derecha ? i : 5 - i;
+						const activo = orden === 0 ? paso > f.base : estadoFlecha(f.base + orden - 1) >= 1;
+						dibujarNodo(ctx, nodo, X(i), f.y, anchoCol(i), hNodo, fs, c, activo, f.tono);
+					}
+					// Flechas entre nodos.
+					for (let k = 0; k < 5; k++) {
+						const p = estadoFlecha(f.base + k);
+						const i0 = derecha ? k : 5 - k;
+						const i1 = derecha ? k + 1 : 4 - k;
+						const xa = derecha ? X(i0) + anchoCol(i0) + 4 : X(i0) - 4;
+						const xb = derecha ? X(i1) - 4 : X(i1) + anchoCol(i1) + 4;
+						const y = f.y + hNodo / 2;
+						if (p > 0) {
+							flecha(ctx, xa, y, xa + (xb - xa) * p, y, f.tono, Math.max(4, fs * 0.2), fs * 0.75);
+						} else {
+							ctx.setLineDash([5, 6]);
+							flecha(ctx, xa, y, xb, y, c.borde, 2, fs * 0.5);
+							ctx.setLineDash([]);
+						}
+					}
+				}
+
+				// Explicación del paso actual.
+				let frase;
+				if (!recorrido) frase = RESUMEN;
+				else if (paso === 0) frase = "Pulsar «Siguiente paso»: primero la orden, después el dato.";
+				else frase = `${paso} · ${PASOS[paso - 1]}`;
+				const tono = !recorrido || paso === 0 ? c.heading : paso <= 5 ? c.acento : c.navy;
+				caja(ctx, m, yCap - fs * 1.15, w - 2 * m, fs * 2.3, fs * 0.4, c.surface, c.borde, 1.5);
+				texto(ctx, frase, w / 2, yCap, fs * 1.05, tono, 700, "center", SANS, w - 2 * m - fs * 1.2);
+			}
+
+			function dibujarNodo(ctx, nodo, x, y, cw, ch, fs, c, activo, tono) {
+				caja(ctx, x, y, cw, ch, fs * 0.45, activo ? c.surface : c.bg, activo ? tono : c.borde, activo ? 3 : 2);
+				const xm = x + cw / 2;
+				const ym = y + ch / 2;
+				const tinta = activo ? c.heading : c.muted;
+				if (nodo.tipo === "switch") {
+					const on = activo;
+					const pw = Math.min(cw * 0.5, fs * 4.2);
+					const ph = pw * 0.48;
+					const py = ym - fs * 0.6;
+					caja(ctx, xm - pw / 2, py - ph / 2, pw, ph, ph / 2, on ? c.ok : c.borde, null);
+					ctx.fillStyle = c.surface;
+					ctx.beginPath();
+					ctx.arc(on ? xm + pw / 2 - ph / 2 : xm - pw / 2 + ph / 2, py, ph * 0.38, 0, Math.PI * 2);
+					ctx.fill();
+					texto(ctx, `Switch · ${on ? "ON" : "OFF"}`, xm, py + ph / 2 + fs * 0.9, fs, tinta, 700, "center", SANS, cw - fs);
+					return;
+				}
+				if (nodo.tipo === "led") {
+					const r = Math.min(cw * 0.16, ch * 0.2);
+					const ly = ym - fs * 0.6;
+					if (activo) {
+						ctx.fillStyle = c.acentoSoft;
+						ctx.beginPath();
+						ctx.arc(xm, ly, r * 1.7, 0, Math.PI * 2);
+						ctx.fill();
+					}
+					ctx.fillStyle = activo ? c.acento : c.bg;
+					ctx.strokeStyle = activo ? c.acento : c.muted;
+					ctx.lineWidth = 3;
+					ctx.beginPath();
+					ctx.arc(xm, ly, r, 0, Math.PI * 2);
+					ctx.fill();
+					ctx.stroke();
+					texto(ctx, cw > fs * 8.5 ? "LED · GPIO 15" : "GPIO 15", xm, ly + r * 1.7 + fs * 0.6, fs, tinta, 700, "center", SANS, cw - fs);
+					return;
+				}
+				if (nodo.tipo === "gauge") {
+					const r = Math.min(cw * 0.36, ch * 0.42);
+					const gy = ym + r * 0.35;
+					ctx.lineWidth = fs * 0.55;
+					ctx.lineCap = "butt";
+					ctx.strokeStyle = c.borde;
+					ctx.beginPath();
+					ctx.arc(xm, gy, r, Math.PI, 0);
+					ctx.stroke();
+					if (activo) {
+						ctx.strokeStyle = c.navy;
+						ctx.beginPath();
+						ctx.arc(xm, gy, r, Math.PI, Math.PI + Math.PI * (23.4 / 50));
+						ctx.stroke();
+					}
+					texto(ctx, activo ? "23.4 °C" : "— °C", xm, gy - r * 0.3, fs * 1.05, activo ? c.navy : c.muted, 700, "center", MONO, r * 1.6);
+					texto(ctx, "Gauge", xm, gy + fs * 0.9, fs, tinta, 700, "center", SANS, cw - fs);
+					return;
+				}
+				const fam1 = nodo.fam ?? MONO;
+				if (nodo.celdas) {
+					texto(ctx, nodo.l1, xm, y + ch * 0.3, fs, tinta, 700, "center", MONO, cw - fs * 0.8);
+					// Cuerpo: campos separados por un byte 0 (dibujado como celdas).
+					ctx.font = `700 ${fs}px ${MONO}`;
+					const anchos = nodo.celdas.map((s) => ctx.measureText(s).width + fs * 0.6);
+					const sep = fs * 0.35;
+					const total = anchos.reduce((a, b) => a + b, 0) + sep * (anchos.length - 1);
+					let cx = xm - total / 2;
+					const cy = y + ch * 0.66;
+					for (const [k, s] of nodo.celdas.entries()) {
+						caja(ctx, cx, cy - fs * 0.75, anchos[k], fs * 1.5, 4, activo ? c.bg : c.surface, activo ? tono : c.borde, 2);
+						texto(ctx, s, cx + anchos[k] / 2, cy, fs, tinta, 700, "center", MONO);
+						cx += anchos[k] + sep;
+					}
+					return;
+				}
+				const conValor = Boolean(nodo.valor);
+				texto(ctx, nodo.l1, xm, y + ch * (conValor ? 0.26 : 0.36), fs * 1.02, tinta, 700, "center", fam1, cw - fs * 0.8);
+				texto(ctx, activo ? nodo.l2 : (nodo.l2antes ?? nodo.l2), xm, y + ch * (conValor ? 0.5 : 0.64), fs, activo ? tono : c.muted, 700, "center", nodo.fam2 ?? SANS, cw - fs * 0.8);
+				if (conValor) texto(ctx, activo ? nodo.valor : nodo.antes, xm, y + ch * 0.76, fs, activo ? c.heading : c.muted, 600, "center", MONO, cw - fs * 0.8);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("pines"), dibujar);
+			const lPaso = document.getElementById("l-paso");
+			const bSig = document.getElementById("b-siguiente");
+
+			function render() {
+				lPaso.textContent = String(paso);
+				bSig.disabled = paso >= TOTAL;
+				lienzo.redibujar();
+			}
+
+			function animar() {
+				cancelAnimationFrame(animacion);
+				const t0 = performance.now();
+				const cuadro = (t) => {
+					avance = Math.min(1, (t - t0) / 500);
+					render();
+					if (avance < 1) animacion = requestAnimationFrame(cuadro);
+				};
+				animacion = requestAnimationFrame(cuadro);
+			}
+
+			document.getElementById("b-inicio").addEventListener("click", () => {
+				cancelAnimationFrame(animacion);
+				recorrido = true;
+				paso = 0;
+				avance = 1;
+				render();
+			});
+			bSig.addEventListener("click", () => {
+				if (paso >= TOTAL) return;
+				recorrido = true;
+				paso++;
+				avance = 0;
+				animar();
+			});
+			render();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 04b · Servo · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 04b</span>
+					</div>
+
+					<h2 class="code-hour__title">Un servo que sigue al potenciómetro de 0° a 180°</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">El mismo LEDC, ahora a 50 Hz y 16 bits.</span>
+								<span class="deliverable__file">platformio.ini (espressif32 @ 6.9.0) · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Potenciómetro en el GPIO 32 y servo en el GPIO 18.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo, circuito y cronograma del pulso.</span>
+								<span class="deliverable__file">diagrama-flujo · circuito · cronograma-servo (.excalidraw)</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Convertir la lectura en ángulo y el ángulo en un pulso de 1000–2000 µs cada 20 ms; actualizar cada 100 ms.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Cursor del potenciómetro al <b>GPIO 32</b> (ADC1); señal del servo al <b>GPIO 18</b> (salida LEDC). En Wokwi el servo va a 3V3; en placa real, a 5 V (VIN) con GND común.</p>
+								<div class="hw-set hw-set--amplio mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-potentiometer></wokwi-potentiometer>
+										<small>Potenciómetro</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-servo></wokwi-servo>
+										<small>Servo</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">Iniciando control de servo por PWM (potenciometro -> angulo)
+[SERVO] adc=   0 angulo=  0  pulso=1000 us  duty= 3276
+[SERVO] adc=2048 angulo= 90  pulso=1500 us  duty= 4915
+[SERVO] adc=4095 angulo=180  pulso=2000 us  duty= 6553</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, fijando platform = espressif32 @ 6.9.0 como en el Ejemplo 04.
+
+<b>2. Firmware.</b> Al arrancar imprime «Iniciando control de servo por PWM (potenciometro -> angulo)». Configura el LEDC sobre el GPIO 18 a 50 Hz y 16 bits. Cada 100 ms lee el GPIO 32, conviértelo con map() a ángulo 0–180, el ángulo a pulso de 1000–2000 µs y el pulso a duty = pulso * 65535 / 20000. Emite «[SERVO] adc=NNNN angulo=NNN  pulso=NNNN us  duty=NNNNN». Sin las librerías Servo ni ESP32Servo.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 32 y un servo con la señal en el GPIO 18.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de una vuelta, el circuito y un cronograma del pulso para 0°, 90° y 180° dentro del período de 20 ms.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Sin librería de servo queda a la vista la cuenta ancho de pulso → duty. La plataforma fijada determina la API LEDC: en el núcleo 3.x <code>ledcSetup()</code> desaparece.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El mismo periférico PWM gobierna un servo, que responde al ancho del pulso y no al valor medio.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué ciclo de trabajo corresponde a 90°? Corresponde al 7,5 %: 1,5 ms de 20 ms; el 7,5 % de 65 535 da 4915. Señalar que el servo usa del 5 % al 10 % del período y que con 16 bits cada paso vale 0,3 µs. En placa real, el servo no se alimenta del 3V3 de la placa, porque su consumo de arranque reinicia el ESP32.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>Las mismas funciones LEDC del Ejemplo 04, con <code>f = 50</code> y <code>bits = 16</code>. La librería ESP32Servo encapsula esta misma cuenta.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Alimentar el servo desde 3V3 en placa real provoca reinicios por caída de tensión.</li><li>Sin GND común entre servo y placa, el pulso no tiene referencia.</li><li>Pulsos fuera de 1000–2000 µs: el servo fuerza contra su tope mecánico.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-pulso-servo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Pulso de control de un servo</span>
+				</a>
+				<a class="slide-nav__link" href="17-capas-software.html">
+					<span>Capas de software</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/servo-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Protocolo · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Plataforma Blynk</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Trama del <em>protocolo</em> propio de la librería Blynk
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Trama real que envía la librería Blynk 1.3.5 en el primer Blynk.virtualWrite(V1, temperatura) tras conectar, con temperatura de tipo float igual a 23.4: 16 bytes. Cabecera de 5 bytes: tipo 0x14, que es 20, HARDWARE; identificador de mensaje 0x0004, porque el inicio de sesión usó el 1, la información del dispositivo el 2 y syncVirtual el 3; longitud del cuerpo 0x000B, 11 bytes. Cuerpo de 11 bytes en texto separado por ceros: v, w, cero, 1, cero, y 23.400 (hex 76 77 00 31 00 32 33 2E 34 30 30). Se transmite por TCP a blynk.cloud:443 dentro de TLS y es incompatible con un broker MQTT. Alternativa que el ejemplo no usa: Blynk.Cloud también es broker MQTT en blynk.cloud:8883, usuario device y contraseña el token; se publica en el tema ds/Temperatura el texto 23.4, un PUBLISH de 22 bytes con QoS 0.">
+						<!-- la llamada -->
+						<text class="s5a-pre" x="0" y="26" font-size="32"><tspan class="navy b">Blynk.virtualWrite</tspan>(V1, temperatura);<tspan class="mut">  // float · 23.4</tspan></text>
+
+						<!-- rótulos de campo -->
+						<text class="mid sans navy b" x="46" y="104" font-size="26">tipo</text>
+						<text class="mid sans navy b" x="196" y="104" font-size="26">id</text>
+						<text class="mid sans navy b" x="396" y="104" font-size="26">longitud</text>
+						<text class="mid sans acc b" x="646" y="104" font-size="26">"vw"</text>
+						<text class="mid sans acc b" x="846" y="104" font-size="26">pin</text>
+						<text class="mid sans acc b" x="1296" y="104" font-size="26">valor</text>
+
+						<!-- bytes: cabecera -->
+						<rect class="caja caja--navy" x="0" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--navy" x="100" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--navy" x="200" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--navy" x="300" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--navy" x="400" y="130" width="92" height="104" rx="10" />
+						<text class="mid navy b" x="46" y="182" font-size="38">14</text>
+						<text class="mid navy b" x="146" y="182" font-size="38">00</text>
+						<text class="mid navy b" x="246" y="182" font-size="38">04</text>
+						<text class="mid navy b" x="346" y="182" font-size="38">00</text>
+						<text class="mid navy b" x="446" y="182" font-size="38">0B</text>
+
+						<!-- bytes: cuerpo -->
+						<rect class="caja caja--acc" x="500" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="600" y="130" width="92" height="104" rx="10" />
+						<rect class="caja" x="700" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="800" y="130" width="92" height="104" rx="10" />
+						<rect class="caja" x="900" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1000" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1100" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1200" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1300" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1400" y="130" width="92" height="104" rx="10" />
+						<rect class="caja caja--acc" x="1500" y="130" width="92" height="104" rx="10" />
+						<text class="mid b" x="546" y="182" font-size="38">76</text>
+						<text class="mid b" x="646" y="182" font-size="38">77</text>
+						<text class="mid mut" x="746" y="182" font-size="38">00</text>
+						<text class="mid b" x="846" y="182" font-size="38">31</text>
+						<text class="mid mut" x="946" y="182" font-size="38">00</text>
+						<text class="mid b" x="1046" y="182" font-size="38">32</text>
+						<text class="mid b" x="1146" y="182" font-size="38">33</text>
+						<text class="mid b" x="1246" y="182" font-size="38">2E</text>
+						<text class="mid b" x="1346" y="182" font-size="38">34</text>
+						<text class="mid b" x="1446" y="182" font-size="38">30</text>
+						<text class="mid b" x="1546" y="182" font-size="38">30</text>
+
+						<!-- ASCII y valores -->
+						<text class="mid sans mut" x="46" y="276" font-size="24">20</text>
+						<text class="mid sans mut" x="196" y="276" font-size="24">n.º 4</text>
+						<text class="mid sans mut" x="396" y="276" font-size="24">11 bytes</text>
+						<text class="mid acc b" x="546" y="276" font-size="34">v</text>
+						<text class="mid acc b" x="646" y="276" font-size="34">w</text>
+						<text class="mid mut" x="746" y="276" font-size="30">\0</text>
+						<text class="mid acc b" x="846" y="276" font-size="34">1</text>
+						<text class="mid mut" x="946" y="276" font-size="30">\0</text>
+						<text class="mid acc b" x="1046" y="276" font-size="34">2</text>
+						<text class="mid acc b" x="1146" y="276" font-size="34">3</text>
+						<text class="mid acc b" x="1246" y="276" font-size="34">.</text>
+						<text class="mid acc b" x="1346" y="276" font-size="34">4</text>
+						<text class="mid acc b" x="1446" y="276" font-size="34">0</text>
+						<text class="mid acc b" x="1546" y="276" font-size="34">0</text>
+
+						<!-- llaves -->
+						<path class="ln ln--navy" d="M4 312 V 326 H 488 V 312" />
+						<text class="mid sans navy b" x="246" y="360" font-size="28">cabecera · 5 B · binaria</text>
+						<text class="mid sans mut" x="246" y="398" font-size="24">20 = HARDWARE</text>
+						<path class="ln ln--acc" d="M504 312 V 326 H 1592 V 312" />
+						<text class="mid sans acc b" x="1048" y="360" font-size="28">cuerpo · 11 B · texto separado por \0</text>
+						<text class="mid sans mut" x="1048" y="398" font-size="24">un float se escribe con 3 decimales</text>
+
+						<path class="ln ln--fina ln--mut" d="M0 440 H 1600" />
+
+						<!-- la librería -->
+						<text class="sans b" x="0" y="490" font-size="30">Librería Blynk · ejemplo 19</text>
+						<text class="sans" x="0" y="550" font-size="28"><tspan class="b">16 bytes</tspan> por envío</text>
+						<text class="sans" x="0" y="600" font-size="28">TCP a <tspan class="b">blynk.cloud:443</tspan>, dentro de TLS</text>
+						<text class="sans" x="0" y="650" font-size="28">formato propio, incompatible</text>
+						<text class="sans" x="0" y="696" font-size="28">con un broker MQTT</text>
+
+						<!-- la alternativa MQTT -->
+						<rect class="rel-navy" x="800" y="466" width="8" height="300" rx="4" />
+						<text class="sans navy b" x="840" y="490" font-size="30">Blynk.Cloud también es broker MQTT</text>
+						<text class="s5a-pre" x="840" y="550" font-size="28"><tspan class="sans mut">tema   </tspan><tspan class="navy b">ds/Temperatura</tspan></text>
+						<text class="s5a-pre" x="840" y="600" font-size="28"><tspan class="sans mut">texto  </tspan><tspan class="acc b">23.4</tspan><tspan class="sans mut">  · PUBLISH de 22 B</tspan></text>
+						<text class="sans" x="840" y="650" font-size="26">blynk.cloud:8883 · usuario device</text>
+						<text class="sans" x="840" y="696" font-size="26">contraseña = token</text>
+						<text class="sans mut" x="840" y="742" font-size="26">el ejemplo 19 no lo usa</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si se apunta un cliente MQTT (por ejemplo MQTT
+					Explorer) a <code>blynk.cloud:443</code>, ¿verá la temperatura del ejemplo
+					19?
+				</p>
+				<p>
+					Respuesta: no. Ese puerto atiende el protocolo de la librería, que no es
+					MQTT. La trama ocupa 16 bytes: una cabecera binaria de 5 (tipo, número de
+					mensaje y longitud) y un cuerpo de texto con tres campos separados por
+					ceros.
+				</p>
+				<p>
+					A la derecha, la alternativa: la nube de Blynk acepta también MQTT en el
+					8883 con el token como contraseña, y el mismo dato se publica en un tema
+					<code>ds/…</code>, como en las láminas 03 y 04. El ejemplo usa la librería
+					porque incluye la reconexión, los pines virtuales y
+					<code>BLYNK_WRITE</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Fuente: Blynk 1.3.5, <code>BlynkProtocolDefs.h</code>
+						(<code>BLYNK_CMD_HARDWARE = 20</code>, cabecera de 1 + 2 + 2 bytes en
+						orden de red) y <code>BlynkApi.h</code> (<code>virtualWrite</code>
+						añade <code>"vw"</code>, el pin y el valor). Un <code>float</code> se
+						escribe con 3 decimales (<code>23.400</code>); un literal
+						<code>23.4</code> es <code>double</code> y se escribe con 7
+						(<code>23.4000000</code>).
+					</p>
+					<h4>Detalle técnico</h4>
+					<p>
+						El id avanza con cada mensaje: inicio de sesión
+						(<code>HW_LOGIN = 29</code>, con el token) 1, información del dispositivo 2, <code>syncVirtual</code> 3; el primer <code>virtualWrite</code> lleva el 4. MQTT de Blynk
+						(docs.blynk.io › Device MQTT API): recibir en
+						<code>downlink/ds/#</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>Buscar los datos del ejemplo 19 con un cliente MQTT; la librería no publica en ningún tema.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-piezas-blynk.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Piezas</span>
+				</a>
+				<a class="slide-nav__link" href="08-pines-virtuales.html">
+					<span>Pines V</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

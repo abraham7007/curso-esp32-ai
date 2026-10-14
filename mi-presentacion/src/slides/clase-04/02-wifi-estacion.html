@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Modo estación · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Enlace WiFi</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El ESP32 se une a la red como <em>cliente</em>
+				</h1>
+
+				<div class="def">
+					<p>En modo <b>estación</b>, el ESP32 se une a la red del router, igual que un móvil, y sale a Internet a través de él.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres clientes de la misma red WiFi: un móvil, el ESP32 en modo estación WIFI_STA y un portátil. Los tres se enlazan con el router, que es el punto de acceso de la red Wokwi-GUEST o la de casa. El ESP32 se enlaza por la banda de 2,4 GHz; la banda de 5 GHz no la ve. El router sale por cable o fibra a Internet, donde está el servidor api.coingecko.com. Arriba a la derecha, el código: WiFi.mode(WIFI_STA), WiFi.begin(ssid, pass) y esperar WiFi.status() igual a WL_CONNECTED. En modo punto de acceso, WIFI_AP, el ESP32 crea su propia red, sin salida a Internet.">
+						<!-- clientes -->
+						<rect class="caja" x="60" y="20" width="320" height="110" rx="14" />
+						<text class="mid" x="220" y="58" font-size="32">móvil</text>
+						<text class="mid sans mut" x="220" y="100" font-size="24">cliente</text>
+
+						<rect class="caja caja--acc" x="30" y="220" width="380" height="200" rx="16" />
+						<text class="mid b" x="220" y="270" font-size="48">ESP32</text>
+						<text class="mid acc b" x="220" y="330" font-size="34">WIFI_STA</text>
+						<text class="mid sans mut" x="220" y="380" font-size="26">modo estación: cliente</text>
+
+						<rect class="caja" x="60" y="530" width="320" height="110" rx="14" />
+						<text class="mid" x="220" y="568" font-size="32">portátil</text>
+						<text class="mid sans mut" x="220" y="610" font-size="24">cliente</text>
+
+						<!-- enlaces de radio -->
+						<path class="ln ln--fina ln--mut ln--trazo" d="M380 75 L 660 235" />
+						<path class="ln ln--fina ln--mut ln--trazo" d="M380 560 L 660 425" />
+						<path class="ln ln--acc" d="M410 290 H 660" />
+						<text class="mid acc b" x="535" y="262" font-size="28">2,4 GHz</text>
+						<g data-paso="1">
+							<path class="ln ln--dan ln--trazo" d="M410 360 H 660" />
+							<rect class="caja caja--dan" x="508" y="336" width="54" height="48" rx="10" />
+							<text class="mid dan b" x="535" y="361" font-size="30">✕</text>
+							<text class="mid dan b" x="535" y="410" font-size="26">sin 5 GHz</text>
+						</g>
+
+						<!-- router -->
+						<path class="ln ln--navy" d="M720 215 V 168 M900 215 V 168" />
+						<circle class="rel-navy" cx="720" cy="164" r="8" />
+						<circle class="rel-navy" cx="900" cy="164" r="8" />
+						<rect class="caja caja--navy" x="660" y="215" width="300" height="220" rx="16" />
+						<text class="mid navy b" x="810" y="262" font-size="42">Router</text>
+						<text class="mid sans" x="810" y="314" font-size="26">punto de acceso</text>
+						<text class="mid mut" x="810" y="360" font-size="24">SSID Wokwi-GUEST</text>
+						<text class="mid sans mut" x="810" y="398" font-size="24">o la red de casa</text>
+
+						<!-- salida a Internet -->
+						<path class="ln" d="M960 325 H 1060" />
+						<text class="mid sans mut" x="1010" y="290" font-size="22">fibra</text>
+						<rect class="caja" x="1060" y="250" width="220" height="150" rx="75" />
+						<text class="mid b" x="1170" y="325" font-size="34">Internet</text>
+						<path class="ln" d="M1280 325 H 1330" />
+						<path class="rel" d="M1336 325 L 1322 317 L 1322 333 Z" />
+						<rect class="caja" x="1336" y="240" width="254" height="170" rx="14" />
+						<text class="mid sans mut" x="1463" y="280" font-size="24">servidor</text>
+						<text class="mid b" x="1463" y="326" font-size="22">api.coingecko</text>
+						<text class="mid b" x="1463" y="360" font-size="22">.com</text>
+
+						<!-- código: arriba a la derecha, junto al router -->
+						<text class="sans mut" x="1060" y="30" font-size="24">en el código</text>
+						<text x="1060" y="78" font-size="28" class="navy">WiFi.mode(WIFI_STA);</text>
+						<text x="1060" y="122" font-size="28" class="navy">WiFi.begin(ssid, pass);</text>
+						<text x="1060" y="166" font-size="28" class="navy">WiFi.status() == WL_CONNECTED</text>
+
+						<!-- contraste con AP -->
+						<path class="ln ln--fina ln--mut" d="M470 560 H 1590" />
+						<text x="470" y="612" font-size="28" class="b">WIFI_AP</text>
+						<text x="620" y="612" font-size="26" class="sans mut">el ESP32 crea su propia red, sin salida a Internet</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción (antes de pulsar →): el router de casa emite en 2,4 GHz y en 5 GHz con el mismo nombre; ¿a cuál de las dos se une el ESP32? Se une a la de 2,4 GHz, porque el ESP32 clásico no tiene radio de 5 GHz. Una red que emite únicamente en 5 GHz no aparece en el escáner del ejemplo 15.
+				</p>
+				<p>
+					Recalcar la palabra «cliente». En modo estación, el ESP32 pide dirección al router como cualquier móvil (lámina 05) y, como ellos, no recibe conexiones iniciadas desde Internet (lámina 07). El modo punto de acceso se usa para configurar un equipo sin router y no da salida a Internet.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>WiFi.mode(WIFI_STA)</code> y <code>WiFi.begin(ssid, pass)</code>
+						arrancan la conexión sin bloquear; el programa espera a que
+						<code>WiFi.status()</code> devuelva <code>WL_CONNECTED</code>, con un tope
+						(20 s en los ejemplos 16 a 18). <code>WIFI_AP_STA</code> combina los dos
+						modos en una sola radio y un solo canal.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplos 15 a 18. En Wokwi, la red <code>Wokwi-GUEST</code> no tiene contraseña y da salida real a Internet.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Usar una red que emite solo en 5 GHz, a la que el ESP32 no llega a conectarse.</li>
+						<li>Esperar <code>WL_CONNECTED</code> sin tope; con una contraseña errónea, el programa queda bloqueado.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Portada</span>
+				</a>
+				<a class="slide-nav__link" href="03-rssi-canales.html">
+					<span>RSSI y canales</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

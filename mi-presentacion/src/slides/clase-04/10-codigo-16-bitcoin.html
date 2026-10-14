@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 16 · Bitcoin · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s4b-compacto s4b-holgado">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 16</span>
+					</div>
+
+					<h2 class="code-hour__title">El precio del Bitcoin consultado por HTTPS cada minuto</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Cliente HTTP con ArduinoJson.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Una placa en Wokwi-GUEST.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo con las ramas de error.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Pedir cada 60 s el precio a CoinGecko, extraer <code>bitcoin.usd</code> del JSON e imprimirlo; cada error se imprime con su código.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Una sola placa. En Wokwi, la red <code>Wokwi-GUEST</code>, sin contraseña, da salida a Internet. IP y precio son ilustrativos.</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+Conectando a WiFi ......
+¡Conectado! IP: 10.13.37.2
+
+[HTTP] Consultando a CoinGecko...
+[HTTP] JSON Recibido: {"bitcoin":{"usd":83257}}
+------------------------------------
+  PRECIO BITCOIN: $ 83257.00 USD
+------------------------------------</div>
+								<figure class="s3-monitor s4b-falla">
+									<figcaption>Salida en caso de error, en lugar del JSON</figcaption>
+									<div class="term">[HTTP] Error de servidor: 429
+[HTTP] Error de conexión: connection refused</div>
+								</figure>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, monitor_speed = 115200 y lib_deps bblanchon/ArduinoJson @ ^6.21.5.
+<b>2. Firmware.</b> Modo estación a Wokwi-GUEST, sin contraseña: «\nConectando a WiFi » y un punto cada 500 ms; a los 20 s sin conexión, avisa y reinicia con ESP.restart(); al conectar, «\n¡Conectado! IP: » y la IP. Cada 60 s, «\n[HTTP] Consultando a CoinGecko...» y GET con HTTPClient a https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&amp;vs_currencies=usd. Con 200: «[HTTP] JSON Recibido: » y el cuerpo; StaticJsonDocument&lt;200&gt; y «  PRECIO BITCOIN: $ %.2f USD» entre dos líneas de 36 guiones. Otro positivo: «[HTTP] Error de servidor: %d»; negativo: «[HTTP] Error de conexión: » + errorToString(). Siempre http.end().
+<b>3. Simulación.</b> Añade la simulación de Wokwi con un ESP32 solo.
+<b>4. Diagrama.</b> En Excalidraw: el flujo de loop() con las ramas 200, servidor y conexión.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> El intervalo de 60 s coincide con la caché de la CDN de CoinGecko (s-maxage=60); con consultas más frecuentes el precio se repite y se gasta cuota (429). Con https y sin certificado, el canal va cifrado sin verificar al servidor (lámina 11).
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Un código positivo lo envía el servidor; uno negativo lo genera HTTPClient cuando la respuesta no llegó (DNS, conexión, TLS o tiempo agotado).</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: con el cable de red del router desconectado, ¿qué línea imprime el monitor? Imprime «[HTTP] Error de conexión: connection refused», código −1, porque HTTPClient no llegó a conectar con ningún servidor. Un 429, en cambio, es una respuesta del servidor. La IP 10.13.37.2 es la que asigna Wokwi; en una red real será otra. El precio es ilustrativo. ArduinoJson convierte el entero 83257 a float y printf lo escribe con dos decimales. Sin certificado, HTTPClient llama a setInsecure(); el canal va cifrado y se acepta cualquier servidor. En un producto se pasa el certificado raíz a http.begin(url, ca).</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>HTTPClient http; http.begin(url); int c = http.GET();</code> → <code>http.getString()</code> con 200 y <code>http.end()</code> siempre. <code>HTTPClient::errorToString(c)</code> traduce los negativos: −1 «connection refused», −11 «read Timeout».</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Consultar cada segundo, con precio repetido y respuestas 429.</li><li>Leer <code>getString()</code> sin comprobar el 200.</li><li>Olvidar <code>http.end()</code>; la memoria se agota en pocas vueltas del <code>loop()</code>.</li><li>Esperar la red sin tope, con la placa imprimiendo puntos sin fin.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-codigos-estado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Códigos</span>
+				</a>
+				<a class="slide-nav__link" href="11-http-https.html">
+					<span>HTTPS</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

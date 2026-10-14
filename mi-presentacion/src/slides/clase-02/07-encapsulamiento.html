@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Encapsulamiento · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Clases y objetos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>private</em> impide el acceso desde main.cpp
+				</h1>
+
+				<div class="rd s2 s2-encap crece">
+					<section class="codepanel s2-codigo" aria-label="Led.h: miembros privados y públicos">
+						<div class="codepanel__header">
+							<span class="codepanel__path">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+								<span>lib/Led/Led.h</span>
+							</span>
+						</div>
+						<div class="s2-lineas">
+							<span class="s2-l">class Led {</span>
+							<div class="s2-zona s2-zona--priv">
+								<span class="s2-zona__rotulo">acceso: métodos de Led</span>
+								<span class="s2-l">private:</span>
+								<span class="s2-l">    uint8_t _pin;</span>
+								<span class="s2-l">    bool _state;</span>
+							</div>
+							<div class="s2-zona s2-zona--pub">
+								<span class="s2-zona__rotulo">acceso: cualquier archivo</span>
+								<span class="s2-l">public:</span>
+								<span class="s2-l">    explicit Led(uint8_t pin);</span>
+								<span class="s2-l">    void begin();</span>
+								<span class="s2-l">    void on();</span>
+								<span class="s2-l">    void off();</span>
+								<span class="s2-l">    bool toggle();</span>
+								<span class="s2-l">    bool isOn() const;</span>
+							</div>
+							<span class="s2-l">};</span>
+						</div>
+					</section>
+
+					<div class="s2-encap__der">
+						<section class="codepanel s2-codigo" aria-label="loop() de main.cpp">
+							<div class="codepanel__header">
+								<span class="codepanel__path">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+									<span>src/main.cpp</span>
+								</span>
+							</div>
+							<div class="s2-lineas">
+								<span class="s2-l">void loop() {</span>
+								<span class="s2-l s2-l--cpp">    bool estado = led.toggle();<span class="s2-chip s2-chip--bien">público ✓</span></span>
+								<span class="s2-l s2-l--mal" data-paso="1">    led._pin = 4;<span class="s2-chip s2-chip--mal">privado ✗</span></span>
+								<span class="s2-l s2-c">    …</span>
+								<span class="s2-l">}</span>
+							</div>
+						</section>
+
+						<section class="codepanel s2-codigo" aria-label="Salida de pio run">
+							<div class="codepanel__header">
+								<span class="codepanel__path">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									<span>terminal · pio run</span>
+								</span>
+								<span class="s2-simbolo s2-simbolo--mal s2-sin" data-paso="2">compilador</span>
+							</div>
+							<pre class="s2-term"><span class="s2-solo-bien"><span class="s2-c">$ pio run</span>
+Compiling .pio/build/esp32dev/src/main.cpp.o
+Linking .pio/build/esp32dev/firmware.elf
+<b class="s2-okt">[SUCCESS]</b></span><span class="s2-solo-mal"><span class="s2-c">src/main.cpp: In function 'void loop()':</span>
+src/main.cpp:21:9: <b class="s2-err">error: 'uint8_t Led::_pin' is private within this context</b>
+     led._pin = 4;
+<span class="s2-c">In file included from src/main.cpp:2:</span>
+lib/Led/Led.h:8:13: note: declared private here</span></pre>
+						</section>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si <code>main.cpp</code> pudiera escribir
+					<code>led._pin = 4</code> después de <code>begin()</code>, ¿qué pin
+					conmutaría el objeto? Respuesta: el GPIO 4, que nunca se configuró como
+					salida, sin ningún aviso. Paso 1: se añade esa línea. Paso 2: el
+					compilador la rechaza y señala archivo, línea y columna, con una nota
+					que apunta a la declaración en <code>Led.h</code>. El error aparece en
+					la compilación, antes de grabar la placa. Para leer el estado existe
+					<code>isOn()</code>, que lo devuelve sin permitir cambiarlo.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>private:</code> limita el acceso a los métodos de la propia clase;
+						<code>public:</code> es la interfaz. <code>isOn() const</code> declara que
+						no modifica el objeto. <code>explicit</code> impide la conversión
+						implícita de un número en <code>Led</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						<code>Boton</code> oculta <code>_lastDebounceTime</code> y la constante
+						<code>DEBOUNCE_DELAY</code> (30 ms); su interfaz pública se limita a
+						<code>begin()</code>, <code>update()</code> y <code>fuePulsado()</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Hacer público un dato «para depurar» y no revertirlo. Cualquier
+						módulo puede entonces dejar el objeto en un estado incoherente; la
+						alternativa es un método de consulta.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-clase-objeto.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Clase y objeto</span>
+				</a>
+				<a class="slide-nav__link" href="08-codigo-06-clase-led.html">
+					<span>Ejemplo 06 · Clase Led</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

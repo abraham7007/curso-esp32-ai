@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Conexión cruzada y masa común · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Enlace serie</span>
+
+				<h1 class="slide__title slide__title--sm">
+					TX con RX, y <em>masa</em> común
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								El TX de una placa va al RX de la otra; el GND unido les da el
+								mismo 0&nbsp;V. Un cableado erróneo no genera ningún aviso.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>17 → 16 · 16 ← 17 · GND — GND</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Cableado entre las dos placas">
+								<button type="button" class="btn btn--primary" data-modo="directo" aria-pressed="true">Directo TX–TX</button>
+								<button type="button" class="btn btn--secondary" data-modo="cruzado" aria-pressed="false">Cruzado + GND</button>
+								<button type="button" class="btn btn--secondary" data-modo="sinmasa" aria-pressed="false">Cruzado sin GND</button>
+							</fieldset>
+							<button type="button" class="btn btn--secondary" id="b-enviar">Enviar «hola»</button>
+							<span class="lectura lectura--fin"><small>bytes válidos en la placa 2 </small><span id="l-rx" class="s3c-ancho s3c-ancho--corto">0 de 5</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="enlace"
+								role="img"
+								aria-label="Dos ESP32 unidos por UART2 (TX2 en GPIO 17, RX2 en GPIO 16, GND). La placa 1 envía hola y Enter. Conexión directa TX con TX: nada llega y la placa 2 no muestra nada. Cruzada con GND: llega [recibido] hola. Cruzada sin GND: llegan bytes alterados. En ningún caso aparece un mensaje de error."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con TX unido a TX, ¿qué muestra el monitor de la
+					placa 2: un error, caracteres extraños o nada? Recoger respuestas antes de
+					animar.
+				</p>
+				<p>
+					Respuesta: nada. TX2 es una salida; ningún receptor está unido a ese
+					cable y el RX de la placa 2 queda en reposo. El programa no puede
+					distinguir «no conectado» de «sin transmisión». Pasar a «Cruzado + GND»:
+					aparece «[recibido] hola», como en el ejemplo 11. Quitar la masa: los
+					niveles se miden respecto a otro 0 V y llegan bytes alterados o ninguno.
+					Advertir que, con las dos placas en el mismo PC, la masa llega por el USB
+					y el fallo puede no manifestarse.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Ejemplo 11: D17 (TX2) de cada placa al D16 (RX2) de la otra y GND con
+						GND. <code>Serial2.begin(115200, SERIAL_8N1, 16, 17)</code>: el
+						tercer argumento es RX y el cuarto TX.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Módulos con rótulos TX/RX propios (GPS, HC-05): su TX va al RX del
+						ESP32. Adaptadores USB-serie para leer una placa desde otro PC.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>TX con TX: dos salidas enfrentadas; si una baja mientras la otra sube, circula corriente entre ellas.</li>
+						<li>Olvidar GND con fuentes separadas: funciona en la mesa (mismo PC) y falla en el montaje final.</li>
+						<li>Invertir RX y TX en <code>Serial2.begin()</code>.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-desajuste-baudios.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Desajuste</span>
+				</a>
+				<a class="slide-nav__link" href="07-puertos-uart.html">
+					<span>UART0–2</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			// «hola» + Enter (monitor_eol = LF), como en el ejemplo 11.
+			const ENVIADOS = ["h", "o", "l", "a", "\n"];
+			// Sin masa común: el receptor ve los flancos respecto a otro 0 V;
+			// unos bytes llegan alterados y el salto de línea se pierde.
+			// Los alterados se muestran en hexadecimal (0xE8, 0xFC).
+			const SIN_MASA = ["E8", "o", "FC", "a", null];
+			const enMonitor = (ch) => (ch.length === 2 ? `<${ch}>` : ch);
+			const verComo = (ch) => (ch === "\n" ? "\\n" : ch);
+
+						const T0 = 0.6;
+			const ENTRE = 0.55;
+			const VIAJE = 1.3;
+
+			let modo = "directo";
+			let t = 0;
+			let previo = performance.now();
+			const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function caja(ctx, x, y, w, h, r, relleno, borde) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				if (relleno) {
+					ctx.fillStyle = relleno;
+					ctx.fill();
+				}
+				if (borde) {
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = 2;
+					ctx.stroke();
+				}
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					warn: token("--color-warn"),
+					ok: token("--color-ok"),
+					codeBg: token("--color-code-bg"),
+					codeFg: token("--color-code-fg"),
+					codeDim: token("--color-code-dim"),
+					codeBorde: token("--color-code-border"),
+				};
+				const fs = clamp(20, Math.min(h * 0.04, w * 0.0155), 28);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				// Placas arriba, monitores abajo.
+				const m = fs * 0.9;
+				const anchoPlaca = w * 0.25;
+				const altoPlaca = h * 0.52;
+				const yPlaca = m;
+				const xP1 = m;
+				const xP2 = w - m - anchoPlaca;
+				const pinY = (i) => yPlaca + altoPlaca * (0.3 + i * 0.26);
+				const pines = [
+					{ n: "TX2 · GPIO 17", y: pinY(0) },
+					{ n: "RX2 · GPIO 16", y: pinY(1) },
+					{ n: "GND", y: pinY(2) },
+				];
+				const xA = xP1 + anchoPlaca;
+				const xB = xP2;
+				const lado = fs * 0.9;
+
+				for (const [x, nombre, der] of [
+					[xP1, "ESP32 · placa 1", true],
+					[xP2, "ESP32 · placa 2", false],
+				]) {
+					caja(ctx, x, yPlaca, anchoPlaca, altoPlaca, fs * 0.5, c.sup, c.borde);
+					texto(ctx, nombre, x + anchoPlaca / 2, yPlaca + altoPlaca * 0.1, fs, c.heading, 700, "center", SANS);
+					for (const p of pines) {
+						const px = der ? x + anchoPlaca - lado : x;
+						ctx.fillStyle = c.muted;
+						ctx.fillRect(px, p.y - lado / 2, lado, lado);
+						texto(ctx, p.n, der ? px - fs * 0.5 : px + lado + fs * 0.5, p.y, fs, c.heading, 600, der ? "right" : "left");
+					}
+				}
+
+				// Cables según el modo.
+				const yTx = pines[0].y;
+				const yRx = pines[1].y;
+				const yG = pines[2].y;
+				const grosor = Math.max(4, fs * 0.2);
+				const cable = (x1, y1, x2, y2, color, discontinuo = false) => {
+					ctx.strokeStyle = color;
+					ctx.lineWidth = grosor;
+					ctx.setLineDash(discontinuo ? [grosor * 2, grosor * 2] : []);
+					ctx.beginPath();
+					ctx.moveTo(x1, y1);
+					ctx.lineTo(x2, y2);
+					ctx.stroke();
+					ctx.setLineDash([]);
+				};
+				const destino = modo === "directo" ? yTx : yRx;
+				if (modo === "directo") {
+					cable(xA, yTx, xB, yTx, c.navy);
+					cable(xA, yRx, xB, yRx, c.warn);
+				} else {
+					cable(xA, yTx, xB, yRx, c.navy);
+					cable(xA, yRx, xB, yTx, c.warn);
+				}
+				const xMedio = (xA + xB) / 2;
+				if (modo === "sinmasa") {
+					cable(xA, yG, xMedio - fs * 2.5, yG, c.muted);
+					cable(xMedio + fs * 2.5, yG, xB, yG, c.muted);
+					texto(ctx, "sin masa común", xMedio, yG + fs * 1.1, fs, c.acento, 700, "center", SANS);
+				} else {
+					cable(xA, yG, xB, yG, c.heading);
+				}
+				texto(ctx, "ralentizado: 5 bytes duran 0,43 ms", xMedio, yPlaca + fs * 0.4, fs * 0.9, c.muted, 600, "center", SANS);
+				if (modo === "directo") {
+					texto(ctx, "TX2 es salida: no escucha", xB - fs * 0.6, yTx - fs * 1.1, fs, c.acento, 700, "right", SANS);
+				}
+
+				// Bytes en vuelo por el cable que sale del TX de la placa 1.
+				const llegadas = [];
+				for (const [i, ch] of ENVIADOS.entries()) {
+					const ts = T0 + i * ENTRE;
+					const f = (t - ts) / VIAJE;
+					const recibido = modo === "sinmasa" ? SIN_MASA[i] : ch;
+					if (f >= 1) llegadas.push(recibido);
+					if (f < 0 || f >= 1.15) continue;
+					const k = Math.min(1, f);
+					const x = xA + (xB - xA) * k;
+					const y = yTx + (destino - yTx) * k;
+					const lleno = f >= 1;
+					let col = c.navy;
+					if (lleno && modo === "directo") col = c.muted;
+					else if (lleno && modo === "sinmasa" && recibido !== ch) col = c.acento;
+					else if (lleno) col = c.ok;
+					const r = fs * 0.95;
+					caja(ctx, x - r, y - r, r * 2, r * 2, fs * 0.3, col, null);
+					const etiqueta = lleno && modo === "directo" ? "✗" : verComo(lleno && recibido !== null ? recibido : ch);
+					texto(ctx, lleno && recibido === null ? "✗" : etiqueta, x, y, fs, c.sup, 700, "center");
+				}
+
+				// Monitores serie: lo que imprime cada placa.
+				const yMon = yPlaca + altoPlaca + fs * 1.2;
+				const altoMon = h - yMon - m;
+				const anchoMon = (w - 3 * m) / 2;
+				const lineaH = Math.min(fs * 1.45, (altoMon - fs * 1.8) / 4.4);
+				const fsMon = clamp(20, lineaH * 0.68, 26);
+				const eco = ENVIADOS.filter((_, i) => t >= T0 + i * ENTRE)
+					.filter((ch) => ch !== "\n")
+					.join("");
+				const recibidos = modo === "directo" ? "" : llegadas.filter((ch) => ch !== null && ch !== "\n").map(enMonitor).join("");
+				const monitores = [
+					{ x: m, titulo: "Monitor · placa 1", lineas: [["--- ENLACE UART INICIADO ---"], ["Escribe algo para enviarlo al otro ESP32..."], [eco]] },
+					{
+						x: 2 * m + anchoMon,
+						titulo: "Monitor · placa 2",
+						lineas: [
+							["--- ENLACE UART INICIADO ---"],
+							["Escribe algo para enviarlo al otro ESP32..."],
+							[""],
+							recibidos ? [`[recibido] ${recibidos}`, modo === "sinmasa"] : [""],
+						],
+					},
+				];
+				for (const mon of monitores) {
+					caja(ctx, mon.x, yMon, anchoMon, altoMon, fs * 0.4, c.codeBg, c.codeBorde);
+					texto(ctx, mon.titulo, mon.x + fs * 0.7, yMon + fs * 0.9, fs * 0.9, c.codeDim, 600, "left", SANS);
+					for (const [i, [s, mal]] of mon.lineas.entries()) {
+						texto(ctx, s, mon.x + fs * 0.7, yMon + fs * 1.9 + lineaH * (i + 0.5), fsMon, mal ? c.acento : c.codeFg, 500);
+					}
+				}
+				const sinError = "sin mensaje de error";
+				texto(ctx, sinError, w - m - fs * 0.7, yMon + fs * 0.9, fs * 0.9, c.codeDim, 600, "right", SANS);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("enlace"), dibujar);
+			const botones = [...document.querySelectorAll("[data-modo]")];
+			const lRx = document.getElementById("l-rx");
+			const VALIDOS = { directo: 0, cruzado: 5, sinmasa: 2 };
+
+			function render() {
+				for (const b of botones) {
+					const on = b.dataset.modo === modo;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lRx.textContent = `${VALIDOS[modo]} de 5`;
+				lRx.classList.toggle("s3c-mal", VALIDOS[modo] < 5);
+				lRx.classList.toggle("s3c-bien", VALIDOS[modo] === 5);
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					modo = b.dataset.modo;
+					render();
+					lanzar();
+				});
+			}
+
+			// Un envío dura FIN segundos; la animación se detiene al terminar y
+			// solo se relanza con «Enviar hola» o al cambiar de cableado.
+			const FIN = T0 + 4 * ENTRE + VIAJE + 0.2;
+			let animando = false;
+			function avanzar(ahora) {
+				t += Math.min(0.1, (ahora - previo) / 1000);
+				previo = ahora;
+				if (t >= FIN) {
+					t = FIN;
+					animando = false;
+				}
+				lienzo.redibujar();
+				if (animando) requestAnimationFrame(avanzar);
+			}
+			function lanzar() {
+				if (quieto) {
+					t = FIN;
+					lienzo.redibujar();
+					return;
+				}
+				t = 0;
+				previo = performance.now();
+				if (!animando) {
+					animando = true;
+					requestAnimationFrame(avanzar);
+				}
+			}
+			document.getElementById("b-enviar").addEventListener("click", lanzar);
+			render();
+			// El estado inicial ya muestra el envío completo, sin animar.
+			t = FIN;
+			lienzo.redibujar();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 13 · Checksum · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s3-salida-ancha">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 13</span>
+					</div>
+
+					<h2 class="code-hour__title">Tramas UART con checksum y rechazo de las alteradas</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Emisor y receptor de tramas.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">El enlace del Ejemplo 11.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo, conexión y trama.</span>
+								<span class="deliverable__file"><span class="s3-archivo">diagrama-flujo-loop.excalidraw</span> · <span class="s3-archivo">diagrama-conexion-placas.excalidraw</span> · <span class="s3-archivo">diagrama-trama-bytes.excalidraw</span></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Cada 3 s, una trama con checksum; una de cada dos, alterada.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>El enlace cruzado del Ejemplo 11, con GND común.</p>
+								<svg class="s3-esquema s3-esquema--bajo" role="img" aria-label="TX2 (GPIO 17) de cada placa al RX2 (GPIO 16) de la otra, cruzados, y GND común" viewBox="0 0 340 146" width="340" height="146"><rect class="s3-esq__caja" x="1" y="1" width="95" height="144" rx="6" /><rect class="s3-esq__caja" x="244" y="1" width="95" height="144" rx="6" /><text class="s3-esq__tit" x="48" y="26" text-anchor="middle">Placa 1</text><text class="s3-esq__tit" x="291.5" y="26" text-anchor="middle">Placa 2</text><text class="s3-esq__pin" x="88" y="68" text-anchor="end">TX2 17</text><text class="s3-esq__pin" x="252" y="68" text-anchor="start">TX2 17</text><text class="s3-esq__pin" x="88" y="98" text-anchor="end">RX2 16</text><text class="s3-esq__pin" x="252" y="98" text-anchor="start">RX2 16</text><text class="s3-esq__pin" x="88" y="128" text-anchor="end">GND</text><text class="s3-esq__pin" x="252" y="128" text-anchor="start">GND</text><path class="s3-esq__a" d="M96 62 H124 L216 92 H238" /><path class="s3-esq__fa" d="M234 86 L244 92 L234 98 Z" /><path class="s3-esq__b" d="M244 62 H216 L124 92 H102" /><path class="s3-esq__fb" d="M106 86 L96 92 L106 98 Z" /><path class="s3-esq__gnd" d="M96 122 H244" /><text class="s3-esq__sub" x="170" y="142" text-anchor="middle">GND común</text><circle class="s3-esq__pa" cx="96" cy="62" r="3.5" /><circle class="s3-esq__pb" cx="96" cy="92" r="3.5" /><circle class="s3-esq__pg" cx="96" cy="122" r="3.5" /><circle class="s3-esq__pb" cx="244" cy="62" r="3.5" /><circle class="s3-esq__pa" cx="244" cy="92" r="3.5" /><circle class="s3-esq__pg" cx="244" cy="122" r="3.5" /></svg>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino y monitor_speed = 115200; el mismo firmware va en las dos placas.
+<b>2. Firmware.</b> Serial2 a 115200 8N1 (RX 16, TX 17). Cada 3 s, trama 0xAA, id (contador), longitud, carga «Hola &lt;id&gt;» y checksum = (id + longitud + carga) mod 256, sin la cabecera; en los id impares, carga[0] ^= 0xFF tras calcularlo. Recepción por estados. Traza con %02X: «[ENVIANDO CORRECTO] Tx: [AA …] -> ACEPTADA», «[ENVIANDO CON ERROR INTENCIONAL] Tx: […] -> RECHAZADA (Checksum erróneo)» y «Rx: […]» igual.
+<b>3. Simulación.</b> La de Wokwi del Ejemplo 11.
+<b>4. Diagramas.</b> En Excalidraw: flujo con la máquina de estados, conexión y trama por bytes.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Alterar el byte tras calcular la suma imita un error en el cable; leer por estados no bloquea.
+								</p>
+							</div>
+						</div>
+						<section aria-label="Salida esperada" class="code-hour__section code-hour__section--full s3-salida">
+							<h4>
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Salida esperada
+							</h4>
+							<div class="s3-monitores">
+								<figure class="s3-monitor">
+									<figcaption>Placa 1 y placa 2 · las dos muestran lo mismo: sus tramas (Tx) y las de la otra (Rx)</figcaption>
+									<div class="term">
+--- TRAMAS UART CON CHECKSUM INICIADO ---
+[ENVIANDO CORRECTO] Tx: [AA 00 06 48 6F 6C 61 20 30 DA] -&gt; ACEPTADA
+Rx: [AA 00 06 48 6F 6C 61 20 30 DA] -&gt; ACEPTADA
+[ENVIANDO CON ERROR INTENCIONAL] Tx: [AA 01 06 B7 6F 6C 61 20 31 DC] -&gt; RECHAZADA (Checksum erróneo)
+Rx: [AA 01 06 B7 6F 6C 61 20 31 DC] -&gt; RECHAZADA (Checksum erróneo)</div>
+								</figure>
+							</div>
+						</section>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El receptor recalcula la suma sobre lo que llegó: obtiene 0x4B, no coincide con el 0xDC recibido y la trama se descarta.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué suma calcula el receptor para la trama 1? Respuesta: 0x4B. Cambia un byte, de 0x48 a 0xB7: 476 − 72 + 183 = 587, y 587 mod 256 = 75 = 0x4B. La traza imprime el checksum recibido (DC), no el calculado. Desde la trama 10, la carga «Hola 10» mide 7 bytes. Las dos placas muestran lo mismo si arrancan a la vez; en placas reales, las líneas Rx se desplazan según el instante de arranque de cada una.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>Una suma en <code>uint8_t</code> es módulo 256: el desbordamiento descarta lo que sobra. <code>Serial.printf("%02X ", b)</code> imprime cada byte con dos cifras. La cabecera 0xAA solo marca el inicio y no entra en la suma.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Sumar la cabecera en un extremo y no en el otro: todas las tramas se rechazan.</li><li>Esperar la trama entera con <code>readBytes()</code>: bloquea y pierde la sincronía tras un byte perdido.</li><li>No volver a esperar cabecera tras un error.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-checksum.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Checksum</span>
+				</a>
+				<a class="slide-nav__link" href="20-json-binario.html">
+					<span>JSON y binario</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

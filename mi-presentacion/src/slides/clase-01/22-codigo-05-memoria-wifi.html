@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 05 · Costo del WiFi · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 05</span>
+					</div>
+
+					<h2 class="code-hour__title">Lo que cuesta en memoria inicializar el WiFi</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">El Ejemplo 01 con la pila WiFi añadida.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">LED del Ejemplo 01 y red «Wokwi-GUEST».</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Procedimiento de medida y barras a escala.</span>
+								<span class="deliverable__file">diagrama-procedimiento · diagrama-barras-memoria</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Compilar el mismo programa sin y con <code>WiFi.begin()</code> y comparar el informe de RAM y Flash de cada construcción.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>El del Ejemplo 01: LED con 220 Ω en el <b>GPIO 2</b>. El enlazador da la medida; el circuito no interviene.</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="red" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-resistor value="220"></wokwi-resistor>
+										<small>220 Ω</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada · terminal de pio run
+								</h4>
+								<div class="term">$ pio run        # sin WiFi
+RAM:   [=         ]   6.6% (used 21464 bytes from 327680 bytes)
+Flash: [==        ]  20.6% (used 269437 bytes from 1310720 bytes)
+$ pio run        # con WiFi.begin()
+RAM:   [=         ]  13.3% (used 43424 bytes from 327680 bytes)
+Flash: [======    ]  55.3% (used 724865 bytes from 1310720 bytes)</div>
+								<p class="mt-2">Con WiFi: +21 kB de RAM estática y +445 kB de Flash (casi el triple).</p>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, partiendo del programa del Ejemplo 01.
+
+<b>2. Firmware.</b> Añade #include &lt;WiFi.h&gt; y WiFi.begin("Wokwi-GUEST", "") en setup(), agrupadas para compilar con y sin ellas. No cambies nada más: ni el GPIO 2, ni el período, ni la traza. Compila las dos versiones y copia las líneas RAM y Flash de cada una.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi del Ejemplo 01 y comprueba que con WiFi el LED sigue conmutando.
+
+<b>4. Diagramas.</b> En Excalidraw: el procedimiento de medida (compilar, anotar, añadir, recompilar, restar) y unas barras a escala con la RAM y la Flash de las dos versiones.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Cambiar una sola cosa entre las dos construcciones hace que la resta mida la dependencia y nada más. El informe sale al enlazar: no hace falta grabar la placa.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Cada dependencia tiene un costo en memoria medible antes de grabar; el informe solo cuenta la RAM estática.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: al añadir WiFi.begin(), ¿cuánto crecerán la RAM y la Flash del informe? La Flash casi se triplica y la RAM estática se duplica. Esa cifra no incluye los búferes que el WiFi reserva en el montón al arrancar, de modo que un firmware que compila con margen puede quedarse sin memoria en ejecución.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><b>RAM</b>: SRAM reservada de forma estática (variables globales); no incluye pila ni montón. <b>Flash</b>: binario sobre la partición de aplicación de 1 310 720 bytes. En ejecución, <code>ESP.getFreeHeap()</code> da la SRAM libre real.</p>
+					<h4>Dónde aparece</h4>
+					<p>Al final de cada <code>pio run</code>, tras <code>Checking size .pio/build/esp32dev/firmware.elf</code>.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Flash por encima del 100 %: el enlazado falla; se cambia <code>board_build.partitions</code>.</li><li>Leer el 13,3 % de RAM como margen garantizado.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-grabacion-arranque.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Grabación y arranque</span>
+				</a>
+				<a class="slide-nav__link" href="23-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

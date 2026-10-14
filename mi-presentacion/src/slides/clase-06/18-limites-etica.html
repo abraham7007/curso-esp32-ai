@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Límites · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Límites</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Un modelo en el chip tiene límites técnicos y <em>éticos</em>
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1900 854" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de seis límites. Sesgo de datos: gestos de pocas personas y con una sola mano; grabar a personas distintas. Audio: el micrófono capta a quien no aceptó; avisar y no guardar ni enviar el audio; en Perú, la Ley 29733 de protección de datos personales. No aprende en el chip: un gesto nuevo exige reentrenar en Colab y volver a cargar el firmware. Deriva: cambian el montaje, los usuarios o el sensor; medir con ejemplos de campo. Seguridad: la flash se puede leer; protegerla con APPROTECT. Salida: la red siempre da una salida, aunque la entrada no se parezca a nada de lo entrenado; hace falta un umbral de confianza, 80 por ciento en el ejemplo 20.">
+						<!-- cabecera -->
+						<text class="sans mut" x="0" y="20" font-size="26">límite</text>
+						<text class="sans mut" x="520" y="20" font-size="26">efecto</text>
+						<text class="sans mut" x="1240" y="20" font-size="26">medida</text>
+						<path class="ln ln--fina" d="M0 44 H1900" />
+						<rect class="s4d-fila" x="0" y="54" width="1900" height="116" rx="8" />
+						<text class="sans" x="16" y="112" font-size="33" font-weight="700">1 · Sesgo de datos</text>
+						<text class="sans" x="520" y="112" font-size="30">Pocas personas, una sola mano.</text>
+						<text class="sans" x="1240" y="112" font-size="30">Grabar a personas distintas.</text>
+						<text class="sans" x="16" y="236" font-size="33" font-weight="700">2 · Audio</text>
+						<text class="sans" x="520" y="236" font-size="30">Capta a quien no aceptó.</text>
+						<text class="sans" x="1240" y="216" font-size="30">Avisar; no guardar ni enviar.</text>
+						<text class="sans navy" x="1240" y="261" font-size="26">Ley 29733 (Perú)</text>
+						<rect class="s4d-fila" x="0" y="302" width="1900" height="116" rx="8" />
+						<text class="sans" x="16" y="360" font-size="33" font-weight="700">3 · No aprende</text>
+						<text class="sans" x="520" y="360" font-size="30">Un gesto nuevo exige reentrenar.</text>
+						<text class="sans" x="1240" y="360" font-size="30">Entrenar en Colab y volver a cargar.</text>
+						<text class="sans" x="16" y="484" font-size="33" font-weight="700">4 · Deriva</text>
+						<text class="sans" x="520" y="484" font-size="30">Cambian montaje, usuarios o sensor.</text>
+						<text class="sans" x="1240" y="484" font-size="30">Medir con ejemplos de campo.</text>
+						<rect class="s4d-fila" x="0" y="550" width="1900" height="116" rx="8" />
+						<text class="sans" x="16" y="608" font-size="33" font-weight="700">5 · Seguridad</text>
+						<text class="sans" x="520" y="608" font-size="30">La flash se puede leer.</text>
+						<text class="sans" x="1240" y="608" font-size="30">Proteger la flash (APPROTECT).</text>
+						<rect class="barra--warn" x="0" y="684" width="1900" height="140" rx="10" />
+						<text class="sans warn" x="24" y="728" font-size="33" font-weight="700">6 · Salida</text>
+						<text class="sans" x="520" y="728" font-size="30">La red siempre da una salida, aunque la entrada no se parezca a nada de lo entrenado.</text>
+						<text class="sans" x="520" y="772" font-size="30">Umbral de confianza: el ejemplo 20 exige el 80 %.</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de leer la fila 6: ¿qué responde el ejemplo 20 si alguien saluda con la mano en lugar de hacer punch o flex? Respuesta: punch o flex, porque las dos salidas de softmax siempre suman 100 %; por eso el ejemplo 20 solo acepta la clase si pasa del 80 % y, si no, enciende el LED amarillo.
+				</p>
+				<p>
+					Sesgo: si solo graban dos compañeros diestros, el modelo se ajusta a sus movimientos; una evaluación correcta separa los datos por persona, como se separaban por grabación. Audio: procesar en el chip ayuda, porque el sonido no sale de la placa, pero no sustituye el aviso ni el consentimiento; la voz es un dato personal. No aprende: TFLM no entrena en la placa; NanoEdge (lámina 17) es la excepción para anomalías. Deriva: la exactitud de un modelo correcto el primer día baja si cambia lo que mide. Seguridad: sin APPROTECT, cualquiera con un depurador puede copiar el modelo de la flash.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Umbral de confianza: tras <code>modelRunInference()</code>, aceptar la clase
+						solo si <code>modelGetOutput(i)</code> supera, por ejemplo, 0,8; si no,
+						imprimir «desconocido». En la nRF52840, el registro APPROTECT del UICR
+						bloquea la lectura de la flash por el puerto de depuración.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 20: <code>UMBRAL_CONFIANZA = 0.80</code>; por debajo, el LED se pone amarillo («dudoso»). Ejemplo 21: un objeto de un color ausente en el entrenamiento.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Evaluar con las mismas personas que grabaron los datos de entrenamiento.</li>
+						<li>Leer el 99 % de softmax como certeza; softmax reparte la probabilidad solo entre las clases conocidas.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-hardware.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Hardware</span>
+				</a>
+				<a class="slide-nav__link" href="19-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

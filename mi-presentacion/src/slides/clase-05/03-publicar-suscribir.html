@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Publicar y suscribir · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Conexión persistente</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El <em>broker</em> entrega cada mensaje según su tema
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Cada cliente abre su conexión al <b>broker</b>. Quien publica elige un
+								tema (<i>topic</i>); el broker entrega el mensaje a cada suscripción
+								cuyo patrón coincide, nivel a nivel.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>+</code> un nivel · <code>#</code> el resto, solo al final
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Tipo de patrón de las tres suscripciones">
+								<span class="s5c-rotulo">Patrones</span>
+								<button type="button" class="btn btn--primary" data-modo="exacto" aria-pressed="true">Exactos</button>
+								<button type="button" class="btn btn--secondary" data-modo="mas" aria-pressed="false">Con +</button>
+								<button type="button" class="btn btn--secondary" data-modo="almohadilla" aria-pressed="false">Con #</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>entregas </small><span id="l-entregas" class="s5c-ancho s5c-ancho--corto">3</span><small> de 12 posibles</small></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="broker"
+								role="img"
+								aria-label="A la izquierda, cuatro mensajes publicados en los temas aula/1/temp, aula/1/led, aula/2/temp y lab/temp; en el centro, el broker; a la derecha, tres suscriptores (panel, alarma y registro) con su patrón. Las líneas de color muestran a qué suscriptor entrega el broker cada mensaje según el patrón elegido: exacto, con + o con #."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con «Con +», la alarma se suscribe a
+					<code>+/temp</code>. ¿Recibe la temperatura del aula 1
+					(<code>aula/1/temp</code>)? Recoger respuestas antes de pulsar.
+				</p>
+				<p>
+					Respuesta: no. <code>+</code> ocupa exactamente un nivel y
+					<code>aula/1/temp</code> tiene tres; <code>+/temp</code> solo encaja con
+					<code>lab/temp</code>. Para todas las temperaturas de las aulas,
+					<code>aula/+/temp</code> (el panel). <code>aula/1/+</code> reúne todo lo del
+					aula 1.
+				</p>
+				<p>
+					Con #: <code>aula/#</code> recibe todo lo que empieza por
+					<code>aula/</code>, y <code>#</code> aislado recibe todo el tráfico.
+					<code>aula/#/temp</code> no es un patrón válido y el broker rechaza la
+					suscripción. El orden de los niveles al nombrar los temas (el aula antes que
+					la magnitud) determina qué patrones se pueden escribir después.
+				</p>
+				<p>
+					Las conexiones siempre parten de los clientes hacia el broker, de modo que
+					el esquema funciona con el ESP32 detrás de un NAT (lámina anterior).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Con la librería PubSubClient: <code>client.publish("aula/1/temp", "23.4")</code>
+						y <code>client.subscribe("aula/+/temp")</code>; lo recibido llega a la
+						función registrada con <code>setCallback()</code>. Blynk.Cloud ofrece
+						también un broker MQTT (temas <code>ds/…</code>), aunque la librería
+						Blynk usa su propio protocolo.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Home Assistant, Node-RED, AWS IoT Core y Mosquitto usan este reparto por temas.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Suponer que <code>+</code> abarca varios niveles.</li>
+						<li>Poner <code>#</code> en medio del patrón.</li>
+						<li>Escribir temas con <code>/</code> inicial o con mayúsculas distintas, que el broker trata como temas diferentes.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-preguntar-escuchar.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Conexión abierta</span>
+				</a>
+				<a class="slide-nav__link" href="04-garantias.html">
+					<span>Garantías</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+
+			const TEMAS = [
+				{ t: "aula/1/temp", v: "23.4", tono: "--color-navy" },
+				{ t: "aula/1/led", v: "1", tono: "--color-accent" },
+				{ t: "aula/2/temp", v: "21.8", tono: "--color-ok" },
+				{ t: "lab/temp", v: "19.6", tono: "--color-warn" },
+			];
+			const NOMBRES = ["Panel", "Alarma", "Registro"];
+			const MODOS = {
+				exacto: {
+					patrones: ["aula/1/temp", "lab/temp", "aula/2/temp"],
+					nota: "Exacto: el patrón debe coincidir nivel a nivel con el tema.",
+				},
+				mas: {
+					patrones: ["aula/+/temp", "+/temp", "aula/1/+"],
+					nota: "+/temp no recibe aula/1/temp: + ocupa un solo nivel.",
+				},
+				almohadilla: {
+					patrones: ["aula/#", "aula/1/#", "#"],
+					nota: "aula/#/temp no es válido: # solo puede ir al final.",
+				},
+			};
+
+			// Regla de coincidencia de MQTT: '+' consume un nivel; '#' el resto
+			// (incluido el nivel padre) y debe ser el último.
+			function coincide(patron, tema) {
+				const p = patron.split("/");
+				const t = tema.split("/");
+				for (let i = 0; i < p.length; i++) {
+					if (p[i] === "#") return true;
+					if (i >= t.length) return false;
+					if (p[i] !== "+" && p[i] !== t[i]) return false;
+				}
+				return p.length === t.length;
+			}
+
+			let modo = "exacto";
+			let avance = 1; // 0…1 durante la animación corta al cambiar de modo
+			let animacion = 0;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function caja(ctx, x, y, w, h, r, relleno, borde, grosor = 2) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				if (borde) {
+					ctx.strokeStyle = borde;
+					ctx.lineWidth = grosor;
+					ctx.stroke();
+				}
+			}
+
+			// Curva de (xa,ya) a (xb,yb); devuelve el punto a fracción p.
+			function curva(ctx, xa, ya, xb, yb, color, grosor, p = 1) {
+				const xm = (xa + xb) / 2;
+				ctx.strokeStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(xa, ya);
+				ctx.bezierCurveTo(xm, ya, xm, yb, xb, yb);
+				ctx.stroke();
+				const u = 1 - p;
+				return {
+					x: u ** 3 * xa + 3 * u * u * p * xm + 3 * u * p * p * xm + p ** 3 * xb,
+					y: u ** 3 * ya + 3 * u * u * p * ya + 3 * u * p * p * yb + p ** 3 * yb,
+				};
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const fs = clamp(MIN_FS, Math.min(h * 0.045, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const patrones = MODOS[modo].patrones;
+				const yNota = h - fs * 1.3;
+				const yTop = fs * 2.4;
+				const yBot = yNota - fs * 1.4;
+
+				// Cabeceras de columna.
+				const anchoPub = w * 0.22;
+				const anchoSub = w * 0.3;
+				const xPub = m;
+				const xSub = w - m - anchoSub;
+				const anchoBroker = w * 0.2;
+				const xBroker = (xPub + anchoPub + xSub) / 2 - anchoBroker / 2;
+				texto(ctx, "publican →", xPub, fs * 1.1, fs, c.muted, 700, "left", SANS);
+				texto(ctx, "← se suscriben", xSub + anchoSub, fs * 1.1, fs, c.muted, 700, "right", SANS);
+				texto(ctx, "conexiones abiertas por los clientes", xBroker + anchoBroker / 2, fs * 1.1, fs * 0.9, c.muted, 600, "center", SANS, xSub - xPub - anchoPub - fs);
+
+				// Broker.
+				caja(ctx, xBroker, yTop, anchoBroker, yBot - yTop, fs * 0.5, c.navy, null);
+				const claro = token("--color-navy-contrast");
+				const xbm = xBroker + anchoBroker / 2;
+				texto(ctx, "broker MQTT", xbm, yTop + fs * 1.3, fs * 1.2, claro, 700, "center", SANS, anchoBroker - fs);
+				texto(ctx, "suscripciones", xbm, yTop + fs * 3.0, fs * 0.9, claro, 600, "center", SANS, anchoBroker - fs);
+				const pasoTabla = fs * 2.25;
+				for (const [j, patron] of patrones.entries()) {
+					const yy = yTop + fs * 4.4 + j * pasoTabla;
+					texto(ctx, patron, xbm, yy, fs, claro, 700, "center", MONO, anchoBroker - fs);
+					texto(ctx, `→ ${NOMBRES[j]}`, xbm, yy + fs * 1.0, fs * 0.9, claro, 500, "center", SANS, anchoBroker - fs);
+				}
+				// Copias que salen de cada mensaje: el reparto (fan-out).
+				const yCopias = yTop + fs * 4.4 + patrones.length * pasoTabla + fs * 0.2;
+				ctx.strokeStyle = claro;
+				ctx.globalAlpha = 0.4;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(xBroker + fs * 0.8, yCopias - fs * 0.6);
+				ctx.lineTo(xBroker + anchoBroker - fs * 0.8, yCopias - fs * 0.6);
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+				texto(ctx, "copias de cada mensaje", xbm, yCopias + fs * 0.2, fs * 0.9, claro, 600, "center", SANS, anchoBroker - fs);
+				const pasoCopia = (yBot - fs * 0.6 - (yCopias + fs * 1.3)) / TEMAS.length;
+				for (const [i, tm] of TEMAS.entries()) {
+					const yy = yCopias + fs * 1.3 + pasoCopia * (i + 0.5);
+					const n = patrones.filter((p) => coincide(p, tm.t)).length;
+					texto(ctx, `${tm.t} × ${n}`, xbm, yy, fs, claro, n ? 700 : 500, "center", MONO, anchoBroker - fs);
+				}
+
+				// Publicadores (temas).
+				const nT = TEMAS.length;
+				const altoPub = (yBot - yTop - fs * 0.8 * (nT - 1)) / nT;
+				const yEntrada = (i) => yTop + fs * 1.2 + ((yBot - yTop - fs * 2.4) * (i + 0.5)) / nT;
+				const pubs = TEMAS.map((tm, i) => {
+					const y = yTop + i * (altoPub + fs * 0.8);
+					const tono = token(tm.tono);
+					caja(ctx, xPub, y, anchoPub, altoPub, fs * 0.4, c.surface, tono, 3);
+					ctx.fillStyle = tono;
+					ctx.fillRect(xPub, y, fs * 0.45, altoPub);
+					texto(ctx, tm.t, xPub + fs * 1.1, y + altoPub * 0.36, fs * 1.05, c.heading, 700, "left", MONO, anchoPub - fs * 1.6);
+					texto(ctx, `"${tm.v}"`, xPub + fs * 1.1, y + altoPub * 0.72, fs * 0.95, tono, 700, "left", MONO, anchoPub - fs * 1.6);
+					return { x: xPub + anchoPub, y: y + altoPub / 2, tono };
+				});
+				// Líneas de entrada al broker con el mensaje viajando.
+				const pIn = clamp(0, avance * 2, 1);
+				for (const [i, p] of pubs.entries()) {
+					const pt = curva(ctx, p.x, p.y, xBroker, yEntrada(i), p.tono, 4, pIn);
+					if (pIn < 1) {
+						ctx.fillStyle = p.tono;
+						ctx.beginPath();
+						ctx.arc(pt.x, pt.y, fs * 0.4, 0, Math.PI * 2);
+						ctx.fill();
+					}
+				}
+
+				// Suscriptores.
+				const nS = NOMBRES.length;
+				const altoSub = (yBot - yTop - fs * 0.8 * (nS - 1)) / nS;
+				let entregas = 0;
+				const pOut = clamp(0, avance * 2 - 1, 1);
+				for (const [j, nombre] of NOMBRES.entries()) {
+					const y = yTop + j * (altoSub + fs * 0.8);
+					const patron = patrones[j];
+					const recibe = TEMAS.map((tm, i) => ({ ...tm, i })).filter((tm) => coincide(patron, tm.t));
+					entregas += recibe.length;
+					caja(ctx, xSub, y, anchoSub, altoSub, fs * 0.4, c.surface, recibe.length ? c.heading : c.borde, 2);
+					texto(ctx, nombre, xSub + fs * 0.8, y + fs * 1.0, fs, c.muted, 700, "left", SANS);
+					texto(ctx, patron, xSub + anchoSub - fs * 0.8, y + fs * 1.0, fs * 1.15, c.acento, 700, "right", MONO, anchoSub - fs * 6.5);
+					// Los cuatro temas en rejilla 2 × 2: los que entrega el broker, marcados.
+					const anchoChip = (anchoSub - fs * 2.4) / 2;
+					const altoChip = (altoSub - fs * 2.3) / 2 - fs * 0.2;
+					for (const [k, tm] of TEMAS.entries()) {
+						const llega = coincide(patron, tm.t);
+						const cx = xSub + fs * 0.8 + (k % 2) * (anchoChip + fs * 0.8);
+						const cy = y + fs * 2.0 + Math.floor(k / 2) * (altoChip + fs * 0.4);
+						const tono = token(tm.tono);
+						if (llega) {
+							ctx.globalAlpha = pOut >= 1 ? 1 : 0.25;
+							caja(ctx, cx, cy, anchoChip, altoChip, fs * 0.3, c.bg, tono, 3);
+							ctx.fillStyle = tono;
+							ctx.fillRect(cx, cy, fs * 0.35, altoChip);
+							texto(ctx, `✓ ${tm.t}`, cx + fs * 0.6, cy + altoChip / 2, fs * 0.95, c.heading, 700, "left", MONO, anchoChip - fs * 0.8);
+							ctx.globalAlpha = 1;
+						} else {
+							ctx.setLineDash([5, 5]);
+							caja(ctx, cx, cy, anchoChip, altoChip, fs * 0.3, c.surface, c.borde, 1.5);
+							ctx.setLineDash([]);
+							texto(ctx, tm.t, cx + fs * 0.6, cy + altoChip / 2, fs * 0.9, c.muted, 500, "left", MONO, anchoChip - fs * 0.8);
+						}
+					}
+					for (const tm of recibe) {
+						const tono = token(tm.tono);
+						// Línea del broker al suscriptor, desplazada por tema.
+						const ySal = yEntrada(tm.i);
+						const yLlega = y + altoSub * 0.3 + (altoSub * 0.5 * tm.i) / (nT - 1);
+						const pt = curva(ctx, xBroker + anchoBroker, ySal, xSub, yLlega, tono, 4, pOut);
+						if (pOut > 0 && pOut < 1) {
+							ctx.fillStyle = tono;
+							ctx.beginPath();
+							ctx.arc(pt.x, pt.y, fs * 0.4, 0, Math.PI * 2);
+							ctx.fill();
+						}
+					}
+				}
+
+				// Regla que enseña este modo.
+				texto(ctx, MODOS[modo].nota, w / 2, yNota, fs * 1.05, c.heading, 700, "center", SANS, w - 2 * m);
+				return entregas;
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("broker"), dibujar);
+			const lEntregas = document.getElementById("l-entregas");
+			const botones = [...document.querySelectorAll("[data-modo]")];
+
+			function cuenta() {
+				let n = 0;
+				for (const p of MODOS[modo].patrones) for (const tm of TEMAS) if (coincide(p, tm.t)) n++;
+				return n;
+			}
+
+			function render() {
+				lEntregas.textContent = String(cuenta());
+				for (const b of botones) {
+					const on = b.dataset.modo === modo;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lienzo.redibujar();
+			}
+
+			// Un recorrido de los mensajes al cambiar de patrón; termina solo.
+			function animar() {
+				cancelAnimationFrame(animacion);
+				const t0 = performance.now();
+				const cuadro = (t) => {
+					avance = Math.min(1, (t - t0) / 1400);
+					lienzo.redibujar();
+					if (avance < 1) animacion = requestAnimationFrame(cuadro);
+				};
+				animacion = requestAnimationFrame(cuadro);
+			}
+
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					modo = b.dataset.modo;
+					avance = 0;
+					render();
+					animar();
+				});
+			}
+			render();
+		</script>
+	</body>
+</html>

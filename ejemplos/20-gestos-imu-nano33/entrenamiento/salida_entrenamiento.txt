@@ -1,0 +1,125 @@
+# Salida REAL de: python entrenar_gestos.py
+# Fecha: 2026-10-14 00:57  ·  macOS 14.4 arm64
+# Python 3.11.7  ·  keras 3.15.1  numpy 2.4.6  pandas 3.0.6  tensorflow 2.21.0  
+# Variable TF_CPP_MIN_LOG_LEVEL=2 (oculta los avisos internos de TensorFlow en C++).
+
+TensorFlow version = 2.21.0 (Keras 3.15.1), Python 3.11.7
+
+Processing index 0 for gesture 'punch'.
+	There are 40 recordings of the punch gesture.
+Processing index 1 for gesture 'flex'.
+	There are 40 recordings of the flex gesture.
+Data set parsing and preparation complete.
+Entrenamiento: 48 gestos, prueba: 16, validación: 16
+Data set randomization and splitting complete.
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Layer (type)                    ┃ Output Shape           ┃       Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ dense (Dense)                   │ (None, 50)             │        35,750 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense_1 (Dense)                 │ (None, 15)             │           765 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense_2 (Dense)                 │ (None, 2)              │            32 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+ Total params: 36,547 (142.76 KB)
+ Trainable params: 36,547 (142.76 KB)
+ Non-trainable params: 0 (0.00 B)
+época 100: loss=3.46e-07 val_loss=4.34e-07 accuracy=1.000 val_accuracy=1.000
+época 200: loss=1.45e-07 val_loss=1.92e-07 accuracy=1.000 val_accuracy=1.000
+época 300: loss=9.06e-08 val_loss=1.22e-07 accuracy=1.000 val_accuracy=1.000
+época 400: loss=6.54e-08 val_loss=8.95e-08 accuracy=1.000 val_accuracy=1.000
+época 500: loss=5.10e-08 val_loss=7.04e-08 accuracy=1.000 val_accuracy=1.000
+época 600: loss=4.17e-08 val_loss=5.79e-08 accuracy=1.000 val_accuracy=1.000
+predictions =
+ [[1.    0.   ]
+ [1.    0.   ]
+ [0.    1.   ]
+ [0.    1.   ]
+ [1.    0.   ]
+ [0.    1.   ]
+ [1.    0.   ]
+ [1.    0.   ]
+ [1.    0.   ]
+ [0.    1.   ]
+ [0.    1.   ]
+ [0.    1.   ]
+ [1.    0.   ]
+ [0.001 0.999]
+ [1.    0.   ]
+ [0.    1.   ]]
+actual =
+ [[1. 0.]
+ [1. 0.]
+ [0. 1.]
+ [0. 1.]
+ [1. 0.]
+ [0. 1.]
+ [1. 0.]
+ [1. 0.]
+ [1. 0.]
+ [0. 1.]
+ [0. 1.]
+ [0. 1.]
+ [1. 0.]
+ [0. 1.]
+ [1. 0.]
+ [0. 1.]]
+
+Pérdida final (MSE): entrenamiento=4.17e-08 validación=5.79e-08 prueba=3.99e-08
+Exactitud (Keras, prueba): 100.0 % (16/16)
+Matriz de confusión (filas = real, columnas = predicho): ['punch', 'flex']
+[[8 0]
+ [0 8]]
+Saved artifact at '/var/folders/3v/2lvfc53d1hzfh9nnhjtngm380000gn/T/tmpb4hgsyqv'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 714), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 2), dtype=tf.float32, name=None)
+Captures:
+  5263268688: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263268880: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263269072: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263265424: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263265616: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263268304: TensorSpec(shape=(), dtype=tf.resource, name=None)
+/private/tmp/claude-501/-Users-mecatronica-Documents-UNI-cursos-esp32-curso-web-esp/b4a12d19-ab22-47aa-ad12-1b3b9ff24e30/scratchpad/venv-tf/lib/python3.11/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+Parámetros del modelo: 36,547
+Model is 148,380 bytes
+Exactitud (.tflite float32, prueba): 100.0 % (16/16)
+Entrada: float32 [1, 714]  Salida: float32 [1, 2]
+Operaciones que necesita el microcontrolador: FULLY_CONNECTED, SOFTMAX
+Header file, model.h, is 915,352 bytes.
+Escrito en /Users/mecatronica/Documents/UNI/cursos/esp32/ejemplos/20-gestos-imu-nano33/include/model.h
+Saved artifact at '/var/folders/3v/2lvfc53d1hzfh9nnhjtngm380000gn/T/tmp93sw5aw5'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 714), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 2), dtype=tf.float32, name=None)
+Captures:
+  5263268688: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263268880: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263269072: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263265424: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263265616: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5263268304: TensorSpec(shape=(), dtype=tf.resource, name=None)
+/private/tmp/claude-501/-Users-mecatronica-Documents-UNI-cursos-esp32-curso-web-esp/b4a12d19-ab22-47aa-ad12-1b3b9ff24e30/scratchpad/venv-tf/lib/python3.11/site-packages/tensorflow/lite/python/convert.py:846: UserWarning: Statistics for quantized inputs were expected, but not specified; continuing anyway.
+  warnings.warn(
+fully_quantize: 0, inference_type: 6, input_inference_type: INT8, output_inference_type: INT8
+/private/tmp/claude-501/-Users-mecatronica-Documents-UNI-cursos-esp32-curso-web-esp/b4a12d19-ab22-47aa-ad12-1b3b9ff24e30/scratchpad/venv-tf/lib/python3.11/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+float32: 148,380 bytes · int8: 40,872 bytes (3.6 veces más pequeño)
+Exactitud (.tflite int8, prueba): 100.0 % (16/16)
+
+# Tiempo total: 37 s

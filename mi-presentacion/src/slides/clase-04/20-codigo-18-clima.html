@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 18 · Clima · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s3-salida-ancha s4b-clima">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sun" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 18</span>
+					</div>
+
+					<h2 class="code-hour__title">El clima de Lima desde OpenWeatherMap, con la clave fuera del código</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Cliente con clave en secrets.h.</span>
+								<span class="deliverable__file"><span class="s3-archivo">src/main.cpp</span> · <span class="s3-archivo">include/secrets.h</span> · <span class="s3-archivo">secrets.example.h</span></span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">ESP32 y OLED por I²C.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Arquitectura y flujo.</span>
+								<span class="deliverable__file">diagrama-arquitectura.excalidraw · diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Cada 60 s, el clima de <code>Lima,PE</code> en °C (ciudad, temperatura y humedad) y cada error explicado según su código.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>La OLED del Ejemplo 16b, en 0x3C.</p>
+								<svg class="s3-esquema s4b-esquema" role="img" aria-label="OLED SSD1306 en 0x3C: GND a GND, VCC a 3V3, SCL al GPIO 22 y SDA al GPIO 21 del ESP32" viewBox="0 0 340 160" width="340" height="160"><rect class="s3-esq__caja" x="1" y="1" width="95" height="158" rx="6" /><rect class="s3-esq__caja" x="244" y="1" width="95" height="158" rx="6" /><text class="s3-esq__tit" x="48" y="26" text-anchor="middle">ESP32</text><text class="s3-esq__tit" x="291.5" y="26" text-anchor="middle">SSD1306</text><text class="s3-esq__sub" x="291.5" y="46" text-anchor="middle">0x3C</text><text class="s3-esq__pin" x="88" y="76" text-anchor="end">GND</text><text class="s3-esq__pin" x="252" y="76" text-anchor="start">GND</text><path class="s3-esq__gnd" d="M96 70 H244" /><circle class="s3-esq__pg" cx="96" cy="70" r="3.5" /><circle class="s3-esq__pg" cx="244" cy="70" r="3.5" /><text class="s3-esq__pin" x="88" y="102" text-anchor="end">3V3</text><text class="s3-esq__pin" x="252" y="102" text-anchor="start">VCC</text><path class="s3-esq__vcc" d="M96 96 H244" /><circle class="s3-esq__pv" cx="96" cy="96" r="3.5" /><circle class="s3-esq__pv" cx="244" cy="96" r="3.5" /><text class="s3-esq__pin" x="88" y="128" text-anchor="end">SCL 22</text><text class="s3-esq__pin" x="252" y="128" text-anchor="start">SCL</text><path class="s3-esq__b" d="M96 122 H244" /><circle class="s3-esq__pb" cx="96" cy="122" r="3.5" /><circle class="s3-esq__pb" cx="244" cy="122" r="3.5" /><text class="s3-esq__pin" x="88" y="154" text-anchor="end">SDA 21</text><text class="s3-esq__pin" x="252" y="154" text-anchor="start">SDA</text><path class="s3-esq__a" d="M96 148 H244" /><circle class="s3-esq__pa" cx="96" cy="148" r="3.5" /><circle class="s3-esq__pa" cx="244" cy="148" r="3.5" /><text class="s3-esq__sub" x="170" y="56" text-anchor="middle">I²C</text></svg>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps ArduinoJson @ ^6.21.5, Adafruit SSD1306 @ ^2.5.7 y Adafruit GFX Library @ ^1.11.5; clave en include/secrets.h (en .gitignore) y plantilla secrets.example.h.
+<b>2. Firmware.</b> secrets.h por __has_include, o la plantilla; WiFi con tope de 20 s y reinicio. Cada 60 s, GET https a api.openweathermap.org/data/2.5/weather con q=Lima,PE, units=metric y appid=OWM_API_KEY. Con 200: «\n--- REPORTE DEL CLIMA ---», «Ciudad: %s», «Temp: %.1f C», «Humedad: %d %%» y 25 guiones, también en la OLED; si no, un mensaje propio para 401, 404, 429, negativo y otros.
+<b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
+<b>4. Diagramas.</b> En Excalidraw: arquitectura y flujo de errores.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> La clave no se publica. https sin certificado cifra <code>appid</code>, pero no verifica al servidor.
+								</p>
+							</div>
+						</div>
+						<section aria-label="Salida esperada" class="code-hour__section code-hour__section--full s3-salida">
+							<h4>
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Salida esperada
+							</h4>
+							<div class="s4b-salida s4b-salida--2">
+								<figure class="s3-monitor s4b-fig s4b-fig--401">
+									<figcaption>Con la clave de la plantilla → 401</figcaption>
+									<div class="s4b-fila">
+										<div class="term">......
+WiFi conectado!
+Error HTTP 401: clave API inválida o aún no activa (revisa include/secrets.h).</div>
+										<span class="s4b-pantalla">
+											<svg class="s4b-oled" role="img" aria-label="OLED: ERROR 401, API KEY invalida, o aun no activa; el resto de la pantalla, en negro" viewBox="-5 -5 138 74"><rect class="s4b-oled__marco" x="-5" y="-5" width="138" height="74" rx="4" /><clipPath id="s4b-recorte-4"><rect x="0" y="0" width="128" height="64" /></clipPath><g clip-path="url(#s4b-recorte-4)"><text class="s4b-oled__t" x="0" y="7" font-size="8.5" textLength="53" lengthAdjust="spacingAndGlyphs">ERROR 401</text><text class="s4b-oled__t" x="0" y="15" font-size="8.5" textLength="95" lengthAdjust="spacingAndGlyphs">API KEY invalida</text><text class="s4b-oled__t" x="0" y="23" font-size="8.5" textLength="89" lengthAdjust="spacingAndGlyphs">o aun no activa</text></g></svg>
+										</span>
+									</div>
+								</figure>
+								<figure class="s3-monitor s4b-fig">
+									<figcaption>Clave válida, tras «WiFi conectado!»</figcaption>
+									<div class="s4b-fila">
+										<div class="term">
+--- REPORTE DEL CLIMA ---
+Ciudad: Lima
+Temp: 18.4 C
+Humedad: 83 %
+-------------------------</div>
+										<span class="s4b-pantalla">
+											<svg class="s4b-oled" role="img" aria-label="OLED: Ciudad: Lima, una línea, 18.4 C en grande y Humedad: 83 %" viewBox="-5 -5 138 74"><rect class="s4b-oled__marco" x="-5" y="-5" width="138" height="74" rx="4" /><clipPath id="s4b-recorte-5"><rect x="0" y="0" width="128" height="64" /></clipPath><g clip-path="url(#s4b-recorte-5)"><text class="s4b-oled__t" x="0" y="7" font-size="8.5" textLength="71" lengthAdjust="spacingAndGlyphs">Ciudad: Lima</text><line class="s4b-oled__ln" x1="0" y1="10.5" x2="128" y2="10.5" /><text class="s4b-oled__t" x="0" y="34" font-size="17.0" textLength="70" lengthAdjust="spacingAndGlyphs">18.4 C</text><text class="s4b-oled__t" x="0" y="52" font-size="8.5" textLength="77" lengthAdjust="spacingAndGlyphs">Humedad: 83 %</text></g></svg>
+											<small>valores ilustrativos</small>
+										</span>
+									</div>
+								</figure>
+							</div>
+						</section>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Sin clave válida, la salida correcta es el 401; el firmware separa fallo de clave y fallo de red, y cada mensaje indica qué revisar.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: recién clonado el proyecto, ¿compila? Compila, porque sin secrets.h __has_include usa la plantilla con un #warning, y la API responde 401. Una clave recién creada tarda en activarse y también da 401. La fuente de la OLED no tiene tildes: «invalida», «aun». Temperatura y humedad son ilustrativas; con units=metric llegan en °C. Al pedir Lima,PE el campo name vale «Lima». Tras un error, la OLED conserva el mensaje hasta la consulta siguiente.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>#if __has_include("secrets.h")</code> elige el archivo en compilación. <code>doc["main"]["temp"]</code> y <code>doc["main"]["humidity"]</code>; el cuerpo trae además coord, weather, wind y sys, de ahí los 2048 bytes. El plan gratuito admite 60 consultas por minuto.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Subir secrets.h al repositorio y dejar pública la clave.</li><li>Poner la clave en una URL http, donde viaja legible.</li><li>Tratar 401, 404 y 429 con un mismo «Error».</li><li>Olvidar <code>units=metric</code>; la temperatura llega entonces en kelvin.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-clave-api.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Clave</span>
+				</a>
+				<a class="slide-nav__link" href="21-cuatro-fallos.html">
+					<span>Fallos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

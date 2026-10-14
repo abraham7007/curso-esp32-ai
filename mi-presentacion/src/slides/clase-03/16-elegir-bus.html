@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Elegir bus · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · SPI y elección de bus</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>Criterios</em> de elección entre UART, I²C y SPI
+				</h1>
+
+				<div class="s3d-buses crece">
+					<section class="s3d-bus" aria-label="UART">
+						<h2 class="s3d-bus__nombre">UART</h2>
+						<svg class="s3d-svg s3d-bus__topo" viewBox="0 0 420 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dos placas unidas punto a punto: TX de cada una con RX de la otra, y masa común">
+							<rect class="caja" x="10" y="30" width="110" height="150" rx="10" />
+							<text class="mid" x="65" y="105" font-size="30">A</text>
+							<rect class="caja" x="300" y="30" width="110" height="150" rx="10" />
+							<text class="mid" x="355" y="105" font-size="30">B</text>
+							<path class="ln ln--acc" d="M120 65 C200 65 220 140 300 140" />
+							<path class="ln ln--navy" d="M120 140 C200 140 220 65 300 65" />
+							<path class="ln ln--mut" d="M120 172 H300" />
+													</svg>
+						<p class="s3d-bus__valor">2 líneas</p>
+						<p class="s3d-bus__valor">2 extremos</p>
+						<p class="s3d-bus__valor">11,5 kB/s<span class="s3d-bus__cond">a 115 200 baud</span></p>
+						<p class="s3d-bus__cuando"><b>Otra placa</b>, GPS</p>
+					</section>
+
+					<section class="s3d-bus" aria-label="I²C">
+						<h2 class="s3d-bus__nombre">I²C</h2>
+						<svg class="s3d-svg s3d-bus__topo" viewBox="0 0 420 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Un maestro y tres dispositivos colgados de las mismas dos líneas SDA y SCL, cada uno con su dirección: 0x3C, 0x77 y 0x68">
+							<rect class="caja" x="6" y="30" width="96" height="150" rx="10" />
+							<text class="mid" x="54" y="105" font-size="30">M</text>
+							<path class="ln ln--acc" d="M102 60 H414" />
+							<path class="ln ln--navy" d="M102 92 H414" />
+														<path class="ln ln--fina ln--acc" d="M150 60 V138 M250 60 V138 M350 60 V138" />
+							<path class="ln ln--fina ln--navy" d="M180 92 V138 M280 92 V138 M380 92 V138" />
+							<rect class="caja" x="130" y="138" width="80" height="62" rx="8" />
+							<rect class="caja" x="230" y="138" width="80" height="62" rx="8" />
+							<rect class="caja" x="330" y="138" width="80" height="62" rx="8" />
+							<text class="mid" x="170" y="169" font-size="21">0x3C</text>
+							<text class="mid" x="270" y="169" font-size="21">0x77</text>
+							<text class="mid" x="370" y="169" font-size="21">0x68</text>
+						</svg>
+						<p class="s3d-bus__valor">2 líneas</p>
+						<p class="s3d-bus__valor">112 direcciones</p>
+						<p class="s3d-bus__valor">11–44 kB/s<span class="s3d-bus__cond">a 100–400 kHz</span></p>
+						<p class="s3d-bus__cuando"><b>Sensores</b> lentos</p>
+					</section>
+
+					<section class="s3d-bus" aria-label="SPI">
+						<h2 class="s3d-bus__nombre">SPI</h2>
+						<svg class="s3d-svg s3d-bus__topo" viewBox="0 0 420 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Un maestro con tres líneas compartidas hacia tres dispositivos y una línea de selección propia para cada uno">
+							<rect class="caja" x="6" y="10" width="90" height="195" rx="10" />
+							<text class="mid" x="51" y="108" font-size="30">M</text>
+							<path class="ln ln--navy" d="M96 24 H414" />
+							<path class="ln ln--acc" d="M96 42 H414" />
+							<path class="ln" d="M96 60 H414" />
+							<path class="ln ln--fina ln--navy" d="M145 24 V100 M245 24 V100 M345 24 V100" />
+							<path class="ln ln--fina ln--acc" d="M160 42 V100 M260 42 V100 M360 42 V100" />
+							<path class="ln ln--fina" d="M175 60 V100 M275 60 V100 M375 60 V100" />
+							<path class="ln ln--mut" d="M96 168 H195 V150 M96 184 H295 V150 M96 200 H395 V150" />
+							<rect class="caja" x="130" y="100" width="80" height="50" rx="8" />
+							<rect class="caja" x="230" y="100" width="80" height="50" rx="8" />
+							<rect class="caja" x="330" y="100" width="80" height="50" rx="8" />
+							<text class="mid" x="170" y="125" font-size="21">CS1</text>
+							<text class="mid" x="270" y="125" font-size="21">CS2</text>
+							<text class="mid" x="370" y="125" font-size="21">CS3</text>
+						</svg>
+						<p class="s3d-bus__valor">3 líneas + CS</p>
+						<p class="s3d-bus__valor">un CS por chip</p>
+						<p class="s3d-bus__valor">1,25 MB/s<span class="s3d-bus__cond">a 10 MHz</span></p>
+						<p class="s3d-bus__cuando"><b>Pantallas</b> y memorias</p>
+					</section>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de comentar la fila inferior (caudal: UART
+					a 115 200 baud, I²C a 100–400 kHz, SPI a 10 MHz): una pantalla de
+					320 × 240 píxeles a 16 bits son 150 kB por imagen; ¿cuánto tarda en
+					enviarse por I²C a 400 kHz? Respuesta: unos 3,5 s; por SPI a 10 MHz,
+					0,12 s. Ese es el criterio de volumen. El de cantidad: para dos extremos
+					basta UART; con cinco sensores, I²C los conecta con dos pines y SPI
+					pediría tres más cinco CS. Las cifras de caudal son el techo bruto, sin
+					dirección, ACK ni pausas entre bytes.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Tabla completa</h4>
+					<p>Líneas sin contar GND, que siempre es común. «Un CS por chip»: cada dispositivo SPI ocupa un GPIO de selección propio; el límite es cuántos pines libres quedan. Los caudales dependen de la velocidad elegida, no del bus: el SPI del ESP32 llega a 80 MHz. Usos típicos: UART para GPS, módem u otra placa; I²C para sensores lentos; SPI para pantallas y memorias.</p>
+					<ul>
+						<li><b>Selección:</b> UART ninguna (punto a punto) · I²C dirección de 7 bits (0x08–0x77) · SPI línea CS.</li>
+						<li><b>Distancia:</b> UART metros · I²C decenas de cm · SPI centímetros.</li>
+						<li><b>Velocidad en el ESP32:</b> UART hasta 5 Mbaud · I²C 100/400 kHz · SPI hasta 80 MHz.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-bus-spi.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>SPI</span>
+				</a>
+				<a class="slide-nav__link" href="17-trama-propia.html">
+					<span>Trama propia</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

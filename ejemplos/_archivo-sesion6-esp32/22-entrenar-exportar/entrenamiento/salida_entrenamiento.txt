@@ -1,0 +1,92 @@
+$ python simular_datos.py
+gestos.csv: 3079 ventanas de 16 sesiones (50 muestras por ventana)
+  quieto=1009  giro=1088  vaiven=982
+
+$ python entrenar.py
+Python 3.11.7 | scikit-learn 1.9.1 | emlearn 0.23.2 | numpy 2.4.6 | pandas 3.0.6
+
+gestos.csv: 3079 ventanas, 16 sesiones
+  por clase: quieto=1009  giro=1088  vaiven=982
+  entrenamiento: 2253 ventanas de 12 sesiones
+  prueba:        826 ventanas de 4 sesiones (no vistas al entrenar)
+
+=== Arbol de decision (profundidad 4) ===
+Matriz de confusion (filas = real, columnas = prediccion), conjunto de PRUEBA:
+              quieto    giro  vaiven   <- prediccion
+  quieto         276       0       2
+  giro             0     252      13
+  vaiven           0       3     280
+Exactitud en prueba: 97.8 %   (en entrenamiento: 96.9 %)
+              precision    recall  f1-score   support
+
+      quieto      1.000     0.993     0.996       278
+        giro      0.988     0.951     0.969       265
+      vaiven      0.949     0.989     0.969       283
+
+    accuracy                          0.978       826
+   macro avg      0.979     0.978     0.978       826
+weighted avg      0.979     0.978     0.978       826
+
+
+=== Bosque de 10 arboles (profundidad 4) ===
+Matriz de confusion (filas = real, columnas = prediccion), conjunto de PRUEBA:
+              quieto    giro  vaiven   <- prediccion
+  quieto         276       0       2
+  giro             0     250      15
+  vaiven           0       3     280
+Exactitud en prueba: 97.6 %   (en entrenamiento: 96.7 %)
+              precision    recall  f1-score   support
+
+      quieto      1.000     0.993     0.996       278
+        giro      0.988     0.943     0.965       265
+      vaiven      0.943     0.989     0.966       283
+
+    accuracy                          0.976       826
+   macro avg      0.977     0.975     0.976       826
+weighted avg      0.977     0.976     0.976       826
+
+Reglas del arbol de profundidad 4 (exportado como arbol, emlearn las escribe como ifs de C;
+ el bosque son 10 arboles asi, cada uno con su propia muestra de los datos):
+|--- desv <= 37.34
+|   |--- desv <= 32.80
+|   |   |--- class: 0
+|   |--- desv >  32.80
+|   |   |--- desv <= 32.98
+|   |   |   |--- class: 2
+|   |   |--- desv >  32.98
+|   |   |   |--- class: 0
+|--- desv >  37.34
+|   |--- cruces <= 1.50
+|   |   |--- desv <= 82.06
+|   |   |   |--- media <= 1028.90
+|   |   |   |   |--- class: 1
+|   |   |   |--- media >  1028.90
+|   |   |   |   |--- class: 2
+|   |   |--- desv >  82.06
+|   |   |   |--- media <= 3451.25
+|   |   |   |   |--- class: 1
+|   |   |   |--- media >  3451.25
+|   |   |   |   |--- class: 1
+|   |--- cruces >  1.50
+|   |   |--- rango <= 1879.50
+|   |   |   |--- media <= 599.60
+|   |   |   |   |--- class: 1
+|   |   |   |--- media >  599.60
+|   |   |   |   |--- class: 2
+|   |   |--- rango >  1879.50
+|   |   |   |--- class: 1
+
+
+emlearn: el codigo C coincide con scikit-learn en 825 de 826 ventanas de prueba
+  distinta: [3231.699951171875, 51.470001220703125, 181.0, 1.0] -> scikit-learn=vaiven, C de emlearn=giro (votos [0.0, 5.0, 5.0])
+Matriz del modelo exportado (codigo C de emlearn en el PC) = la que debe dar el ESP32:
+              quieto    giro  vaiven   <- prediccion
+  quieto         276       1       1
+  giro             0     250      15
+  vaiven           0       3     280
+Exactitud: 97.6 % (806/826)
+
+Exportado al ESP32: bosque de 10 arboles (profundidad 4)
+  10 arbol(es), 89 nodos de decision, 99 hojas
+  include/modelo_gestos.h   15695 bytes de texto C
+  include/casos_prueba.h    34519 bytes (826 ventanas de prueba + matriz del PC)

@@ -1,0 +1,392 @@
+/* Estilos propios de la sesión 6 (modo ponencia, Nano 33 BLE Sense). Todo prefijado .ponencia. */
+
+/* sesión 6 agente C: simulaciones 03, 06, 09, 10 y 11.
+   Lecturas de ancho fijo: los mandos no saltan al cambiar la cifra. */
+.ponencia .s6c-ancho,
+.ponencia .mandos .lectura > .s6c-ancho {
+	display: inline-block;
+	min-width: 9ch;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.ponencia .mandos .lectura > .s6c-ancho--largo {
+	min-width: 12ch;
+	text-align: left;
+}
+
+.ponencia .mandos .lectura > .s6c-ancho--corto,
+.ponencia .mandos .control > .s6c-ancho--corto {
+	min-width: 5ch;
+}
+
+.ponencia .mandos .control > .s6c-ancho--medio {
+	min-width: 9ch;
+}
+
+/* 11: porcentaje con un decimal («95,9 %») sin mover el deslizador. */
+.ponencia .mandos .lectura > .s6c-ancho--pct {
+	min-width: 6.5ch;
+}
+
+.ponencia .s6c-mal {
+	color: var(--color-accent);
+}
+
+.ponencia .s6c-bien {
+	color: var(--color-ok);
+}
+
+.ponencia .mandos .s6c-rotulo {
+	font-size: var(--fs-body);
+	color: var(--color-text-muted);
+}
+
+/* 06: tres deslizadores en la barra; cada uno cede ancho sin saltar de fila. */
+.ponencia .mandos .control.s6c-estrecho {
+	flex: 1 1 9rem;
+}
+
+.ponencia .mandos .control.s6c-estrecho > span {
+	white-space: nowrap;
+}
+/* fin sesión 6 agente C */
+
+/* sesión 6 agente D: láminas 07, 08, 16, 17, 18 y 19.
+   Los diagramas reutilizan .s3d-svg (sesión 3) y .s4d-fila (sesión 4);
+   aquí solo lo propio. */
+.ponencia .s3d-svg .s6d-abanico path {
+	fill: none;
+	stroke: var(--color-text-muted);
+	stroke-width: 2;
+	opacity: 0.55;
+}
+
+.ponencia .s3d-svg .s6d-barra-acc {
+	fill: var(--color-accent-soft);
+	stroke: var(--color-accent);
+	stroke-width: 3;
+}
+
+/* 08: las seis curvas del gesto, más gruesas que las líneas del dibujo. */
+.ponencia .s3d-svg .s6d-curva {
+	fill: none;
+	stroke-width: 4.5;
+	stroke-linejoin: round;
+}
+
+.ponencia .s3d-svg .s6d-curva--x {
+	stroke: var(--color-accent);
+}
+
+.ponencia .s3d-svg .s6d-curva--y {
+	stroke: var(--color-navy);
+}
+
+.ponencia .s3d-svg .s6d-curva--z {
+	stroke: var(--color-ok);
+}
+
+/* 19: sin insignia, la caja de la palabra en rojo asoma por arriba;
+   un poco de aire la deja dentro del área útil. */
+.ponencia .slide__title.s6d-titulo {
+	padding-top: 0.15em;
+}
+/* fin sesión 6 agente D */
+
+/* sesión 6 agente A: láminas 01, 02, 04, 05, 12 y 13.
+   Los diagramas reutilizan .s4a-svg (sesión 4) y la portada .s4a-portada-grid;
+   aquí solo lo propio: la placa Nano 33 BLE Sense dibujada (PCB, chips,
+   módulo NINA, pines) y los fondos de fila de las tablas SVG. */
+.ponencia .s6a-portada {
+	grid-column: 2;
+	grid-row: 2 / 4;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	margin: 0;
+}
+
+.ponencia .s6a-portada > svg {
+	flex: 1 1 0;
+	min-height: 0;
+}
+
+.ponencia .s4a-svg .s6a-pcb {
+	fill: var(--color-navy-soft);
+	stroke: var(--color-navy);
+	stroke-width: 4;
+}
+
+.ponencia .s4a-svg .s6a-chip {
+	fill: var(--color-code-bg);
+	stroke: var(--color-code-border);
+	stroke-width: 2;
+}
+
+.ponencia .s4a-svg .s6a-chip--sensor {
+	stroke: var(--color-accent);
+	stroke-width: 5;
+}
+
+.ponencia .s4a-svg .s6a-lata {
+	fill: var(--color-surface-2);
+	stroke: var(--color-text-muted);
+	stroke-width: 3;
+}
+
+.ponencia .s4a-svg .s6a-pad {
+	fill: var(--color-warn-soft);
+	stroke: var(--color-warn);
+	stroke-width: 2.5;
+}
+
+.ponencia .s4a-svg .s6a-agujero {
+	fill: var(--color-bg);
+	stroke: var(--color-navy);
+	stroke-width: 3;
+}
+
+.ponencia .s4a-svg .s6a-ventana {
+	fill: none;
+	stroke: var(--color-code-dim);
+	stroke-width: 3;
+}
+
+.ponencia .s4a-svg .s6a-led {
+	fill: var(--color-surface);
+	stroke: var(--color-text-muted);
+	stroke-width: 2;
+}
+
+.ponencia .s4a-svg .s6a-led--rgb {
+	stroke: var(--color-navy);
+	stroke-width: 4;
+}
+
+/* Fondos de fila y de columna destacada en las tablas dibujadas (02, 13). */
+.ponencia .s4a-svg .s6a-fila {
+	fill: var(--color-bg-subtle);
+}
+
+.ponencia .s4a-svg .s6a-elegida {
+	fill: var(--color-ok-soft);
+	stroke: var(--color-ok);
+	stroke-width: 3;
+}
+
+.ponencia .s4a-svg .s6a-pista {
+	fill: var(--color-surface-2);
+}
+
+.ponencia .s4a-svg .s6a-marca {
+	stroke: var(--color-bg);
+	stroke-width: 2;
+}
+
+.ponencia .s4a-svg .s6a-icono {
+	fill: none;
+	stroke: currentColor;
+	color: var(--color-heading);
+}
+
+.ponencia .s4a-svg .s6a-icono--acc {
+	color: var(--color-accent);
+}
+
+/* 13: filas de las herramientas adoptadas. */
+.ponencia .s4a-svg .s6a-adoptada {
+	fill: var(--color-ok-soft);
+}
+
+/* 05: número de etapa sobre el círculo relleno. */
+.ponencia .s4a-svg .s6a-num {
+	fill: var(--color-bg);
+}
+/* fin sesión 6 agente A */
+
+/* sesión 6 v2 agente B: «La hora del código» 14 (Ejemplo 20) y 15 (Ejemplo 21).
+   A la izquierda, lo que se hace y se ve en la mesa: los tres tiempos
+   (capturar, entrenar, inferir), la placa Nano 33 BLE Sense dibujada con la
+   topología de la 12 y el sensor usado resaltado, el CSV de la captura y el
+   aviso. A la derecha, el prompt y la traza de la inferencia, cuya línea
+   más larga (79 caracteres en el 21) cabe entera. Los valores que dependen
+   del gesto o del objeto van marcados con un recuadro discontinuo. */
+.ponencia--trabajo .s6n-hoja .code-hour__body--pair {
+	grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+}
+
+.ponencia--trabajo .s6n-pasos {
+	display: grid;
+	gap: var(--space-3xs);
+	margin: 0;
+	padding-left: 1.7em;
+	list-style: decimal;
+	font-size: var(--fs-small);
+}
+
+.ponencia--trabajo .s6n-pasos li::marker {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	color: var(--color-accent);
+}
+
+.ponencia--trabajo .s6n-pasos code {
+	white-space: nowrap;
+}
+
+.ponencia--trabajo
+	.s6n-hoja
+	.code-hour__stack:first-child
+	> .code-hour__section:nth-child(2)
+	> .s6n-placa {
+	width: clamp(21rem, 23vw, 28rem);
+	margin-top: 0;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-pcb {
+	fill: var(--color-navy-soft);
+	stroke: var(--color-navy);
+	stroke-width: 1.5;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-agujero {
+	fill: var(--color-bg);
+	stroke: var(--color-navy);
+	stroke-width: 1;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-pad {
+	fill: var(--color-warn-soft);
+	stroke: var(--color-warn);
+	stroke-width: 1;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-lata {
+	fill: var(--color-surface-2);
+	stroke: var(--color-text-muted);
+	stroke-width: 1.2;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-chip {
+	fill: var(--color-code-bg);
+	stroke: var(--color-code-border);
+	stroke-width: 1;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-smd {
+	fill: var(--color-surface);
+	stroke: var(--color-text-muted);
+	stroke-width: 0.8;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-led {
+	fill: var(--color-surface);
+}
+
+.ponencia--trabajo .s6n-placa .s6n-usado {
+	stroke: var(--color-accent);
+	stroke-width: 3;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-ventana {
+	fill: none;
+	stroke: var(--color-code-dim);
+	stroke-width: 1.2;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-cable {
+	fill: none;
+	stroke: var(--color-text-muted);
+	stroke-width: 6;
+	stroke-linecap: round;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-clavija {
+	fill: var(--color-text-muted);
+}
+
+.ponencia--trabajo .s6n-placa .s6n-guia {
+	fill: none;
+	stroke: var(--color-accent);
+	stroke-width: 2;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-rot {
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.ponencia--trabajo .s6n-placa .s6n-rot--acc {
+	fill: var(--color-accent);
+}
+
+.ponencia--trabajo .s6n-placa .s6n-rot--mut {
+	font-weight: 500;
+	fill: var(--color-text-muted);
+}
+
+/* Texto del montaje: el nombre de la librería, a ≥ 20 px también a 1440. */
+.ponencia--trabajo .s6n-montaje p {
+	font-size: var(--fs-body);
+}
+
+.ponencia--trabajo .s6n-montaje p code {
+	font-size: clamp(1.25rem, 1.39vw, 1.45rem);
+}
+
+/* Trazas: la de la inferencia baja la letra con el ancho antes que recortar. */
+.ponencia--trabajo .s6n-hoja .s3-monitor .term {
+	flex: 0 0 auto;
+	font-size: clamp(0.85rem, 0.94vw, 1.2rem);
+}
+
+.ponencia--trabajo .s6n-hoja .s6n-inferencia .term {
+	font-size: min(clamp(0.85rem, 0.94vw, 1.2rem), 2.05cqi);
+	line-height: 1.4;
+}
+
+.ponencia--trabajo .s6n-var {
+	background: var(--color-code-border);
+	outline: 1px dashed var(--color-code-dim);
+	outline-offset: -1px;
+	border-radius: 2px;
+}
+
+.ponencia--trabajo figcaption .s6n-var {
+	padding: 0 0.2em;
+	background: none;
+	outline-color: var(--color-text-muted);
+}
+
+/* El CSV de la captura es estrecho: el aviso ocupa el resto de la fila. */
+.ponencia--trabajo .s6n-fila {
+	display: flex;
+	gap: var(--space-sm);
+	align-items: stretch;
+}
+
+.ponencia--trabajo .s6n-fila--apilada {
+	flex-direction: column;
+	gap: var(--space-2xs);
+}
+
+.ponencia--trabajo .s6n-fila > .s6n-captura {
+	flex: 0 0 auto;
+	container-type: normal;
+}
+
+.ponencia--trabajo .s6n-aviso {
+	flex: 1 1 0;
+	align-self: flex-end;
+	margin: 0;
+	font-size: var(--fs-small);
+}
+/* fin sesión 6 v2 agente B */
+
+/* sesión 6 agente D, ronda 1: 19. Aire entre los enlaces del pie y la
+   navegación; el diagrama cede ese alto. */
+.ponencia .def.s6d-pie {
+	margin-bottom: clamp(0.75rem, 2.4vh, 1.75rem);
+}

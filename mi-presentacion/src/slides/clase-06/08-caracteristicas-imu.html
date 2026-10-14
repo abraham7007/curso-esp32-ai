@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ventana IMU · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Redes y datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Un gesto son 119 muestras de seis <em>ejes</em>
+				</h1>
+
+				<div class="def">
+					<p>La captura arranca cuando la suma de los tres ejes de aceleración llega a 2,5 g y guarda 119 muestras del acelerómetro y del giroscopio; la red recibe 714 números escalados entre 0 y 1.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1800 880" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis curvas del gesto 12 del archivo flex.csv del ejemplo 20, datos sintéticos. Arriba, la aceleración en los ejes X, Y y Z, en g, con el rango del sensor de más a menos 4 g; abajo, la velocidad de giro en los mismos ejes, en grados por segundo, de más a menos 1000; el giro en X llega a unos 600. La captura empieza en la muestra 0, cuando la suma de los valores absolutos de la aceleración supera 2,5 g, y termina en la muestra 118, unos 1,2 segundos a 100 hercios. A la derecha, 119 muestras por 6 ejes son 714 entradas. Después, cada valor se escala entre 0 y 1: aceleración más 4 entre 8, giro más 2000 entre 4000; y se coloca en la posición muestra por 6 más eje: aX0, aY0, aZ0, gX0, gY0, gZ0, aX1 y así sucesivamente.">
+						<!-- panel de aceleración -->
+						<path class="ln ln--vida" d="M150 50 H1150 M150 350 H1150" />
+						<path class="ln ln--fina ln--mut" d="M150 200 H1150" />
+						<text class="mut fin" x="130" y="50" font-size="26">+4 g</text>
+						<text class="mut fin" x="130" y="200" font-size="26">0</text>
+						<text class="mut fin" x="130" y="350" font-size="26">−4 g</text>
+						<text class="sans mut fin" x="1150" y="20" font-size="26">aceleración</text>
+						<path class="s6d-curva s6d-curva--z" d="M150 163 L158 162 L167 161 L175 157 L184 154 L192 151 L201 145 L209 138 L218 132 L226 125 L235 119 L243 112 L252 107 L260 99 L269 92 L277 86 L286 79 L294 77 L303 73 L311 71 L319 70 L328 70 L336 70 L345 72 L353 74 L362 78 L370 85 L379 90 L387 97 L396 103 L404 113 L413 122 L421 128 L430 138 L438 145 L447 156 L455 166 L464 175 L472 183 L481 193 L489 201 L497 206 L506 213 L514 218 L523 224 L531 230 L540 235 L548 234 L557 236 L565 237 L574 235 L582 237 L591 237 L599 236 L608 239 L616 236 L625 235 L633 237 L642 237 L650 238 L658 236 L667 235 L675 236 L684 236 L692 237 L701 236 L709 237 L718 238 L726 237 L735 237 L743 237 L752 238 L760 236 L769 237 L777 237 L786 237 L794 238 L803 238 L811 236 L819 238 L828 237 L836 237 L845 239 L853 238 L862 237 L870 237 L879 239 L887 236 L896 238 L904 238 L913 237 L921 237 L930 238 L938 238 L947 237 L955 239 L964 238 L972 237 L981 238 L989 237 L997 235 L1006 237 L1014 238 L1023 236 L1031 239 L1040 236 L1048 237 L1057 236 L1065 236 L1074 238 L1082 238 L1091 240 L1099 238 L1108 237 L1116 238 L1125 237 L1133 238 L1142 235 L1150 238" />
+						<path class="s6d-curva s6d-curva--y" d="M150 85 L158 111 L167 128 L175 142 L184 154 L192 162 L201 167 L209 170 L218 173 L226 177 L235 174 L243 177 L252 175 L260 173 L269 173 L277 171 L286 170 L294 166 L303 167 L311 166 L319 165 L328 164 L336 162 L345 164 L353 164 L362 164 L370 167 L379 168 L387 169 L396 170 L404 173 L413 174 L421 179 L430 184 L438 184 L447 188 L455 191 L464 193 L472 198 L481 198 L489 200 L497 201 L506 203 L514 206 L523 207 L531 207 L540 206 L548 206 L557 208 L565 206 L574 208 L582 205 L591 206 L599 207 L608 205 L616 203 L625 204 L633 204 L642 204 L650 203 L658 204 L667 201 L675 201 L684 201 L692 202 L701 203 L709 201 L718 200 L726 201 L735 199 L743 199 L752 202 L760 200 L769 202 L777 202 L786 201 L794 201 L803 200 L811 201 L819 203 L828 202 L836 203 L845 200 L853 202 L862 201 L870 202 L879 202 L887 202 L896 201 L904 199 L913 199 L921 199 L930 200 L938 201 L947 202 L955 201 L964 199 L972 197 L981 200 L989 196 L997 198 L1006 196 L1014 196 L1023 198 L1031 197 L1040 197 L1048 196 L1057 196 L1065 196 L1074 196 L1082 195 L1091 195 L1099 197 L1108 195 L1116 196 L1125 197 L1133 197 L1142 198 L1150 196" />
+						<path class="s6d-curva s6d-curva--x" d="M150 234 L158 226 L167 222 L175 214 L184 211 L192 206 L201 204 L209 203 L218 202 L226 202 L235 201 L243 199 L252 200 L260 199 L269 202 L277 200 L286 202 L294 205 L303 204 L311 207 L319 206 L328 208 L336 209 L345 207 L353 212 L362 211 L370 211 L379 212 L387 213 L396 210 L404 213 L413 212 L421 213 L430 211 L438 211 L447 211 L455 212 L464 209 L472 209 L481 209 L489 208 L497 206 L506 205 L514 205 L523 202 L531 199 L540 202 L548 200 L557 200 L565 198 L574 199 L582 197 L591 195 L599 193 L608 195 L616 195 L625 191 L633 191 L642 193 L650 190 L658 191 L667 191 L675 193 L684 192 L692 192 L701 191 L709 193 L718 193 L726 195 L735 197 L743 193 L752 195 L760 199 L769 197 L777 198 L786 199 L794 201 L803 201 L811 203 L819 202 L828 205 L836 207 L845 207 L853 206 L862 207 L870 207 L879 208 L887 207 L896 209 L904 206 L913 208 L921 208 L930 205 L938 206 L947 204 L955 206 L964 204 L972 202 L981 204 L989 201 L997 199 L1006 200 L1014 200 L1023 197 L1031 199 L1040 197 L1048 197 L1057 193 L1065 194 L1074 192 L1082 194 L1091 195 L1099 192 L1108 194 L1116 193 L1125 195 L1133 194 L1142 195 L1150 194" />
+
+						<!-- panel de giro -->
+						<path class="ln ln--vida" d="M150 410 H1150 M150 710 H1150" />
+						<path class="ln ln--fina ln--mut" d="M150 560 H1150" />
+						<text class="mut fin" x="130" y="410" font-size="26">+1000</text>
+						<text class="mut fin" x="130" y="560" font-size="26">0</text>
+						<text class="mut fin" x="130" y="710" font-size="26">−1000</text>
+						<text class="sans mut fin" x="1150" y="382" font-size="26">giro · °/s</text>
+						<path class="s6d-curva s6d-curva--z" d="M150 560 L158 560 L167 559 L175 558 L184 558 L192 557 L201 557 L209 557 L218 556 L226 556 L235 556 L243 555 L252 554 L260 555 L269 555 L277 554 L286 553 L294 554 L303 553 L311 554 L319 553 L328 552 L336 553 L345 553 L353 552 L362 552 L370 553 L379 553 L387 553 L396 552 L404 552 L413 553 L421 553 L430 553 L438 553 L447 554 L455 555 L464 555 L472 555 L481 555 L489 556 L497 556 L506 557 L514 557 L523 558 L531 558 L540 557 L548 560 L557 559 L565 560 L574 560 L582 559 L591 559 L599 560 L608 559 L616 560 L625 561 L633 560 L642 559 L650 559 L658 560 L667 559 L675 561 L684 560 L692 560 L701 560 L709 561 L718 560 L726 560 L735 561 L743 560 L752 561 L760 559 L769 559 L777 560 L786 561 L794 561 L803 559 L811 560 L819 560 L828 559 L836 560 L845 559 L853 560 L862 559 L870 561 L879 560 L887 561 L896 559 L904 560 L913 560 L921 560 L930 560 L938 560 L947 560 L955 560 L964 560 L972 560 L981 559 L989 560 L997 560 L1006 560 L1014 559 L1023 560 L1031 560 L1040 560 L1048 560 L1057 560 L1065 561 L1074 559 L1082 559 L1091 561 L1099 561 L1108 560 L1116 561 L1125 561 L1133 561 L1142 559 L1150 560" />
+						<path class="s6d-curva s6d-curva--y" d="M150 560 L158 559 L167 558 L175 556 L184 556 L192 555 L201 553 L209 553 L218 552 L226 551 L235 551 L243 550 L252 549 L260 549 L269 549 L277 548 L286 549 L294 548 L303 548 L311 549 L319 549 L328 548 L336 549 L345 549 L353 551 L362 551 L370 553 L379 553 L387 554 L396 556 L404 557 L413 558 L421 559 L430 560 L438 561 L447 561 L455 564 L464 563 L472 565 L481 566 L489 567 L497 568 L506 569 L514 569 L523 571 L531 570 L540 571 L548 571 L557 572 L565 572 L574 572 L582 572 L591 572 L599 571 L608 571 L616 571 L625 570 L633 569 L642 568 L650 569 L658 569 L667 566 L675 566 L684 564 L692 562 L701 561 L709 561 L718 559 L726 560 L735 557 L743 556 L752 556 L760 555 L769 552 L777 552 L786 551 L794 549 L803 550 L811 550 L819 549 L828 550 L836 549 L845 547 L853 548 L862 549 L870 549 L879 547 L887 550 L896 549 L904 551 L913 550 L921 551 L930 553 L938 554 L947 554 L955 554 L964 555 L972 557 L981 557 L989 559 L997 560 L1006 562 L1014 562 L1023 564 L1031 565 L1040 566 L1048 566 L1057 568 L1065 568 L1074 569 L1082 570 L1091 570 L1099 571 L1108 572 L1116 572 L1125 572 L1133 572 L1142 571 L1150 571" />
+						<path class="s6d-curva s6d-curva--x" d="M150 559 L158 553 L167 549 L175 544 L184 538 L192 531 L201 527 L209 521 L218 514 L226 510 L235 505 L243 500 L252 496 L260 492 L269 488 L277 485 L286 481 L294 477 L303 476 L311 474 L319 472 L328 470 L336 469 L345 469 L353 468 L362 468 L370 469 L379 469 L387 470 L396 471 L404 473 L413 477 L421 479 L430 482 L438 483 L447 488 L455 492 L464 495 L472 501 L481 506 L489 511 L497 516 L506 521 L514 526 L523 532 L531 537 L540 543 L548 548 L557 554 L565 560 L574 561 L582 561 L591 563 L599 563 L608 564 L616 564 L625 565 L633 566 L642 565 L650 567 L658 567 L667 567 L675 566 L684 565 L692 567 L701 567 L709 567 L718 567 L726 566 L735 566 L743 567 L752 567 L760 567 L769 566 L777 565 L786 565 L794 566 L803 564 L811 565 L819 564 L828 564 L836 564 L845 564 L853 563 L862 562 L870 563 L879 562 L887 563 L896 562 L904 562 L913 562 L921 563 L930 561 L938 561 L947 561 L955 561 L964 561 L972 560 L981 561 L989 560 L997 561 L1006 558 L1014 560 L1023 558 L1031 559 L1040 558 L1048 560 L1057 559 L1065 559 L1074 558 L1082 559 L1091 558 L1099 559 L1108 558 L1116 557 L1125 559 L1133 559 L1142 558 L1150 559" />
+
+						<!-- disparo y eje de muestras -->
+						<path class="ln ln--acc" d="M150 30 V730" />
+						<text class="sans acc" x="170" y="20" font-size="27" font-weight="700">disparo: |aX| + |aY| + |aZ| ≥ 2,5 g</text>
+						<text class="mid" x="150" y="756" font-size="26">0</text>
+						<text class="mid" x="1150" y="756" font-size="26">118</text>
+						<text class="sans mut mid" x="650" y="756" font-size="26">muestra · ≈ 1,2 s a 100 Hz</text>
+
+						<!-- leyenda -->
+						<path class="s6d-curva s6d-curva--x" d="M150 818 H210" />
+						<text x="226" y="818" font-size="27">aX · gX</text>
+						<path class="s6d-curva s6d-curva--y" d="M420 818 H480" />
+						<text x="496" y="818" font-size="27">aY · gY</text>
+						<path class="s6d-curva s6d-curva--z" d="M690 818 H750" />
+						<text x="766" y="818" font-size="27">aZ · gZ</text>
+						
+
+						<!-- la cuenta -->
+						<text class="sans" x="1260" y="50" font-size="36" font-weight="700">119 muestras</text>
+						<text class="sans" x="1260" y="106" font-size="36" font-weight="700">× 6 ejes</text>
+						<path class="ln ln--fina" d="M1260 142 H1800" />
+						<text class="acc" x="1260" y="210" font-size="96" font-weight="700">714</text>
+						<text class="sans" x="1450" y="214" font-size="32">entradas</text>
+						<text class="sans mut" x="1260" y="818" font-size="26">flex.csv sintético del ejemplo 20 · gesto 12</text>
+
+						<g>
+							<text class="sans mut" x="1260" y="320" font-size="27">escalar entre 0 y 1</text>
+							<text x="1260" y="372" font-size="30">a′ = (a + 4) / 8</text>
+							<text x="1260" y="424" font-size="30">g′ = (g + 2000) / 4000</text>
+							<text class="sans mut" x="1260" y="520" font-size="27">posición en la entrada</text>
+							<text class="navy" x="1260" y="572" font-size="30">muestra · 6 + eje</text>
+							<text class="sans" x="1260" y="640" font-size="28">aX₀ aY₀ aZ₀ gX₀ gY₀ gZ₀</text>
+							<text class="sans" x="1260" y="690" font-size="28">aX₁ aY₁ … gZ₁₁₈</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de mostrar la cuenta: ¿cuántos números recibe la red por cada gesto? Respuesta: 714, de 119 muestras × 6 ejes.
+				</p>
+				<p>
+					El ejemplo 20 espera hasta que |aX| + |aY| + |aZ| llega a 2,5 g. En reposo la aceleración mide 1 g, la gravedad; con la placa plana, aZ ≈ 1 g y la suma vale 1 g, e inclinada llega como mucho a 1,73 g, por debajo del disparo en ambos casos. Entonces lee 119 muestras de los seis ejes del BMI270, a unos 100 Hz. Las curvas son el gesto 12 de <code>flex.csv</code>: la muñeca gira en X (gX cerca de 600 °/s) y aZ pasa de +1 g a −1 g, porque la placa acaba boca abajo.
+				</p>
+				<p>
+					El CSV que trae el ejemplo es sintético (<code>simular_datos.py</code>); con gestos propios cambia la forma de las curvas, pero no el número de entradas. La entrada de la red son 714 números en un orden fijo, muestra a muestra y eje a eje. El escalado y el orden deben ser idénticos en Colab y en la placa. Los rangos ±4 g y ±2000 °/s son los del sensor; un golpe más fuerte que 4 g queda recortado.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>IMU.readAcceleration(aX, aY, aZ)</code> en g y
+						<code>IMU.readGyroscope(gX, gY, gZ)</code> en °/s
+						(<code>Arduino_BMI270_BMM150</code>); cada valor escalado entra con
+						<code>modelSetInput(valor, muestra * 6 + eje)</code> (ArduTFLite).
+						<code>IMU.accelerationSampleRate()</code> imprime la frecuencia real.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 20: el mismo bucle sirve para capturar el CSV y para inferir.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Escalar en Colab y olvidar el escalado en la placa.</li>
+						<li>Entrenar con otra frecuencia de muestreo, de modo que las 119 muestras abarcan otra duración.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-parametros-memoria.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Parámetros</span>
+				</a>
+				<a class="slide-nav__link" href="09-audio-espectrograma.html">
+					<span>Audio</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

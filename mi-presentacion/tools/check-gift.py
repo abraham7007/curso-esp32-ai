@@ -15,7 +15,8 @@ Lo que revisa:
   · opción múltiple sin respuesta correcta, o con más de una;
   · emparejamientos cuyas parejas no llevan `->`;
   · verdadero/falso con un valor que no es TRUE, FALSE, T ni F;
-  · respuesta corta sin ninguna alternativa aceptada.
+  · respuesta corta sin ninguna alternativa aceptada;
+  · opción múltiple con varias correctas cuyos pesos positivos no suman 100 %.
 
 Uso:  python3 tools/check-gift.py pruebas/test-01.gift
 """
@@ -140,6 +141,15 @@ def revisar_respuestas(bloque: str) -> list[str]:
             fallos.append("un emparejamiento necesita al menos dos parejas")
         return fallos
 
+    # Opción múltiple con varias correctas: cada alternativa lleva su peso,
+    # «~%50%» si suma y «~%-50%» si resta, y no hay ningún «=».
+    pesos = [float(p) for p in re.findall(r"(?<!\\)~%(-?\d+(?:[.,]\d+)?)%", cuerpo)]
+    if pesos and not correctas:
+        positivos = sum(p for p in pesos if p > 0)
+        if abs(positivos - 100) > 0.01:
+            fallos.append(f"los pesos positivos suman {positivos:g} %, no 100 %")
+        return fallos
+
     if not correctas:
         fallos.append("no hay ninguna respuesta correcta (falta «=»)")
     elif distractores and len(correctas) > 1:
@@ -201,6 +211,8 @@ def clasificar(fuera: list[str], dentro: list[str]) -> str:
     # embebido en la frase: eso es una pregunta de palabra faltante, aunque su
     # sintaxis interna sea la de una opción múltiple.
     embebida = len(fuera) > 1 and fuera[-1].strip() != ""
+    if re.search(r"(?<!\\)~%\d", cuerpo) and not re.search(r"(?<!\\)=", cuerpo):
+        return "opción múltiple (varias correctas)"
     if re.search(r"(?<!\\)~", cuerpo):
         return "palabra faltante" if embebida else "opción múltiple"
     return "respuesta corta"

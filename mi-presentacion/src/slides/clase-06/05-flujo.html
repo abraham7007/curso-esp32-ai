@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Flujo de un modelo TinyML · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de TinyML</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El modelo se entrena en Colab y se ejecuta en la <em>placa</em>
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="-16 0 1832 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis etapas en fila, agrupadas por dónde ocurren. En la placa: 1, capturar ejemplos etiquetados de cada clase con el monitor serie a un archivo CSV. En Google Colab: 2, entrenar, ajustar los pesos de la red con TensorFlow y Keras, produce un modelo float32; 3, evaluar con los datos de prueba, exactitud y matriz de confusión, con model.evaluate; 4, convertir a .tflite con TFLiteConverter y, si se le dan entre 100 y 500 muestras, cuantizar a int8 en el mismo paso, opcional, lo usa el ejemplo 21; 5, exportar a C, el .tflite como arreglo de bytes con un script de Python o xxd -i, produce model.h. En el PC y la placa: 6, desplegar, compilar con PlatformIO, grabar y ejecutar en la placa con TensorFlow Lite Micro, produce el gesto o el color. Una flecha vuelve de la etapa 6 a la 1: si falla con datos nuevos, más ejemplos y volver a entrenar.">
+						<rect class="caja caja--zona" x="-10" y="56" width="295" height="616" rx="16" />
+						<text class="sans b acc" x="-4" y="26" font-size="30">en la placa</text>
+						<rect class="caja caja--zona" x="295" y="56" width="1210" height="616" rx="16" />
+						<text class="sans b navy" x="301" y="26" font-size="30">en Google Colab</text>
+						<rect class="caja caja--zona" x="1515" y="56" width="295" height="616" rx="16" />
+						<text class="sans b acc" x="1521" y="26" font-size="30">PC y placa</text>
+						<rect class="caja caja--acc" x="0" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-acc" cx="42" cy="132" r="28" />
+						<text class="mid b s6a-num" x="42" y="133" font-size="30">1</text>
+						<text class="sans b acc" x="82" y="132" font-size="34">Capturar</text>
+						<text class="sans" x="20" y="218" font-size="27">ejemplos</text>
+						<text class="sans" x="20" y="262" font-size="27">etiquetados de</text>
+						<text class="sans" x="20" y="306" font-size="27">cada clase</text>
+						<path class="ln ln--fina ln--mut" d="M20 386 H255" />
+						<text class="navy" x="18" y="436" font-size="25">monitor serie</text>
+						<text class="navy" x="18" y="480" font-size="25">→ archivo CSV</text>
+						<path class="ln ln--fina" d="M137.5 546 V584" />
+						<rect class="s6a-pista" x="12" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="137.5" y="618" font-size="27">CSV</text>
+						<path class="ln ln--fina" d="M277 311 H295" />
+						<path class="rel" d="M303 311 l-12 -9 v18 z" />
+						<rect class="caja caja--navy" x="305" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-navy" cx="347" cy="132" r="28" />
+						<text class="mid b s6a-num" x="347" y="133" font-size="30">2</text>
+						<text class="sans b navy" x="387" y="132" font-size="34">Entrenar</text>
+						<text class="sans" x="325" y="218" font-size="27">ajustar los pesos</text>
+						<text class="sans" x="325" y="262" font-size="27">de la red con</text>
+						<text class="sans" x="325" y="306" font-size="27">los datos</text>
+						<path class="ln ln--fina ln--mut" d="M325 386 H560" />
+						<text class="navy" x="323" y="436" font-size="25">TensorFlow</text>
+						<text class="navy" x="323" y="480" font-size="25">Keras: fit()</text>
+						<path class="ln ln--fina" d="M442.5 546 V584" />
+						<rect class="s6a-pista" x="317" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="442.5" y="618" font-size="27">modelo float32</text>
+						<path class="ln ln--fina" d="M582 311 H600" />
+						<path class="rel" d="M608 311 l-12 -9 v18 z" />
+						<rect class="caja caja--navy" x="610" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-navy" cx="652" cy="132" r="28" />
+						<text class="mid b s6a-num" x="652" y="133" font-size="30">3</text>
+						<text class="sans b navy" x="692" y="132" font-size="34">Evaluar</text>
+						<text class="sans" x="630" y="218" font-size="27">exactitud y</text>
+						<text class="sans" x="630" y="262" font-size="27">matriz de</text>
+						<text class="sans" x="630" y="306" font-size="27">confusión</text>
+						<path class="ln ln--fina ln--mut" d="M630 386 H865" />
+						<text class="navy" x="628" y="436" font-size="25">model.evaluate</text>
+						<text class="navy" x="628" y="480" font-size="25">con la prueba</text>
+						<path class="ln ln--fina" d="M747.5 546 V584" />
+						<rect class="s6a-pista" x="622" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="747.5" y="618" font-size="27">métricas</text>
+						<path class="ln ln--fina" d="M887 311 H905" />
+						<path class="rel" d="M913 311 l-12 -9 v18 z" />
+						<rect class="caja caja--navy" x="915" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-navy" cx="957" cy="132" r="28" />
+						<text class="mid b s6a-num" x="957" y="133" font-size="30">4</text>
+						<text class="sans b navy" x="997" y="132" font-size="34">Convertir</text>
+						<text class="sans" x="935" y="218" font-size="27">a .tflite y, con</text>
+						<text class="sans" x="935" y="262" font-size="27">muestras, a int8</text>
+						<text class="sans" x="935" y="306" font-size="27">(opcional: ej. 21)</text>
+						<path class="ln ln--fina ln--mut" d="M935 386 H1170" />
+						<text class="navy" x="933" y="436" font-size="25">TFLiteConverter</text>
+						<text class="navy" x="933" y="480" font-size="25">100–500 muestras</text>
+						<path class="ln ln--fina" d="M1052.5 546 V584" />
+						<rect class="s6a-pista" x="927" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="1052.5" y="618" font-size="27">.tflite</text>
+						<path class="ln ln--fina" d="M1192 311 H1210" />
+						<path class="rel" d="M1218 311 l-12 -9 v18 z" />
+						<rect class="caja caja--navy" x="1220" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-navy" cx="1262" cy="132" r="28" />
+						<text class="mid b s6a-num" x="1262" y="133" font-size="30">5</text>
+						<text class="sans b navy" x="1302" y="132" font-size="34">Exportar</text>
+						<text class="sans" x="1240" y="218" font-size="27">a C: el .tflite</text>
+						<text class="sans" x="1240" y="262" font-size="27">como arreglo</text>
+						<text class="sans" x="1240" y="306" font-size="27">de bytes</text>
+						<path class="ln ln--fina ln--mut" d="M1240 386 H1475" />
+						<text class="navy" x="1238" y="436" font-size="25">script Python</text>
+						<text class="navy" x="1238" y="480" font-size="25">(o xxd -i)</text>
+						<path class="ln ln--fina" d="M1357.5 546 V584" />
+						<rect class="s6a-pista" x="1232" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="1357.5" y="618" font-size="27">model.h</text>
+						<path class="ln ln--fina" d="M1497 311 H1515" />
+						<path class="rel" d="M1523 311 l-12 -9 v18 z" />
+						<rect class="caja caja--acc" x="1525" y="76" width="275" height="470" rx="12" />
+						<circle class="rel-acc" cx="1567" cy="132" r="28" />
+						<text class="mid b s6a-num" x="1567" y="133" font-size="30">6</text>
+						<text class="sans b acc" x="1607" y="132" font-size="34">Desplegar</text>
+						<text class="sans" x="1545" y="218" font-size="27">compilar, grabar</text>
+						<text class="sans" x="1545" y="262" font-size="27">y ejecutar</text>
+						<text class="sans" x="1545" y="306" font-size="27">en la placa</text>
+						<path class="ln ln--fina ln--mut" d="M1545 386 H1780" />
+						<text class="navy" x="1543" y="436" font-size="25">PlatformIO</text>
+						<text class="navy" x="1543" y="480" font-size="25">TFLite Micro</text>
+						<path class="ln ln--fina" d="M1662.5 546 V584" />
+						<rect class="s6a-pista" x="1537" y="586" width="251" height="62" rx="8" />
+						<text class="mid b" x="1662.5" y="618" font-size="27">gesto o color</text>
+						<path class="ln ln--acc ln--trazo" d="M1662.5 648 V738 H137.5 V670" />
+						<path class="rel-acc" d="M137.5 652 l-11 18 h22 z" />
+						<text class="sans b acc mid halo" x="900" y="738" font-size="30">si falla con datos nuevos: más ejemplos y volver a entrenar</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: de las seis etapas, ¿en cuál se va la mayor parte del tiempo de un proyecto real? Respuesta: en la captura de datos. Entrenar en Colab tarda minutos; reunir ejemplos variados y bien etiquetados (varias personas, varias posiciones, la clase «nada») determina si el modelo funciona fuera del laboratorio.
+				</p>
+				<p>
+					Recorrido: la placa captura y envía cada muestra por el puerto serie; se guarda como CSV y se sube a Colab. Allí Keras ajusta los pesos. Antes de convertir se evalúa con datos de prueba que no se usaron al entrenar: exactitud y matriz de confusión (lámina 11). Si las métricas no son suficientes, se vuelve a entrenar sin tocar la placa.
+				</p>
+				<p>
+					<code>TFLiteConverter</code> hace dos cosas en el mismo paso: convierte a <code>.tflite</code> y, si se le dan entre 100 y 500 muestras representativas, cuantiza a int8 (lámina 10). Después el cuaderno escribe el <code>.tflite</code> como arreglo de bytes en C, el <code>model.h</code> (lo que hace <code>xxd -i</code>), que se compila con el programa. En la placa, TensorFlow Lite Micro carga el modelo y ejecuta la red: con ArduTFLite en el ejemplo 20 y llamando al intérprete directamente en el 21.
+				</p>
+				<p>
+					La flecha de vuelta indica qué hacer cuando la placa falla con gestos de otra persona: capturar más ejemplos y entrenar otra vez, sin cambiar el código.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Colab: <code>converter = tf.lite.TFLiteConverter.from_keras_model(model)</code>;
+						para int8, <code>converter.representative_dataset</code>. En la placa, con ArduTFLite (ejemplo 20):
+						<code>modelInit(model, arena, tamaño)</code>, <code>modelSetInput(valor, i)</code>,
+						<code>modelRunInference()</code> y <code>modelGetOutput(i)</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 20 (gestos, convertido en float) y ejemplo 21 (colores, convertido a int8).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Normalizar distinto en Colab y en la placa, con lo que la red recibe valores fuera del rango de entrenamiento.</li>
+						<li>Evaluar con los mismos datos del entrenamiento, que dan una exactitud optimista.</li>
+						<li>Usar el cuaderno oficial GestureToEmoji, que fija TensorFlow 2.0.0-rc1, una versión que ya no se instala.</li>
+						<li>Esperar que la primera compilación sea rápida: con la descarga puede pasar de 40 min; las siguientes, segundos.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-aplicaciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Aplicaciones</span>
+				</a>
+				<a class="slide-nav__link" href="06-neurona-capa.html">
+					<span>Neurona</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

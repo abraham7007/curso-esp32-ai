@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Proyecto PlatformIO · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Entorno de desarrollo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una carpeta que se construye <em>igual en cualquier equipo</em>
+				</h1>
+
+				<div class="rd crece flex flex-col gap-6">
+					<div class="flex-1 min-h-0 grid grid-cols-12 gap-8">
+						<section class="arbol col-span-5 self-center" aria-label="Archivos del proyecto">
+							<ul>
+								<li>
+									<div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="root" aria-pressed="false">01-salida-digital/</button><span class="arbol__nota">el proyecto</span></div>
+									<ul>
+										<li>
+											<div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="src" aria-pressed="false">src/</button></div>
+											<ul>
+												<li><div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="main" aria-pressed="false">main.cpp</button><span class="arbol__nota">el programa</span></div></li>
+											</ul>
+										</li>
+										<li><div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="ini" aria-pressed="false">platformio.ini</button><span class="arbol__nota">cómo compila</span></div></li>
+										<li><div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="diagram" aria-pressed="false">diagram.json</button><span class="arbol__nota">circuito de Wokwi</span></div></li>
+										<li><div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="wokwi" aria-pressed="false">wokwi.toml</button><span class="arbol__nota">qué simula Wokwi</span></div></li>
+										<li><div class="arbol__fila"><button type="button" class="arbol__nombre" data-node="pio" aria-pressed="false">.pio/</button><span class="arbol__nota">generado</span></div></li>
+									</ul>
+								</li>
+							</ul>
+						</section>
+
+						<div class="col-span-7 flex flex-col justify-center gap-8">
+							<div class="codepanel visor" data-visor>
+								<div class="codepanel__header">
+									<span class="codepanel__path">
+										<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+										<span data-visor-ruta>platformio.ini</span>
+									</span>
+								</div>
+								<pre><code data-visor-texto></code></pre>
+							</div>
+							<p class="def rd-pie rd-pie--fijo" id="tree-detail" aria-live="polite"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si se copia esta carpeta a otro equipo sin
+					<code>.pio/</code>, ¿qué falta para compilar? No falta ningún archivo;
+					PlatformIO lee <code>platformio.ini</code> y descarga la plataforma y el
+					<i>framework</i> que declara. Recorrer el árbol: se escriben a mano tres
+					archivos, y <code>.pio/</code> se regenera en cada construcción.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Las librerías externas se declaran con <code>lib_deps</code>, con
+						versión acotada (<code>autor/nombre@^1.2.0</code>). Los módulos propios
+						van en <code>lib/</code>, las cabeceras compartidas en
+						<code>include/</code> y las pruebas en <code>test/</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Dejar código fuera de <code>src/</code>, donde no se compila.</li>
+						<li>Olvidar <code>monitor_speed</code>: el monitor abre a 9600 baudios y muestra caracteres ilegibles.</li>
+						<li>Versionar <code>.pio/</code>, que ocupa cientos de megabytes regenerables.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-cadena-construccion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cadena de construcción</span>
+				</a>
+				<a class="slide-nav__link" href="21-grabacion-arranque.html">
+					<span>Grabación y arranque</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			// Contenido real de ejemplos/01-salida-digital (extractos de 8 líneas
+			// como máximo; las carpetas muestran su listado).
+			const archivos = {
+				root: ["01-salida-digital/", ".gitignore\n.pio/\n.vscode/\ndiagram.json\ndiagrama-flujo.excalidraw\nplatformio.ini\nsrc/\nwokwi.toml"],
+				src: ["src/", "main.cpp"],
+				main: ["src/main.cpp", '#include <Arduino.h>\n\nvoid setup() {\n    pinMode(2, OUTPUT);\n    Serial.begin(115200);\n    …\n}\nvoid loop() { … }'],
+				ini: ["platformio.ini", "[env:esp32dev]\nplatform = espressif32\nboard = esp32dev\nframework = arduino\nmonitor_speed = 115200"],
+				diagram: ["diagram.json", '{\n  "version": 1,\n  "parts": [\n    { "type": "wokwi-esp32-devkit-v1", … },\n    { "type": "wokwi-led", … },\n    { "type": "wokwi-resistor", … }\n  ],\n  "connections": [ … ]'],
+				wokwi: ["wokwi.toml", '[wokwi]\nversion = 1\nelf = ".pio/build/esp32dev/firmware.elf"\nfirmware = ".pio/build/esp32dev/firmware.bin"\n\n[[serial]]\nport = "USB"\nbaud = 115200'],
+				pio: [".pio/build/esp32dev/", "bootloader.bin\nfirmware.bin\nfirmware.elf\nlibFrameworkArduino.a\npartitions.bin\nsrc/main.cpp.o\n…"],
+			};
+			const detalles = {
+				root: "<b>01-salida-digital/</b>: se abre en VS Code y se versiona entera.",
+				src: "<b>src/</b>: se compila lo que contiene; el código fuera de ella no se compila.",
+				main: "<b>main.cpp</b>: setup() y loop(), el programa del ejemplo.",
+				ini: "<b>platformio.ini</b>: cinco líneas fijan chip, placa, <i>framework</i> y monitor.",
+				diagram: "<b>diagram.json</b>: piezas y conexiones para Wokwi; no se compila.",
+				wokwi: "<b>wokwi.toml</b>: qué .elf y .bin de .pio/build/ carga Wokwi.",
+				pio: "<b>.pio/</b>: lo generado al compilar; se borra sin pérdida.",
+			};
+			const nodos = document.querySelectorAll("[data-node]");
+			const detalle = document.getElementById("tree-detail");
+			const ruta = document.querySelector("[data-visor-ruta]");
+			const texto = document.querySelector("[data-visor-texto]");
+
+			function elegir(nodo) {
+				for (const n of nodos) {
+					const sel = n === nodo;
+					n.classList.toggle("is-selected", sel);
+					n.setAttribute("aria-pressed", String(sel));
+				}
+				const [r, t] = archivos[nodo.dataset.node];
+				ruta.textContent = r;
+				texto.textContent = t;
+				detalle.innerHTML = detalles[nodo.dataset.node];
+			}
+
+			for (const n of nodos) n.addEventListener("click", () => elegir(n));
+			elegir(document.querySelector('[data-node="ini"]'));
+		</script>
+	</body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 14 · JSON · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s3-salida-ancha">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 14</span>
+					</div>
+
+					<h2 class="code-hour__title">Tres medidas empaquetadas en una línea JSON</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Documento JSON con ArduinoJson.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Una placa, salida por USB.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo y comparativa de tamaño.</span>
+								<span class="deliverable__file">diagrama-flujo-json.excalidraw · diagrama-comparativa-json.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Cada 3 s, componer un documento JSON con temperatura, humedad, presión y tiempo desde el arranque, y escribirlo en una línea del monitor.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Una sola placa y ninguna conexión: las medidas se simulan con <code>random()</code> y la línea sale por el USB (UART0).</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino y monitor_speed = 115200; declara en lib_deps bblanchon/ArduinoJson @ ^6.21.5.
+<b>2. Firmware.</b> setup() imprime «\n--- GENERADOR DE JSON INICIADO ---». Cada 3 s, en un StaticJsonDocument&lt;200&gt;: temp = 20.0 + random(0, 100) / 10.0 y presion = 1010.0 + random(0, 50) / 10.0 como float, hum = random(40, 80) como int y tiempo_ms = millis(). Imprime «Generando JSON: » y, en la misma línea, serializeJson(doc, Serial). El texto no se arma a mano con sprintf.
+<b>3. Simulación.</b> Añade la simulación de Wokwi con un ESP32 solo.
+<b>4. Diagramas.</b> En Excalidraw: el flujo crear documento → asignar → serializar, y una comparativa del mismo registro en JSON y en binario con los bytes contados.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Fijar la versión 6 evita la API de ArduinoJson 7, donde <code>StaticJsonDocument</code> queda obsoleto. Sin <code>sprintf</code>, comillas, comas y llaves las pone la biblioteca.
+								</p>
+							</div>
+						</div>
+						<section aria-label="Salida esperada" class="code-hour__section code-hour__section--full s3-salida">
+							<h4>
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Salida esperada
+							</h4>
+							<div class="s3-monitores">
+								<figure class="s3-monitor">
+									<figcaption>Monitor · valores aleatorios en cada línea</figcaption>
+									<div class="term">
+--- GENERADOR DE JSON INICIADO ---
+Generando JSON: {"temp":21.39999962,"hum":63,"presion":1010.5,"tiempo_ms":12}
+Generando JSON: {"temp":23.70000076,"hum":57,"presion":1012.299988,"tiempo_ms":3012}
+Generando JSON: {"temp":25,"hum":48,"presion":1014.900024,"tiempo_ms":6012}</div>
+								</figure>
+							</div>
+						</section>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Cada valor viaja con su nombre y el receptor no necesita conocer el programa emisor; a cambio, la línea ocupa unos 68 bytes para cuatro números.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿por qué el monitor muestra 23.70000076 y no 23.7? Respuesta: el float más próximo a 23,7 vale 23,7000007629…; ArduinoJson 6 en el ESP32 guarda los números como double (ARDUINOJSON_USE_DOUBLE = 1) y los escribe con nueve cifras significativas, sin ceros finales: 25,0 sale como 25 y 1010,5 como 1010.5. Declarado como double, 23,7 saldría como 23.7. Los números y los instantes de la traza son ilustrativos: random() cambia en cada ejecución.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>serializeJson(doc, Serial)</code> escribe directamente en el puerto, sin cadena intermedia; <code>measureJson(doc)</code> devuelve los bytes que ocupará. <code>StaticJsonDocument&lt;200&gt;</code> reserva 200 bytes en la pila para el árbol del documento.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Capacidad insuficiente: las claves sobrantes se pierden sin aviso; <code>doc.overflowed()</code> lo detecta.</li><li>Instalar ArduinoJson 7 sin fijar versión: avisos de obsolescencia.</li><li>Comparar el JSON con el binario sin contar las claves.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-json-binario.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>JSON y binario</span>
+				</a>
+				<a class="slide-nav__link" href="22-niveles-logicos.html">
+					<span>3,3 V y 5 V</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

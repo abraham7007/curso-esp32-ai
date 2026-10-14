@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Bloques funcionales del ESP32 · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Arquitectura del ESP32</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Los periféricos trabajan <em>en paralelo</em> con la CPU
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto">
+						<p>
+							<code>delay()</code> bloquea la tarea <code>loop()</code>; el LEDC
+							sigue generando el PWM sin intervención de la CPU.
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="lienzo-caja">
+							<canvas
+								id="paralelo"
+								role="img"
+								aria-label="Plano de bloques del ESP32 y línea de tiempo: la tarea loop() pasa casi todo el tiempo bloqueada en delay(), mientras el bloque LEDC genera sin pausa una onda PWM en el GPIO 2; el ciclo de trabajo solo cambia cuando la CPU ejecuta ledcWrite()"
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Mostrar la lámina antes de que avance la animación. Pregunta de
+					predicción: si <code>loop()</code> queda 4 s en un <code>delay()</code>,
+					¿qué ocurre con el LED atenuado con PWM? Error frecuente: responder que
+					se congela o se apaga.
+				</p>
+				<p>
+					El brillo se mantiene. La CPU interviene en <code>ledcWrite()</code>,
+					que fija el ciclo de trabajo, y el LEDC genera la onda sin ella. Durante
+					el <code>delay()</code>, FreeRTOS bloquea la tarea <code>loop()</code> y
+					cede el núcleo a otras tareas; la CPU sigue ejecutando. El RTC y la
+					radio también funcionan sin intervención de la CPU.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						La CPU configura cada bloque escribiendo registros mapeados en
+						memoria. Desde Arduino: <code>pinMode()</code>/<code>digitalWrite()</code>
+						para GPIO, <code>analogRead()</code> para ADC,
+						<code>ledcAttach()</code>/<code>ledcWrite()</code> para PWM,
+						<code>Wire.h</code> y <code>SPI.h</code> para buses.
+					</p>
+					<h4>Los bloques</h4>
+					<p>
+						CPU: 2 núcleos Xtensa LX6. SRAM 520 KB. ROM 448 KB (primer cargador).
+						GPIO y ADC, LEDC (PWM), RTC con coprocesador ULP, radio WiFi y
+						Bluetooth. La flash de 4 MB está fuera del chip, en el módulo.
+					</p>
+					<h4>Reparto entre núcleos</h4>
+					<p>
+						Habitualmente el núcleo 0 (PRO_CPU) atiende WiFi y Bluetooth y el
+						núcleo 1 (APP_CPU) ejecuta <code>loop()</code>. Es configurable. Reloj:
+						80, 160 o 240 MHz.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Registrador alimentado por batería. Los núcleos permanecen en sueño
+						profundo y el coprocesador ULP lee un sensor cada 10 min, con un
+						consumo mil veces menor.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-chip-modulo-placa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Chip, módulo y placa</span>
+				</a>
+				<a class="slide-nav__link" href="05-memoria-flash-sram.html">
+					<span>Flash y SRAM</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// El programa que se anima, a escala real de tiempo:
+			//   ledcWrite(LED, 30 %); delay(4000); ledcWrite(LED, 80 %); delay(4000);
+			const CICLO = 8; // s
+			const DUTY = (t) => (t % CICLO < 4 ? 0.3 : 0.8);
+			const PERIODO = 0.25; // s en el dibujo; el LEDC real conmuta a 5 kHz
+			let t = 0;
+			let previo = performance.now();
+
+			const BLOQUES = [
+				// [nombre, detalle, columna, fila, ancho]
+				["CPU", "2 núcleos", 0, 0, 2],
+				["SRAM", "520 KB", 0, 1, 1],
+				["ROM", "448 KB", 1, 1, 1],
+				["GPIO · ADC", "terminales", 0, 2, 1],
+				["LEDC", "PWM", 1, 2, 1],
+				["RTC · ULP", "bajo consumo", 0, 3, 1],
+				["Radio", "WiFi · BT", 1, 3, 1],
+			];
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = "'IBM Plex Mono', monospace") {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function caja(ctx, x, y, w, h, relleno, borde, grosor = 2, r = 8) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				ctx.lineWidth = grosor;
+				ctx.strokeStyle = borde;
+				ctx.stroke();
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("paralelo"), (ctx, w, h) => {
+				const fs = Math.max(22, Math.min(32, h * 0.048));
+				const c = {
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					borde: token("--color-border"),
+					sup: token("--color-surface"),
+					sup2: token("--color-surface-2"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+					warnSoft: token("--color-warn-soft"),
+					acento: token("--color-accent"),
+					navy: token("--color-navy"),
+				};
+				const enDelay = t % 4 > 0.15;
+				const restan = 4 - (t % 4);
+
+				// ---------- Plano de bloques (izquierda) ----------
+				const pw = Math.min(w * 0.3, h * 0.78);
+				const top = fs * 1.9;
+				const ph = h - top - fs * 3.6;
+				texto(ctx, "Chip ESP32", 0, fs * 0.7, fs * 1.05, c.heading, 700);
+				caja(ctx, 1, top, pw - 2, ph, c.sup2, c.heading, 3, 14);
+				const pad = fs * 0.5;
+				const cw = (pw - 3 * pad) / 2;
+				const rh = (ph - 5 * pad) / 4;
+				const pos = {};
+				for (const [n, d, col, fila, an] of BLOQUES) {
+					const x = pad + col * (cw + pad);
+					const y = top + pad + fila * (rh + pad);
+					const bw = an * cw + (an - 1) * pad;
+					pos[n] = { x, y, w: bw, h: rh };
+					let rel = c.sup;
+					let bor = c.borde;
+					const col1 = c.heading;
+					let sub = d;
+					let col2 = c.muted;
+					if (n === "CPU") {
+						rel = enDelay ? c.warnSoft : c.sup;
+						bor = enDelay ? c.warn : c.acento;
+						sub = enDelay ? "loop() en delay()" : "ejecuta ledcWrite()";
+						col2 = enDelay ? c.warn : c.acento;
+					}
+					if (n === "LEDC") {
+						rel = c.okSoft;
+						bor = c.ok;
+						sub = "genera PWM";
+						col2 = c.ok;
+					}
+					caja(ctx, x, y, bw, rh, rel, bor, n === "CPU" || n === "LEDC" ? 4 : 2);
+					texto(ctx, n, x + bw / 2, y + rh * 0.36, fs, col1, 700, "center");
+					texto(ctx, sub, x + bw / 2, y + rh * 0.7, fs * 0.8, col2, 600, "center",
+						"'IBM Plex Sans', sans-serif");
+				}
+				// Flash fuera del chip
+				const fy = top + ph + fs * 0.6;
+				ctx.setLineDash([8, 6]);
+				caja(ctx, 1, fy, pw - 2, fs * 2.2, "transparent", c.muted, 2);
+				ctx.setLineDash([]);
+				texto(ctx, "Flash 4 MB · en el módulo", pw / 2, fy + fs * 1.1, fs * 0.8, c.muted, 600,
+					"center", "'IBM Plex Sans', sans-serif");
+
+				// ---------- Línea de tiempo (derecha) ----------
+				const x0 = pw + fs * 2.5;
+				const lab = fs * 6.2;
+				const tx0 = x0 + lab;
+				const ledR = Math.min(h * 0.09, fs * 2.2);
+				const tx1 = w - ledR * 2 - fs * 2;
+				const X = (s) => tx0 + ((tx1 - tx0) * s) / CICLO;
+
+				const carril1 = { y: top + fs * 0.4, h: h * 0.24 };
+				const carril2 = { y: carril1.y + carril1.h + fs * 2.6, h: h * 0.3 };
+				const ejeY = carril2.y + carril2.h + fs * 0.9;
+
+				texto(ctx, "loop()", x0, carril1.y + carril1.h / 2 - fs * 0.6, fs, c.heading, 700);
+				texto(ctx, "tarea · CPU", x0, carril1.y + carril1.h / 2 + fs * 0.6, fs * 0.8, c.muted, 600,
+					"left", "'IBM Plex Sans', sans-serif");
+				texto(ctx, "LEDC", x0, carril2.y + carril2.h / 2 - fs * 0.6, fs, c.ok, 700);
+				texto(ctx, "→ GPIO 2", x0, carril2.y + carril2.h / 2 + fs * 0.6, fs * 0.8, c.muted, 600,
+					"left", "'IBM Plex Sans', sans-serif");
+
+				// Carril de la tarea: ledcWrite breve + delay largo, dibujado hasta t.
+				for (const ini of [0, 4]) {
+					if (t < ini) break;
+					const fin = Math.min(t, ini + 4);
+					const wEsc = 0.12;
+					caja(ctx, X(ini), carril1.y, X(Math.min(fin, ini + wEsc)) - X(ini), carril1.h, c.acento, c.acento, 1, 4);
+					if (fin > ini + wEsc) {
+						caja(ctx, X(ini + wEsc) + 3, carril1.y, X(fin) - X(ini + wEsc) - 3, carril1.h, c.warnSoft, c.warn, 2, 4);
+						if (X(fin) - X(ini + wEsc) > fs * 6.8) {
+							texto(ctx, "delay(4000)", X(ini + wEsc) + fs * 0.6, carril1.y + carril1.h * 0.32, fs * 0.9, c.warn, 700);
+							texto(ctx, "tarea bloqueada", X(ini + wEsc) + fs * 0.6, carril1.y + carril1.h * 0.7, fs * 0.8, c.warn, 600,
+								"left", "'IBM Plex Sans', sans-serif");
+						}
+					}
+					texto(ctx, `ledcWrite(${ini === 0 ? 30 : 80} %)`, X(ini), carril1.y - fs * 0.7, fs * 0.8, c.acento, 700);
+				}
+
+				// Carril del LEDC: onda PWM continua hasta t.
+				const yA = carril2.y + fs * 0.4;
+				const yB = carril2.y + carril2.h;
+				ctx.strokeStyle = c.ok;
+				ctx.lineWidth = Math.max(3, fs * 0.14);
+				ctx.lineJoin = "round";
+				ctx.beginPath();
+				ctx.moveTo(X(0), yB);
+				for (let p0 = 0; p0 < t; p0 += PERIODO) {
+					const dc = DUTY(p0);
+					const sube = p0;
+					const baja = Math.min(t, p0 + dc * PERIODO);
+					const finP = Math.min(t, p0 + PERIODO);
+					ctx.lineTo(X(sube), yB);
+					ctx.lineTo(X(sube), yA);
+					ctx.lineTo(X(baja), yA);
+					if (baja < t) {
+						ctx.lineTo(X(baja), yB);
+						ctx.lineTo(X(finP), yB);
+					}
+				}
+				ctx.stroke();
+
+				// Eje de tiempo.
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(X(0), ejeY);
+				ctx.lineTo(X(CICLO), ejeY);
+				ctx.stroke();
+				for (let s = 0; s <= CICLO; s += 1) {
+					ctx.beginPath();
+					ctx.moveTo(X(s), ejeY);
+					ctx.lineTo(X(s), ejeY + fs * 0.3);
+					ctx.stroke();
+					texto(ctx, `${s}`, X(s), ejeY + fs * 0.95, fs * 0.8, c.muted, 600, "center");
+				}
+				texto(ctx, "t (s)", X(CICLO) + fs * 0.8, ejeY + fs * 0.95, fs * 0.8, c.muted, 600, "left");
+				texto(ctx, "onda ampliada · el LEDC conmuta 5000 veces por segundo", X(0), ejeY + fs * 2, fs * 0.72,
+					c.muted, 500, "left", "'IBM Plex Sans', sans-serif");
+
+				// Cursor del instante actual: empieza bajo los rótulos de ledcWrite().
+				ctx.strokeStyle = c.heading;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 6]);
+				ctx.beginPath();
+				ctx.moveTo(X(t), carril1.y);
+				ctx.lineTo(X(t), ejeY);
+				ctx.stroke();
+				ctx.setLineDash([]);
+
+				// Lectura pegada al cursor, en el hueco entre los dos carriles.
+				const lect = enDelay
+					? `faltan ${(Math.ceil(restan * 10) / 10).toFixed(1).replace(".", ",")} s de delay()`
+					: "ledcWrite() ahora";
+				ctx.font = `700 ${fs * 0.85}px 'IBM Plex Mono', monospace`;
+				const anchoL = ctx.measureText(lect).width;
+				const aDer = X(t) + fs * 0.4 + anchoL < tx1 + fs;
+				texto(ctx, lect, aDer ? X(t) + fs * 0.4 : X(t) - fs * 0.4,
+					carril1.y + carril1.h + fs * 1.3, fs * 0.85, enDelay ? c.warn : c.acento, 700,
+					aDer ? "left" : "right");
+
+				// LED a la derecha.
+				const lx = w - ledR - fs * 1.2;
+				const ly = carril2.y + carril2.h / 2;
+				const dc = DUTY(t);
+				ctx.save();
+				ctx.globalAlpha = 0.15 + 0.85 * dc;
+				ctx.shadowColor = c.acento;
+				ctx.shadowBlur = ledR * 0.5 * dc;
+				ctx.beginPath();
+				ctx.arc(lx, ly, ledR, 0, Math.PI * 2);
+				ctx.fillStyle = c.acento;
+				ctx.fill();
+				ctx.restore();
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = c.heading;
+				ctx.beginPath();
+				ctx.arc(lx, ly, ledR, 0, Math.PI * 2);
+				ctx.stroke();
+				texto(ctx, `LED ${Math.round(dc * 100)} %`, lx, ly + ledR + fs * 0.9, fs * 0.85, c.heading, 700, "center");
+			});
+
+			const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			function avanzar(ahora) {
+				t += Math.min(0.1, (ahora - previo) / 1000);
+				previo = ahora;
+				if (t >= CICLO) t = 0;
+				lienzo.redibujar();
+				requestAnimationFrame(avanzar);
+			}
+			if (reducido) {
+				t = 6.5;
+				lienzo.redibujar();
+			} else {
+				t = 2.5;
+				requestAnimationFrame(avanzar);
+			}
+		</script>
+	</body>
+</html>

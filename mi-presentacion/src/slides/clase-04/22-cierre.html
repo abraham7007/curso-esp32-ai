@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title">Resumen de la <em>sesión 4</em></h1>
+
+				<ol class="puntos crece justify-evenly">
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Enlace</p>
+							<p class="slide__lede col-span-3">El ESP32 se conecta como cliente en 2,4 GHz, con un tope de 20 s para la conexión WiFi.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Petición</p>
+							<p class="slide__lede col-span-3">DNS, TCP, TLS y GET; los códigos negativos los genera HTTPClient.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Datos</p>
+							<p class="slide__lede col-span-3">Los campos útiles del JSON pasan a variables; red y pantalla se actualizan a ritmos distintos.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Claves</p>
+							<p class="slide__lede col-span-3">Prueba previa con curl, intervalo según la cuota y clave fuera del código, enviada por HTTPS.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Robustez</p>
+							<p class="slide__lede col-span-3">«Sin dato» tiene cuatro causas, que el monitor serie distingue; el último dato se muestra con su edad.</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="def">
+					<p>
+						<b>Sesión 5</b> · MQTT (publicar y suscribirse) y la plataforma Blynk.
+					</p>
+				</div>
+
+				<div class="def">
+					<p>
+						<b>Documentación de referencia</b> ·
+						<a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html" target="_blank" rel="noopener">Arduino-ESP32: WiFi</a>
+						·
+						<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/HTTPClient" target="_blank" rel="noopener">Arduino-ESP32: HTTPClient</a>
+						·
+						<a href="https://arduinojson.org/v6/doc/" target="_blank" rel="noopener">ArduinoJson 6</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer las ideas y pedir el ejemplo de hoy que demuestra cada una: el
+					escáner del 15 que no detecta redes de 5 GHz; el -1 que aparece sin llegar al servidor; la OLED del 16b que alterna BTC y DOGE doce veces por consulta;
+					el 401 que se reproduce con curl antes de compilar el 18. Para la quinta, el -1 se reintenta y el 401 se corrige sin reintentar. Pregunta de predicción, que enlaza con la sesión 5: si el dato cambia una vez por hora, ¿cuántas de las 60 consultas por hora del 16b sobran? Sobran 59. La sesión 5 sustituye la consulta periódica por la suscripción de MQTT.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos clave</h4>
+					<ul>
+						<li><b>Estación</b> (<i>station</i>, STA): el ESP32 se une a una red ajena como cliente.</li>
+						<li><b>RSSI</b>: potencia recibida en dBm; un valor más cercano a 0 indica más señal.</li>
+						<li><b>DNS</b>: traduce un nombre (api.coingecko.com) a una dirección IP.</li>
+						<li><b>NAT</b>: el router comparte una IP pública; desde fuera no se puede iniciar una conexión hacia el ESP32.</li>
+						<li><b>Endpoint</b>: ruta concreta de una API que responde a una petición.</li>
+						<li><b>Código de estado</b>: 2xx éxito, 4xx error de la petición, 5xx error del servidor; negativo, error local de HTTPClient.</li>
+						<li><b>TLS</b>: cifra la conexión de HTTPS; sin certificado cargado no verifica al servidor.</li>
+						<li><b>Deserializar</b>: convertir el texto JSON en un documento navegable.</li>
+						<li><b>Cuota</b> (<i>rate limit</i>): peticiones permitidas por minuto o por mes; superarla da 429.</li>
+						<li><b>Clave de API</b> (<i>API key</i>): identifica la cuenta; se guarda fuera del repositorio.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-cuatro-fallos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Fallos</span>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

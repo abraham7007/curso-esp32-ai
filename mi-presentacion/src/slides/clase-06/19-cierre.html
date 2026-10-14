@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title s6d-titulo">
+					Las seis sesiones del <em>curso</em>
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1800 770" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Las seis sesiones en una línea. 01, Arquitectura del ESP32 y entorno de desarrollo: lectura y control por los pines; ejemplos 01 a 05 y 04b. 02, Firmware modular en C++: varias tareas sin bloqueo; ejemplos 06 a 10. 03, Comunicación entre dispositivos: intercambio con sensores y placas; ejemplos 11 a 14, 12b y 12c. 04, WiFi y consumo de APIs HTTP: consultas HTTP a servicios web; ejemplos 15 a 18 y 16b. 05, Protocolo MQTT y plataformas de IoT: telemetría y control remoto; ejemplo 19. 06, TinyML y Edge AI, inferencia en microcontroladores: clasificación en el propio chip; ejemplos 20 y 21, con la Arduino Nano 33 BLE Sense. Líneas de continuación: el ESP32 con esp-tflite-micro, para llevar el flujo de los ejemplos 20 y 21 al chip de las sesiones 1 a 5; una palabra clave con el micrófono PDM de la Nano, espectrograma y red en int8; Edge Impulse, con captura, entrenamiento e int8 guiados y exportación a Arduino.">
+						<!-- la tira de las seis sesiones -->
+						<path class="ln ln--mut" d="M14 30 H1786" />
+						<!-- sesión 01 -->
+						<circle class="punto" cx="14" cy="30" r="10" />
+						<text class="navy" x="0" y="116" font-size="72" font-weight="700">01</text>
+						<text class="sans" x="0" y="196" font-size="28" font-weight="700">Arquitectura del</text>
+						<text class="sans" x="0" y="234" font-size="28" font-weight="700">ESP32 y entorno</text>
+						<text class="sans" x="0" y="272" font-size="28" font-weight="700">de desarrollo</text>
+						<text class="sans navy" x="0" y="348" font-size="30" font-weight="600">lectura y control</text>
+						<text class="sans navy" x="0" y="388" font-size="30" font-weight="600">por los pines</text>
+						<text class="sans mut" x="0" y="456" font-size="25">ejemplos</text>
+						<text class="navy" x="0" y="494" font-size="25">01–05 · 04b</text>
+						<!-- sesión 02 -->
+						<circle class="punto" cx="316" cy="30" r="10" />
+						<text class="navy" x="302" y="116" font-size="72" font-weight="700">02</text>
+						<text class="sans" x="302" y="196" font-size="28" font-weight="700">Firmware modular</text>
+						<text class="sans" x="302" y="234" font-size="28" font-weight="700">en C++</text>
+						<text class="sans navy" x="302" y="348" font-size="30" font-weight="600">varias tareas</text>
+						<text class="sans navy" x="302" y="388" font-size="30" font-weight="600">sin bloqueo</text>
+						<text class="sans mut" x="302" y="456" font-size="25">ejemplos</text>
+						<text class="navy" x="302" y="494" font-size="25">06–10</text>
+						<!-- sesión 03 -->
+						<circle class="punto" cx="618" cy="30" r="10" />
+						<text class="navy" x="604" y="116" font-size="72" font-weight="700">03</text>
+						<text class="sans" x="604" y="196" font-size="28" font-weight="700">Comunicación</text>
+						<text class="sans" x="604" y="234" font-size="28" font-weight="700">entre dispositivos</text>
+						<text class="sans navy" x="604" y="348" font-size="30" font-weight="600">intercambio con</text>
+						<text class="sans navy" x="604" y="388" font-size="30" font-weight="600">sensores y placas</text>
+						<text class="sans mut" x="604" y="456" font-size="25">ejemplos</text>
+						<text class="navy" x="604" y="494" font-size="25">11–14 · 12b · 12c</text>
+						<!-- sesión 04 -->
+						<circle class="punto" cx="920" cy="30" r="10" />
+						<text class="navy" x="906" y="116" font-size="72" font-weight="700">04</text>
+						<text class="sans" x="906" y="196" font-size="28" font-weight="700">WiFi y consumo</text>
+						<text class="sans" x="906" y="234" font-size="28" font-weight="700">de APIs HTTP</text>
+						<text class="sans navy" x="906" y="348" font-size="30" font-weight="600">consultas HTTP</text>
+						<text class="sans navy" x="906" y="388" font-size="30" font-weight="600">a servicios web</text>
+						<text class="sans mut" x="906" y="456" font-size="25">ejemplos</text>
+						<text class="navy" x="906" y="494" font-size="25">15–18 · 16b</text>
+						<!-- sesión 05 -->
+						<circle class="punto" cx="1222" cy="30" r="10" />
+						<text class="navy" x="1208" y="116" font-size="72" font-weight="700">05</text>
+						<text class="sans" x="1208" y="196" font-size="28" font-weight="700">Protocolo MQTT y</text>
+						<text class="sans" x="1208" y="234" font-size="28" font-weight="700">plataformas de IoT</text>
+						<text class="sans navy" x="1208" y="348" font-size="30" font-weight="600">telemetría y</text>
+						<text class="sans navy" x="1208" y="388" font-size="30" font-weight="600">control remoto</text>
+						<text class="sans mut" x="1208" y="456" font-size="25">ejemplo</text>
+						<text class="navy" x="1208" y="494" font-size="25">19</text>
+						<!-- sesión 06 -->
+						<circle class="rel-acc" cx="1524" cy="30" r="15" />
+						<text class="acc" x="1510" y="116" font-size="72" font-weight="700">06</text>
+						<text class="sans" x="1510" y="196" font-size="28" font-weight="700">TinyML y Edge AI:</text>
+						<text class="sans" x="1510" y="234" font-size="28" font-weight="700">inferencia en</text>
+						<text class="sans" x="1510" y="272" font-size="28" font-weight="700">microcontroladores</text>
+						<text class="sans acc" x="1510" y="348" font-size="30" font-weight="600">clasificación en</text>
+						<text class="sans acc" x="1510" y="388" font-size="30" font-weight="600">el propio chip</text>
+						<text class="sans mut" x="1510" y="456" font-size="25">ejemplos</text>
+						<text class="navy" x="1510" y="494" font-size="25">20–21</text>
+						<text class="sans mut" x="1510" y="532" font-size="25">Nano 33 BLE Sense</text>
+
+						<!-- líneas de continuación -->
+						<path class="ln ln--fina ln--mut" d="M0 576 H1800" />
+						<text class="sans mut" x="0" y="616" font-size="27">Líneas de continuación</text>
+						<text class="sans" x="0" y="668" font-size="31" font-weight="700">ESP32 con esp-tflite-micro</text>
+						<text class="sans" x="0" y="714" font-size="27">el flujo de los ejemplos 20 y 21</text>
+						<text class="sans" x="0" y="754" font-size="27">en el chip de las sesiones 1 a 5</text>
+						<text class="sans" x="604" y="668" font-size="31" font-weight="700">Palabra clave</text>
+						<text class="sans" x="604" y="714" font-size="27">micrófono PDM de la Nano,</text>
+						<text class="sans" x="604" y="754" font-size="27">espectrograma y red en int8</text>
+						<text class="sans" x="1208" y="668" font-size="31" font-weight="700">Edge Impulse</text>
+						<text class="sans" x="1208" y="714" font-size="27">captura, entrenamiento e int8</text>
+						<text class="sans" x="1208" y="754" font-size="27">guiados, con exportación a Arduino</text>
+					</svg>
+				</div>
+
+				<div class="def s6d-pie">
+					<p>
+						<b>Documentación oficial</b> ·
+						<a href="https://developers.google.com/edge/litert/microcontrollers/overview" target="_blank" rel="noopener">LiteRT Micro</a>
+						·
+						<a href="https://github.com/spaziochirale/Chirale_TensorFlowLite" target="_blank" rel="noopener">TensorFlow Lite Micro (Chirale)</a>
+						·
+						<a href="https://github.com/spaziochirale/ArduTFLite" target="_blank" rel="noopener">ArduTFLite</a>
+						·
+						<a href="https://docs.edgeimpulse.com/" target="_blank" rel="noopener">Edge Impulse</a>
+						·
+						<a href="https://docs.arduino.cc/hardware/nano-33-ble-sense-rev2/" target="_blank" rel="noopener">Nano 33 BLE Sense Rev2</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer la tira de izquierda a derecha pidiendo, para cada sesión, el ejemplo que lo demuestra: el LED y el ADC de la 1, el parpadeo sin <code>delay()</code> de la 2, la trama con checksum de la 3, la OLED con datos de una API en la 4, el tablero de Blynk en la 5 y el LED RGB que muestra el gesto o el color en la 6. En la sesión 6 el dispositivo transmite, si hace falta, el resultado de la clasificación en lugar de la señal medida.
+				</p>
+				<p>
+					Pregunta de predicción, antes de las líneas de continuación: ¿qué cambiaría primero si el ejemplo 20 tuviera que reconocer una palabra en lugar de un gesto? Respuesta: la entrada pasa a ser un espectrograma del micrófono, la red crece y la cuantización int8 deja de ser opcional.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos clave de la sesión 6</h4>
+					<ul>
+						<li><b>TinyML</b>: aprendizaje automático que se ejecuta en un microcontrolador, con memoria de kilobytes.</li>
+						<li><b>Inferencia</b>: aplicar un modelo ya entrenado a datos nuevos; con TFLM, en el chip solo se infiere.</li>
+						<li><b>Parámetros</b>: pesos y sesgos de la red; una capa densa de <i>n</i> entradas y <i>m</i> neuronas tiene <i>n</i>·<i>m</i> + <i>m</i>.</li>
+						<li><b>Tensor arena</b>: zona de RAM donde el intérprete guarda entrada, resultados intermedios y salida.</li>
+						<li><b>Cuantización int8</b>: guardar cada número en un byte con <code>real = (q − zero_point) × scale</code>.</li>
+						<li><b>Softmax</b>: convierte las salidas en un reparto que suma 100 % entre las clases conocidas.</li>
+						<li><b>Matriz de confusión</b>: cuenta aciertos y errores por clase real y clase predicha.</li>
+						<li><b>Precisión</b>: fracción de las predicciones «X» que eran X. <b>Exhaustividad</b>: fracción de los casos X que el modelo detectó.</li>
+						<li><b>Espectrograma</b>: energía de cada banda de frecuencia en ventanas sucesivas del audio.</li>
+						<li><b>Deriva</b> (<i>drift</i>): los datos de uso se alejan de los de entrenamiento con el tiempo.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-limites-etica.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Límites</span>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

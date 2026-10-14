@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 12c · Enlace I²C · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s3-salida-ancha">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 12c</span>
+					</div>
+
+					<h2 class="code-hour__title">Mensajes de un ESP32 maestro a otro esclavo por I²C</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Mismo firmware en las dos placas.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Dos ESP32 en el mismo bus.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Conexión y flujo de roles.</span>
+								<span class="deliverable__file">diagrama-conexion-placas.excalidraw · diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>La línea escrita en el monitor de A (maestro) llega por I²C a B (esclavo en 0x11), que la imprime; un solo sentido.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>SDA con SDA y SCL con SCL, sin cruzar; GND común. El puente <b>GPIO 4</b>–GND hace maestro a A.</p>
+								<svg class="s3-esquema" role="img" aria-label="SDA con SDA y SCL con SCL entre las dos placas, pull-ups de 4,7 kΩ a 3V3, GND común y puente del GPIO 4 a GND en la placa A" viewBox="0 0 340 176" width="340" height="176"><rect class="s3-esq__caja" x="1" y="1" width="95" height="174" rx="6" /><rect class="s3-esq__caja" x="244" y="1" width="95" height="174" rx="6" /><text class="s3-esq__tit" x="48" y="26" text-anchor="middle">Placa A</text><text class="s3-esq__sub" x="48" y="48" text-anchor="middle">maestro</text><text class="s3-esq__tit" x="291.5" y="26" text-anchor="middle">Placa B</text><text class="s3-esq__sub" x="291.5" y="48" text-anchor="middle">0x11</text><text class="s3-esq__pin" x="88" y="88" text-anchor="end">SDA 21</text><text class="s3-esq__pin" x="252" y="88" text-anchor="start">SDA 21</text><text class="s3-esq__pin" x="88" y="114" text-anchor="end">SCL 22</text><text class="s3-esq__pin" x="252" y="114" text-anchor="start">SCL 22</text><text class="s3-esq__pin" x="88" y="140" text-anchor="end">GND</text><text class="s3-esq__pin" x="252" y="140" text-anchor="start">GND</text><text class="s3-esq__pin" x="88" y="166" text-anchor="end">GPIO 4</text><path class="s3-esq__vcc" d="M124 30 H172" /><text class="s3-esq__sub" x="148" y="20" text-anchor="middle">3V3</text><path class="s3-esq__a" d="M136 30 V82" /><path class="s3-esq__b" d="M164 30 V108" /><rect class="s3-esq__r" x="131" y="42" width="10" height="16" /><rect class="s3-esq__r" x="159" y="42" width="10" height="16" /><text class="s3-esq__sub" x="176" y="56" text-anchor="start">4,7 kΩ</text><circle class="s3-esq__pv" cx="136" cy="30" r="3.5" /><circle class="s3-esq__pv" cx="164" cy="30" r="3.5" /><circle class="s3-esq__pa" cx="136" cy="82" r="3.5" /><circle class="s3-esq__pb" cx="164" cy="108" r="3.5" /><path class="s3-esq__a" d="M96 82 H244" /><path class="s3-esq__b" d="M96 108 H244" /><path class="s3-esq__gnd" d="M96 134 H244" /><text class="s3-esq__sub" x="200" y="128" text-anchor="middle">GND</text><path class="s3-esq__puente" d="M96 160 H118 V134" /><circle class="s3-esq__pg" cx="118" cy="134" r="3.5" /><text class="s3-esq__sub" x="124" y="166" text-anchor="start">puente</text><circle class="s3-esq__pa" cx="96" cy="82" r="3.5" /><circle class="s3-esq__pb" cx="96" cy="108" r="3.5" /><circle class="s3-esq__pg" cx="96" cy="134" r="3.5" /><circle class="s3-esq__pa" cx="244" cy="82" r="3.5" /><circle class="s3-esq__pb" cx="244" cy="108" r="3.5" /><circle class="s3-esq__pg" cx="244" cy="134" r="3.5" /><circle class="s3-esq__pg" cx="96" cy="160" r="3.5" /></svg>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino y monitor_speed = 115200; el mismo firmware va en las dos placas.
+<b>2. Firmware.</b> Al arrancar, lee una vez el GPIO 4 con INPUT_PULLUP. A GND: maestro, Wire.begin(21, 22); reúne la línea del monitor hasta '\n' (ignora '\r'), la envía a 0x11 en bloques de ≤ 32 bytes terminada en '\n', comprueba cada endTransmission() e imprime «[Enviado por I2C a 0x11]: …» o «[Error I2C] endTransmission devolvió N: …». Libre: esclavo, Wire.onReceive() y Wire.begin(0x11, 21, 22, 100000); arma la línea en onReceive y la imprime desde loop(): «[Mensaje recibido por I2C]: …». Banners como en la salida.
+<b>3. Simulación.</b> La de Wokwi: dos ESP32 con SDA, SCL y GND unidos, pull-ups de 4,7 kΩ y el GPIO 4 de A a GND.
+<b>4. Diagramas.</b> En Excalidraw: la conexión con el puente de rol y el flujo desde la lectura del GPIO 4.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> El esclavo no puede iniciar transmisiones; imprimir en <code>loop()</code> saca <code>Serial</code> de la rutina de recepción.
+								</p>
+							</div>
+						</div>
+						<section aria-label="Salida esperada" class="code-hour__section code-hour__section--full s3-salida">
+							<h4>
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Salida esperada
+							</h4>
+							<div class="s3-monitores s3-monitores--dos">
+								<figure class="s3-monitor">
+									<figcaption>Placa A · GPIO 4 a GND · se escribe «hola» y Enter</figcaption>
+									<div class="term">
+--- MODO PLACA A (MAESTRO I2C) ---
+Escribe un mensaje en el monitor y pulsa Enter para enviarlo a 0x11...
+[Enviado por I2C a 0x11]: hola</div>
+								</figure>
+								<figure class="s3-monitor">
+									<figcaption>Placa B · GPIO 4 libre</figcaption>
+									<div class="term">
+--- MODO PLACA B (ESCLAVO I2C, Dir: 0x11) ---
+Esperando mensajes de la Placa A...
+[Mensaje recibido por I2C]: hola</div>
+								</figure>
+							</div>
+						</section>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El mismo binario actúa como maestro o como esclavo según el puente de GPIO 4 leído al arrancar.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué imprime la placa A si la B está apagada? Respuesta: «[Error I2C] endTransmission devolvió 2: NACK en la dirección (¿esclavo conectado y encendido?)». A diferencia de la UART, el maestro detecta que nadie contestó. El rol se lee una sola vez: mover el puente con la placa encendida no tiene efecto hasta reiniciar. Si B intentara transmitir, endTransmission devolvería 4. Los bloques de 32 bytes caben con holgura en el búfer de 128 de Wire.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>Maestro: <code>Wire.begin(sda, scl)</code>, sin dirección propia. Esclavo: <code>Wire.onReceive(funcion)</code> y <code>Wire.begin(direccion, sda, scl, frecuencia)</code>. La rutina de <code>onReceive</code> recibe el número de bytes y los lee con <code>Wire.read()</code>.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Cruzar SDA con SCL como si fuera TX y RX.</li><li>Una pareja de pull-ups en cada placa sin calcular el paralelo.</li><li>Imprimir dentro de <code>onReceive</code>: se ejecuta fuera de <code>loop()</code>.</li><li>Puente en las dos placas: ambas arrancan como maestro.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-maestro-esclavo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Roles</span>
+				</a>
+				<a class="slide-nav__link" href="15-bus-spi.html">
+					<span>SPI</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

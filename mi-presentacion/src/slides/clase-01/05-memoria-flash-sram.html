@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Memoria flash y SRAM · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Arquitectura del ESP32</span>
+
+				<h1 class="slide__title slide__title--sm">
+					SRAM volátil y flash <em>no volátil</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto">
+						<div class="controls controles-grandes">
+							<button type="button" class="btn btn--secondary" id="guardar-btn">Guardar en flash</button>
+							<button type="button" class="btn btn--primary" id="reset-btn">Reiniciar (EN)</button>
+						</div>
+						<p id="caption" aria-live="polite">
+							El contador aumenta en 1 cada segundo; «Guardar en flash» copia su valor a la flash.
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="lienzo-caja">
+							<canvas
+								id="memorias"
+								role="img"
+								aria-label="Dos memorias: la SRAM con el contador en ejecución y la flash con el firmware y la copia guardada"
+							></canvas>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Dejar que el contador avance, pulsar «Guardar en flash» y esperar unos
+					segundos. Pregunta de predicción: después de pulsar EN, ¿qué valor
+					mostrará cada memoria? La SRAM vuelve a 0 y la flash conserva el último
+					valor guardado. Los datos que deben sobrevivir a un reinicio se guardan
+					en la flash.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>Preferences.h</code> guarda pares clave-valor en la partición
+						NVS de la flash: <code>prefs.begin("app")</code>,
+						<code>prefs.putUInt("cuenta", n)</code> y, en
+						<code>setup()</code>, <code>prefs.getUInt("cuenta", 0)</code> para
+						recuperarlo. <code>ESP.getFreeHeap()</code> informa de la SRAM libre.
+						De los 520 KB, unos 320 KB quedan para datos del programa (el informe
+						de compilación los muestra como «RAM … 327680 bytes»); el resto lo usan
+						la caché de instrucciones y el sistema.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Calibraciones, credenciales WiFi y contadores de uso se guardan en la
+						flash porque deben conservarse tras un corte de energía.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Escribir en flash dentro de <code>loop()</code> en cada vuelta: cada
+						sector admite del orden de 100 000 borrados. Olvidar que el WiFi ocupa decenas de KB de SRAM (Ejemplo 05).
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-bloques-funcionales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Bloques funcionales</span>
+				</a>
+				<a class="slide-nav__link" href="06-mapa-gpio.html">
+					<span>Mapa de terminales</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const caption = document.getElementById("caption");
+			const guardarBtn = document.getElementById("guardar-btn");
+			const resetBtn = document.getElementById("reset-btn");
+
+			let sram = 0;
+			let flash = 0;
+			let arrancando = false;
+			let copiando = false;
+
+			const COLS = 8;
+			const FILAS = 6;
+			// Celdas de la SRAM ocupadas por otras variables y la pila (fijas).
+			const ocupadas = new Set([0, 1, 2, 5, 6, 7, 40, 41, 42, 43, 44, 45, 46, 47]);
+			// Bloque del contador: filas 2 a 3, columnas 1 a 6.
+			const enContador = (c, f) => f >= 2 && f <= 3 && c >= 1 && c <= 6;
+
+			function rotulo(ctx, x, y, fs, titulo, sub, color) {
+				ctx.textAlign = "left";
+				ctx.textBaseline = "alphabetic";
+				ctx.fillStyle = color;
+				ctx.font = `700 ${fs * 1.15}px 'IBM Plex Mono', monospace`;
+				ctx.fillText(titulo, x, y);
+				ctx.fillStyle = token("--color-text-muted");
+				ctx.font = `500 ${fs * 0.85}px 'IBM Plex Sans', sans-serif`;
+				ctx.fillText(sub, x, y + fs * 1.2);
+			}
+
+			function caja(ctx, x, y, w, h, relleno, borde, ancho = 2) {
+				ctx.fillStyle = relleno;
+				ctx.strokeStyle = borde;
+				ctx.lineWidth = ancho;
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, 6);
+				ctx.fill();
+				ctx.stroke();
+			}
+
+			function texto(ctx, t, x, y, fs, color, peso = 600, familia = "'IBM Plex Mono', monospace") {
+				ctx.fillStyle = color;
+				ctx.font = `${peso} ${fs}px ${familia}`;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(t, x, y);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("memorias"), (ctx, w, h) => {
+				const fs = Math.max(24, Math.min(34, h * 0.05));
+				const gap = w * 0.06;
+				const pw = (w - gap) / 2;
+				const cabecera = fs * 2.9;
+				const top = cabecera + fs * 0.6;
+				const alto = h - top - 2;
+
+				const acento = token("--color-accent");
+				const navy = token("--color-navy");
+				const borde = token("--color-border");
+				const fondo = token("--color-surface-2");
+				const superficie = token("--color-surface");
+				const muted = token("--color-text-muted");
+
+				// ---- SRAM ----
+				rotulo(ctx, 0, fs * 1.1, fs, "SRAM · 520 KB", "volátil: se borra al reiniciar · ≈ 320 KB para datos", acento);
+				caja(ctx, 1, top, pw - 2, alto, fondo, borde);
+				const pad = fs * 0.8;
+				const cw = (pw - 2 * pad) / COLS;
+				const ch = (alto - 2 * pad) / FILAS;
+				for (let f = 0; f < FILAS; f++) {
+					for (let c = 0; c < COLS; c++) {
+						if (enContador(c, f)) continue;
+						const i = f * COLS + c;
+						const x = pad + c * cw + 3;
+						const y = top + pad + f * ch + 3;
+						const ruido = arrancando && Math.random() < 0.5;
+						caja(
+							ctx, x, y, cw - 6, ch - 6,
+							ruido ? token("--color-warn-soft") : ocupadas.has(i) ? token("--color-navy-soft") : superficie,
+							borde, 1,
+						);
+					}
+				}
+				const bx = pad + cw + 3;
+				const by = top + pad + 2 * ch + 3;
+				const bw = 6 * cw - 6;
+				const bh = 2 * ch - 6;
+				caja(ctx, bx, by, bw, bh, token("--color-accent-soft"), acento, 3);
+				texto(ctx, "contador", bx + bw / 2, by + fs * 0.9, fs * 0.8, acento, 600);
+				texto(ctx, arrancando ? "—" : String(sram), bx + bw / 2, by + bh / 2 + fs * 0.5,
+					Math.min(bh * 0.55, fs * 3.4), acento, 700);
+
+				// ---- Flash ----
+				const fx = pw + gap;
+				rotulo(ctx, fx, fs * 1.1, fs, "Flash · 4 MB", "no volátil: conserva sin energía", navy);
+				caja(ctx, fx + 1, top, pw - 2, alto, fondo, borde);
+				const zonas = [
+					["Arranque", 0.11, superficie, borde],
+					["Tabla de particiones", 0.11, superficie, borde],
+					["NVS", 0.36, token("--color-navy-soft"), navy],
+					["Programa (firmware)", 0.42, superficie, borde],
+				];
+				let y = top + pad;
+				const util = alto - 2 * pad - 3 * fs * 0.4;
+				for (const [nombre, frac, rel, bor] of zonas) {
+					const zh = util * frac;
+					caja(ctx, fx + pad, y, pw - 2 * pad, zh, rel, bor, nombre === "NVS" ? 3 : 1.5);
+					if (nombre === "NVS") {
+						texto(ctx, "NVS · cuenta", fx + pw / 2, y + fs * 0.9, fs * 0.8, navy, 600);
+						texto(ctx, String(flash), fx + pw / 2, y + zh / 2 + fs * 0.5,
+							Math.min(zh * 0.55, fs * 3.4), navy, 700);
+					} else {
+						texto(ctx, nombre, fx + pw / 2, y + zh / 2, fs * 0.8, muted, 500,
+							"'IBM Plex Sans', sans-serif");
+					}
+					y += zh + fs * 0.4;
+				}
+
+				// Flecha de copia SRAM → NVS mientras se guarda.
+				if (copiando) {
+					const y0 = by + bh / 2;
+					const y1 = top + pad + util * 0.22 + fs * 0.8 + util * 0.18;
+					ctx.strokeStyle = navy;
+					ctx.fillStyle = navy;
+					ctx.lineWidth = Math.max(3, fs * 0.18);
+					ctx.beginPath();
+					ctx.moveTo(bx + bw + 4, y0);
+					ctx.lineTo(fx + pad - fs * 0.6, y1);
+					ctx.stroke();
+					const ang = Math.atan2(y1 - y0, fx + pad - fs * 0.6 - (bx + bw + 4));
+					ctx.save();
+					ctx.translate(fx + pad - fs * 0.4, y1 + Math.tan(ang) * fs * 0.2);
+					ctx.rotate(ang);
+					ctx.beginPath();
+					ctx.moveTo(0, 0);
+					ctx.lineTo(-fs * 0.8, -fs * 0.45);
+					ctx.lineTo(-fs * 0.8, fs * 0.45);
+					ctx.closePath();
+					ctx.fill();
+					ctx.restore();
+				}
+			});
+
+			// El programa del ESP32: contador++ una vez por segundo.
+			setInterval(() => {
+				if (arrancando) return;
+				sram += 1;
+				lienzo.redibujar();
+			}, 1000);
+
+			guardarBtn.addEventListener("click", () => {
+				if (arrancando) return;
+				flash = sram;
+				copiando = true;
+				caption.textContent = `prefs.putUInt("cuenta", ${flash}): el valor ${flash} queda escrito en la flash.`;
+				lienzo.redibujar();
+				setTimeout(() => {
+					copiando = false;
+					lienzo.redibujar();
+				}, 1200);
+			});
+
+			resetBtn.addEventListener("click", () => {
+				arrancando = true;
+				sram = 0;
+				caption.textContent = "Reiniciando: el contenido de la SRAM se pierde; la flash no cambia…";
+				lienzo.redibujar();
+				setTimeout(() => {
+					arrancando = false;
+					caption.textContent = `Tras el reinicio la SRAM empieza de 0; la flash conserva ${flash}.`;
+					lienzo.redibujar();
+				}, 900);
+			});
+		</script>
+	</body>
+</html>

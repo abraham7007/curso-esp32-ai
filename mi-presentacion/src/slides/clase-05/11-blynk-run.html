@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Blynk.run · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Política de envío</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Un <code>delay()</code> en el loop <em>corta</em> la conexión
+				</h1>
+
+				<div class="def">
+					<p><code>Blynk.run()</code> lee las órdenes y envía el <i>ping</i>; la conexión se mantiene mientras se ejecute sin pausas largas. Las tareas periódicas se programan con <code>BlynkTimer</code>.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dos líneas de tiempo de 0 a 180 segundos con el ejemplo 19, que pide V0 con syncVirtual al conectar. Arriba, el loop sin esperas: Blynk.run se ejecuta miles de veces por segundo; BlynkTimer envía V1 cada 30 segundos; la biblioteca manda un ping a los 40 y a los 80 segundos; una orden a V0 a los 100 segundos enciende el LED al instante y, como cuenta como tráfico recibido, el siguiente ping sale a los 140. Abajo, un loop con delay de 30 segundos: Blynk.run y el envío de V1 solo ocurren a los 0, 30, 60, 90, 120, 150 y 180 segundos. Lo último que se recibe es la respuesta del sync, leída a los 30 segundos; a los 90 han pasado 60 sin recibir nada, más de 58, y la biblioteca registra Heartbeat timeout y se desconecta. A los 120 reconecta y envía el login, cuya respuesta se lee a los 150: Ready, con un ping de unos 150000 ms. La orden de los 100 segundos queda guardada en el servidor y el LED la recibe a los 180, con el sync. Debajo, las cifras: ping tras 40 segundos sin tráfico, BLYNK_HEARTBEAT; conexión dada por perdida tras 40 más 3 por 6, 58 segundos sin recibir.">
+						<!-- carril 1: loop sin esperas -->
+						<text class="sans ok" x="0" y="40" font-size="34" font-weight="700">Sin esperas</text>
+						<text x="0" y="86" font-size="25">Blynk.run();</text>
+						<text x="0" y="120" font-size="25">timer.run();</text>
+						<rect class="barra--navy" x="507" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="535" y="40" font-size="24">V1</text>
+						<rect class="barra--ok" x="568" y="17" width="70" height="46" rx="6" />
+						<text class="mid ok" x="603" y="40" font-size="24">ping</text>
+						<rect class="barra--navy" x="712" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="740" y="40" font-size="24">V1</text>
+						<rect class="barra--ok" x="842" y="17" width="70" height="46" rx="6" />
+						<text class="mid ok" x="877" y="40" font-size="24">ping</text>
+						<rect class="barra--navy" x="917" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="945" y="40" font-size="24">V1</text>
+						<rect class="barra--navy" x="1122" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="1150" y="40" font-size="24">V1</text>
+						<rect class="barra--ok" x="1252" y="17" width="70" height="46" rx="6" />
+						<text class="mid ok" x="1287" y="40" font-size="24">ping</text>
+						<rect class="barra--navy" x="1327" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="1355" y="40" font-size="24">V1</text>
+						<rect class="barra--navy" x="1532" y="17" width="56" height="46" rx="6" />
+						<text class="mid navy" x="1560" y="40" font-size="24">V1</text>
+						<path class="s5d-ticks" d="M330 100 H1561" />
+						<circle class="rel-acc" cx="1013" cy="100" r="11" />
+						<text class="acc" x="1027" y="146" font-size="26">orden V0 → LED al instante</text>
+
+						<!-- carril 2: loop con delay(30000) -->
+						<text class="sans dan" x="0" y="236" font-size="34" font-weight="700">delay(30000)</text>
+						<text x="0" y="282" font-size="25">Blynk.run();</text>
+						<text x="0" y="316" font-size="25">enviar(); delay…</text>
+						<text class="sans mut" x="0" y="352" font-size="22">con el sync del ejemplo 19</text>
+						<rect class="barra--navy" x="302" y="213" width="56" height="46" rx="6" />
+						<text class="mid navy" x="330" y="236" font-size="24">V1</text>
+						<rect class="barra--navy" x="507" y="213" width="56" height="46" rx="6" />
+						<text class="mid navy" x="535" y="236" font-size="24">V1</text>
+						<rect class="barra--navy" x="712" y="213" width="56" height="46" rx="6" />
+						<text class="mid navy" x="740" y="236" font-size="24">V1</text>
+						<rect class="barra--navy" x="1327" y="213" width="56" height="46" rx="6" />
+						<text class="mid navy" x="1355" y="236" font-size="24">V1</text>
+						<rect class="barra--navy" x="1532" y="213" width="56" height="46" rx="6" />
+						<text class="mid navy" x="1560" y="236" font-size="24">V1</text>
+						<path class="ln ln--fina ln--mut" d="M330 300 H1560" />
+						<rect class="barra--dan" x="945" y="282" width="410" height="36" rx="6" />
+						<text class="mid dan" x="1252" y="301" font-size="24">desconectado</text>
+						<path class="ln" d="M330 272 V328 M535 272 V328 M740 272 V328 M945 272 V328 M1150 272 V328 M1355 272 V328 M1560 272 V328" />
+						<circle class="rel-acc" cx="1013" cy="300" r="11" />
+						<path class="ln ln--fina ln--mut" d="M535 344 V362 H945 V344" />
+						<text class="mid mut" x="740" y="390" font-size="24">sync leído · 60 s sin recibir</text>
+						<text class="dan" x="960" y="352" font-size="26">«Heartbeat timeout»</text>
+						<text class="fin ok" x="1600" y="390" font-size="24">«Ready (ping: ≈150000ms).»</text>
+						<text class="acc" x="1013" y="428" font-size="24">orden V0 → LED a los 180 s (sync)</text>
+
+						<!-- eje -->
+						<path class="ln ln--fina ln--mut" d="M330 470 H1560 M330 470 V490 M535 470 V490 M740 470 V490 M945 470 V490 M1150 470 V490 M1355 470 V490 M1560 470 V490" />
+						<text class="mid mut" x="330" y="510" font-size="24">0</text>
+						<text class="mid mut" x="535" y="510" font-size="24">30</text>
+						<text class="mid mut" x="740" y="510" font-size="24">60</text>
+						<text class="mid mut" x="945" y="510" font-size="24">90</text>
+						<text class="mid mut" x="1150" y="510" font-size="24">120</text>
+						<text class="mid mut" x="1355" y="510" font-size="24">150</text>
+						<text class="fin mut" x="1600" y="510" font-size="24">180 s</text>
+
+						<!-- las cifras de la biblioteca -->
+						<path class="ln ln--fina ln--mut" d="M0 538 H1600" />
+						<text x="0" y="574" font-size="27"><tspan class="navy">BLYNK_HEARTBEAT 40</tspan><tspan class="mut"> → ping tras 40 s sin tráfico</tspan></text>
+						<text x="830" y="574" font-size="27"><tspan class="dan">40 + 3 × 6 = 58 s</tspan><tspan class="mut"> sin recibir nada → reconecta</tspan></text>
+
+						<g data-paso="1">
+							<text class="sans" x="0" y="628" font-size="30">El loop solo llama a <tspan class="s4d-mono acc">Blynk.run()</tspan> y <tspan class="s4d-mono acc">timer.run()</tspan>; lo periódico, con <tspan class="s4d-mono acc">timer.setInterval()</tspan>.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si el ejemplo 19 sustituye el temporizador por
+					<code>delay(30000)</code> en el loop, ¿sigue conectado a los 90 s?
+				</p>
+				<p>
+					Respuesta: no. Leer el carril de abajo con el código de la biblioteca (Blynk
+					1.3.5, <code>BlynkProtocol.h</code>): el ping sale cuando pasan 40 s sin
+					recibir o 40 s sin enviar, y la conexión se da por perdida tras 58 s (40 + 3 ×
+					<code>BLYNK_TIMEOUT_MS</code>) sin recibir nada; la librería comprueba este
+					segundo plazo antes que el ping. Con el <code>BLYNK_CONNECTED()</code> del
+					ejemplo, lo último que entra es la respuesta de <code>syncVirtual(V0)</code>,
+					leída a los 30 s. A los 60 s ni la recepción ni el envío llevan 40 s parados y
+					no sale ningún ping; a los 90 s suman 60 s sin recibir: «Heartbeat timeout».
+				</p>
+				<p>
+					Cada paso de la reconexión espera una vuelta: login a los 120, «Ready» a los
+					150. El «ping» que imprime mide desde la última marca de heartbeat (el
+					«Ready» inicial), no la latencia. La orden de los 100 s no se pierde: el
+					servidor la guarda y el sync la entrega a los 180 s. Arriba, esa misma orden
+					cuenta como tráfico recibido y retrasa el ping siguiente a los 140 s.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>BlynkTimer timer;</code> · <code>timer.setInterval(30000L, sendSensorData);</code>
+						en <code>setup()</code> · <code>loop() { Blynk.run(); timer.run(); }</code>.
+						<code>BLYNK_HEARTBEAT</code> (40 s en <code>BlynkConfig.h</code>) se puede
+						cambiar con un <code>#define</code> antes de incluir la cabecera.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19: <code>loop()</code> de dos líneas y envío de V1 cada 30 s.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Llamar a <code>Blynk.virtualWrite()</code> directamente en el <code>loop()</code>, con miles de mensajes por segundo y error de inundación.</li>
+						<li>Esperar a un sensor lento con un <code>while</code>, que también bloquea <code>Blynk.run()</code>.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-codigo-19-blynk.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 19 · Blynk</span>
+				</a>
+				<a class="slide-nav__link" href="12-cuota-intervalo.html">
+					<span>Cuota</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Herramientas de TinyML · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Placa y herramientas</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Herramientas de <em>TinyML</em> para la Nano 33 BLE Sense
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1800 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Siete herramientas de TinyML con su papel y su situación en la Nano 33 BLE Sense Rev2. Adoptadas, en verde: Colab con TensorFlow, que entrena la red, y TensorFlow Lite Micro, que ejecuta la red en el chip. Arduino_TensorFlowLite, la versión de 2019, está archivada desde 2025. Edge Impulse, plataforma web completa, es la alternativa profesional. emlearn pasa modelos de scikit-learn a C y sirve para modelos clásicos. NanoEdge AI y ST Edge AI son herramientas de ST, solo para STM32. Neuton es de Nordic y se ejecuta en el nRF52, pero exige nRF Connect SDK. Opción adoptada: Colab entrena y TensorFlow Lite Micro ejecuta en la placa; código abierto, con cada etapa a la vista.">
+						<rect class="s6a-adoptada" x="0" y="0" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="40" font-size="34">Colab + TensorFlow</text>
+						<text class="sans" x="620" y="40" font-size="31">entrena la red</text>
+						<text class="sans b ok" x="1250" y="40" font-size="31">✓ adoptada</text>
+						<rect class="s6a-adoptada" x="0" y="88" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="128" font-size="34">TensorFlow Lite Micro</text>
+						<text class="sans" x="620" y="128" font-size="31">ejecuta la red en el chip</text>
+						<text class="sans b ok" x="1250" y="128" font-size="31">✓ adoptada</text>
+						<rect class="s6a-fila" x="0" y="176" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="216" font-size="34">Arduino_TensorFlowLite</text>
+						<text class="sans" x="620" y="216" font-size="31">la versión de 2019</text>
+						<text class="sans b dan" x="1250" y="216" font-size="31">✗ archivada en 2025</text>
+						<rect class="s6a-fila" x="0" y="264" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="304" font-size="34">Edge Impulse</text>
+						<text class="sans" x="620" y="304" font-size="31">plataforma web completa</text>
+						<text class="sans b navy" x="1250" y="304" font-size="31">alternativa profesional</text>
+						<rect class="s6a-fila" x="0" y="352" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="392" font-size="34">emlearn</text>
+						<text class="sans" x="620" y="392" font-size="31">scikit-learn a C</text>
+						<text class="sans b navy" x="1250" y="392" font-size="31">modelos clásicos</text>
+						<rect class="s6a-fila" x="0" y="440" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="480" font-size="34">NanoEdge AI, ST Edge AI</text>
+						<text class="sans" x="620" y="480" font-size="31">herramientas de ST</text>
+						<text class="sans b dan" x="1250" y="480" font-size="31">✗ solo STM32</text>
+						<rect class="s6a-fila" x="0" y="528" width="1800" height="80" rx="8" />
+						<text class="sans b" x="24" y="568" font-size="34">Neuton</text>
+						<text class="sans" x="620" y="568" font-size="31">de Nordic; se ejecuta en nRF52</text>
+						<text class="sans b dan" x="1250" y="568" font-size="31">✗ exige nRF Connect SDK</text>
+						<rect class="s6a-elegida" x="2" y="628" width="1796" height="170" rx="12" />
+						<text class="sans b ok" x="28" y="676" font-size="34">Opción adoptada</text>
+						<text class="sans" x="330" y="676" font-size="31">Colab entrena; TensorFlow Lite Micro ejecuta en la placa.</text>
+						<text class="sans mut" x="330" y="726" font-size="29">Código abierto; Colab solo pide una cuenta de Google.</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: Edge Impulse hace todo el flujo en una página web, con gráficos y estimación de memoria. ¿Por qué no usarlo aquí? Respuesta: oculta las etapas que esta sesión quiere mostrar (normalizar, entrenar, evaluar, convertir) y exige una cuenta y subir los datos a su nube. Para proyectos fuera del aula es una alternativa válida: el plan Developer es gratuito y admite la Rev1 y la Rev2.
+				</p>
+				<p>
+					TensorFlow Lite Micro (Google lo renombró LiteRT for Microcontrollers en 2024) es un intérprete que recorre las capas del <code>.tflite</code> dentro de una zona de memoria reservada, la <i>tensor arena</i>. La librería oficial, Arduino_TensorFlowLite, salió del gestor de librerías y su repositorio se archivó en febrero de 2025. La sustituye un port de Spazio Chirale, con CMSIS-NN. El nombre difiere entre el registro y la cabecera: en el registro de PlatformIO aparece como <code>Chirale_TensorFLowLite</code>, con una «L» mayúscula de más, y el archivo de cabecera es <code>&lt;Chirale_TensorFlowLite.h&gt;</code>. Sobre esa librería, ArduTFLite ofrece cuatro funciones que solo trabajan con tensores float; por eso el ejemplo 20 la usa y el 21, cuantizado a int8, llama al intérprete directamente.
+				</p>
+				<p>
+					emlearn sirve para árboles y redes pequeñas de scikit-learn, pero no lee un <code>.tflite</code>. NanoEdge AI Studio y ST Edge AI Core funcionan solo con STM32. Neuton, ahora de Nordic, genera modelos que se ejecutan en cualquier SoC Nordic, también en el nRF52840 de esta placa, pero se integra con nRF Connect SDK y no con el núcleo Arduino (mbed) que se usa aquí.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>lib_deps</code>: <code>spaziochirale/Chirale_TensorFLowLite@2.0.0</code> y,
+						solo en el ejemplo 20, <code>spaziochirale/ArduTFLite@1.0.2</code>. En el código
+						del 20: <code>#include &lt;ArduTFLite.h&gt;</code>, <code>modelInit()</code>,
+						<code>modelSetInput()</code>, <code>modelRunInference()</code> y
+						<code>modelGetOutput()</code>. En Colab, TensorFlow 2.21 aún trae
+						<code>tf.lite</code>, marcado como obsoleto; su sucesor es <code>ai-edge-litert</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplos 20 y 21: misma librería y mismo flujo en Colab, con modelo float y con int8.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Instalar Arduino_TensorFlowLite siguiendo un tutorial antiguo.</li>
+						<li>Pasar a ArduTFLite un modelo int8: su API lee y escribe float.</li>
+						<li>Contar solo el <code>model.h</code>, sin el intérprete ni la <i>tensor arena</i>, que también ocupan memoria.</li>
+					</ul>
+					<h4>Fuente</h4>
+					<p>Neuton: nordicsemi.com, Edge AI, Software.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-la-placa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>La placa</span>
+				</a>
+				<a class="slide-nav__link" href="14-codigo-20-gestos.html">
+					<span>Ejemplo 20 · Gestos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

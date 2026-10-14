@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Flujo de trabajo · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Entorno de desarrollo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					PlatformIO y Wokwi comparten la <em>misma carpeta</em>
+				</h1>
+
+				<div class="rd flujo crece" role="img" aria-label="Flujo de trabajo: el asistente de IA propone código y circuito; PlatformIO en VS Code edita, compila y graba; Wokwi simula; la placa lo ejecuta por USB. PlatformIO y Wokwi trabajan sobre la misma carpeta del proyecto. Los errores y la salida del monitor vuelven al asistente.">
+					<div class="flujo__llave" data-paso="2"><span>misma carpeta</span></div>
+
+					<div class="estacion estacion--ia col-start-1">
+						<span class="estacion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg></span>
+						<span class="estacion__titulo">Asistente de IA</span>
+						<span class="estacion__linea">propone código y circuito</span>
+					</div>
+					<svg class="icon flujo__flecha col-start-2" aria-hidden="true" data-paso="1"><use href="/course-icons.svg#i-arrow-right" /></svg>
+					<div class="estacion estacion--pio col-start-3" data-paso="1">
+						<span class="estacion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg></span>
+						<span class="estacion__titulo">PlatformIO</span>
+						<span class="estacion__linea">edita, compila y graba en VS Code</span>
+					</div>
+					<svg class="icon flujo__flecha col-start-4" aria-hidden="true" data-paso="2"><use href="/course-icons.svg#i-arrow-right" /></svg>
+					<div class="estacion estacion--sim col-start-5" data-paso="2">
+						<span class="estacion__icono">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+						</span>
+						<span class="estacion__titulo">Wokwi</span>
+						<span class="estacion__linea">simula el circuito sin hardware</span>
+					</div>
+					<svg class="icon flujo__flecha col-start-6" aria-hidden="true" data-paso="3"><use href="/course-icons.svg#i-arrow-right" /></svg>
+					<div class="estacion estacion--placa col-start-7" data-paso="3">
+						<span class="estacion__icono"><svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg></span>
+						<span class="estacion__titulo">Placa ESP32</span>
+						<span class="estacion__linea">prueba real por USB</span>
+					</div>
+
+					<div class="flujo__lazo" data-paso="3">
+						<p>↺ errores del compilador y salida del monitor <b>vuelven al asistente</b></p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer de izquierda a derecha. El asistente propone código y circuito;
+					PlatformIO y Wokwi trabajan sobre la misma carpeta, y Wokwi valida la
+					lógica sin riesgo para la placa. Antes del último paso, plantear la pregunta.
+					Pregunta de predicción: ¿qué detecta la placa que el simulador no modela? El ruido,
+					el consumo real y los defectos de conexión, como un cable suelto. El
+					resultado se valida contrastándolo con la salida esperada; la respuesta
+					del asistente no basta como validación.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						PlatformIO: <i>Build</i> (✓), <i>Upload</i> (→) y <i>Monitor</i> en la
+						barra inferior. Wokwi lee <code>wokwi.toml</code> (qué firmware cargar)
+						y <code>diagram.json</code> (componentes y conexiones).
+					</p>
+					<h4>Límites de cada herramienta</h4>
+					<ul>
+						<li>Wokwi no reproduce ruido eléctrico, consumo real ni defectos de conexión.</li>
+						<li>El asistente puede inventar funciones o librerías inexistentes, que el compilador detecta como error.</li>
+						<li>El Arduino IDE integra editor y grabación, pero no fija versiones ni entornos en un archivo.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-capas-software.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Capas de software</span>
+				</a>
+				<a class="slide-nav__link" href="19-cadena-construccion.html">
+					<span>Cadena de construcción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

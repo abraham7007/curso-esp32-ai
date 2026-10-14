@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title">Resumen de la <em>sesión 5</em></h1>
+
+				<ol class="puntos crece justify-evenly s5d-cierre">
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Conexión abierta</p>
+							<p class="slide__lede col-span-3">La orden llega sin espera; un ping tras 40 s sin tráfico evita el cierre por inactividad.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Plataforma</p>
+							<p class="slide__lede col-span-3">El broker reparte por tema; la plataforma además guarda, muestra, avisa y administra.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Pines virtuales</p>
+							<p class="slide__lede col-span-3">Plantilla, datastream y dispositivo; <code>BLYNK_WRITE(V0)</code> recibe la orden y <code>virtualWrite</code> envía V1.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Envío</p>
+							<p class="slide__lede col-span-3">Loop sin <code>delay()</code>; la cuota mensual fija el intervalo, y la orden se confirma.</p>
+						</div>
+					</li>
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Estado</p>
+							<p class="slide__lede col-span-3">Token fuera del código y por el 443; <code>syncVirtual</code> recupera el estado tras un corte.</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="def">
+					<p>
+						<b>Sesión 6</b> · TinyML: un modelo pequeño entrenado en Colab se ejecuta dentro del microcontrolador (una Arduino Nano 33 BLE Sense), sin consultar a la nube.
+					</p>
+				</div>
+
+				<div class="def">
+					<p>
+						<b>Documentación de referencia</b> ·
+						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/virtual-pins" target="_blank" rel="noopener">Blynk: pines virtuales</a>
+						·
+						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/state-syncing" target="_blank" rel="noopener">Blynk: sincronizar</a>
+						·
+						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/limitations-and-recommendations" target="_blank" rel="noopener">Blynk: límites</a>
+						·
+						<a href="https://docs.blynk.io/en/blynk.cloud-mqtt-api/device-mqtt-api" target="_blank" rel="noopener">Blynk: API MQTT</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: en el ejemplo 19, ¿qué dos sucesos ejecutan
+					<code>BLYNK_WRITE(V0)</code>?
+				</p>
+				<p>
+					Respuesta: el Switch del panel y la respuesta a <code>syncVirtual(V0)</code>
+					tras cada conexión.
+				</p>
+				<p>
+					Recorrer las ideas y pedir para cada una la prueba del ejemplo 19: el LED
+					que responde al Switch sin espera; la consola con su gauge y su historial;
+					el <code>loop()</code> de dos líneas con envío cada 30 s; el
+					<code>secrets.h</code> que no aparece en git.
+				</p>
+				<p>
+					Presentar la sesión 6: una Arduino Nano 33 BLE Sense ejecuta un modelo que
+					determina, en el propio microcontrolador, qué datos se envían.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos de la sesión</h4>
+					<ul>
+						<li><b>Publicar/suscribir</b> (<i>publish/subscribe</i>): el emisor publica en un tema; el broker lo entrega a quien se suscribió.</li>
+						<li><b>Broker</b>: servidor que recibe y reparte los mensajes por tema.</li>
+						<li><b>Mensaje retenido</b>: el broker guarda el último valor de un tema; en Blynk, <code>syncVirtual</code>.</li>
+						<li><b>Last Will</b>: mensaje que el broker publica si el cliente se desconecta sin enviar <code>DISCONNECT</code>; en Blynk, el estado Offline.</li>
+						<li><b>Plantilla</b> (<i>template</i>): define datastreams y panel para muchos dispositivos.</li>
+						<li><b>Datastream</b>: canal con nombre, pin virtual, tipo y rango.</li>
+						<li><b>Pin virtual</b>: V0…V255; une un widget con una función del firmware.</li>
+						<li><b>Token</b>: credencial que identifica al dispositivo ante el servidor.</li>
+						<li><b>Heartbeat</b>: ping que evita el cierre de la conexión por inactividad (40 s en la biblioteca).</li>
+						<li><b>Telemetría</b>: datos que el dispositivo envía; <b>comando</b>: orden que recibe.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-fallos-blynk.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Fallos</span>
+				</a>
+				<span></span>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

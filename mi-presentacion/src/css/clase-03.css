@@ -1,0 +1,685 @@
+/* Estilos propios de la sesión 3 (modo ponencia). Todo prefijado .ponencia.
+   Va aparte de ponencia.css para que su construcción no choque con las
+   correcciones de la sesión 2, que editan ese archivo a la vez. */
+
+/* sesión 3 agente C: simulaciones 04, 05, 06, 10, 18 y 20.
+   Lecturas de ancho fijo (los mandos no saltan al cambiar la cifra) y la
+   trama de bytes clicable de la 18. */
+.ponencia .s3c-ancho {
+	display: inline-block;
+	min-width: 16ch;
+	text-align: left;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.ponencia .s3c-ancho--corto {
+	min-width: 7ch;
+	text-align: right;
+}
+
+.ponencia .s3c-mal {
+	color: var(--color-accent);
+}
+
+.ponencia .s3c-bien {
+	color: var(--color-ok);
+}
+.ponencia .s3c-ancho--min {
+	min-width: 2ch;
+	text-align: right;
+}
+
+/* 18: la trama del ejemplo 13 en dos filas de cinco bytes; cada bit es un
+   botón grande que se invierte al pulsarlo. El panel hace de lienzo: mismo
+   fondo y filete que .lienzo-caja bajo una barra de mandos. */
+.ponencia .s3c-panel {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(0.5rem, 0.9vw, 1rem);
+	padding: clamp(0.5rem, 0.9vw, 1rem);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-bg-subtle);
+}
+
+.ponencia .s3c-trama {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	gap: clamp(0.5rem, 0.9vw, 1rem);
+}
+
+.ponencia .s3c-byte {
+	margin: 0;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(0.2rem, 0.5vh, 0.5rem);
+	padding: clamp(0.4rem, 0.8vh, 0.9rem) clamp(0.4rem, 0.6vw, 0.8rem);
+	border: 1px solid var(--color-border);
+	border-top: 0.35rem solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+}
+
+.ponencia .s3c-byte--ctl {
+	border-top-color: var(--color-navy);
+}
+
+.ponencia .s3c-byte--carga {
+	border-top-color: var(--color-text-muted);
+}
+
+.ponencia .s3c-byte--suma {
+	border-top-color: var(--color-ok);
+}
+
+.ponencia .s3c-byte__campo {
+	font-family: var(--font-mono);
+	font-size: clamp(0.95rem, 1.1vw, 1.4rem);
+	font-weight: 600;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s3c-byte__hex {
+	font-family: var(--font-mono);
+	font-size: clamp(1.6rem, 2.3vw, 3rem);
+	font-weight: 700;
+	line-height: 1.05;
+	color: var(--color-heading);
+}
+
+.ponencia .s3c-byte__car {
+	font-family: var(--font-mono);
+	font-size: clamp(0.95rem, 1.1vw, 1.4rem);
+	font-weight: 600;
+	color: var(--color-text-muted);
+	white-space: pre;
+}
+
+.ponencia .s3c-byte--alterado .s3c-byte__hex,
+.ponencia .s3c-byte--alterado .s3c-byte__car {
+	color: var(--color-accent);
+}
+
+.ponencia .s3c-bits {
+	display: grid;
+	grid-template-columns: repeat(8, minmax(0, 1fr));
+	gap: 0.2rem;
+	width: 100%;
+}
+
+.ponencia .s3c-bit {
+	font-family: var(--font-mono);
+	font-size: clamp(1rem, 1.2vw, 1.5rem);
+	font-weight: 700;
+	padding: 0.25em 0;
+	border: 1px solid var(--color-border);
+	border-radius: 0.3rem;
+	background: var(--color-bg-subtle);
+	color: var(--color-heading);
+	cursor: pointer;
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .s3c-bit:hover {
+	border-color: var(--color-accent);
+}
+
+.ponencia .s3c-bit--invertido {
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+	color: var(--color-accent-contrast);
+}
+
+.ponencia .s3c-receptor {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-rows: auto auto;
+	align-items: center;
+	gap: 0.2rem 2rem;
+	padding: clamp(0.3rem, 0.8vh, 0.8rem) clamp(0.4rem, 0.6vw, 0.8rem) 0;
+	border-top: 1px solid var(--color-border);
+}
+
+.ponencia .s3c-receptor p {
+	margin: 0;
+}
+
+.ponencia .s3c-receptor__calculo {
+	font-family: var(--font-mono);
+	font-size: clamp(1rem, 1.15vw, 1.45rem);
+	color: var(--color-text);
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .s3c-receptor__entrega {
+	font-family: var(--font-mono);
+	font-size: clamp(1.05rem, 1.3vw, 1.6rem);
+	font-weight: 700;
+	color: var(--color-heading);
+	white-space: pre;
+}
+
+.ponencia .s3c-receptor__veredicto {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	font-family: var(--font-mono);
+	font-size: clamp(1.6rem, 2.4vw, 3rem);
+	font-weight: 700;
+	min-width: 11ch;
+	text-align: center;
+	padding: 0.15em 0.5em;
+	border-radius: var(--radius-md);
+	color: var(--color-accent);
+	background: var(--color-accent-soft);
+}
+
+.ponencia .s3c-receptor__veredicto[data-estado="aceptada"] {
+	color: var(--color-ok);
+	background: var(--color-ok-soft);
+}
+
+/* Aceptada con bits alterados: el error pasa por bueno. */
+.ponencia .s3c-receptor__veredicto[data-estado="engano"] {
+	color: var(--color-warn);
+	background: var(--color-warn-soft);
+	outline: 3px dashed var(--color-warn);
+}
+/* fin sesión 3 agente C */
+
+/* sesión 3 agente D: láminas 13, 15, 16, 17, 22, 23 y 24.
+   Diagramas SVG a todo el escenario: el texto del dibujo hereda la letra
+   del curso por clase, no por atributos repetidos en cada <text>. */
+.ponencia .s3d-svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+}
+
+.ponencia .s3d-svg text {
+	font-family: var(--font-mono);
+	font-weight: 600;
+	fill: var(--color-heading);
+	dominant-baseline: central;
+}
+
+.ponencia .s3d-svg .sans {
+	font-family: var(--font-sans);
+}
+
+.ponencia .s3d-svg .mid {
+	text-anchor: middle;
+}
+
+.ponencia .s3d-svg .fin {
+	text-anchor: end;
+}
+
+.ponencia .s3d-svg .mut {
+	fill: var(--color-text-muted);
+	font-weight: 500;
+}
+
+.ponencia .s3d-svg .acc {
+	fill: var(--color-accent);
+}
+
+.ponencia .s3d-svg .navy {
+	fill: var(--color-navy);
+}
+
+.ponencia .s3d-svg .ok {
+	fill: var(--color-ok);
+}
+
+.ponencia .s3d-svg .warn {
+	fill: var(--color-warn);
+}
+
+.ponencia .s3d-svg .dan {
+	fill: var(--color-danger);
+}
+
+.ponencia .s3d-svg .caja {
+	fill: var(--color-surface-2);
+	stroke: var(--color-heading);
+	stroke-width: 3;
+}
+
+.ponencia .s3d-svg .caja--acc {
+	fill: var(--color-accent-soft);
+	stroke: var(--color-accent);
+}
+
+.ponencia .s3d-svg .caja--warn {
+	fill: none;
+	stroke: var(--color-warn);
+	stroke-width: 4;
+}
+
+.ponencia .s3d-svg .caja--dan {
+	fill: var(--color-danger-soft);
+	stroke: var(--color-danger);
+	stroke-dasharray: 8 6;
+}
+
+.ponencia .s3d-svg .caja--fantasma {
+	fill: none;
+	stroke: var(--color-text-muted);
+	stroke-dasharray: 8 7;
+}
+
+.ponencia .s3d-svg .ln {
+	fill: none;
+	stroke: var(--color-heading);
+	stroke-width: 4;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.ponencia .s3d-svg .ln--fina {
+	stroke-width: 2.5;
+}
+
+.ponencia .s3d-svg .ln--vida {
+	stroke: var(--color-text-muted);
+	stroke-width: 3;
+	stroke-dasharray: 10 10;
+}
+
+.ponencia .s3d-svg .ln--acc {
+	stroke: var(--color-accent);
+}
+
+.ponencia .s3d-svg .ln--navy {
+	stroke: var(--color-navy);
+}
+
+.ponencia .s3d-svg .ln--ok {
+	stroke: var(--color-ok);
+}
+
+.ponencia .s3d-svg .ln--mut {
+	stroke: var(--color-text-muted);
+}
+
+.ponencia .s3d-svg .ln--dan {
+	stroke: var(--color-danger);
+}
+
+.ponencia .s3d-svg .ln--warn {
+	stroke: var(--color-warn);
+}
+
+.ponencia .s3d-svg .punto {
+	fill: var(--color-heading);
+}
+
+.ponencia .s3d-svg .barra--dan {
+	fill: var(--color-danger-soft);
+	stroke: var(--color-danger);
+	stroke-width: 3;
+}
+
+.ponencia .s3d-svg .barra--warn {
+	fill: var(--color-warn-soft);
+	stroke: var(--color-warn);
+	stroke-width: 3;
+}
+
+.ponencia .s3d-svg .barra--ok {
+	fill: var(--color-ok-soft);
+	stroke: var(--color-ok);
+	stroke-width: 3;
+}
+
+.ponencia .s3d-svg .barra--navy {
+	fill: var(--color-navy-soft);
+	stroke: var(--color-navy);
+	stroke-width: 3;
+}
+
+.ponencia .s3d-svg .rel-acc {
+	fill: var(--color-accent);
+}
+
+.ponencia .s3d-svg .rel-ok {
+	fill: var(--color-ok);
+}
+
+.ponencia .s3d-svg .rel-dan {
+	fill: var(--color-danger);
+}
+
+.ponencia .s3d-svg .rel-navy {
+	fill: var(--color-navy);
+}
+
+.ponencia .s3d-svg .rel {
+	fill: var(--color-heading);
+}
+
+/* 16 · Comparador de buses: tres columnas altas, cifra grande por fila y
+   la conclusión de cada columna al pie, alineada entre columnas. */
+.ponencia .s3d-buses {
+	--rd-u: min(1vh, 0.56vw);
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
+	column-gap: clamp(1.5rem, 3vw, 3.5rem);
+	min-height: 0;
+	margin-top: calc(var(--rd-u) * 3);
+}
+
+.ponencia .s3d-bus {
+	display: grid;
+	grid-row: 1 / -1;
+	grid-template-rows: subgrid;
+	row-gap: calc(var(--rd-u) * 2.4);
+	padding-inline: calc(var(--rd-u) * 1.5);
+	border-left: 3px solid var(--color-border);
+	min-height: 0;
+}
+
+.ponencia .s3d-bus__nombre {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: max(2.4rem, calc(var(--rd-u) * 6));
+	font-weight: 700;
+	line-height: 1;
+	color: var(--color-heading);
+}
+
+.ponencia .s3d-bus__topo {
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+}
+
+.ponencia .s3d-bus__valor {
+	font-family: var(--font-mono);
+	margin: 0;
+	font-size: max(1.9rem, calc(var(--rd-u) * 4.4));
+	font-weight: 600;
+	line-height: 1.1;
+	color: var(--color-heading);
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .s3d-bus__cond {
+	display: block;
+	margin-top: 0.15em;
+	font-family: var(--font-sans);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.4));
+	font-weight: 500;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s3d-bus__cuando {
+	margin: 0;
+	padding: 0.35em 0 0.35em 0.8em;
+	border-left: 4px solid var(--color-accent);
+	margin-left: calc(var(--rd-u) * -1.5 - 3px);
+	font-size: max(1.4rem, calc(var(--rd-u) * 2.7));
+	font-weight: 600;
+	line-height: 1.25;
+	color: var(--color-heading);
+}
+
+.ponencia .s3d-bus__cuando b {
+	color: var(--color-accent);
+}
+/* fin sesión 3 agente D */
+
+/* sesión 3 agente A: portada (trama del ejemplo 13) y lámina 03. */
+.ponencia .s3a-trama ul {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 0.6);
+}
+
+.ponencia .s3a-trama li {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	align-items: baseline;
+	gap: 1.2ch;
+}
+
+.ponencia .s3a-trama li > span:last-child {
+	font-family: var(--font-sans);
+	font-size: 0.72em;
+	white-space: nowrap;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s3a-trama__b {
+	font-weight: 700;
+}
+
+.ponencia .s3a-trama__b--cab {
+	color: var(--color-navy);
+}
+
+.ponencia .s3a-trama__b--dato {
+	color: var(--color-accent);
+}
+
+.ponencia .s3a-trama__b--suma {
+	color: var(--color-ok);
+}
+
+/* Lámina 03: rótulos de los tres pasos; el activo se subraya en rojo. */
+.ponencia .s3a-etapas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem clamp(1.5rem, 3vw, 3.5rem);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--fs-body);
+	font-weight: 600;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s3a-etapas > li {
+	padding-bottom: 0.2em;
+	border-bottom: 4px solid transparent;
+}
+
+.ponencia .s3a-etapas > li.is-actual {
+	color: var(--color-heading);
+	border-bottom-color: var(--color-accent);
+}
+/* fin sesión 3 agente A */
+
+/* sesión 3 agente B: «La hora del código» (08, 11, 12, 14, 19, 21).
+   Con trazas largas (tramas en hexadecimal, JSON) o dos placas, la salida
+   esperada ocupa todo el ancho bajo las dos columnas; con dos placas, los
+   dos monitores van lado a lado, cada uno con su rótulo. */
+.ponencia--trabajo .s3-salida-ancha .code-hour__body--pair {
+	grid-template-columns: 0.62fr 1.38fr;
+	grid-template-rows: 1fr auto;
+	row-gap: var(--space-2xs);
+}
+
+@media (max-width: 1699px) {
+	.ponencia--trabajo .s3-salida-ancha .code-hour__body--pair {
+		grid-template-columns: 0.56fr 1.44fr;
+		row-gap: 0;
+	}
+}
+
+.ponencia--trabajo
+	.s3-salida-ancha
+	.code-hour__body--pair
+	> .code-hour__stack:first-child {
+	justify-content: flex-start;
+	gap: var(--space-sm);
+}
+
+/* La OLED de Wokwi viene a escala física: se reduce para que la placa
+   siga siendo la pieza mayor del montaje. */
+.ponencia--trabajo .hw-set wokwi-ssd1306 {
+	zoom: 0.5;
+}
+
+.ponencia--trabajo .s3-monitores {
+	display: grid;
+	gap: var(--space-sm);
+}
+
+.ponencia--trabajo .s3-monitores--dos {
+	grid-template-columns: 1fr 1fr;
+}
+
+.ponencia--trabajo .s3-monitor {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3xs);
+	min-width: 0;
+	margin: 0;
+	container-type: inline-size;
+}
+
+.ponencia--trabajo .s3-monitor figcaption {
+	font-family: var(--font-mono);
+	line-height: 1.3;
+	font-size: clamp(0.85rem, 1.05vw, 1.3rem);
+	color: var(--color-text-muted);
+}
+
+/* La línea más larga (70 caracteres en el 12c, 100 en el 13) cabe entera en
+   su monitor: la letra baja con el ancho del contenedor antes que recortar. */
+.ponencia--trabajo .s3-monitor .term {
+	flex: 1 1 auto;
+	font-size: min(clamp(0.85rem, 0.94vw, 1.2rem), 2.3cqi);
+	overflow-x: hidden;
+}
+
+.ponencia--trabajo .s3-remedio {
+	padding: var(--space-xs) var(--space-sm);
+	border-left: 3px solid var(--color-navy);
+	background: var(--color-navy-soft);
+	border-radius: var(--radius-sm);
+}
+
+/* Módulo BMP180 del montaje: no existe en @wokwi/elements. */
+.ponencia--trabajo .s3-modulo__pcb {
+	fill: var(--color-navy);
+}
+
+.ponencia--trabajo .s3-modulo__chip {
+	fill: var(--color-code-bg);
+	stroke: var(--color-code-border);
+}
+
+.ponencia--trabajo .s3-modulo__pin {
+	fill: var(--color-warn);
+}
+
+/* sesión 3 agente A: los tres rótulos de la 03 caben en una fila. */
+.ponencia .escenario__texto > .s3a-etapas {
+	max-width: none;
+}
+
+/* sesión 3 agente B (revisión): el montaje es un esquema de conexión
+   dibujado en SVG (08, 11, 12, 14, 19): placas y dispositivos con sus pines,
+   y cada cable llega a su pin. Texto a 16,5 unidades: ≥ 16 px a 1440 y
+   ≥ 20 px a 1080p con el alto que se le deja. */
+.ponencia--trabajo .s3-esquema {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: clamp(9rem, 20vh, 13.5rem);
+	margin-top: var(--space-2xs);
+}
+
+/* El cruce UART es más bajo: con 12 rem de alto su texto ya pasa de 20 px. */
+.ponencia--trabajo .s3-esquema--bajo {
+	max-height: clamp(9rem, 18vh, 12rem);
+}
+
+.ponencia--trabajo .s3-esquema text {
+	font-family: var(--font-mono);
+	font-size: 16.5px;
+	fill: var(--color-text);
+}
+
+.ponencia--trabajo .s3-esquema .s3-esq__tit {
+	font-weight: 700;
+}
+
+.ponencia--trabajo .s3-esquema .s3-esq__sub {
+	fill: var(--color-text-muted);
+}
+
+.ponencia--trabajo .s3-esq__caja {
+	fill: var(--color-surface-2);
+	stroke: var(--color-border);
+	stroke-width: 1.5;
+}
+
+.ponencia--trabajo .s3-esq__r {
+	fill: var(--color-surface);
+	stroke: var(--color-text);
+	stroke-width: 1.5;
+}
+
+.ponencia--trabajo .s3-esq__a,
+.ponencia--trabajo .s3-esq__b,
+.ponencia--trabajo .s3-esq__gnd,
+.ponencia--trabajo .s3-esq__vcc,
+.ponencia--trabajo .s3-esq__puente {
+	fill: none;
+	stroke-width: 2.5;
+}
+
+.ponencia--trabajo .s3-esq__a {
+	stroke: var(--color-accent);
+}
+
+.ponencia--trabajo .s3-esq__b {
+	stroke: var(--color-navy);
+}
+
+.ponencia--trabajo .s3-esq__gnd,
+.ponencia--trabajo .s3-esq__puente {
+	stroke: var(--color-text-muted);
+}
+
+.ponencia--trabajo .s3-esq__puente {
+	stroke-dasharray: 5 3;
+}
+
+.ponencia--trabajo .s3-esq__vcc {
+	stroke: var(--color-warn);
+}
+
+.ponencia--trabajo .s3-esq__fa,
+.ponencia--trabajo .s3-esq__pa {
+	fill: var(--color-accent);
+}
+
+.ponencia--trabajo .s3-esq__fb,
+.ponencia--trabajo .s3-esq__pb {
+	fill: var(--color-navy);
+}
+
+.ponencia--trabajo .s3-esq__pg {
+	fill: var(--color-text-muted);
+}
+
+.ponencia--trabajo .s3-esq__pv {
+	fill: var(--color-warn);
+}
+
+.ponencia--trabajo .s3-archivo {
+	white-space: nowrap;
+}

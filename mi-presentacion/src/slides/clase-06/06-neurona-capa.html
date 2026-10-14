@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Neurona · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Redes y datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una <em>neurona</em> aplica la activación a una suma ponderada
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Neurona</b>: multiplica cada entrada por su <b>peso</b>, suma el
+								<b>sesgo</b> y aplica la <b>activación</b>. ReLU deja pasar lo
+								positivo y convierte lo negativo en 0.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								<b>Softmax</b> convierte las salidas de la última capa en
+								probabilidades que suman 100&nbsp;%. La red del ejemplo 20 tiene
+								714 entradas; aquí, 2.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>a = ReLU(w₁x₁ + w₂x₂ + b)</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control s6c-estrecho">
+								<span>Aceleración x₁</span>
+								<input type="range" id="x1" min="0" max="20" step="1" value="16" />
+								<output id="x1-out" for="x1" class="s6c-ancho s6c-ancho--corto">0,80</output>
+							</label>
+							<label class="control s6c-estrecho">
+								<span>Giro x₂</span>
+								<input type="range" id="x2" min="0" max="20" step="1" value="4" />
+								<output id="x2-out" for="x2" class="s6c-ancho s6c-ancho--corto">0,20</output>
+							</label>
+							<label class="control s6c-estrecho">
+								<span>Sesgo b₁</span>
+								<input type="range" id="b1" min="0" max="20" step="1" value="8" />
+								<output id="b1-out" for="b1" class="s6c-ancho s6c-ancho--corto">−0,20</output>
+							</label>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="neurona"
+								role="img"
+								aria-label="A la izquierda, la neurona 1 ampliada: las entradas x1 (aceleración, 0,80) y x2 (giro, 0,20) se multiplican por los pesos 1,5 y −1,0, se suma el sesgo −0,20 y se obtiene z = 0,80; la gráfica de ReLU muestra que la salida es 0,80 porque z es positivo. A la derecha, la red completa: dos entradas, una capa oculta de tres neuronas con ReLU y dos salidas, punch y flex, que pasan por softmax. Con la entrada de un golpe, la neurona 2 queda en 0 por ReLU y softmax da punch 94 % y flex 6 %."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con la entrada de un golpe (aceleración alta, giro bajo) la red dice punch al 94&nbsp;%. Si el sesgo de la neurona 1 baja a −1, ¿qué le pasa a esa neurona y a la probabilidad de punch? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: z₁ = 1,5·0,80 − 1,0·0,20 − 1 = 0; ReLU da 0 y la neurona queda inactiva. Es la neurona que más responde a los golpes, y sin ella punch baja al 55&nbsp;%. El sesgo fija el valor de la suma a partir del cual la neurona da una salida distinta de 0.
+				</p>
+				<p>
+					Después, subir el giro y bajar la aceleración: la neurona 1 queda en 0, la 2 se activa y flex pasa a ser la clase más probable. Los pesos de esta lámina están puestos a mano para que se lean; en el ejemplo 20 los ajusta el entrenamiento en Colab, con una red 714 → 50 → 15 → 2 y las entradas normalizadas entre 0 y 1.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						En Keras: <code>Dense(50, activation="relu")</code> es una capa de 50
+						neuronas como la de la figura; <code>Dense(2, activation="softmax")</code>,
+						la salida. Cada neurona guarda un peso por entrada y un sesgo.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 20: el modelo de gestos devuelve dos probabilidades (punch y
+						flex) y el programa enciende el LED de la mayor.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Leer el 94&nbsp;% de softmax como una certeza.</li>
+						<li>Dar a la red entradas sin normalizar cuando se entrenó con 0 a 1.</li>
+						<li>Suponer que la neurona aprende en la placa, donde solo se calcula la salida con pesos fijos.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-flujo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Flujo</span>
+				</a>
+				<a class="slide-nav__link" href="07-parametros-memoria.html">
+					<span>Parámetros</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const coma = (x, d = 2) => x.toFixed(d).replace(".", ",").replace(/^-/, "−");
+
+			// Pesos puestos a mano (no entrenados) para que la red se lea:
+			// h1 responde al empuje, h2 al giro, h3 al movimiento en general.
+			const W1 = [
+				[1.5, -1.0],
+				[-0.8, 1.6],
+				[0.7, 0.7],
+			];
+			const B1 = [-0.2, -0.3, -0.5];
+			const W2 = [
+				[2.0, -1.5, 0.5],
+				[-1.2, 2.2, 0.4],
+			];
+			const B2 = [0.1, -0.1];
+			const CLASES = ["punch", "flex"];
+
+			const est = { x1: 0.8, x2: 0.2, b1: -0.2 };
+
+			function red() {
+				const x = [est.x1, est.x2];
+				const b = [est.b1, B1[1], B1[2]];
+				const z = W1.map((w, i) => Math.round((w[0] * x[0] + w[1] * x[1] + b[i]) * 1e6) / 1e6);
+				const a = z.map((v) => Math.max(0, v));
+				const zo = W2.map((w, k) => w[0] * a[0] + w[1] * a[1] + w[2] * a[2] + B2[k]);
+				const mx = Math.max(...zo);
+				const e = zo.map((v) => Math.exp(v - mx));
+				const s = e[0] + e[1];
+				return { x, b, z, a, zo, p: e.map((v) => v / s) };
+			}
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function flecha(ctx, xa, ya, xb, yb, color, grosor, punta) {
+				ctx.strokeStyle = color;
+				ctx.fillStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(xa, ya);
+				ctx.lineTo(xb, yb);
+				ctx.stroke();
+				const ang = Math.atan2(yb - ya, xb - xa);
+				ctx.beginPath();
+				ctx.moveTo(xb, yb);
+				ctx.lineTo(xb - punta * Math.cos(ang - 0.45), yb - punta * Math.sin(ang - 0.45));
+				ctx.lineTo(xb - punta * Math.cos(ang + 0.45), yb - punta * Math.sin(ang + 0.45));
+				ctx.closePath();
+				ctx.fill();
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					surface: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					warn: token("--color-warn"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					contraste: token("--color-accent-contrast"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const r = red();
+
+				// ===== Izquierda: la neurona 1 ampliada =====
+				const lx0 = m;
+				const lx1 = w * 0.46 - fs * 0.8;
+				texto(ctx, "Neurona 1, ampliada", lx0, fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, lx1 - lx0);
+				const ya = fs * 2.9;
+				const yb = fs * 5.9;
+				const ys = (ya + yb) / 2;
+				const R = fs * 1.5;
+				ctx.font = `700 ${fs}px ${MONO}`;
+				const anchoX = ctx.measureText("x₂ 0,20").width;
+				// Reparto del ancho: entradas, hueco, Σ, hueco, ReLU, flecha y a₁.
+				ctx.font = `700 ${fs}px ${SANS}`;
+				const anR = ctx.measureText("ReLU").width + fs;
+				ctx.font = `700 ${fs * 1.05}px ${MONO}`;
+				const anA = ctx.measureText("a₁ = −0,00").width;
+				const libre = lx1 - lx0 - anchoX - 2 * R - anR - fs * 2 - anA;
+				const hueco1 = clamp(fs * 3.8, libre * 0.55, fs * 7);
+				const hueco2 = clamp(fs * 2.4, libre - hueco1, fs * 5);
+				const cx = lx0 + anchoX + hueco1 + R;
+				// Entradas y pesos: el rótulo del peso va sobre su línea, con fondo.
+				for (const [i, y] of [ya, yb].entries()) {
+					texto(ctx, `x${i ? "₂" : "₁"} ${coma(r.x[i])}`, lx0, y, fs, c.heading, 700, "left", MONO);
+					const wv = W1[0][i];
+					const xi = lx0 + anchoX + fs * 0.5;
+					const yf = ys + (y - ys) * 0.25;
+					flecha(ctx, xi, y, cx - R * 0.95, yf, wv > 0 ? c.navy : c.warn, 2 + Math.abs(wv) * 2, fs * 0.6);
+					const et = `× ${coma(wv, 1)}`;
+					ctx.font = `700 ${Math.max(fs * 0.9, MIN_FS)}px ${MONO}`;
+					const an = ctx.measureText(et).width + fs * 0.4;
+					const xm = xi - fs * 0.3 + an / 2;
+					const ym = y + (yf - y) * ((xm - xi) / (cx - R - xi));
+					ctx.fillStyle = c.bg;
+					ctx.fillRect(xi - fs * 0.5, ym - fs * 0.6, an + fs * 0.2, fs * 1.2);
+					texto(ctx, et, xm, ym, fs * 0.9, wv > 0 ? c.navy : c.warn, 700, "center", MONO);
+				}
+				// Σ con el sesgo, que entra desde abajo.
+				const yB = yb + fs * 1.7;
+				flecha(ctx, cx, yB - fs * 0.6, cx, ys + R + 2, c.muted, 3, fs * 0.5);
+				texto(ctx, `b₁ = ${coma(r.b[0])}`, cx, yB, fs * 0.9, c.heading, 700, "center", MONO);
+				ctx.fillStyle = c.surface;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.arc(cx, ys, R, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.stroke();
+				texto(ctx, "Σ", cx, ys, fs * 1.5, c.heading, 700, "center", SANS);
+				// z, ReLU y a.
+				const xr = cx + R + hueco2;
+				flecha(ctx, cx + R, ys, xr - fs * 0.2, ys, c.muted, 3, fs * 0.6);
+				texto(ctx, `z = ${coma(r.z[0])}`, xr + anR, ys - fs * 1.5, fs * 0.85, c.heading, 700, "right", MONO);
+				ctx.fillStyle = c.navySoft;
+				ctx.fillRect(xr, ys - fs * 0.9, anR, fs * 1.8);
+				texto(ctx, "ReLU", xr + anR / 2, ys, fs, c.navy, 700, "center", SANS);
+				const xa = xr + anR;
+				flecha(ctx, xa, ys, xa + fs * 1.6, ys, c.muted, 3, fs * 0.6);
+				const apag = r.a[0] === 0;
+				texto(ctx, `a₁ = ${coma(r.a[0])}`, xa + fs * 2, ys, fs * 1.05, apag ? c.acento : c.ok, 700, "left", MONO, lx1 - xa - fs * 2);
+
+				// La cuenta completa.
+				const yc = yB + fs * 1.5;
+				const cuenta = `z = ${coma(W1[0][0], 1)}·${coma(r.x[0])} ${W1[0][1] < 0 ? "−" : "+"} ${coma(Math.abs(W1[0][1]), 1)}·${coma(r.x[1])} ${r.b[0] < 0 ? "−" : "+"} ${coma(Math.abs(r.b[0]))} = ${coma(r.z[0])}`;
+				texto(ctx, cuenta, lx0, yc, fs * 0.9, c.muted, 600, "left", MONO, lx1 - lx0);
+
+				// Gráfica de ReLU.
+				const gx0 = lx0 + fs * 2.2;
+				const gx1 = lx1 - fs * 0.5;
+				const gy0 = yc + fs * 1.6;
+				const gy1 = h - fs * 1.7;
+				const ZM = 2;
+				const GX = (z) => gx0 + ((z + ZM) / (2 * ZM)) * (gx1 - gx0);
+				const GY = (a) => gy1 - (a / ZM) * (gy1 - gy0);
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1;
+				for (const z of [-2, -1, 0, 1, 2]) {
+					ctx.beginPath();
+					ctx.moveTo(GX(z), gy0);
+					ctx.lineTo(GX(z), gy1);
+					ctx.stroke();
+					texto(ctx, coma(z, 0), GX(z), gy1 + fs * 0.7, fs * 0.82, c.muted, 600, z === -2 ? "left" : z === 2 ? "right" : "center", MONO);
+				}
+				for (const a of [1, 2]) {
+					ctx.beginPath();
+					ctx.moveTo(gx0, GY(a));
+					ctx.lineTo(gx1, GY(a));
+					ctx.stroke();
+					texto(ctx, String(a), gx0 - fs * 0.4, GY(a), fs * 0.82, c.muted, 600, "right", MONO);
+				}
+				texto(ctx, "a ↑", gx0 + fs * 0.4, gy0 + fs * 0.5, fs * 0.82, c.muted, 700, "left", SANS);
+				texto(ctx, "z →", gx1 - fs * 0.2, GY(0) - fs * 0.6, fs * 0.82, c.muted, 700, "right", SANS);
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(gx0, GY(0));
+				ctx.lineTo(gx1, GY(0));
+				ctx.stroke();
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 5;
+				ctx.beginPath();
+				ctx.moveTo(GX(-ZM), GY(0));
+				ctx.lineTo(GX(0), GY(0));
+				ctx.lineTo(GX(ZM), GY(ZM));
+				ctx.stroke();
+				texto(ctx, "lo negativo → 0", GX(-1), GY(0) - fs * 0.7, fs * 0.82, c.navy, 700, "center", SANS, GX(0) - GX(-2) - fs * 0.4);
+				const zc = clamp(-ZM, r.z[0], ZM);
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 5]);
+				ctx.beginPath();
+				ctx.moveTo(GX(zc), gy1);
+				ctx.lineTo(GX(zc), GY(Math.max(0, zc)));
+				ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = c.acento;
+				ctx.beginPath();
+				ctx.arc(GX(zc), GY(Math.max(0, zc)), fs * 0.45, 0, Math.PI * 2);
+				ctx.fill();
+
+				// Separador.
+				const sx = w * 0.46;
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(sx, m * 0.6);
+				ctx.lineTo(sx, h - m * 0.6);
+				ctx.stroke();
+
+				// ===== Derecha: la capa completa y softmax =====
+				const rx0 = sx + fs * 1.2;
+				const rx1 = w - m;
+				const rw = rx1 - rx0;
+				texto(ctx, "La red: 2 entradas, 3 neuronas ReLU, 2 salidas", rx0, fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, rw);
+				const RN = fs * 1.85;
+				ctx.font = `700 ${Math.max(fs * 0.9, MIN_FS)}px ${SANS}`;
+				const anchoE = ctx.measureText("aceleración").width;
+				const colX = rx0 + anchoE + fs * 0.6 + RN;
+				const colH = rx0 + rw * 0.45;
+				const colO = rx0 + rw * 0.7;
+				const ny0 = fs * 3.2;
+				const ny1 = h - fs * 2.6;
+				const yN = (i, n) => ny0 + ((i + 0.5) / n) * (ny1 - ny0);
+				texto(ctx, "capa oculta", colH, fs * 2.2, fs * 0.85, c.muted, 600, "center", SANS);
+				texto(ctx, "salida", colO, fs * 2.2, fs * 0.85, c.muted, 600, "center", SANS);
+				texto(ctx, "softmax", colO + RN + fs * 1.2, fs * 2.2, fs * 0.85, c.muted, 600, "left", SANS);
+				// Conexiones entrada → oculta.
+				const linea = (xa, ya2, xb, yb2, wv) => {
+					ctx.strokeStyle = wv > 0 ? c.navy : c.warn;
+					ctx.lineWidth = 1 + Math.abs(wv) * 2.2;
+					ctx.setLineDash(wv > 0 ? [] : [8, 6]);
+					ctx.beginPath();
+					ctx.moveTo(xa, ya2);
+					ctx.lineTo(xb, yb2);
+					ctx.stroke();
+					ctx.setLineDash([]);
+				};
+				for (let j = 0; j < 3; j++) {
+					for (let i = 0; i < 2; i++) linea(colX + RN, yN(i, 2), colH - RN, yN(j, 3), W1[j][i]);
+				}
+				for (let k = 0; k < 2; k++) {
+					for (let j = 0; j < 3; j++) linea(colH + RN, yN(j, 3), colO - RN, yN(k, 2), W2[k][j]);
+				}
+				const rotulo = (s2, x, y, f, color, peso, alin, fam) => {
+					ctx.font = `${peso} ${Math.max(f, MIN_FS)}px ${fam}`;
+					const an = ctx.measureText(s2).width;
+					const x0 = alin === "center" ? x - an / 2 : alin === "right" ? x - an : x;
+					ctx.fillStyle = c.bg;
+					ctx.fillRect(x0 - fs * 0.2, y - fs * 0.6, an + fs * 0.4, fs * 1.2);
+					texto(ctx, s2, x, y, f, color, peso, alin, fam);
+				};
+				const nodo = (x, y, valor, activo, resalta, nombre = "") => {
+					ctx.fillStyle = activo ? c.navySoft : c.surface;
+					ctx.strokeStyle = resalta ? c.acento : activo ? c.navy : c.borde;
+					ctx.lineWidth = resalta ? 4 : 2.5;
+					ctx.beginPath();
+					ctx.arc(x, y, RN, 0, Math.PI * 2);
+					ctx.fill();
+					ctx.stroke();
+					// Con nombre (h₁…h₃), el nombre arriba y la cifra abajo, dentro del círculo.
+					const dy = nombre ? RN * 0.3 : 0;
+					if (nombre) texto(ctx, nombre, x, y - RN * 0.42, fs * 0.8, resalta ? c.acento : c.muted, 700, "center", MONO, RN * 1.4);
+					texto(ctx, valor, x, y + dy, fs * 0.8, activo ? c.heading : c.muted, 700, "center", MONO, RN * 1.75);
+				};
+				for (const [i, nom] of ["aceleración", "giro"].entries()) {
+					nodo(colX, yN(i, 2), coma(r.x[i]), true, false);
+					texto(ctx, nom, colX - RN - fs * 0.4, yN(i, 2) - fs * 0.35, fs * 0.9, c.heading, 700, "right", SANS);
+					texto(ctx, `x${i ? "₂" : "₁"}`, colX - RN - fs * 0.4, yN(i, 2) + fs * 0.6, fs * 0.85, c.muted, 600, "right", MONO);
+				}
+				for (let j = 0; j < 3; j++) {
+					const on = r.a[j] > 0;
+					nodo(colH, yN(j, 3), coma(r.a[j]), on, j === 0, `h${"₁₂₃"[j]}`);
+					if (!on) rotulo("ReLU → 0", colH, yN(j, 3) + RN + fs * 0.7, fs * 0.82, c.acento, 700, "center", SANS);
+				}
+				// Salidas y softmax.
+				const gana = r.p[0] >= r.p[1] ? 0 : 1;
+				const bx0 = colO + RN + fs * 1.2;
+				const bx1 = rx1;
+				for (let k = 0; k < 2; k++) {
+					const y = yN(k, 2);
+					nodo(colO, y, coma(r.zo[k]), true, false);
+					texto(ctx, CLASES[k], bx0, y - fs * 1.15, fs * 1.05, k === gana ? c.ok : c.heading, 700, "left", SANS);
+					const hb = fs * 1.4;
+					ctx.fillStyle = c.surface;
+					ctx.fillRect(bx0, y - hb / 2 + fs * 0.4, bx1 - bx0, hb);
+					ctx.fillStyle = k === gana ? c.ok : c.muted;
+					ctx.fillRect(bx0, y - hb / 2 + fs * 0.4, (bx1 - bx0) * r.p[k], hb);
+					const pt = `${Math.round(r.p[k] * 100)} %`;
+					ctx.font = `700 ${fs}px ${MONO}`;
+					const an = ctx.measureText(pt).width;
+					const xe = bx0 + (bx1 - bx0) * r.p[k];
+					if (xe - bx0 > an + fs) texto(ctx, pt, xe - fs * 0.4, y + fs * 0.4, fs, c.contraste, 700, "right", MONO);
+					else texto(ctx, pt, xe + fs * 0.4, y + fs * 0.4, fs, c.heading, 700, "left", MONO);
+				}
+				rotulo("z de cada clase", colO, yN(1, 2) + RN + fs * 0.75, fs * 0.82, c.muted, 600, "center", SANS);
+				// Leyenda de las líneas.
+				const yl = h - fs * 0.9;
+				let xl = rx0;
+				for (const [rot, dash] of [
+					["peso positivo", []],
+					["peso negativo", [8, 6]],
+				]) {
+					ctx.strokeStyle = dash.length ? c.warn : c.navy;
+					ctx.lineWidth = 3;
+					ctx.setLineDash(dash);
+					ctx.beginPath();
+					ctx.moveTo(xl, yl);
+					ctx.lineTo(xl + fs * 2.2, yl);
+					ctx.stroke();
+					ctx.setLineDash([]);
+					xl += fs * 2.7;
+					xl += texto(ctx, rot, xl, yl, fs * 0.82, c.muted, 600, "left", SANS) + fs * 1.4;
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("neurona"), dibujar);
+			const mandos = [
+				["x1", (v) => v / 20],
+				["x2", (v) => v / 20],
+				["b1", (v) => (v - 10) / 10],
+			];
+
+			function render() {
+				for (const [id, conv] of mandos) {
+					est[id] = conv(Number(document.getElementById(id).value));
+					document.getElementById(`${id}-out`).textContent = coma(est[id]);
+				}
+				lienzo.redibujar();
+			}
+			for (const [id] of mandos) document.getElementById(id).addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

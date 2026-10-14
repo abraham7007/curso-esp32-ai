@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Idas y vueltas · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Red e Internet</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una petición HTTP requiere varias <em>idas y vueltas</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Antes del GET, el ESP32 pide la IP (DNS), abre la conexión (TCP)
+								y, con HTTPS, negocia el cifrado (TLS). Cada mensaje con su respuesta es una <b>ida y vuelta</b> (<i>round trip</i>, RTT).
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>int codigo = http.GET();</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Protocolo">
+								<button type="button" class="btn btn--secondary" data-tls="no" aria-pressed="false">HTTP</button>
+								<button type="button" class="btn btn--primary" data-tls="si" aria-pressed="true">HTTPS</button>
+							</fieldset>
+							<fieldset class="mandos__grupo" aria-label="Recorrido paso a paso">
+								<button type="button" class="btn btn--secondary" id="b-inicio">Desde el inicio</button>
+								<button type="button" class="btn btn--secondary" id="b-siguiente">Siguiente ida y vuelta</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>idas y vueltas </small><span id="l-rtt" class="s4c-ancho s4c-ancho--corto">5</span></span>
+							<span class="lectura"><small>tiempo ≈ </small><span id="l-tiempo" class="s4c-ancho">250 ms</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="viaje"
+								role="img"
+								aria-label="Diagrama de secuencia entre el ESP32, el servidor DNS y api.coingecko.com: consulta y respuesta DNS por UDP 53, el saludo TCP en tres paquetes, el saludo TLS si se usa HTTPS y el GET con su respuesta 200 y el JSON; cada ida y vuelta lleva un número."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con HTTPS, ¿cuántas idas y vueltas por la red ocurren dentro de la línea <code>http.GET()</code> antes de recibir el precio, 1, 3 o 5? Recoger respuestas antes de pulsar «Desde el inicio».
+				</p>
+				<p>
+					Respuesta: 5 con TLS 1.2 (DNS, TCP, dos de TLS y el GET). Cada pulsación
+					avanza una ida y vuelta. El ACK final de TCP viaja junto al primer
+					mensaje siguiente y no añade espera. Con 50 ms por ida y vuelta (cifra
+					ilustrativa) son unos 250 ms, sin contar el cálculo criptográfico del
+					propio ESP32, que alarga el saludo TLS.
+				</p>
+				<p>
+					Modo HTTP: 3 idas y vueltas. api.coingecko.com no entrega el precio por HTTP; responde 301 con <code>Location: https://…</code>, y
+					<code>HTTPClient</code> no sigue redirecciones por defecto
+					(<code>setFollowRedirects()</code>). El ESP32 recibe un 301 en lugar del precio.
+				</p>
+				<p>
+					En consultas frecuentes, el tiempo se va en los saludos más que en el tamaño del JSON. La respuesta DNS se guarda un tiempo en caché, y en consultas seguidas puede no repetirse. TLS 1.3 reduce su saludo a una ida y vuelta.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>http.begin(url)</code> solo guarda la URL;
+						<code>http.GET()</code> hace DNS, TCP, TLS (si es
+						<code>https://</code>), envía la petición y espera la respuesta.
+						<code>http.end()</code> cierra la conexión: la siguiente consulta
+						repite el saludo.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Un código negativo de <code>GET()</code> indica en qué tramo falló:
+						sin DNS, sin conexión o tiempo agotado (lámina 9).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Atribuir al servidor una lentitud que se debe a los saludos.</li>
+						<li>Suponer que <code>GET()</code> no bloquea, cuando el <code>loop()</code> se detiene hasta la respuesta.</li>
+						<li>Olvidar <code>http.end()</code> y agotar la memoria tras varias consultas.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-ip-dns.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>IP y DNS</span>
+				</a>
+				<a class="slide-nav__link" href="07-cliente-pregunta.html">
+					<span>NAT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const RTT_MS = 50; // ida y vuelta ilustrativa
+
+			// Carriles: 0 = ESP32, 1 = DNS, 2 = servidor de la API.
+			// cierra: el mensaje completa una ida y vuelta.
+			function mensajes(tls) {
+				const m = [
+					{ fase: "DNS", de: 0, a: 1, t: "consulta api.coingecko.com · UDP 53", fam: SANS },
+					{ fase: "DNS", de: 1, a: 0, t: "IP del servidor", fam: SANS, cierra: true },
+					{ fase: "TCP", de: 0, a: 2, t: `SYN · puerto ${tls ? 443 : 80}`, fam: MONO },
+					{ fase: "TCP", de: 2, a: 0, t: "SYN-ACK", fam: MONO, cierra: true },
+					{ fase: "TCP", de: 0, a: 2, t: "ACK (va con el mensaje siguiente)", fam: MONO },
+				];
+				if (tls) {
+					m.push(
+						{ fase: "TLS", de: 0, a: 2, t: "ClientHello", fam: MONO },
+						{ fase: "TLS", de: 2, a: 0, t: "ServerHello + certificado", fam: MONO, cierra: true },
+						{ fase: "TLS", de: 0, a: 2, t: "clave + Finished", fam: MONO },
+						{ fase: "TLS", de: 2, a: 0, t: "Finished", fam: MONO, cierra: true },
+					);
+				}
+				m.push(
+					{ fase: "HTTP", de: 0, a: 2, t: "GET /api/v3/simple/price?ids=bitcoin&vs_currencies=usd", fam: MONO },
+					tls
+						? { fase: "HTTP", de: 2, a: 0, t: '200 OK · {"bitcoin":{"usd":83257}}', fam: MONO, cierra: true }
+						: { fase: "HTTP", de: 2, a: 0, t: "301 Moved Permanently · Location: https://…", fam: MONO, cierra: true, mal: true },
+				);
+				// Grupo = una ida y vuelta: termina en el mensaje que la cierra (el ACK
+				// suelto viaja con el grupo siguiente).
+				let g = 0;
+				for (const x of m) {
+					x.grupo = g;
+					if (x.cierra) g++;
+				}
+				return m;
+			}
+			const grupos = (l) => l.filter((x) => x.cierra).length;
+
+			// Progreso 0…1 de cada mensaje: los del grupo nuevo salen uno tras otro.
+			function progreso(i) {
+				const g = lista[i].grupo;
+				if (g >= paso) return 0;
+				if (g < paso - 1) return 1;
+				const del = lista.filter((x) => x.grupo === g);
+				const j = del.indexOf(lista[i]);
+				return clamp(0, avance * del.length - j, 1);
+			}
+
+			let tls = true;
+			let lista = mensajes(tls);
+			let paso = grupos(lista); // idas y vueltas visibles; arranca con el viaje completo
+			let avance = 1; // 0…1: progreso del grupo más reciente
+			let animacion = 0;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = fs;
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function flecha(ctx, x0, y0, x1, y1, color, grosor, punta) {
+				ctx.strokeStyle = color;
+				ctx.fillStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(x0, y0);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+				const ang = Math.atan2(y1 - y0, x1 - x0);
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x1 - punta * Math.cos(ang - 0.4), y1 - punta * Math.sin(ang - 0.4));
+				ctx.lineTo(x1 - punta * Math.cos(ang + 0.4), y1 - punta * Math.sin(ang + 0.4));
+				ctx.closePath();
+				ctx.fill();
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+					warnSoft: token("--color-warn-soft"),
+					surface: token("--color-surface"),
+				};
+				const fase = {
+					DNS: [c.navy, c.navySoft],
+					TCP: [c.muted, c.borde],
+					TLS: [c.warn, c.warnSoft],
+					HTTP: [c.ok, c.okSoft],
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const n = lista.length;
+				const cab = clamp(MIN_FS, h * 0.045, 28) * 2.4;
+				const fila = (h - cab - 12) / n;
+				// Misma letra en HTTP y HTTPS: se dimensiona con las 11 filas de HTTPS.
+				const fila11 = (h - cab - 12) / 11;
+				const fs = clamp(MIN_FS, Math.min(fila11 * 0.46, w * 0.016), 28);
+				const colFase = fs * 4.2;
+				const xs = [colFase + fs * 4, 0, w - fs * 9];
+				xs[1] = xs[0] + (xs[2] - xs[0]) * 0.4;
+				const yFila = (i) => cab + i * fila;
+
+				// Bandas de fase a la izquierda.
+				let i0 = 0;
+				while (i0 < n) {
+					const f = lista[i0].fase;
+					let i1 = i0;
+					while (i1 + 1 < n && lista[i1 + 1].fase === f) i1++;
+					const [tono, suave] = fase[f];
+					ctx.fillStyle = suave;
+					ctx.beginPath();
+					ctx.roundRect(fs * 0.4, yFila(i0) + 3, colFase - fs * 0.4, fila * (i1 - i0 + 1) - 6, fs * 0.3);
+					ctx.fill();
+					texto(ctx, f, fs * 0.4 + (colFase - fs * 0.4) / 2, yFila(i0) + (fila * (i1 - i0 + 1)) / 2, fs, tono, 700, "center", MONO, colFase - fs * 0.6);
+					i0 = i1 + 1;
+				}
+
+				// Carriles.
+				const nombres = ["ESP32", "servidor DNS", "api.coingecko.com"];
+				for (const [k, x] of xs.entries()) {
+					texto(ctx, nombres[k], x, cab * 0.42, fs * 1.05, c.heading, 700, "center", k === 0 ? MONO : SANS);
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 2;
+					ctx.setLineDash([6, 6]);
+					ctx.beginPath();
+					ctx.moveTo(x, cab * 0.75);
+					ctx.lineTo(x, h - 6);
+					ctx.stroke();
+					ctx.setLineDash([]);
+				}
+
+				// Mensajes: los visibles en color, los pendientes como sombra tenue.
+				let rtt = 0;
+				const xRtt = w - fs * 2.2;
+				for (const [i, msg] of lista.entries()) {
+					const p = progreso(i);
+					const visible = p > 0;
+					const [tono] = msg.mal ? [c.acento] : fase[msg.fase];
+					const y0 = yFila(i) + fs * 1.45 + (fila - fila11) * 0.5;
+					const y1 = y0 + Math.min(fila11 * 0.22, fs * 0.6);
+					const x0 = xs[msg.de];
+					const x1 = xs[msg.a];
+					const xm = (x0 + x1) / 2;
+					const ancho = Math.abs(x1 - x0) - fs * 1.2;
+					ctx.globalAlpha = visible ? 1 : 0.22;
+					if (visible) {
+						flecha(ctx, x0, y0, x0 + (x1 - x0) * p, y0 + (y1 - y0) * p, tono, Math.max(3, fs * 0.13), fs * 0.6);
+					} else {
+						ctx.setLineDash([5, 7]);
+						flecha(ctx, x0, y0, x1, y1, c.muted, 2, fs * 0.5);
+						ctx.setLineDash([]);
+					}
+					texto(ctx, msg.t, xm, y0 - fs * 0.62, fs, visible ? c.heading : c.muted, visible ? 700 : 500, "center", msg.fam, ancho);
+					ctx.globalAlpha = 1;
+					if (msg.cierra) {
+						rtt++;
+						const listo = visible && p >= 1;
+						ctx.beginPath();
+						ctx.arc(xRtt, (y0 + y1) / 2, fs * 0.85, 0, Math.PI * 2);
+						ctx.fillStyle = listo ? c.acento : c.surface;
+						ctx.fill();
+						ctx.strokeStyle = listo ? c.acento : c.borde;
+						ctx.lineWidth = 2;
+						ctx.stroke();
+						texto(ctx, String(rtt), xRtt, (y0 + y1) / 2, fs, listo ? token("--color-accent-contrast") : c.muted, 700, "center", MONO);
+					}
+				}
+				texto(ctx, "RTT", xRtt, cab * 0.42, fs, c.acento, 700, "center", MONO);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("viaje"), dibujar);
+			const lRtt = document.getElementById("l-rtt");
+			const lTiempo = document.getElementById("l-tiempo");
+			const bSig = document.getElementById("b-siguiente");
+			const botonesTls = [...document.querySelectorAll("[data-tls]")];
+
+			function render() {
+				let rtt = 0;
+				for (const [i, m] of lista.entries()) if (m.cierra && progreso(i) >= 1) rtt++;
+				lRtt.textContent = String(rtt);
+				lTiempo.textContent = `${rtt * RTT_MS} ms`;
+				bSig.disabled = paso >= grupos(lista);
+				for (const b of botonesTls) {
+					const on = (b.dataset.tls === "si") === tls;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lienzo.redibujar();
+			}
+
+			// Animación corta de la flecha nueva; termina sola.
+			function animar() {
+				cancelAnimationFrame(animacion);
+				const t0 = performance.now();
+				const duracion = 380 * lista.filter((x) => x.grupo === paso - 1).length;
+				const cuadro = (t) => {
+					avance = Math.min(1, (t - t0) / duracion);
+					render();
+					if (avance < 1) animacion = requestAnimationFrame(cuadro);
+				};
+				animacion = requestAnimationFrame(cuadro);
+			}
+
+			for (const b of botonesTls) {
+				b.addEventListener("click", () => {
+					cancelAnimationFrame(animacion);
+					tls = b.dataset.tls === "si";
+					lista = mensajes(tls);
+					paso = grupos(lista);
+					avance = 1;
+					render();
+				});
+			}
+			document.getElementById("b-inicio").addEventListener("click", () => {
+				cancelAnimationFrame(animacion);
+				paso = 0;
+				avance = 1;
+				render();
+			});
+			bSig.addEventListener("click", () => {
+				if (paso >= grupos(lista)) return;
+				paso++;
+				avance = 0;
+				animar();
+			});
+			render();
+		</script>
+	</body>
+</html>

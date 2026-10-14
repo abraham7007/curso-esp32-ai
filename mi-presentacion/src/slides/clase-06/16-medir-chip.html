@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Medir en el chip · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Placa y herramientas</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La compilación mide la flash y la RAM de cada <em>ejemplo</em>
+				</h1>
+
+				<div class="def">
+					<p><code>pio run</code> informa al terminar de la flash y la RAM que usa el programa; el .tflite es la parte de la flash que ocupa el modelo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1900 900" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, lo que informa pio run al compilar el entorno inferencia. Ejemplo 20, float32, que registra todas las operaciones a través de ArduTFLite: 503 512 bytes de flash, el 51,2 por ciento de 983 040, y 58 536 bytes de RAM, el 22,3 por ciento de 262 144, con una tensor arena de 8 192 bytes. Ejemplo 21, int8, que registra solo FULLY_CONNECTED y SOFTMAX: 129 696 bytes de flash, el 13,2 por ciento, y 48 368 de RAM, el 18,5 por ciento, con una arena de 4 096 bytes. Debajo, el tamaño del archivo .tflite, dividido en pesos y sesgos y en el resto del archivo. Ejemplo 20, 36 547 parámetros: en float32, 148 380 bytes; en int8, solo para comparar, 40 872 bytes, 3,6 veces menos. Ejemplo 21, 59 parámetros, a otra escala: en float32, 1 992 bytes, con solo 236 de pesos y sesgos; en int8, 2 360 bytes, más que en float32, porque estructura y escalas ocupan más de lo que se ahorra. Abajo: la latencia se mide con micros() antes y después de la inferencia; la exactitud del 100 por ciento se obtuvo con datos sintéticos y no es representativa.">
+						<!-- compilación (salida real de pio run) -->
+						<text class="sans mut" x="0" y="20" font-size="26">pio run -e inferencia</text>
+						<text class="sans mut" x="760" y="20" font-size="26">flash (de 983 040 B)</text>
+						<text class="sans mut" x="1240" y="20" font-size="26">RAM (de 262 144 B)</text>
+						<text class="sans mut" x="1680" y="20" font-size="26">arena</text>
+						<path class="ln ln--fina" d="M0 44 H1900" />
+						<rect class="s4d-fila" x="0" y="54" width="1900" height="100" rx="8" />
+						<text class="sans" x="16" y="86" font-size="30" font-weight="700">ejemplo 20 · float32</text>
+						<text class="sans mut" x="16" y="126" font-size="25">registra todas las operaciones (ArduTFLite)</text>
+						<text x="760" y="104" font-size="32" font-weight="700">503 512 B <tspan class="mut" font-size="25" font-weight="500">51,2 %</tspan></text>
+						<text x="1240" y="104" font-size="32" font-weight="700">58 536 B <tspan class="mut" font-size="25" font-weight="500">22,3 %</tspan></text>
+						<text x="1680" y="104" font-size="30">8 192 B</text>
+						<text class="sans" x="16" y="196" font-size="30" font-weight="700">ejemplo 21 · int8</text>
+						<text class="sans mut" x="16" y="236" font-size="25">registra solo FULLY_CONNECTED y SOFTMAX</text>
+						<text x="760" y="214" font-size="32" font-weight="700">129 696 B <tspan class="mut" font-size="25" font-weight="500">13,2 %</tspan></text>
+						<text x="1240" y="214" font-size="32" font-weight="700">48 368 B <tspan class="mut" font-size="25" font-weight="500">18,5 %</tspan></text>
+						<text x="1680" y="214" font-size="30">4 096 B</text>
+
+						<!-- el modelo dentro de la flash: archivo .tflite -->
+						<path class="ln ln--fina ln--mut" d="M0 278 H1900" />
+						<text class="sans" x="0" y="318" font-size="29" font-weight="700">ejemplo 20 · .tflite · 36 547 parámetros</text>
+						<text class="sans mut fin" x="1900" y="318" font-size="26">escala: 150 KB</text>
+						<text class="sans" x="0" y="384" font-size="28">float32</text>
+						<rect class="caja caja--fantasma" x="200" y="356" width="1300" height="56" rx="6" />
+						<rect class="s6d-barra-acc" x="200" y="356" width="1281" height="56" rx="6" />
+						<text class="fin" x="1900" y="384" font-size="30" font-weight="700">148 380 B</text>
+						<text class="sans" x="0" y="460" font-size="28">int8</text>
+						<rect class="caja caja--fantasma" x="200" y="432" width="358" height="56" rx="6" />
+						<rect class="barra--ok" x="200" y="432" width="322" height="56" rx="6" />
+						<text class="sans" x="590" y="460" font-size="27">3,6 veces menos <tspan class="mut">· solo para comparar</tspan></text>
+						<text class="fin ok" x="1900" y="460" font-size="30" font-weight="700">40 872 B</text>
+
+						<text class="sans" x="0" y="536" font-size="29" font-weight="700">ejemplo 21 · .tflite · 59 parámetros</text>
+						<text class="sans mut fin" x="1900" y="536" font-size="26">escala: 2,4 KB (60 veces menor)</text>
+						<text class="sans" x="0" y="602" font-size="28">float32</text>
+						<rect class="caja caja--fantasma" x="200" y="574" width="1097" height="56" rx="6" />
+						<rect class="s6d-barra-acc" x="200" y="574" width="130" height="56" rx="6" />
+						<text class="fin" x="1900" y="602" font-size="30" font-weight="700">1 992 B</text>
+						<text class="sans" x="0" y="678" font-size="28">int8</text>
+						<rect class="caja caja--fantasma" x="200" y="650" width="1300" height="56" rx="6" />
+						<rect class="barra--ok" x="200" y="650" width="51" height="56" rx="6" />
+						<text class="sans acc fin" x="1480" y="678" font-size="27">más grande que float32</text>
+						<text class="fin acc" x="1900" y="678" font-size="30" font-weight="700">2 360 B</text>
+
+						<!-- leyenda -->
+						<rect class="s6d-barra-acc" x="200" y="734" width="44" height="30" rx="4" />
+						<rect class="barra--ok" x="250" y="734" width="44" height="30" rx="4" />
+						<text class="sans" x="310" y="750" font-size="26">pesos y sesgos</text>
+						<rect class="caja caja--fantasma" x="620" y="734" width="60" height="30" rx="4" />
+						<text class="sans" x="696" y="750" font-size="26">estructura, nombres y escalas</text>
+
+						<!-- lo que mide el estudiante -->
+						<path class="ln ln--fina ln--mut" d="M0 796 H1900" />
+						<text class="sans" x="0" y="840" font-size="27">Latencia: <tspan class="s4d-mono navy">t = micros()</tspan> antes de la inferencia y <tspan class="s4d-mono navy">micros() - t</tspan> después.</text>
+						<text class="sans warn fin" x="1900" y="840" font-size="27" font-weight="700">Exactitud 100 %: datos sintéticos, no representativa.</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Arriba, lo que imprime <code>pio run</code> al terminar, una medida que no depende de la placa. El ejemplo 20 ocupa 503 512 B de flash, de los que 148 380 son el modelo; el resto es el núcleo mbed y TFLM con todas sus operaciones, porque ArduTFLite usa <code>AllOpsResolver</code>. El 21 registra solo las dos que usa la red y ocupa 129 696 B.
+				</p>
+				<p>
+					Pregunta de predicción, antes de mostrar las barras del ejemplo 21: si su modelo ocupa 1 992 B en float32, ¿cuánto ocupará en int8? Respuesta: 2 360 B, y no la cuarta parte que sugiere pasar de 4 bytes a 1. Con 59 parámetros, pesos y sesgos son 236 B en float32 y 92 B en int8 (los sesgos quedan en int32), y el resto del archivo es estructura, nombres y escalas. En el 20 los pesos son el 98 % del archivo y ahí int8 divide por 3,6 (el 20 usa float32; el int8 se generó solo para comparar).
+				</p>
+				<p>
+					La latencia la mide cada estudiante en su placa: el ejemplo 20 la imprime en cada gesto. Los dos modelos dan 100 % en prueba con CSV sintéticos (<code>simular_datos.py</code>), una cifra sin valor como medida; la evaluación que cuenta es la matriz de confusión con gestos y objetos capturados en clase.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>pio run -e inferencia</code> imprime «RAM: … used» y «Flash: … used»
+						al final. En el sketch: <code>sizeof(model)</code> da los bytes del modelo y
+						<code>interpreter-&gt;arena_used_bytes()</code> los bytes ocupados de la
+						tensor arena (ejemplo 21). Tiempo: <code>t = micros()</code> antes de la
+						inferencia y <code>micros() - t</code> después. La primera compilación es larga: unos 10 min de descarga de la plataforma y, en el equipo de prueba, 34 min compilando TFLM entero; las siguientes, unos segundos. Conviene compilar antes de la clase.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 20 (<code>[MODELO]</code> y <code>[GESTO n]</code>) y ejemplo 21 (<code>[MODELO]</code> con la arena usada).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Leer el tamaño de <code>model.h</code> (915 352 bytes de texto en el ejemplo 20) como si fuera lo que ocupa en la flash.</li>
+						<li>Cuantizar un modelo diminuto para ahorrar memoria, cuando en ese caso int8 solo aporta aritmética entera.</li>
+						<li>Dejar <code>AllOpsResolver</code> cuando la red usa dos operaciones, lo que enlaza todas en la flash.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-codigo-21-colores.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 21 · Colores</span>
+				</a>
+				<a class="slide-nav__link" href="17-hardware.html">
+					<span>Hardware</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

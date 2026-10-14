@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Conversión analógica-digital · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Terminales de entrada y salida</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El ADC convierte la tensión en <em>escalones</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>ADC</b> (<i>analog-to-digital converter</i>): asigna a cada
+								tensión un código de <i>n</i> bits; con 12 bits, 4096 escalones.
+							</p>
+						</div>
+						<div class="def" data-paso="1">
+							<p>
+								Ideal: <code>V = código × 3,3 / 4095</code>. Con 11 dB, el
+								fondo real es ~3,1 V y la respuesta no es lineal.
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Resolución">
+								<button type="button" class="btn btn--primary" data-bits="3" aria-pressed="true">3 bits</button>
+								<button type="button" class="btn btn--secondary" data-bits="6" aria-pressed="false">6 bits</button>
+								<button type="button" class="btn btn--secondary" data-bits="12" aria-pressed="false">12 bits</button>
+							</fieldset>
+							<label class="control">
+								<span>V<sub>in</sub></span>
+								<input type="range" id="vin" min="0" max="3.3" step="0.01" value="1.00" />
+								<output id="vin-out" for="vin">1,00 V</output>
+							</label>
+						</div>
+						<div class="lienzo-caja"><canvas id="adc" aria-label="Escalera de cuantización: código frente a tensión de entrada"></canvas></div>
+						<div class="lecturas">
+							<span class="lectura"><small>código </small><span id="l-codigo">2</span></span>
+							<span class="lectura"><small>reconstruida (ideal) </small><span id="l-vrec">0,943 V</span></span>
+							<span class="lectura"><small>error de cuantización </small><span id="l-err">−57 mV</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con 3 bits, ¿qué código saldrá para 1,00 V y qué
+					tensión devolverá el programa al reconstruirla? Sale el código 2, que se
+					reconstruye como 0,943 V. Recorrer el deslizador despacio: el código no
+					cambia hasta cruzar el siguiente escalón, y el error oscila entre ±½
+					escalón (LSB).
+				</p>
+				<p>
+					Pasar a 6 y a 12 bits. Con 12 bits la escalera se aproxima a una recta
+					y el escalón mide 0,8 mV, como muestra la lupa. Aumentar la resolución
+					reduce el error de cuantización y no corrige los demás errores del ADC.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>analogRead(pin)</code> devuelve el código (0–4095).
+						<code>analogReadMilliVolts(pin)</code> devuelve la tensión ya
+						corregida con la calibración de fábrica. Por defecto la atenuación
+						es de 11 dB, que permite medir hasta unos 3,1 V.
+					</p>
+					<h4>Dónde aparece</h4>
+					<ul>
+						<li>ADC1 (GPIO 32–39) funciona con el WiFi activo.</li>
+						<li>ADC2 queda reservado mientras el WiFi está encendido.</li>
+					</ul>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Suponer que la respuesta es lineal en todo el rango: cerca de 0 V
+						(hasta ~0,1 V) y por encima de ~3,1 V el ESP32 se aparta de la recta.
+						Las medidas se hacen en la zona central del rango.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-codigo-02-entrada-digital.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 02 · Entrada digital</span>
+				</a>
+				<a class="slide-nav__link" href="12-codigo-03-entrada-analogica.html">
+					<span>Ejemplo 03 · Entrada analógica</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const VREF = 3.3;
+			const vin = document.getElementById("vin");
+			const vinOut = document.getElementById("vin-out");
+			const lCodigo = document.getElementById("l-codigo");
+			const lVrec = document.getElementById("l-vrec");
+			const lErr = document.getElementById("l-err");
+			const bitBtns = [...document.querySelectorAll("[data-bits]")];
+
+			let bits = 3;
+			const coma = (x, d) => x.toFixed(d).replace(".", ",").replace("-", "−");
+			const MONO = "'IBM Plex Mono', monospace";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			function convertir(v) {
+				const max = 2 ** bits - 1;
+				const codigo = Math.round((v / VREF) * max);
+				const vrec = (codigo * VREF) / max;
+				return { max, codigo, vrec, err: vrec - v };
+			}
+
+			// Escalera de cuantización entre v0 y v1 en un rectángulo dado.
+			function escalera(ctx, v0, v1, toX, toY, max) {
+				const lsb = VREF / max;
+				ctx.beginPath();
+				let c = Math.round(v0 / lsb);
+				ctx.moveTo(toX(v0), toY(c));
+				while (true) {
+					const vt = Math.min((c + 0.5) * lsb, v1); // umbral al siguiente código
+					ctx.lineTo(toX(vt), toY(c));
+					if (vt >= v1 || c >= max) {
+						ctx.lineTo(toX(v1), toY(c));
+						break;
+					}
+					c += 1;
+					ctx.lineTo(toX(vt), toY(c));
+				}
+				ctx.stroke();
+			}
+
+			function draw(ctx, w, h) {
+				const v = Number(vin.value);
+				const { max, codigo } = convertir(v);
+				const C = {
+					bg: token("--color-bg-subtle"),
+					grid: token("--color-border"),
+					text: token("--color-text"),
+					dim: token("--color-text-muted"),
+					accent: token("--color-accent"),
+					navy: token("--color-navy"),
+					surface: token("--color-surface"),
+				};
+				// Letra y grosores proporcionales al tamaño real del lienzo.
+				const fs = clamp(20, Math.min(w * 0.021, h * 0.05), 34);
+				const lw = fs / 12;
+
+				ctx.fillStyle = C.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const L = fs * 4.6, R = fs * 1.6, T = fs * 1.4, B = fs * 3.6;
+				const pw = w - L - R, ph = h - T - B;
+				const toX = (x) => L + (x / VREF) * pw;
+				const toY = (c) => T + ph - (c / max) * ph;
+
+				// Ejes y rejilla
+				ctx.lineWidth = lw;
+				ctx.strokeStyle = C.grid;
+				ctx.font = `500 ${fs}px ${MONO}`;
+				ctx.fillStyle = C.dim;
+				ctx.textBaseline = "top";
+				ctx.textAlign = "center";
+				for (let x = 0; x <= 3.3001; x += 0.5) {
+					const X = toX(Math.min(x, 3.3));
+					ctx.beginPath(); ctx.moveTo(X, T); ctx.lineTo(X, T + ph); ctx.stroke();
+					ctx.fillText(coma(x, 1), X, T + ph + fs * 0.45);
+				}
+				ctx.fillText("tensión de entrada (V)", L + pw / 2, T + ph + fs * 2);
+				ctx.textAlign = "right";
+				ctx.textBaseline = "middle";
+				for (const c of [0, max]) {
+					ctx.beginPath(); ctx.moveTo(L, toY(c)); ctx.lineTo(L + pw, toY(c)); ctx.stroke();
+					ctx.fillText(String(c), L - fs * 0.5, toY(c));
+				}
+				ctx.save();
+				ctx.translate(fs * 1.2, T + ph / 2);
+				ctx.rotate(-Math.PI / 2);
+				ctx.textAlign = "center";
+				ctx.fillText("código", 0, 0);
+				ctx.restore();
+
+				// Recta ideal
+				ctx.setLineDash([fs * 0.4, fs * 0.4]);
+				ctx.strokeStyle = C.dim;
+				ctx.lineWidth = lw * 1.5;
+				ctx.beginPath(); ctx.moveTo(toX(0), toY(0)); ctx.lineTo(toX(VREF), toY(max)); ctx.stroke();
+				ctx.setLineDash([]);
+
+				// Escalera
+				ctx.strokeStyle = C.accent;
+				ctx.lineWidth = bits === 12 ? lw * 1.5 : lw * 2.6;
+				ctx.lineJoin = "miter";
+				escalera(ctx, 0, VREF, toX, toY, max);
+
+				// Punto de trabajo con guías
+				ctx.strokeStyle = C.navy;
+				ctx.lineWidth = lw;
+				ctx.setLineDash([fs * 0.25, fs * 0.33]);
+				ctx.beginPath();
+				ctx.moveTo(toX(v), T + ph); ctx.lineTo(toX(v), toY(codigo)); ctx.lineTo(L, toY(codigo));
+				ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = C.navy;
+				ctx.beginPath(); ctx.arc(toX(v), toY(codigo), fs * 0.42, 0, 2 * Math.PI); ctx.fill();
+				// Etiqueta en una caja, debajo y a la derecha del punto (bajo la recta)
+				const fe = fs * 1.1;
+				ctx.font = `700 ${fe}px ${MONO}`;
+				ctx.textAlign = "left";
+				ctx.textBaseline = "middle";
+				const etiqueta = `código ${codigo}`;
+				const tw = ctx.measureText(etiqueta).width;
+				const pad = fe * 0.35, bh = fe * 1.6;
+				let ex = toX(v) + fe, ey = toY(codigo) + fe * 1.6;
+				if (ex + tw + pad > L + pw) ex = toX(v) - tw - fe * 1.4;
+				if (ey + bh / 2 > T + ph) ey = toY(codigo) - fe * 1.6;
+				ctx.fillStyle = C.surface;
+				ctx.fillRect(ex - pad, ey - bh / 2, tw + 2 * pad, bh);
+				ctx.strokeStyle = C.navy; ctx.lineWidth = lw;
+				ctx.strokeRect(ex - pad, ey - bh / 2, tw + 2 * pad, bh);
+				ctx.fillStyle = C.navy;
+				ctx.fillText(etiqueta, ex, ey);
+
+				// Leyenda abajo a la derecha (zona libre bajo la recta)
+				ctx.font = `500 ${fs}px ${MONO}`;
+				const lgw = fs * 12.5, lx = L + pw - lgw, ly = T + ph - fs * 3.3;
+				ctx.fillStyle = C.bg;
+				ctx.fillRect(lx - fs * 0.5, ly - fs * 0.9, lgw, fs * 3.3);
+				ctx.strokeStyle = C.accent; ctx.lineWidth = lw * 2.6;
+				ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + fs * 1.6, ly); ctx.stroke();
+				ctx.fillStyle = C.text; ctx.fillText(`ADC de ${bits} bits`, lx + fs * 2.2, ly);
+				ctx.strokeStyle = C.dim; ctx.lineWidth = lw * 1.5; ctx.setLineDash([fs * 0.4, fs * 0.4]);
+				ctx.beginPath(); ctx.moveTo(lx, ly + fs * 1.5); ctx.lineTo(lx + fs * 1.6, ly + fs * 1.5); ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillText("recta ideal", lx + fs * 2.2, ly + fs * 1.5);
+
+				// Lupa con 12 bits: ±5 LSB alrededor del punto
+				if (bits === 12) {
+					const lsb = VREF / max;
+					const bw = Math.min(pw * 0.42, fs * 18), bh2 = Math.min(ph * 0.48, bw * 0.55);
+					const bx = L + fs * 0.8, by = T + fs * 0.4;
+					let v0 = v - 5 * lsb, v1 = v + 5 * lsb;
+					if (v0 < 0) { v1 -= v0; v0 = 0; }
+					if (v1 > VREF) { v0 -= v1 - VREF; v1 = VREF; }
+					const c0 = Math.round(v0 / lsb) - 1, c1 = Math.round(v1 / lsb) + 1;
+					const m = fs * 0.7;
+					const ix = (x) => bx + m + ((x - v0) / (v1 - v0)) * (bw - 2 * m);
+					const iy = (c) => by + bh2 - m - ((c - c0) / (c1 - c0)) * (bh2 - fs * 2.6);
+					ctx.fillStyle = C.surface;
+					ctx.strokeStyle = C.navy;
+					ctx.lineWidth = lw;
+					ctx.fillRect(bx, by, bw, bh2);
+					ctx.strokeRect(bx, by, bw, bh2);
+					ctx.save();
+					ctx.beginPath(); ctx.rect(bx, by, bw, bh2); ctx.clip();
+					ctx.setLineDash([fs * 0.33, fs * 0.33]);
+					ctx.strokeStyle = C.dim; ctx.lineWidth = lw;
+					ctx.beginPath(); ctx.moveTo(ix(v0), iy((v0 / VREF) * max)); ctx.lineTo(ix(v1), iy((v1 / VREF) * max)); ctx.stroke();
+					ctx.setLineDash([]);
+					ctx.strokeStyle = C.accent; ctx.lineWidth = lw * 2;
+					escalera(ctx, v0, v1, ix, iy, max);
+					ctx.fillStyle = C.navy;
+					ctx.beginPath(); ctx.arc(ix(v), iy(codigo), fs * 0.33, 0, 2 * Math.PI); ctx.fill();
+					ctx.restore();
+					ctx.fillStyle = C.text;
+					ctx.font = `600 ${fs}px ${MONO}`;
+					ctx.textAlign = "left";
+					ctx.textBaseline = "top";
+					ctx.fillText("Lupa · 1 escalón = 0,8 mV", bx + fs * 0.6, by + fs * 0.4);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("adc"), draw);
+
+			function actualizar() {
+				const v = Number(vin.value);
+				const { codigo, vrec, err } = convertir(v);
+				vinOut.textContent = `${coma(v, 2)} V`;
+				lCodigo.textContent = String(codigo);
+				lVrec.textContent = `${coma(vrec, 3)} V`;
+				lErr.textContent = `${err > 0 ? "+" : ""}${coma(err * 1000, bits === 12 ? 1 : 0)} mV`;
+				bitBtns.forEach((b) => {
+					const on = Number(b.dataset.bits) === bits;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				});
+				lienzo.redibujar();
+			}
+
+			vin.addEventListener("input", actualizar);
+			for (const b of bitBtns)
+				b.addEventListener("click", () => {
+					bits = Number(b.dataset.bits);
+					actualizar();
+				});
+
+			actualizar();
+		</script>
+	</body>
+</html>

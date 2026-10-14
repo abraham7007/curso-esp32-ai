@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "author": "Ejemplo 12c - Chat I2C entre dos ESP32",
+  "author": "Ejemplo 12c - Enlace I2C maestro (A) -> esclavo 0x11 (B)",
   "editor": "wokwi",
   "parts": [
     {
@@ -36,19 +36,21 @@
   ],
   "connections": [
     [ "espA:GND.1", "espB:GND.1", "black", [] ],
-    
+
     [ "espA:D21", "espB:D21", "blue", [] ],
     [ "espA:D22", "espB:D22", "green", [] ],
-    
+
     [ "espA:3V3", "r1:1", "red", [] ],
     [ "r1:2", "espA:D21", "blue", [] ],
     [ "espA:3V3", "r2:1", "red", [] ],
     [ "r2:2", "espA:D22", "green", [] ],
-    
+
     [ "espA:GND.2", "espA:D4", "black", [] ],
-    
+
     [ "espA:TX0", "$serialMonitor:RX", "", [] ],
-    [ "espA:RX0", "$serialMonitor:TX", "", [] ]
+    [ "espA:RX0", "$serialMonitor:TX", "", [] ],
+    [ "espB:TX0", "$serialMonitor:RX", "", [] ],
+    [ "espB:RX0", "$serialMonitor:TX", "", [] ]
   ],
   "dependencies": {}
 }

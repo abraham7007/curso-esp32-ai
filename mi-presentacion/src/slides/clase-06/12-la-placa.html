@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>La placa Nano 33 BLE Sense Rev2 · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Placa y herramientas</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La Nano 33 BLE Sense Rev2 integra cinco <em>sensores</em>
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1800 790" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dibujo de la cara superior de la Arduino Nano 33 BLE Sense Rev2 según su datasheet, con el conector micro-USB a la izquierda y dos filas de 15 pines. A la derecha, el módulo NINA-B306 con el nRF52840: Cortex-M4F a 64 MHz, 1 MB de flash, 256 KB de RAM y Bluetooth 5. Sensores, con su librería: HS3003, humedad y temperatura, Arduino_HS300x; BMI270 más BMM150, IMU de 9 ejes, Arduino_BMI270_BMM150; LPS22HB, presión y temperatura, Arduino_LPS22HB; APDS-9960, color y proximidad, Arduino_APDS9960; MP34DT06JTR, micrófono digital, librería PDM incluida en el núcleo. Además, el LED RGB, que es una salida y no un sensor, con los pines LEDR, LEDG y LEDB, activo en LOW. A la derecha, la comparación entre revisiones: la Rev1, que ya no se fabrica, llevaba el IMU LSM9DS1 (Arduino_LSM9DS1), el sensor de humedad HTS221 (Arduino_HTS221) y el micrófono MP34DT05; la Rev2 lleva BMI270 más BMM150, HS3003 y MP34DT06JTR. APDS-9960 y LPS22HB son iguales en las dos. Cómo distinguirlas: la serigrafía REV2 en la cara inferior, el SKU de la caja ABX00069 o ABX00070, y que IMU.begin() de la librería del BMI270 devuelve 0 si la placa es una Rev1.">
+						<!-- placa: cara superior, topología del datasheet ABX00069 -->
+						<g transform="translate(6.4 172.4) scale(0.8)">
+							<rect class="s6a-pcb" x="67" y="22" width="1313" height="541" rx="14" />
+							<circle class="s6a-agujero" cx="102" cy="57" r="24" />
+							<circle class="s6a-agujero" cx="1345" cy="57" r="24" />
+							<circle class="s6a-agujero" cx="102" cy="528" r="24" />
+							<circle class="s6a-agujero" cx="1345" cy="528" r="24" />
+							<rect class="s6a-pad" x="140.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="140.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="217.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="217.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="295.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="295.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="372.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="372.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="450.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="450.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="528.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="528.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="605.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="605.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="683.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="683.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="760.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="760.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="838.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="838.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="916.0" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="916.0" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="993.6" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="993.6" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1071.2" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1071.2" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1148.8" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1148.8" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1226.4" y="28" width="66" height="66" rx="4" />
+							<rect class="s6a-pad" x="1226.4" y="491" width="66" height="66" rx="4" />
+							<rect class="s6a-lata" x="22" y="178" width="170" height="228" rx="6" />
+							<rect class="s6a-ventana" x="34" y="230" width="40" height="124" rx="4" />
+							<rect class="s6a-lata" x="360" y="232" width="88" height="118" rx="6" />
+							<circle class="s6a-chip" cx="404" cy="291" r="28" />
+							<rect class="s6a-chip" x="467" y="383" width="50" height="65" rx="3" />
+							<rect class="s6a-led" x="240" y="150" width="50" height="36" rx="3" />
+							<rect class="s6a-led" x="228" y="245" width="88" height="46" rx="3" />
+							<rect class="s6a-led" x="486" y="302" width="50" height="26" rx="3" />
+							<rect class="s6a-led" x="486" y="343" width="50" height="26" rx="3" />
+							<rect class="s6a-led" x="385" y="390" width="26" height="46" rx="3" />
+							<rect class="s6a-led" x="423" y="390" width="26" height="46" rx="3" />
+							<rect class="s6a-led" x="568" y="343" width="36" height="70" rx="3" />
+							<rect class="s6a-led" x="1050" y="452" width="50" height="26" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="590" y="145" width="70" height="90" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="722" y="188" width="48" height="50" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="572" y="253" width="94" height="80" rx="3" />
+							<rect class="s6a-chip s6a-chip--sensor" x="685" y="258" width="120" height="70" rx="3" />
+							<circle class="s6a-ventana" cx="708" cy="293" r="16" />
+							<circle class="s6a-ventana" cx="782" cy="293" r="16" />
+							<rect class="s6a-chip s6a-chip--sensor" x="815" y="218" width="90" height="120" rx="3" />
+							<circle class="s6a-ventana" cx="858" cy="250" r="15" />
+							<rect class="s6a-chip s6a-chip--sensor" x="627" y="378" width="61" height="60" rx="3" />
+							<rect class="s6a-led" x="105" y="113" width="45" height="22" rx="3" />
+							<rect class="s6a-led" x="105" y="450" width="45" height="22" rx="3" />
+							<rect class="s6a-led s6a-led--rgb" x="858" y="163" width="30" height="40" rx="3" />
+							<rect class="s6a-lata" x="918" y="140" width="462" height="305" rx="8" />
+							<path class="ln ln--fina ln--mut" d="M1262 160 V425 M1290 205 L1340 250 V335 L1290 380" />
+						</g>
+						<text class="mid b" x="876" y="326" font-size="38">nRF52840</text>
+						<text class="mid sans" x="876" y="378" font-size="24">Cortex-M4F · 64 MHz</text>
+						<text class="mid sans" x="876" y="418" font-size="24">1 MB de flash</text>
+						<text class="mid sans" x="876" y="456" font-size="24">256 KB de RAM</text>
+						<text class="mid mut" x="876" y="500" font-size="22">NINA-B306 · BLE 5</text>
+						<path class="ln ln--fina ln--acc" d="M506 288 V268 H160 V150" />
+						<path class="ln ln--fina ln--acc" d="M539 394 H547 V150" />
+						<path class="ln ln--fina ln--acc" d="M603 323 V150" />
+						<path class="ln ln--fina ln--mut" d="M705 303 L760 150" />
+						<path class="ln ln--fina ln--acc" d="M532 523 V554 H200 V652" />
+						<path class="ln ln--fina ln--acc" d="M640 435 V652" />
+						<path class="ln ln--fina ln--acc" d="M694 443 V652" />
+						<circle class="rel-acc" cx="506" cy="288" r="7" />
+						<circle class="rel-acc" cx="539" cy="394" r="7" />
+						<circle class="rel-acc" cx="603" cy="323" r="7" />
+						<circle class="rel-acc" cx="532" cy="523" r="7" />
+						<circle class="rel-acc" cx="640" cy="435" r="7" />
+						<circle class="rel-acc" cx="694" cy="443" r="7" />
+						<circle class="rel-mut" cx="705" cy="303" r="7" />
+						<text class="acc b" x="0" y="26" font-size="30">HS3003</text>
+						<text class="sans" x="0" y="68" font-size="26">humedad y temperatura</text>
+						<text class="navy" x="0" y="108" font-size="23">Arduino_HS300x</text>
+						<text class="acc b" x="345" y="26" font-size="30">BMI270 + BMM150</text>
+						<text class="sans" x="345" y="68" font-size="26">IMU de 9 ejes</text>
+						<text class="navy" x="345" y="108" font-size="23">Arduino_BMI270_BMM150</text>
+						<text class="b" x="775" y="26" font-size="30">LED RGB</text>
+						<text class="sans" x="775" y="68" font-size="26">salida, no sensor</text>
+						<text class="navy" x="775" y="108" font-size="23">LEDR/G/B, en LOW</text>
+						<text class="acc b" x="0" y="682" font-size="30">LPS22HB</text>
+						<text class="sans" x="0" y="724" font-size="26">presión y temperatura</text>
+						<text class="navy" x="0" y="764" font-size="23">Arduino_LPS22HB</text>
+						<text class="acc b" x="410" y="682" font-size="30">APDS-9960</text>
+						<text class="sans" x="410" y="724" font-size="26">color y proximidad</text>
+						<text class="navy" x="410" y="764" font-size="23">Arduino_APDS9960</text>
+						<text class="acc b" x="680" y="682" font-size="30">MP34DT06JTR</text>
+						<text class="sans" x="680" y="724" font-size="26">micrófono digital</text>
+						<text class="navy" x="680" y="764" font-size="23">PDM (en el núcleo)</text>
+						<text class="sans b" x="1145" y="26" font-size="34">Rev1 o Rev2</text>
+						<text class="sans mut" x="1145" y="70" font-size="24">la Rev1 ya no se fabrica</text>
+						<text class="sans b mut" x="1290" y="128" font-size="26">Rev1</text>
+						<text class="sans b ok" x="1505" y="128" font-size="26">Rev2</text>
+						<path class="ln ln--fina ln--mut" d="M1145 154 H1800" />
+						<rect class="s6a-fila" x="1133" y="166" width="667" height="96" rx="8" />
+						<text class="sans b" x="1145" y="196" font-size="26">IMU</text>
+						<text class="b mut" x="1290" y="196" font-size="25">LSM9DS1</text>
+						<text class="mut" x="1290" y="234" font-size="22">Arduino_LSM9DS1</text>
+						<text class="b ok" x="1505" y="196" font-size="25">BMI270 + BMM150</text>
+						<text class="navy" x="1505" y="234" font-size="22">Arduino_BMI270_BMM150</text>
+						<text class="sans b" x="1145" y="300" font-size="26">Humedad</text>
+						<text class="b mut" x="1290" y="300" font-size="25">HTS221</text>
+						<text class="mut" x="1290" y="338" font-size="22">Arduino_HTS221</text>
+						<text class="b ok" x="1505" y="300" font-size="25">HS3003</text>
+						<text class="navy" x="1505" y="338" font-size="22">Arduino_HS300x</text>
+						<rect class="s6a-fila" x="1133" y="374" width="667" height="96" rx="8" />
+						<text class="sans b" x="1145" y="404" font-size="26">Micrófono</text>
+						<text class="b mut" x="1290" y="404" font-size="25">MP34DT05</text>
+						<text class="mut" x="1290" y="442" font-size="22">PDM</text>
+						<text class="b ok" x="1505" y="404" font-size="25">MP34DT06JTR</text>
+						<text class="navy" x="1505" y="442" font-size="22">PDM</text>
+						<text class="sans" x="1145" y="500" font-size="26">iguales: APDS-9960 y LPS22HB</text>
+						<rect class="s6a-elegida" x="1133" y="548" width="665" height="232" rx="12" />
+						<text class="sans b ok" x="1157" y="586" font-size="28">Cómo distinguirlas</text>
+						<text class="sans" x="1157" y="630" font-size="25">cara inferior: serigrafía «REV2»</text>
+						<text class="sans" x="1157" y="670" font-size="25">caja: SKU ABX00069 o ABX00070</text>
+						<text class="sans" x="1157" y="710" font-size="25"><tspan class="b">IMU.begin()</tspan> del BMI270 devuelve</text>
+						<text class="sans" x="1157" y="748" font-size="25">0 si la placa es una Rev1</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: los ejemplos de gestos que circulan por Internet usan <code>#include &lt;Arduino_LSM9DS1.h&gt;</code>. ¿Qué pasa si se cargan en esta placa? Respuesta: compilan, pero <code>IMU.begin()</code> falla, porque la Rev2 no tiene ese chip. La solución es cambiar a <code>Arduino_BMI270_BMM150</code>, que mantiene la misma interfaz (<code>IMU.readAcceleration(x, y, z)</code>).
+				</p>
+				<p>
+					El microcontrolador es el nRF52840 de Nordic, dentro del módulo NINA-B306 de u-blox (el blindaje metálico con la antena). Tiene la mitad de RAM que el ESP32 (256 KB frente a 520 KB); su núcleo es un Cortex-M4F con FPU y con las instrucciones DSP que aprovecha CMSIS-NN. No tiene WiFi; su radio es Bluetooth Low Energy.
+				</p>
+				<p>
+					Los sensores van conectados a un bus I²C interno de la placa; el micrófono usa PDM, una trama de un bit a alta frecuencia que el nRF52840 convierte en muestras. El ejemplo 20 usa el IMU (aceleración y giro, 6 de los 9 ejes) y el 21 el APDS-9960 (color). El LED RGB es activo en LOW: <code>digitalWrite(LEDR, LOW)</code> lo enciende en rojo.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>platformio.ini</code>: <code>platform = nordicnrf52</code>,
+						<code>board = nano33ble</code>, <code>framework = arduino</code>. Librerías:
+						<code>arduino-libraries/Arduino_BMI270_BMM150</code>,
+						<code>arduino-libraries/Arduino_APDS9960</code>. Las mismas líneas sirven
+						para la Rev1 y la Rev2; cambian las librerías de sensores.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 20 (IMU) y ejemplo 21 (APDS-9960); el micrófono, en la lámina 09.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Conectar señales de 5 V: las E/S son de 3,3 V y no toleran 5 V.</li>
+						<li>Usar como analógicas A4 y A5, que forman el bus I²C con resistencias de pull-up.</li>
+						<li>Placa que no aparece por USB: doble pulsación del reset para el modo de arranque.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-metricas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Métricas</span>
+				</a>
+				<a class="slide-nav__link" href="13-herramientas.html">
+					<span>Herramientas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

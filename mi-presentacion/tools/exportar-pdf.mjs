@@ -24,7 +24,7 @@ import { chromium } from "playwright";
 import { asegurarServidor } from "./lib/servidor.mjs";
 
 const RAIZ = path.resolve(import.meta.dirname, "..");
-const BASE = "http://localhost:5173";
+const BASE = process.env.BASE ?? "http://localhost:5173";
 const ANCHO_PX = 1440;
 const ALTO_PX = 900;
 const PPP = 96;
@@ -41,7 +41,7 @@ const laminas = readdirSync(path.join(RAIZ, "src", "slides", clase))
 
 mkdirSync(temporal, { recursive: true });
 
-await asegurarServidor();
+await asegurarServidor(BASE);
 
 const navegador = await chromium.launch({ channel: "chrome" });
 const pagina = await navegador.newPage({
@@ -50,8 +50,17 @@ const pagina = await navegador.newPage({
 
 const sueltos = [];
 for (const [i, lamina] of laminas.entries()) {
-	await pagina.goto(`${BASE}/src/slides/${clase}/${lamina}`, {
+	/* `#fin` abre la lámina con todos sus pasos (data-paso) ya revelados: en
+	   papel no hay tecla para descubrirlos, y sin él la página saldría con el
+	   estado inicial de la exposición. */
+	await pagina.goto(`${BASE}/src/slides/${clase}/${lamina}#fin`, {
 		waitUntil: "networkidle",
+	});
+	/* El cromo de la presentación (botones, enlaces anterior/siguiente y la
+	   pastilla «Para estudiar») no tiene sentido en un PDF. */
+	await pagina.addStyleTag({
+		content:
+			".deck-controls, .slide-nav, .detalle, .notas, .prompt-box__copy { display: none !important; }",
 	});
 
 	/* Las láminas entran con una animación escalonada y algunas figuras se

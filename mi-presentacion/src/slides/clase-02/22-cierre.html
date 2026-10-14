@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title">Resumen de la <em>sesión 2</em></h1>
+
+				<ol class="puntos crece justify-evenly">
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Módulos</p>
+							<p class="slide__lede col-span-3">Cada clase en su .h y su .cpp, dentro de lib/, con su estado en privado.</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="1">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Sin bloqueo</p>
+							<p class="slide__lede col-span-3">begin() configura; update() compara millis() en cada vuelta sin detener loop().</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="2">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Memoria</p>
+							<p class="slide__lede col-span-3">Los objetos con búfer en el heap se pasan por referencia.</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="3">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Integración</p>
+							<p class="slide__lede col-span-3">main.cpp coordina con un bool de modo; el backtrace localiza los fallos.</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="def">
+					<p>
+						<b>Documentación de referencia</b> ·
+						<a href="https://docs.platformio.org/en/latest/projectconf/sections/platformio/options/directory/lib_dir.html" target="_blank" rel="noopener">PlatformIO: carpeta lib/</a>
+						·
+						<a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/fatal-errors.html" target="_blank" rel="noopener">ESP-IDF: errores fatales</a>
+						·
+						<a href="https://docs.platformio.org/en/latest/core/userguide/device/cmd_monitor.html" target="_blank" rel="noopener">PlatformIO: monitor y filtros</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Revelar una idea por vez. Pregunta de predicción: antes de cada paso,
+					¿qué ejemplo de la sesión ilustra la idea siguiente? Respuesta: el
+					Led.h que declara y el Led.cpp que define, con <code>_state</code>
+					privado; los tres LED a 500, 800 y 1300 ms que conmutan sin
+					<code>delay()</code>; la copia de EntradaAnalogica que libera dos
+					veces el mismo búfer y la traza LoadProhibited que señala la línea;
+					el main del ejemplo 10, que coordina tres clases con un
+					<code>bool</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos de la sesión</h4>
+					<ul>
+						<li><b>Declaración / definición</b>: el <code>.h</code> declara nombres y tipos; el <code>.cpp</code> los implementa.</li>
+						<li><b>Guarda de inclusión</b>: <code>#ifndef LED_H</code> / <code>#define LED_H</code> / <code>#endif</code>.</li>
+						<li><b>Encapsulamiento</b>: miembros <code>private</code>, accesibles únicamente desde los métodos de la clase.</li>
+						<li><b>begin() / update()</b>: configurar una vez; avanzar un paso por vuelta sin esperar.</li>
+						<li><b>Antirrebote</b> (<i>debounce</i>): ignorar los cambios hasta 30 ms de señal estable.</li>
+						<li><b>Heap</b>: memoria que reserva <code>new</code> y libera <code>delete[]</code>.</li>
+						<li><b>Referencia</b> (<code>T&amp;</code>): otro nombre de un objeto existente, sin copia.</li>
+						<li><b>Backtrace</b>: pila de llamadas activa en el instante del pánico.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="21-errores-ejecucion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Errores en ejecución</span>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

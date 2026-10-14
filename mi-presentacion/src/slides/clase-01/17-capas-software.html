@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Capas de software · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Entorno de desarrollo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Cuatro capas entre digitalWrite() y el <em>registro</em>
+				</h1>
+
+				<fieldset class="rd capas crece" data-layer-picker aria-label="Capas de software, de la aplicación al hardware">
+					<button class="picker__item capa" type="button" data-index="0">
+						<span class="capa__nombre">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>Aplicación<span class="capa__sub">src/main.cpp</span></span>
+						</span>
+						<span>
+							<span class="capa__llamada">digitalWrite(2, HIGH);</span>
+							<span class="capa__donde">código propio</span>
+						</span>
+						<span class="capa__contiene">setup(), loop() y la lógica del proyecto</span>
+					</button>
+					<button class="picker__item capa" type="button" data-index="1">
+						<span class="capa__nombre">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+							<span>Núcleo de Arduino<span class="capa__sub">arduino-esp32</span></span>
+						</span>
+						<span data-paso="1">
+							<span class="capa__llamada">gpio_set_level(2, 1);</span>
+							<span class="capa__donde">esp32-hal-gpio.c</span>
+						</span>
+						<span class="capa__contiene">API común: pinMode, Serial, analogRead…</span>
+					</button>
+					<button class="picker__item capa" type="button" data-index="2">
+						<span class="capa__nombre">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-cpu" /></svg>
+							<span>ESP-IDF<span class="capa__sub">drivers · FreeRTOS</span></span>
+						</span>
+						<span data-paso="2">
+							<span class="capa__llamada">GPIO.out_w1ts = BIT(2);</span>
+							<span class="capa__donde">hal/gpio_ll.h</span>
+						</span>
+						<span class="capa__contiene">drivers, FreeRTOS y WiFi; se ejecuta <b>siempre</b>, también bajo Arduino</span>
+					</button>
+					<button class="picker__item capa" type="button" data-index="3">
+						<span class="capa__nombre">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+							<span>Hardware<span class="capa__sub">registros</span></span>
+						</span>
+						<span data-paso="3">
+							<span class="capa__llamada">GPIO_OUT_W1TS_REG</span>
+							<span class="capa__donde">0x3FF44008 · bit 2 → GPIO 2 a 3,3 V</span>
+						</span>
+						<span class="capa__contiene">registros mapeados en memoria que conmutan el terminal</span>
+					</button>
+				</fieldset>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: al llamar a <code>digitalWrite</code>, ¿qué capa
+					escribe en el hardware? El driver de ESP-IDF: la función de Arduino
+					delega en él, y el driver escribe un bit en un registro. Avanzar capa
+					por capa. Al final, señalar que ESP-IDF y su FreeRTOS se ejecutan
+					siempre, también en un proyecto Arduino, porque Arduino funciona sobre
+					ESP-IDF.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Una función de ESP-IDF se llama desde el mismo <code>main.cpp</code>:
+						<code>#include "driver/gpio.h"</code> y luego
+						<code>gpio_set_level(GPIO_NUM_2, 1)</code>.
+						<code>GPIO_OUT_W1TS_REG</code> (<i>write 1 to set</i>, 0x3FF44008)
+						pone en alto solo los bits escritos a 1, sin tocar las demás salidas;
+						<code>GPIO_OUT_W1TC_REG</code> los pone en bajo.
+					</p>
+					<h4>Arduino frente a ESP-IDF</h4>
+					<ul>
+						<li>Arduino: interfaz uniforme entre familias, menos código, no expone todos los parámetros de cada periférico.</li>
+						<li>ESP-IDF: entorno oficial de Espressif, drivers completos y configuración de tareas; más código y una curva de aprendizaje más larga.</li>
+					</ul>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Escribir el registro completo en vez de usar W1TS/W1TC apaga las
+						otras salidas del mismo puerto.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-codigo-04b-servo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 04b · Servo</span>
+				</a>
+				<a class="slide-nav__link" href="18-flujo-trabajo.html">
+					<span>Flujo de trabajo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			const items = document.querySelectorAll("[data-layer-picker] .picker__item");
+
+			function elegir(i) {
+				for (const it of items) it.classList.toggle("is-selected", Number(it.dataset.index) === i);
+			}
+
+			for (const it of items) it.addEventListener("click", () => elegir(Number(it.dataset.index)));
+			// Cada paso desciende una capa: la selección sigue al revelado.
+			document.addEventListener("paso", (e) => elegir(e.detail.mostrados));
+			// deck.js aplica los pasos antes de que corra este script (p. ej. al
+			// volver con #fin): se parte de la última capa ya revelada.
+			const revelados = [...document.querySelectorAll("[data-paso].is-shown")].map((el) => Number(el.dataset.paso));
+			elegir(Math.max(0, ...revelados));
+		</script>
+	</body>
+</html>

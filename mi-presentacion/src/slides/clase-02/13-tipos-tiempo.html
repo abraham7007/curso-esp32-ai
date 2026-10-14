@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tipos para guardar el tiempo · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Tiempo sin bloqueo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La <em>resta</em> sin signo tolera el desborde
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila s2c-cifras">
+						<div class="cifra">
+							<span class="cifra__valor">32<span class="cifra__unidad">bits</span></span>
+							<span class="cifra__que"><code>unsigned long</code> en el ESP32: de 0 a 4 294 967 295</span>
+						</div>
+						<div class="cifra cifra--navy">
+							<span class="cifra__valor">49<span class="s2c-coma">,</span>7<span class="cifra__unidad">días</span></span>
+							<span class="cifra__que">2<sup>32</sup> ms hasta que <code>millis()</code> vuelve a 0</span>
+						</div>
+						<div class="def">
+							<p>
+								Constante del mismo tipo que <code>millis()</code>:<br />
+								<code>static const unsigned long DEBOUNCE_DELAY = 30;</code>
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Tiempo transcurrido</span>
+								<input type="range" id="trans" min="0" max="900" step="10" value="200" />
+								<output id="trans-out" for="trans" class="s2c-ancho">200 ms</output>
+							</label>
+							<span class="lectura lectura--fin"><small>now − previo = </small><span id="l-resta" class="s2c-ancho">200</span><small> ms</small></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="desborde"
+								role="img"
+								aria-label="Tres registros de 32 bits: previo vale 4 294 967 000 y now, 200 ms después, 4 294 967 200. La resta sin signo now − previo da 200, el tiempo real, antes y después del desborde. La comparación now >= previo + 500 es verdadera porque previo + 500 desbordó a 204, y se cumple 300 ms antes de tiempo."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con <code>previo</code> guardado 296 ms antes
+					del desborde, 200 ms transcurridos y un período de 500 ms, ¿se cumple
+					<code>if (now &gt;= previo + 500)</code>?
+				</p>
+				<p>
+					Respuesta: sí, 300 ms antes de tiempo, porque <code>previo + 500</code>
+					desbordó y vale 204. La resta sin signo es aritmética módulo
+					2<sup>32</sup> y da 200, el tiempo real. Mover el deslizador más allá
+					del desborde (296 ms): <code>now</code> pasa a valer casi cero y
+					<code>now - previo</code> sigue dando el intervalo exacto. Con la resta,
+					<code>update()</code> da el mismo resultado el día 50 que el día 1; la
+					forma con suma falla una vez cada 49,7 días, un fallo difícil de
+					reproducir al depurar.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>millis()</code> devuelve <code>unsigned long</code>, de 32 bits en
+						el ESP32 (equivale a <code>uint32_t</code>). Guardar el instante previo
+						y los intervalos con ese mismo tipo, y comparar siempre
+						<code>now - previo &gt;= intervalo</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Todo equipo que funciona semanas sin reiniciarse: estaciones de
+						medida, controladores de riego, pasarelas.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Guardar <code>millis()</code> en <code>int</code>: con signo, pasa a negativo a los 24,9 días.</li>
+						<li>Comparar contra una suma: <code>now &gt;= previo + intervalo</code>.</li>
+						<li>Un <code>#define</code> sin tipo para la ventana, cuyo tipo depende de cada expresión.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-codigo-07-boton.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 07 · Botón</span>
+				</a>
+				<a class="slide-nav__link" href="14-codigo-08-intermitentes.html">
+					<span>Ejemplo 08 · Tres LED</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const M = 2 ** 32; // valores de un unsigned long de 32 bits
+			const PREVIO = 4294967000; // 296 ms antes del desborde
+			const INTERVALO = 500;
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const u32 = (x) => ((x % M) + M) % M;
+			const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+			const trans = document.getElementById("trans");
+			const transOut = document.getElementById("trans-out");
+			const lResta = document.getElementById("l-resta");
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function dibujar(ctx, w, h) {
+				const e = Number(trans.value);
+				const now = u32(PREVIO + e);
+				const resta = u32(now - PREVIO);
+				const limite = u32(PREVIO + INTERVALO);
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+				};
+				const fs = clamp(20, Math.min(h * 0.05, w * 0.016), 30);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				// ---------- Registros de 32 bits ----------
+				const pad = fs * 0.8;
+				const labW = fs * 8;
+				const valW = fs * 8.6;
+				const x0 = pad + labW;
+				const celdas = w - x0 - valW - pad;
+				const gap = fs * 0.35; // separación entre bytes
+				const cw = (celdas - 3 * gap) / 32;
+				const filaH = clamp(fs * 1.6, (h - pad * 2 - fs * 11.2) / 3, fs * 3.2);
+				const regs = [
+					["previo", PREVIO, c.navy, c.navySoft],
+					["now", now, c.acento, c.acentoSoft],
+					["now − previo", resta, c.ok, c.okSoft],
+				];
+				const yTop = pad;
+				texto(ctx, "bit 31", x0, yTop + fs * 0.5, fs * 0.85 < 20 ? 20 : fs * 0.85, c.muted, 500);
+				texto(ctx, "bit 0", x0 + celdas, yTop + fs * 0.5, 20, c.muted, 500, "right");
+				for (const [i, [nombre, v, col, soft]] of regs.entries()) {
+					const y = yTop + fs * 1.3 + i * (filaH + fs * 0.6);
+					texto(ctx, nombre, pad, y + filaH / 2, fs, col, 700);
+					const bits = v.toString(2).padStart(32, "0");
+					for (let b = 0; b < 32; b++) {
+						const x = x0 + b * cw + Math.floor(b / 8) * gap;
+						const uno = bits[b] === "1";
+						ctx.fillStyle = uno ? soft : c.sup;
+						ctx.fillRect(x + 1, y, cw - 2, filaH);
+						ctx.strokeStyle = uno ? col : c.borde;
+						ctx.lineWidth = uno ? 2 : 1;
+						ctx.strokeRect(x + 1, y, cw - 2, filaH);
+						texto(ctx, bits[b], x + cw / 2, y + filaH / 2 + 1, fs * 0.95, uno ? col : c.muted, uno ? 700 : 500, "center");
+					}
+					texto(ctx, miles(v), w - pad, y + filaH / 2, fs * 1.05, col, 700, "right");
+				}
+
+				// ---------- Recta del contador ----------
+				const yR = yTop + fs * 1.3 + 3 * (filaH + fs * 0.6) + fs * 2.6;
+				const E0 = -60;
+				const E1 = 960;
+				const rx0 = pad + labW;
+				const rx1 = w - pad - fs * 3;
+				const X = (ms) => rx0 + ((rx1 - rx0) * (ms - E0)) / (E1 - E0);
+				texto(ctx, "contador", pad, yR, fs, c.heading, 700);
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(X(E0), yR);
+				ctx.lineTo(X(296) - 4, yR);
+				ctx.moveTo(X(296) + 4, yR);
+				ctx.lineTo(X(E1), yR);
+				ctx.stroke();
+				// Desborde: corte de la recta
+				ctx.strokeStyle = c.warn;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(X(296), yR - fs * 1.1);
+				ctx.lineTo(X(296), yR + fs * 0.55);
+				ctx.stroke();
+				texto(ctx, "4 294 967 295 → 0", X(296), yR - fs * 1.7, fs * 0.95, c.warn, 700, "center");
+				// Intervalo transcurrido
+				ctx.fillStyle = c.okSoft;
+				ctx.fillRect(X(0), yR - fs * 0.45, X(e) - X(0), fs * 0.9);
+				// Marcas
+				const marca = (ms, col, arriba, etq) => {
+					ctx.fillStyle = col;
+					ctx.beginPath();
+					ctx.arc(X(ms), yR, fs * 0.4, 0, Math.PI * 2);
+					ctx.fill();
+					texto(ctx, etq, X(ms), yR + (arriba ? -fs * 1.25 : fs * 1.25), fs * 0.95, col, 700, "center");
+				};
+				texto(ctx, "previo", X(0), yR - fs * 1.25, fs * 0.95, c.navy, 700, "center");
+				ctx.fillStyle = c.navy;
+				ctx.beginPath();
+				ctx.arc(X(0), yR, fs * 0.4, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([5, 5]);
+				ctx.beginPath();
+				ctx.moveTo(X(INTERVALO), yR - fs * 0.9);
+				ctx.lineTo(X(INTERVALO), yR + fs * 0.9);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				texto(ctx, "+500 ms", X(INTERVALO), yR - fs * 1.25, fs * 0.95, c.muted, 700, "center");
+				marca(e, c.acento, false, "now");
+
+				// ---------- Las dos comprobaciones ----------
+				const yC = yR + fs * 3.2;
+				const bien = resta >= INTERVALO;
+				const ingenua = now >= limite;
+				const correcta = ingenua === bien;
+				texto(ctx, `now - previo >= 500  →  ${bien}`, pad, yC, fs, c.heading, 700);
+				texto(ctx, "✓ el intervalo real", pad + fs * 21, yC, fs, c.ok, 700, "left", SANS);
+				texto(ctx, `now >= previo + 500  →  ${ingenua}`, pad, yC + fs * 1.6, fs, c.heading, 700);
+				texto(
+					ctx,
+					correcta ? "✓ coincide en este caso" : `✗ previo + 500 desbordó a ${limite}; se cumple ${INTERVALO - e} ms antes`,
+					pad + fs * 21,
+					yC + fs * 1.6,
+					fs,
+					correcta ? c.muted : c.acento,
+					700,
+					"left",
+					SANS,
+				);
+
+				lResta.textContent = String(resta);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("desborde"), dibujar);
+			trans.addEventListener("input", () => {
+				transOut.textContent = `${trans.value} ms`;
+				lienzo.redibujar();
+			});
+		</script>
+	</body>
+</html>

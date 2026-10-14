@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Clase y objeto · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Clases y objetos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Los <em>objetos</em> de una clase comparten su código
+				</h1>
+
+				<div class="escenario s2-objetos">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Cada objeto guarda <b>sus</b> datos. El código de
+								<code>toggle()</code> es único y opera sobre el objeto invocado
+								(<code>this</code>).
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<button type="button" class="btn btn--secondary" data-obj="0">led.toggle()</button>
+							<button type="button" class="btn btn--secondary" data-obj="1">alarma.toggle()</button>
+							<span class="lectura lectura--fin" aria-live="polite">
+								<span data-lee="0">led.isOn() = true</span>
+								<span data-lee="1">alarma.isOn() = false</span>
+							</span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="objetos"
+								role="img"
+								aria-label="La clase Led a la izquierda y dos objetos a la derecha: led en el GPIO 2 y alarma en el GPIO 4, cada uno con su _pin y su _state. Llamar a toggle() sobre un objeto cambia únicamente su _state."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Antes de pulsar. Pregunta de predicción: si se llama a
+					<code>led.toggle()</code>, ¿cambia algo en <code>alarma</code>?
+					Respuesta: no. Pulsar varias veces uno de los botones; el
+					<code>_state</code> del otro objeto se mantiene. La flecha roja indica
+					a qué objeto apunta <code>this</code> en esa llamada. Cada objeto ocupa
+					2 bytes de SRAM (<code>_pin</code> y <code>_state</code>); el código de
+					los métodos está una vez en la Flash. <code>alarma</code> es un segundo
+					objeto ilustrativo; el ejemplo 06 crea únicamente <code>led</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>Led led(2);</code> llama al constructor
+						<code>Led::Led(uint8_t pin) : _pin(pin), _state(false)</code>. Dentro
+						de un método, <code>_state</code> significa
+						<code>this-&gt;_state</code>: el del objeto con el que se llamó.
+						<code>sizeof(Led)</code> vale 2.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 08: tres objetos <code>LedIntermitente</code> con periodos de
+						500, 800 y 1300 ms, cada uno con su propio instante de referencia.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Guardar el estado en una variable <code>static</code> o global dentro
+						de <code>Led.cpp</code>, que todos los objetos compartirían.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-lib-src.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>lib/ y src/</span>
+				</a>
+				<a class="slide-nav__link" href="07-encapsulamiento.html">
+					<span>Encapsulamiento</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// Estado inicial: el loop() ya llamó una vez a led.toggle().
+			const objetos = [
+				{ nombre: "led", pin: 2, state: true },
+				{ nombre: "alarma", pin: 4, state: false },
+			];
+			let ultimo = 0;
+			const METODOS = ["Led(uint8_t pin)", "begin()", "on()", "off()", "toggle()", "isOn() const"];
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function caja(ctx, x, y, w, h, relleno, borde, grosor = 2, r = 10) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				ctx.lineWidth = grosor;
+				ctx.strokeStyle = borde;
+				ctx.stroke();
+			}
+
+			function flecha(ctx, x1, y1, x2, y2, color, grosor, punta) {
+				const dx = (x2 - x1) * 0.5;
+				ctx.strokeStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.bezierCurveTo(x1 + dx, y1, x2 - dx, y2, x2, y2);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				ctx.fillStyle = color;
+				ctx.beginPath();
+				ctx.moveTo(x2, y2);
+				ctx.lineTo(x2 - punta, y2 - punta * 0.6);
+				ctx.lineTo(x2 - punta, y2 + punta * 0.6);
+				ctx.closePath();
+				ctx.fill();
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("objetos"), (ctx, w, h) => {
+				const fs = Math.max(20, Math.min(32, h * 0.05, w * 0.019));
+				const c = {
+					heading: token("--color-heading"),
+					texto: token("--color-text"),
+					muted: token("--color-text-muted"),
+					borde: token("--color-border"),
+					sup: token("--color-surface"),
+					sup2: token("--color-surface-2"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+				};
+				const pad = fs * 0.9;
+
+				// ---------- La clase (izquierda) ----------
+				const cw = Math.min(w * 0.3, fs * 15);
+				const cy = fs * 0.4;
+				const ch = h - fs * 0.8;
+				caja(ctx, 2, cy, cw - 4, ch, c.sup2, c.heading, 3, 14);
+				let y = cy + pad + fs * 0.4;
+				texto(ctx, "class Led", pad, y, fs * 1.35, c.acento, 700);
+				y += fs * 1.35;
+				texto(ctx, "se define una vez", pad, y, fs * 0.85, c.muted, 500, "left", SANS);
+				y += fs * 1.6;
+				texto(ctx, "datos · uno por objeto", pad, y, fs * 0.85, c.muted, 600, "left", SANS);
+				y += fs * 1.25;
+				texto(ctx, "_pin : uint8_t", pad, y, fs, c.heading);
+				y += fs * 1.35;
+				texto(ctx, "_state : bool", pad, y, fs, c.heading);
+				y += fs * 1.7;
+				texto(ctx, "métodos · una copia en Flash", pad, y, fs * 0.85, c.muted, 600, "left", SANS);
+				y += fs * 0.6;
+				const paso = (cy + ch - pad - y) / METODOS.length;
+				let yToggle = y;
+				for (const [i, m] of METODOS.entries()) {
+					const ym = y + paso * (i + 0.5);
+					if (m === "toggle()") {
+						yToggle = ym;
+						caja(ctx, pad * 0.5, ym - paso * 0.42, cw - pad * 1.2, paso * 0.84, c.acentoSoft, c.acento, 2, 6);
+					}
+					texto(ctx, m, pad, ym, fs, m === "toggle()" ? c.acento : c.heading, m === "toggle()" ? 700 : 600);
+				}
+
+				// ---------- Los objetos (derecha) ----------
+				const ox = cw + Math.max(fs * 9, w * 0.15);
+				const ow = w - ox - 2;
+				const gap = fs * 1.2;
+				const oh = (h - gap - fs * 0.8) / 2;
+				for (const [i, o] of objetos.entries()) {
+					const oy = cy + i * (oh + gap);
+					const activo = i === ultimo;
+					caja(ctx, ox, oy, ow, oh, c.sup, activo ? c.acento : c.borde, activo ? 4 : 2, 14);
+
+					// Encabezado: la declaración que lo creó.
+					texto(ctx, `Led ${o.nombre}(${o.pin});`, ox + pad, oy + pad + fs * 0.4, fs * 1.2, c.heading, 700);
+					texto(ctx, "2 bytes en SRAM", ox + ow - pad, oy + pad + fs * 0.4, fs * 0.85, c.muted, 500, "right", SANS);
+
+					// Sus datos, grandes.
+					const fy = oy + oh * 0.55;
+					const big = Math.min(fs * 1.5, oh * 0.2);
+					texto(ctx, "_pin", ox + pad, fy - big * 0.75, big, c.muted, 600);
+					texto(ctx, `= ${o.pin}`, ox + pad + big * 4.2, fy - big * 0.75, big, c.heading, 700);
+					texto(ctx, "_state", ox + pad, fy + big * 0.85, big, c.muted, 600);
+					texto(ctx, `= ${o.state}`, ox + pad + big * 4.2, fy + big * 0.85, big, o.state ? c.ok : c.heading, 700);
+
+					// El LED de su pin.
+					const r = Math.min(oh * 0.26, ow * 0.09);
+					const lx = ox + ow - pad - r * 1.4;
+					const ly = oy + oh * 0.5 + fs * 0.3;
+					ctx.save();
+					if (o.state) {
+						ctx.shadowColor = c.acento;
+						ctx.shadowBlur = r * 0.8;
+					}
+					ctx.beginPath();
+					ctx.arc(lx, ly, r, 0, Math.PI * 2);
+					ctx.fillStyle = o.state ? c.acento : c.sup2;
+					ctx.fill();
+					ctx.restore();
+					ctx.lineWidth = 3;
+					ctx.strokeStyle = c.heading;
+					ctx.beginPath();
+					ctx.arc(lx, ly, r, 0, Math.PI * 2);
+					ctx.stroke();
+					texto(ctx, `GPIO ${o.pin}`, lx, ly + r + fs * 0.8, fs * 0.9, c.heading, 700, "center");
+
+					// Instancia: del molde al encabezado de cada objeto.
+					ctx.setLineDash([8, 8]);
+					flecha(ctx, cw, cy + fs * (1.4 + i * 1.3), ox - 4, oy + pad + fs * 0.4, c.muted, 2, fs * 0.45);
+				}
+
+				// La última llamada: this apunta al objeto que la hizo.
+				const yFin = cy + ultimo * (oh + gap) + oh * 0.72;
+				flecha(ctx, cw - pad * 0.7, yToggle, ox - 4, yFin, c.acento, 4, fs * 0.6);
+				// this se rotula dentro de la fila de toggle(): no se confunde con
+				// las flechas de instancia.
+				texto(ctx, `this = &${objetos[ultimo].nombre}`, cw - pad * 1.1, yToggle, fs * 0.85, c.acento, 700, "right");
+			});
+
+			const botones = document.querySelectorAll("[data-obj]");
+			const lecturas = document.querySelectorAll("[data-lee]");
+
+			function pintar() {
+				for (const [i, o] of objetos.entries()) {
+					lecturas[i].textContent = `${o.nombre}.isOn() = ${o.state}`;
+					botones[i].classList.toggle("btn--primary", i === ultimo);
+					botones[i].classList.toggle("btn--secondary", i !== ultimo);
+				}
+				lienzo.redibujar();
+			}
+
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					const i = Number(b.dataset.obj);
+					objetos[i].state = !objetos[i].state;
+					ultimo = i;
+					pintar();
+				});
+			}
+			pintar();
+		</script>
+	</body>
+</html>

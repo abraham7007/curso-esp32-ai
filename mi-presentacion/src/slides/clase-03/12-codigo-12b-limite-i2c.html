@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 12b · Una dirección · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 12b</span>
+					</div>
+
+					<h2 class="code-hour__title">Tres sensores iguales en el bus responden como uno solo</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">El firmware del Ejemplo 12.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Tres BMP180 en paralelo.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Conexión del bus y flujo.</span>
+								<span class="deliverable__file">diagrama-conexion-i2c.excalidraw · diagrama-flujo-escaneo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Ejecutar el escáner del Ejemplo 12, sin cambiar el firmware, con tres BMP180 en el bus y contar cuántos encuentra.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Tres BMP180 en el mismo bus, a 3V3 y GND. Sin pull-ups externas: cada módulo trae las suyas.</p>
+								<svg class="s3-esquema" role="img" aria-label="Bus I²C: ESP32 con 3V3, SDA (GPIO 21), SCL (GPIO 22) y GND hasta BMP180 en 0x77, BMP180 en 0x77, BMP180 en 0x77" viewBox="0 0 470 172" width="470" height="172"><rect class="s3-esq__caja" x="1" y="1" width="99" height="170" rx="6" /><text class="s3-esq__tit" x="50" y="26" text-anchor="middle">ESP32</text><text class="s3-esq__pin" x="92" y="86" text-anchor="end">3V3</text><path class="s3-esq__vcc" d="M100 80 H468" /><circle class="s3-esq__pv" cx="100" cy="80" r="3.5" /><text class="s3-esq__pin" x="92" y="111" text-anchor="end">SDA 21</text><path class="s3-esq__a" d="M100 105 H468" /><circle class="s3-esq__pa" cx="100" cy="105" r="3.5" /><text class="s3-esq__pin" x="92" y="136" text-anchor="end">SCL 22</text><path class="s3-esq__b" d="M100 130 H468" /><circle class="s3-esq__pb" cx="100" cy="130" r="3.5" /><text class="s3-esq__pin" x="92" y="161" text-anchor="end">GND</text><path class="s3-esq__gnd" d="M100 155 H468" /><circle class="s3-esq__pg" cx="100" cy="155" r="3.5" /><rect class="s3-esq__caja" x="122" y="1" width="100" height="55" rx="6" /><text class="s3-esq__tit" x="172" y="24" text-anchor="middle">BMP180</text><text class="s3-esq__sub" x="172" y="46" text-anchor="middle">0x77</text><path class="s3-esq__vcc" d="M142 56 V80" /><circle class="s3-esq__pv" cx="142" cy="80" r="3.5" /><path class="s3-esq__a" d="M162 56 V105" /><circle class="s3-esq__pa" cx="162" cy="105" r="3.5" /><path class="s3-esq__b" d="M182 56 V130" /><circle class="s3-esq__pb" cx="182" cy="130" r="3.5" /><path class="s3-esq__gnd" d="M202 56 V155" /><circle class="s3-esq__pg" cx="202" cy="155" r="3.5" /><rect class="s3-esq__caja" x="238" y="1" width="100" height="55" rx="6" /><text class="s3-esq__tit" x="288" y="24" text-anchor="middle">BMP180</text><text class="s3-esq__sub" x="288" y="46" text-anchor="middle">0x77</text><path class="s3-esq__vcc" d="M258 56 V80" /><circle class="s3-esq__pv" cx="258" cy="80" r="3.5" /><path class="s3-esq__a" d="M278 56 V105" /><circle class="s3-esq__pa" cx="278" cy="105" r="3.5" /><path class="s3-esq__b" d="M298 56 V130" /><circle class="s3-esq__pb" cx="298" cy="130" r="3.5" /><path class="s3-esq__gnd" d="M318 56 V155" /><circle class="s3-esq__pg" cx="318" cy="155" r="3.5" /><rect class="s3-esq__caja" x="354" y="1" width="100" height="55" rx="6" /><text class="s3-esq__tit" x="404" y="24" text-anchor="middle">BMP180</text><text class="s3-esq__sub" x="404" y="46" text-anchor="middle">0x77</text><path class="s3-esq__vcc" d="M374 56 V80" /><circle class="s3-esq__pv" cx="374" cy="80" r="3.5" /><path class="s3-esq__a" d="M394 56 V105" /><circle class="s3-esq__pa" cx="394" cy="105" r="3.5" /><path class="s3-esq__b" d="M414 56 V130" /><circle class="s3-esq__pb" cx="414" cy="130" r="3.5" /><path class="s3-esq__gnd" d="M434 56 V155" /><circle class="s3-esq__pg" cx="434" cy="155" r="3.5" /></svg>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+Iniciando escaneo del bus I2C (SDA=21, SCL=22)
+[I2C] dispositivo en 0x77
+[I2C] 1 dispositivo encontrado</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Duplica el proyecto del Ejemplo 12 como proyecto nuevo de PlatformIO para esp32dev con Arduino: el firmware no cambia.
+
+<b>2. Firmware.</b> Ninguna modificación: el mismo barrido de 0x08 a 0x77 con Wire.begin(21, 22), la misma traza y el mismo ciclo de 5 s.
+
+<b>3. Simulación.</b> En Wokwi, sustituye la OLED y el BMP180 por tres BMP180 en paralelo en SDA 21 y SCL 22, todos a 3V3 y GND, sin pull-ups externas.
+
+<b>4. Diagramas.</b> En Excalidraw: la conexión de los tres sensores con la dirección 0x77 rotulada en cada uno; el flujo del escaneo es el del Ejemplo 12.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Con el firmware intacto, un cambio en la cuenta solo puede venir del montaje. Rotular 0x77 en los tres sensores hace visible el conflicto antes de ejecutar.
+								</p>
+							</div>
+							<p class="s3-remedio">
+									Los tres sensores comparten la dirección <b>0x77</b>. Alternativas: BMP280 (0x76 o 0x77), multiplexor TCA9548A o un segundo bus, <code>Wire1</code>.
+							</p>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Para el maestro, tres sensores en 0x77 son uno solo; cada dirección del bus debe ser única.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción, antes de ejecutar: ¿cuántos dispositivos contará el escáner? Respuesta: uno; es frecuente que la clase responda 3. Los tres contestan ACK a la vez sobre la misma línea de drenador abierto y el maestro ve un único ACK; si después leyera datos, las tres respuestas se mezclarían en SDA. El BMP180 no tiene pin para cambiar su dirección. Las pull-ups de los tres módulos quedan en paralelo: unos 1,6 kΩ si cada uno trae 4,7 kΩ.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>El TCA9548A, en 0x70 por defecto, abre uno de ocho sub-buses cada vez. El ESP32 tiene dos controladores I²C: <code>Wire1.begin(sda, scl)</code> crea un segundo bus en otros pines. El BMP280 elige 0x76 o 0x77 con su pin SDO.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Creer que el escáner falla: cuenta direcciones, no módulos.</li><li>Cambiar el orden del cableado esperando otra dirección: la fija el chip.</li><li>Añadir pull-ups externas sobre las de los módulos: la resistencia equivalente baja aún más.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-codigo-12-escaner.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 12 · Escáner</span>
+				</a>
+				<a class="slide-nav__link" href="13-maestro-esclavo.html">
+					<span>Roles</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

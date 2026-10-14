@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Serie, sincronía y dúplex · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Enlace serie</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Transmisión serie, sincronía y <em>dúplex</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto">
+						<ol class="s3a-etapas" aria-label="Las tres comparaciones de la animación">
+							<li data-etapa="0">1 · Serie frente a paralelo</li>
+							<li data-etapa="1" data-paso="1">2 · Con reloj o sin reloj</li>
+							<li data-etapa="2" data-paso="2">3 · Símplex, semidúplex, dúplex</li>
+						</ol>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="lienzo-caja">
+							<canvas
+								id="enlace"
+								role="img"
+								aria-label="Animación en tres pasos. Uno: el byte 0x48, letra H, cruza en paralelo por ocho hilos de una vez, y en serie por un solo hilo, bit a bit, empezando por el menos significativo. Dos: en el enlace síncrono el receptor lee el dato en cada flanco de subida del reloj compartido; en el asíncrono no hay reloj y el receptor cuenta tiempos de bit de 8,7 microsegundos a 115 200 baudios desde el bit de inicio. Tres: símplex transmite siempre de A a B; semidúplex usa un solo hilo por turnos, como SDA en I2C; dúplex usa dos hilos a la vez, como TX y RX en UART"
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes del primer paso: si en paralelo pasa un
+					byte entero de una vez, ¿por qué casi todos los enlaces entre placas son
+					serie? Respuesta: en cables largos los ocho hilos no llegan a la vez
+					(desfase) y ocupan pines; un hilo único no tiene ese problema. Segundo
+					paso: sin reloj, el receptor solo puede contar tiempo desde el flanco de
+					inicio, por eso UART exige la misma velocidad en ambos extremos. Tercer
+					paso: UART es dúplex porque TX y RX son hilos distintos; I²C es semidúplex
+					porque SDA es una sola línea.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<ul>
+						<li>UART: asíncrono y dúplex; <code>Serial2.write()</code> y <code>Serial2.read()</code> funcionan a la vez.</li>
+						<li>I²C: síncrono (SCL) y semidúplex; el maestro escribe o lee, nunca ambas a la vez.</li>
+						<li>SPI: síncrono (SCLK) y dúplex; <code>SPI.transfer(b)</code> envía un byte y devuelve el que llegó en el mismo reloj.</li>
+					</ul>
+					<h4>El orden de los bits</h4>
+					<p>
+						UART envía primero el bit menos significativo (LSB): 0x48 =
+						0100 1000 sale como 0 0 0 1 0 0 1 0.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Asociar «asíncrono» con «lento» o «sin orden»; el término indica que
+						no hay hilo de reloj.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-acuerdos-del-enlace.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Acuerdos</span>
+				</a>
+				<a class="slide-nav__link" href="04-trama-uart.html">
+					<span>Trama UART</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// 'H' = 0x48 = 0100 1000; en serie sale primero el LSB.
+			const BITS_LSB = [0, 0, 0, 1, 0, 0, 1, 0];
+			const etapas = document.querySelectorAll(".s3a-etapas > li");
+			let etapa = 0;
+			// Cada paso se anima una sola vez (s) y se queda en su estado final.
+			const DURACION = [2.2 + 7 * 0.55 + 0.2, 4.5, 4.6];
+			let enMarcha = false;
+			let t = 0;
+			let previo = performance.now();
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function caja(ctx, x, y, w, h, relleno, borde, grosor = 3, r = 10) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				ctx.lineWidth = grosor;
+				ctx.strokeStyle = borde;
+				ctx.stroke();
+			}
+
+			function linea(ctx, puntos, color, grosor) {
+				ctx.strokeStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.lineJoin = "round";
+				ctx.beginPath();
+				ctx.moveTo(puntos[0][0], puntos[0][1]);
+				for (const [x, y] of puntos.slice(1)) ctx.lineTo(x, y);
+				ctx.stroke();
+			}
+
+			// Onda digital: valores 0/1, ancho de bit bw, desde x0.
+			function onda(ctx, x0, yAlto, yBajo, bits, bw, color, grosor) {
+				const pts = [];
+				let prev = null;
+				bits.forEach((b, i) => {
+					const y = b ? yAlto : yBajo;
+					const x = x0 + i * bw;
+					if (prev !== null && prev !== b) pts.push([x, prev ? yAlto : yBajo]);
+					pts.push([x, y]);
+					pts.push([x + bw, y]);
+					prev = b;
+				});
+				linea(ctx, pts, color, grosor);
+			}
+
+			function chip(ctx, x, y, s, bit, c) {
+				caja(ctx, x - s / 2, y - s / 2, s, s, bit ? c.acento : c.sup, c.acento, 3, 6);
+				texto(ctx, String(bit), x, y + 1, s * 0.62, bit ? c.contraste : c.acento, 700, "center");
+			}
+
+			// ---------- Etapa 1: paralelo frente a serie ----------
+			function dibujarSerie(ctx, w, h, fs, c) {
+				const mitad = w / 2;
+				const VIAJE = 2.2; // s que tarda un bit en cruzar
+				const tc = t;
+				const s = Math.min(fs * 1.5, h * 0.075);
+
+				for (const lado of [0, 1]) {
+					const x0 = lado * mitad + (lado ? fs : 0);
+					const ancho = mitad - fs * 1.5;
+					const top = fs * 0.9;
+					const bajo = h - fs * 3.4;
+					texto(ctx, lado ? "Serie · 1 hilo" : "Paralelo · 8 hilos", x0, top, fs * 1.15, c.heading, 700, "left", SANS);
+					const bw = fs * 3.4;
+					const yA = top + fs * 1.4;
+					const altoCaja = bajo - yA;
+					caja(ctx, x0, yA, bw, altoCaja, c.sup2, c.heading, 3);
+					caja(ctx, x0 + ancho - bw, yA, bw, altoCaja, c.sup2, c.heading, 3);
+					texto(ctx, "A", x0 + bw / 2, yA + fs * 1, fs * 1.1, c.heading, 700, "center");
+					texto(ctx, "B", x0 + ancho - bw / 2, yA + fs * 1, fs * 1.1, c.heading, 700, "center");
+					const xa = x0 + bw;
+					const xb = x0 + ancho - bw;
+					const recorrido = xb - xa;
+					const yLineas = yA + fs * 2.4;
+					const altoLineas = bajo - yLineas - fs * 0.8;
+
+					if (!lado) {
+						const paso = altoLineas / 8;
+						const llega = tc >= VIAJE;
+						for (let i = 0; i < 8; i++) {
+							const y = yLineas + paso * (i + 0.5);
+							linea(ctx, [[xa, y], [xb, y]], c.borde, 3);
+							texto(ctx, `D${i}`, xa - fs * 0.4, y, fs * 0.72, c.muted, 600, "right");
+							if (!llega) chip(ctx, xa + s * 0.8 + (recorrido - s * 1.6) * (tc / VIAJE), y, Math.min(s, paso * 0.85), BITS_LSB[i], c);
+						}
+						texto(ctx, llega ? "0x48" : "…", xb + bw / 2, yLineas + altoLineas * 0.45, fs, c.ok, 700, "center");
+						texto(ctx, llega ? "'H'" : "", xb + bw / 2, yLineas + altoLineas * 0.45 + fs * 1.3, fs, c.ok, 700, "center");
+						texto(ctx, "8 bits de una vez, en 8 hilos que deben", x0, h - fs * 2.2, fs * 0.85, c.text, 500, "left", SANS);
+						texto(ctx, "llegar juntos: uso dentro de la placa", x0, h - fs * 1, fs * 0.85, c.text, 500, "left", SANS);
+					} else {
+						const y = yLineas + altoLineas / 2;
+						linea(ctx, [[xa, y], [xb, y]], c.borde, 3);
+						const vel = recorrido / VIAJE;
+						const recibidos = [];
+						for (let k = 0; k < 8; k++) {
+							const tk = tc - k * 0.55;
+							if (tk < 0) continue;
+							const x = xa + s * 0.8 + vel * tk;
+							if (x > xb - s * 0.8) recibidos.push(BITS_LSB[k]);
+							else chip(ctx, x, y, s, BITS_LSB[k], c);
+						}
+						// Bits que llegan a B: b0 arriba, como D0 en paralelo.
+						const n = recibidos.length;
+						for (let k = 0; k < 8; k++) {
+							const yy = yLineas + (altoLineas / 8) * (k + 0.5);
+							texto(ctx, k < n ? String(recibidos[k]) : "·", xb + bw / 2, yy, fs * 0.9, k < n ? c.ok : c.muted, 700, "center");
+						}
+						texto(ctx, `${n}/8 bits`, (xa + xb) / 2, y - s * 1.3, fs * 0.9, c.acento, 700, "center");
+						texto(ctx, "8 tiempos de bit, LSB primero,", x0, h - fs * 2.2, fs * 0.85, c.text, 500, "left", SANS);
+						texto(ctx, "pero un solo hilo (más masa)", x0, h - fs * 1, fs * 0.85, c.text, 500, "left", SANS);
+					}
+				}
+				linea(ctx, [[mitad, fs * 0.2], [mitad, h - fs * 0.2]], c.borde, 2);
+			}
+
+			// ---------- Etapa 2: síncrono frente a asíncrono ----------
+			function dibujarReloj(ctx, w, h, fs, c) {
+				const mitad = w / 2;
+				const prog = Math.min(1, t / DURACION[1]);
+				for (const lado of [0, 1]) {
+					const x0 = lado * mitad + (lado ? fs : 0);
+					const ancho = mitad - fs * 1.5;
+					texto(ctx, lado ? "Asíncrono · sin reloj (UART)" : "Síncrono · reloj compartido (I²C, SPI)", x0, fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS);
+					const xi = x0 + fs * 4.4;
+					const util = ancho - fs * 4.4;
+					const amp = Math.min(h * 0.16, fs * 3.6);
+					const cursorX = xi + util * prog;
+					// El cursor solo recorre las ondas: no cruza los rótulos.
+					let cursorY = [0, 0];
+
+					if (!lado) {
+						const bw = util / 8;
+						const yC = h * 0.15;
+						const yD = h * 0.46;
+						texto(ctx, "reloj", x0, yC + amp / 2, fs * 0.9, c.navy, 700);
+						cursorY = [yC - fs * 0.3, yD + amp + fs * 0.3];
+						texto(ctx, "datos", x0, yD + amp / 2, fs * 0.9, c.acento, 700);
+						const reloj = [];
+						for (let i = 0; i < 8; i++) reloj.push(0, 1);
+						onda(ctx, xi, yC, yC + amp, reloj, bw / 2, c.navy, 4);
+						onda(ctx, xi, yD, yD + amp, BITS_LSB, bw, c.acento, 4);
+						for (let i = 0; i < 8; i++) {
+							const x = xi + bw * (i + 0.5);
+							if (x > cursorX) break;
+							ctx.setLineDash([6, 6]);
+							linea(ctx, [[x, yC], [x, yD + amp]], c.muted, 2);
+							ctx.setLineDash([]);
+							ctx.fillStyle = c.ok;
+							ctx.beginPath();
+							ctx.arc(x, BITS_LSB[i] ? yD : yD + amp, fs * 0.32, 0, Math.PI * 2);
+							ctx.fill();
+						}
+						texto(ctx, "lee en cada flanco de subida", x0, h - fs * 2.4, fs * 0.9, c.text, 500, "left", SANS);
+						texto(ctx, "del reloj: no hace falta acordar velocidad", x0, h - fs * 1.1, fs * 0.9, c.text, 500, "left", SANS);
+					} else {
+						const bits = [1, 0, ...BITS_LSB, 1];
+						const bw = util / bits.length;
+						const yD = h * 0.38;
+						texto(ctx, "datos", x0, yD + amp / 2, fs * 0.9, c.acento, 700);
+						onda(ctx, xi, yD, yD + amp, bits, bw, c.acento, 4);
+						texto(ctx, "inicio", xi + bw * 1.5, yD + amp + fs * 1, fs * 0.75, c.navy, 700, "center");
+						cursorY = [yD - fs * 1.6, yD + amp + fs * 0.3];
+						texto(ctx, "parada", xi + bw * 10.5, yD + amp + fs * 1, fs * 0.75, c.navy, 700, "center");
+						// Reloj propio del receptor: arranca en el flanco del bit de inicio.
+						for (let i = 1; i < bits.length; i++) {
+							const x = xi + bw * (i + 0.5);
+							if (x > cursorX) break;
+							ctx.setLineDash([6, 6]);
+							linea(ctx, [[x, yD - fs * 1.6], [x, yD + amp]], c.muted, 2);
+							ctx.setLineDash([]);
+							ctx.fillStyle = c.ok;
+							ctx.beginPath();
+							ctx.arc(x, bits[i] ? yD : yD + amp, fs * 0.32, 0, Math.PI * 2);
+							ctx.fill();
+						}
+						const yT = yD - fs * 2.4;
+						// Cota con topes: un tiempo de bit entre dos muestras.
+						const tope = fs * 0.35;
+						linea(ctx, [[xi + bw * 1.5, yT], [xi + bw * 2.5, yT]], c.heading, 3);
+						linea(ctx, [[xi + bw * 1.5, yT - tope], [xi + bw * 1.5, yT + tope]], c.heading, 3);
+						linea(ctx, [[xi + bw * 2.5, yT - tope], [xi + bw * 2.5, yT + tope]], c.heading, 3);
+						texto(ctx, "T = 8,7 µs", xi + bw * 2.7, yT, fs * 0.8, c.heading, 700, "left");
+						texto(ctx, "cuenta T = 1/115 200 s desde el", x0, h - fs * 2.4, fs * 0.9, c.text, 500, "left", SANS);
+						texto(ctx, "flanco de inicio: ambos, misma velocidad", x0, h - fs * 1.1, fs * 0.9, c.text, 500, "left", SANS);
+					}
+					if (prog < 1) {
+						ctx.setLineDash([3, 5]);
+						linea(ctx, [[cursorX, cursorY[0]], [cursorX, cursorY[1]]], c.heading, 2);
+						ctx.setLineDash([]);
+					}
+				}
+				linea(ctx, [[mitad, fs * 0.2], [mitad, h - fs * 0.2]], c.borde, 2);
+			}
+
+			// ---------- Etapa 3: símplex, semidúplex, dúplex ----------
+			function dibujarSentido(ctx, w, h, fs, c) {
+				const FILAS = [
+					["Símplex", "un sentido fijo · GPS que solo emite"],
+					["Semidúplex", "un hilo por turnos · SDA en I²C"],
+					["Dúplex", "dos hilos a la vez · TX y RX en UART"],
+				];
+				const alto = h / 3;
+				const xa = w * 0.34;
+				const bw = fs * 3;
+				const xb = w - bw - 3;
+				const s = Math.min(fs * 1.2, alto * 0.22);
+				const VIAJE = 1.6;
+				FILAS.forEach(([n, q], i) => {
+					const y0 = alto * i;
+					const yc = y0 + alto / 2;
+					texto(ctx, n, 0, yc - fs * 0.75, fs * 1.2, c.heading, 700, "left", SANS);
+					texto(ctx, q, 0, yc + fs * 0.75, fs * 0.85, c.muted, 500, "left", SANS);
+					const bh = alto * 0.68;
+					caja(ctx, xa, yc - bh / 2, bw, bh, c.sup2, c.heading, 3);
+					caja(ctx, xb, yc - bh / 2, bw, bh, c.sup2, c.heading, 3);
+					texto(ctx, "A", xa + bw / 2, yc, fs * 1.1, c.heading, 700, "center");
+					texto(ctx, "B", xb + bw / 2, yc, fs * 1.1, c.heading, 700, "center");
+					const x1 = xa + bw;
+					const x2 = xb;
+					const L = x2 - x1 - s * 1.6;
+					// Hilo con punta de flecha en el extremo que recibe.
+					const hilo = (y, ida, vuelta) => {
+						linea(ctx, [[x1, y], [x2, y]], c.muted, 3);
+						const pt = fs * 0.55;
+						ctx.fillStyle = c.muted;
+						for (const [x, d] of [[x2, 1], [x1, -1]]) {
+							if ((d === 1 && !ida) || (d === -1 && !vuelta)) continue;
+							ctx.beginPath();
+							ctx.moveTo(x, y);
+							ctx.lineTo(x - d * pt, y - pt * 0.6);
+							ctx.lineTo(x - d * pt, y + pt * 0.6);
+							ctx.fill();
+						}
+					};
+					// Un paquete que sale en t0 y cruza una sola vez.
+					const paquete = (y, ida, color, t0) => {
+						const p = (t - t0) / VIAJE;
+						if (p <= 0 || p >= 1) return;
+						const x = ida ? x1 + s * 0.8 + L * p : x2 - s * 0.8 - L * p;
+						caja(ctx, x - s / 2, y - s / 2, s, s, color, color, 2, 6);
+					};
+					const rotulo = (txt, color) =>
+						texto(ctx, txt, (x1 + x2) / 2, yc - alto * 0.3, fs * 0.85, color, 700, "center");
+					if (i === 0) {
+						hilo(yc, true, false);
+						for (let k = 0; k < 4; k++) paquete(yc, true, c.acento, k * 0.5);
+						rotulo("solo de A a B", c.acento);
+					} else if (i === 1) {
+						hilo(yc, true, true);
+						for (let k = 0; k < 2; k++) paquete(yc, true, c.acento, k * 0.5);
+						for (let k = 0; k < 2; k++) paquete(yc, false, c.navy, 2.3 + k * 0.5);
+						if (t < 2.2) rotulo("turno de A", c.acento);
+						else if (t < 4.4) rotulo("turno de B", c.navy);
+						else rotulo("A y B se turnan", c.heading);
+					} else {
+						const d = alto * 0.16;
+						hilo(yc - d, true, false);
+						hilo(yc + d, false, true);
+						rotulo("los dos a la vez", c.heading);
+						for (let k = 0; k < 4; k++) {
+							paquete(yc - d, true, c.acento, k * 0.5);
+							paquete(yc + d, false, c.navy, k * 0.5 + 0.25);
+						}
+					}
+					if (i < 2) linea(ctx, [[0, y0 + alto], [w, y0 + alto]], c.borde, 2);
+				});
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("enlace"), (ctx, w, h) => {
+				const fs = Math.max(22, Math.min(32, h * 0.045, w * 0.018));
+				const c = {
+					heading: token("--color-heading"),
+					text: token("--color-text"),
+					muted: token("--color-text-muted"),
+					borde: token("--color-border"),
+					sup: token("--color-surface"),
+					sup2: token("--color-surface-2"),
+					ok: token("--color-ok"),
+					acento: token("--color-accent"),
+					contraste: token("--color-accent-contrast"),
+					navy: token("--color-navy"),
+				};
+				if (etapa === 0) dibujarSerie(ctx, w, h, fs, c);
+				else if (etapa === 1) dibujarReloj(ctx, w, h, fs, c);
+				else dibujarSentido(ctx, w, h, fs, c);
+			});
+
+			function fijarEtapa(n) {
+				etapa = n;
+				t = 0;
+				for (const li of etapas) li.classList.toggle("is-actual", Number(li.dataset.etapa) === n);
+				lienzo.redibujar();
+				arrancar();
+			}
+
+			const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			function avanzar(ahora) {
+				t = Math.min(DURACION[etapa], t + Math.min(0.1, (ahora - previo) / 1000));
+				previo = ahora;
+				lienzo.redibujar();
+				if (t < DURACION[etapa]) requestAnimationFrame(avanzar);
+				else enMarcha = false;
+			}
+			function arrancar() {
+				if (reducido) {
+					t = DURACION[etapa];
+					lienzo.redibujar();
+					return;
+				}
+				if (enMarcha) return;
+				enMarcha = true;
+				previo = performance.now();
+				requestAnimationFrame(avanzar);
+			}
+
+			document.addEventListener("paso", (e) => fijarEtapa(e.detail.mostrados));
+			// Al volver con #fin, deck.js ya mostró los pasos antes de este script.
+			fijarEtapa(document.querySelectorAll(".s3a-etapas > li.is-shown").length);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pulso de control de un servo · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Terminales de entrada y salida</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Posición del servo según el <em>ancho</em> del pulso
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								El LEDC genera el pulso y el servo mide su duración, repetida cada 20 ms (50 Hz). 1 ms → 0° · 2 ms → 180°.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta" data-paso="1">
+							<code>duty = pulso × 65535 / 20000</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Ángulo</span>
+								<input type="range" id="ang" min="0" max="180" step="1" value="45" />
+								<output id="ang-out" for="ang">45°</output>
+							</label>
+							<span class="lectura"><small>pulso </small><span id="l-pulso">1250 µs</span></span>
+							<span class="lectura"><small>duty (16 bits) </small><span id="l-duty">4095</span></span>
+							<span class="lectura"><small>D </small><span id="l-d">6,25 %</span></span>
+						</div>
+						<div class="lienzo-caja"><canvas id="servo" aria-label="Pulso de control y posición del brazo del servo"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Enlazar con la lámina anterior. El valor medio que recibe el servo es
+					del 5–10 % de 3,3 V, y el servo no responde a él. Pregunta de
+					predicción: para pasar de 0° a 180°, ¿cuánto debe crecer el pulso?
+					Crece 1 ms de cada 20.
+				</p>
+				<p>
+					Con 16 bits, 1 ms equivale a unos 3277 pasos de duty, unos 18 pasos por
+					grado; con 8 bits el recorrido completo cabría en unos 13 valores. Por
+					eso se usan 16 bits.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Ejemplo 04b: servo en GPIO 18, <code>ledcAttach(18, 50, 16)</code>
+						(Core 3.x) o <code>ledcSetup(0, 50, 16)</code> +
+						<code>ledcAttachPin(18, 0)</code> (Core 2.x). El ángulo se convierte
+						con <code>map(angulo, 0, 180, 1000, 2000)</code> y luego a duty:
+						3276 (0°) a 6553 (180°).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Alimentar el servo desde el pin de 3,3 V de la placa: el arranque del motor provoca reinicios. Usar 5 V aparte con tierra común.</li>
+						<li>Suponer 1–2 ms exactos: muchos servos usan 0,5–2,5 ms; ajustar los límites al modelo.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-04-pwm-ledc.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 04 · Brillo por PWM</span>
+				</a>
+				<a class="slide-nav__link" href="16-codigo-04b-servo.html">
+					<span>Ejemplo 04b · Servo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const PERIODO_US = 20000;
+			const ang = document.getElementById("ang");
+			const angOut = document.getElementById("ang-out");
+			const lPulso = document.getElementById("l-pulso");
+			const lDuty = document.getElementById("l-duty");
+			const lD = document.getElementById("l-d");
+
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+			const MONO = "'IBM Plex Mono', monospace";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			// Misma aritmética entera que el Ejemplo 04b (map de Arduino trunca).
+			const pulsoDe = (a) => 1000 + Math.trunc((a * 1000) / 180);
+			const dutyDe = (p) => Math.trunc((p * 65535) / PERIODO_US);
+
+			function pulso(ctx, toX, yHi, yLo, t0, t1, ancho) {
+				ctx.beginPath();
+				ctx.moveTo(toX(t0), yLo);
+				ctx.lineTo(toX(t0), yHi);
+				ctx.lineTo(toX(t0 + ancho), yHi);
+				ctx.lineTo(toX(t0 + ancho), yLo);
+				ctx.lineTo(toX(t1), yLo);
+				ctx.stroke();
+			}
+
+			function cota(ctx, x0, x1, y, texto, color, lw, tk) {
+				ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw;
+				ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y);
+				ctx.moveTo(x0, y - tk); ctx.lineTo(x0, y + tk);
+				ctx.moveTo(x1, y - tk); ctx.lineTo(x1, y + tk);
+				ctx.stroke();
+				ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+				ctx.fillText(texto, (x0 + x1) / 2, y - tk);
+			}
+
+			// Rectángulo de esquinas redondeadas (trazado, sin rellenar).
+			function rr(ctx, x, y, w, h, r) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+			}
+
+			function draw(ctx, w, h) {
+				const a = Number(ang.value);
+				const p = pulsoDe(a);
+				const pms = p / 1000;
+				const C = {
+					bg: token("--color-bg-subtle"),
+					grid: token("--color-border"),
+					text: token("--color-text"),
+					dim: token("--color-text-muted"),
+					accent: token("--color-accent"),
+					navy: token("--color-navy"),
+					soft: token("--color-accent-soft"),
+					body: token("--color-code-header"),
+					bodyEdge: token("--color-code-dim"),
+					bodyText: token("--color-code-fg"),
+					hole: token("--color-code-bg"),
+				};
+				// Letra y grosores proporcionales al tamaño real del lienzo.
+				const fs = clamp(20, Math.min(w * 0.02, h * 0.045), 32);
+				const lw = fs / 12;
+				const tk = fs * 0.4;
+
+				ctx.fillStyle = C.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				// Columna de señales (izquierda) y columna del servo (derecha).
+				const L = fs * 1.6;
+				const W = w * 0.54 - L;
+				ctx.lineJoin = "miter";
+
+				// 1. Período completo: 0–22 ms, el pulso apenas se ve.
+				const yHi1 = fs * 2.4, yLo1 = yHi1 + clamp(fs * 2.4, h * 0.13, fs * 5);
+				{
+					const toX = (t) => L + (t / 22) * W;
+					ctx.font = `500 ${fs}px ${MONO}`;
+					ctx.fillStyle = C.dim; ctx.textAlign = "left"; ctx.textBaseline = "top";
+					ctx.fillText("Un período · 20 ms", L, fs * 0.4);
+					ctx.strokeStyle = C.accent; ctx.lineWidth = lw * 2;
+					pulso(ctx, toX, yHi1, yLo1, 0, 20, pms);
+					pulso(ctx, toX, yHi1, yLo1, 20, 22, pms);
+					cota(ctx, toX(0), toX(20), yLo1 + fs * 1.2, "", C.dim, lw, tk);
+					ctx.textAlign = "center"; ctx.textBaseline = "top";
+					ctx.fillText("20 ms", toX(10), yLo1 + fs * 1.7);
+					// recuadro de la zona ampliada
+					ctx.strokeStyle = C.navy; ctx.lineWidth = lw; ctx.setLineDash([fs * 0.25, fs * 0.25]);
+					ctx.strokeRect(toX(0) - fs * 0.2, yHi1 - fs * 0.5, toX(2.5) - toX(0) + fs * 0.4, yLo1 - yHi1 + fs);
+					ctx.setLineDash([]);
+				}
+
+				// 2. Zoom 0–2,5 ms: aquí sí se ve el ancho.
+				{
+					const top2 = yLo1 + fs * 3.6;
+					const yHi = top2 + fs * 4.2, yLo = h - fs * 2.6;
+					const toX = (t) => L + (t / 2.5) * W;
+					ctx.fillStyle = C.navy; ctx.textAlign = "left"; ctx.textBaseline = "top";
+					ctx.font = `600 ${fs}px ${MONO}`;
+					ctx.fillText("Ampliado · 0 a 2,5 ms", L, top2);
+					// banda de control 1–2 ms
+					ctx.fillStyle = C.soft;
+					ctx.fillRect(toX(1), yHi - fs * 0.4, toX(2) - toX(1), yLo - yHi + fs * 0.4);
+					ctx.font = `500 ${fs}px ${MONO}`;
+					ctx.fillStyle = C.dim;
+					ctx.textBaseline = "top";
+					ctx.strokeStyle = C.grid; ctx.lineWidth = lw;
+					for (const t of [0, 0.5, 1, 1.5, 2, 2.5]) {
+						ctx.beginPath(); ctx.moveTo(toX(t), yLo); ctx.lineTo(toX(t), yLo + tk); ctx.stroke();
+						const txt = coma(t, t % 1 ? 1 : 0) + (t === 2.5 ? " ms" : "");
+						ctx.textAlign = t === 2.5 ? "right" : t === 0 ? "left" : "center";
+						ctx.fillText(txt, toX(t) + (t === 2.5 ? fs * 0.35 : 0), yLo + fs * 0.6);
+					}
+					ctx.strokeStyle = C.accent; ctx.lineWidth = lw * 3;
+					pulso(ctx, toX, yHi, yLo, 0, 2.5, pms);
+					// Rótulos de la banda, con fondo para que el flanco no los tache.
+					ctx.font = `500 ${fs}px ${MONO}`;
+					ctx.textBaseline = "middle";
+					const yr = (yHi + yLo) / 2;
+					for (const [txt, x, al] of [["0°", toX(1) + fs * 0.4, "left"], ["180°", toX(2) - fs * 0.4, "right"]]) {
+						const tw = ctx.measureText(txt).width;
+						const xl = al === "left" ? x : x - tw;
+						ctx.fillStyle = C.soft;
+						ctx.fillRect(xl - fs * 0.2, yr - fs * 0.7, tw + fs * 0.4, fs * 1.4);
+						ctx.fillStyle = C.dim; ctx.textAlign = al;
+						ctx.fillText(txt, x, yr);
+					}
+					ctx.font = `700 ${fs * 1.15}px ${MONO}`;
+					cota(ctx, toX(0), toX(pms), yHi - fs * 1.1, `${coma(pms, 2)} ms`, C.accent, lw, tk);
+				}
+
+				// 3. Servo visto desde arriba: cuerpo con orejetas, eje y brazo sobre el arco graduado.
+				{
+					const x0 = w * 0.56, sw = w - x0;
+					const r = Math.max(fs * 3, Math.min(sw / 2 - fs * 2.6, (h - fs * 5) / 2.2));
+					const cx = x0 + sw / 2;
+					// Centrado en vertical: arco y rótulos arriba, cuerpo y cable abajo.
+					const alto = r * 1.02 + fs * 2.2 + r * 1.13 + fs * 2.4;
+					const cy = Math.max(0, (h - alto) / 2) + r * 1.02 + fs * 2.2;
+
+					// Arco graduado: marcas cada 10°, largas cada 45°.
+					const ra = r * 1.02;
+					ctx.strokeStyle = C.grid; ctx.lineWidth = lw * 2;
+					ctx.beginPath(); ctx.arc(cx, cy, ra, Math.PI, 2 * Math.PI); ctx.stroke();
+					ctx.strokeStyle = C.dim;
+					for (let g = 0; g <= 180; g += 10) {
+						const th = Math.PI - (g * Math.PI) / 180;
+						const largo = g % 45 === 0;
+						ctx.lineWidth = largo ? lw * 2 : lw;
+						const r1 = ra + (largo ? fs * 0.9 : fs * 0.45);
+						ctx.beginPath();
+						ctx.moveTo(cx + Math.cos(th) * ra, cy - Math.sin(th) * ra);
+						ctx.lineTo(cx + Math.cos(th) * r1, cy - Math.sin(th) * r1);
+						ctx.stroke();
+					}
+					ctx.font = `500 ${fs}px ${MONO}`;
+					ctx.fillStyle = C.dim;
+					ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+					ctx.fillText("90°", cx, cy - ra - fs * 1.1);
+					ctx.textBaseline = "top";
+					ctx.textAlign = "center";
+					ctx.fillText("0°", cx - ra - fs * 0.3, cy + fs * 0.4);
+					ctx.fillText("180°", cx + ra + fs * 0.3, cy + fs * 0.4);
+					// Sector recorrido hasta el ángulo actual.
+					const th = Math.PI - (a * Math.PI) / 180;
+					ctx.fillStyle = C.soft;
+					ctx.beginPath(); ctx.moveTo(cx, cy);
+					ctx.arc(cx, cy, ra, Math.PI, 2 * Math.PI - th); ctx.closePath(); ctx.fill();
+
+					// Cuerpo: el eje queda cerca del extremo superior.
+					const bw = r * 0.95, bt = cy - r * 0.42, bh = r * 1.55;
+					const ear = r * 0.32, ey = bt + bh * 0.42, eh = r * 0.3;
+					ctx.fillStyle = C.body; ctx.strokeStyle = C.bodyEdge; ctx.lineWidth = lw;
+					rr(ctx, cx - bw / 2 - ear, ey, bw + 2 * ear, eh, eh * 0.25); ctx.fill(); ctx.stroke();
+					rr(ctx, cx - bw / 2, bt, bw, bh, r * 0.08); ctx.fill(); ctx.stroke();
+					ctx.fillStyle = C.bg;
+					for (const s of [-1, 1]) {
+						ctx.beginPath(); ctx.arc(cx + s * (bw / 2 + ear * 0.5), ey + eh / 2, eh * 0.2, 0, 2 * Math.PI); ctx.fill();
+					}
+					// Cable de tres hilos que sale por abajo.
+					ctx.lineWidth = lw * 2.4; ctx.lineCap = "round";
+					[C.bodyEdge, C.accent, C.navy].forEach((col, i) => {
+						const dx = (i - 1) * lw * 3;
+						ctx.strokeStyle = col;
+						ctx.beginPath(); ctx.moveTo(cx + dx, bt + bh); ctx.lineTo(cx + dx, Math.min(h - fs * 0.4, bt + bh + fs * 2.4)); ctx.stroke();
+					});
+					// Lectura del ángulo sobre el cuerpo.
+					ctx.fillStyle = C.bodyText;
+					ctx.font = `700 ${clamp(fs, r * 0.24, fs * 2)}px ${MONO}`;
+					ctx.textAlign = "center"; ctx.textBaseline = "middle";
+					ctx.fillText(`${a}°`, cx, bt + bh * 0.78);
+
+					// Brazo (horn): se estrecha hacia la punta, con agujeros.
+					const ux = Math.cos(th), uy = -Math.sin(th);
+					const nx = -uy, ny = ux;
+					const len = r * 0.9, w0 = r * 0.17, w1 = r * 0.08;
+					ctx.fillStyle = C.accent;
+					ctx.beginPath();
+					ctx.moveTo(cx + nx * w0, cy + ny * w0);
+					ctx.lineTo(cx + ux * len + nx * w1, cy + uy * len + ny * w1);
+					ctx.arc(cx + ux * len, cy + uy * len, w1, Math.atan2(ny, nx), Math.atan2(-ny, -nx), true);
+					ctx.lineTo(cx - nx * w0, cy - ny * w0);
+					ctx.arc(cx, cy, w0, Math.atan2(-ny, -nx), Math.atan2(ny, nx), true);
+					ctx.closePath(); ctx.fill();
+					ctx.fillStyle = C.hole;
+					for (const k of [0.45, 0.63, 0.81]) {
+						ctx.beginPath(); ctx.arc(cx + ux * len * k, cy + uy * len * k, w1 * 0.38, 0, 2 * Math.PI); ctx.fill();
+					}
+					// Eje con tornillo.
+					ctx.fillStyle = C.bodyText;
+					ctx.beginPath(); ctx.arc(cx, cy, w0 * 0.62, 0, 2 * Math.PI); ctx.fill();
+					ctx.strokeStyle = C.hole; ctx.lineWidth = lw * 1.5;
+					ctx.beginPath();
+					ctx.moveTo(cx - w0 * 0.35, cy); ctx.lineTo(cx + w0 * 0.35, cy);
+					ctx.moveTo(cx, cy - w0 * 0.35); ctx.lineTo(cx, cy + w0 * 0.35);
+					ctx.stroke();
+					ctx.lineCap = "butt";
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("servo"), draw);
+
+			function actualizar() {
+				const a = Number(ang.value);
+				const p = pulsoDe(a);
+				angOut.textContent = `${a}°`;
+				lPulso.textContent = `${p} µs`;
+				lDuty.textContent = String(dutyDe(p));
+				lD.textContent = `${coma((p / PERIODO_US) * 100, 2)} %`;
+				lienzo.redibujar();
+			}
+
+			ang.addEventListener("input", actualizar);
+			actualizar();
+		</script>
+	</body>
+</html>

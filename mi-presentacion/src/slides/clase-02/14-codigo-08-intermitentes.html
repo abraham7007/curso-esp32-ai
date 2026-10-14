@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 08 · Tres LED · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 08</span>
+					</div>
+
+					<h2 class="code-hour__title">Tres LED que parpadean con períodos independientes</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Tres objetos sin delay().</span>
+								<span class="deliverable__file">platformio.ini · lib/LedIntermitente/ · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Tres LED en los GPIO 2, 4 y 5.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de loop() y cronograma.</span>
+								<span class="deliverable__file">diagrama-flujo-loop.excalidraw · cronograma-multitarea.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Conmutar tres LED cada 500, 800 y 1300 ms y anotar cada cambio.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Tres LED con 220 Ω a GND en los <b>GPIO 2, 4 y 5</b> (salidas digitales).</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="red" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="green" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="blue" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-resistor value="220"></wokwi-resistor>
+										<small>220 Ω</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+Iniciando control multitarea no bloqueante para 3 LEDs intermitentes
+t=600 ms [LED-1] gpio=2 nivel=1
+t=900 ms [LED-2] gpio=4 nivel=1
+t=1100 ms [LED-1] gpio=2 nivel=0
+t=1400 ms [LED-3] gpio=5 nivel=1
+t=1600 ms [LED-1] gpio=2 nivel=1</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, con la clase en lib/LedIntermitente/.
+
+<b>2. Firmware.</b> LedIntermitente(uint8_t pin, unsigned long periodo, const char* nombre = "LED"). begin() deja la salida en bajo y toma millis() como referencia; update() conmuta si now - _lastToggleTime &gt;= _periodo e imprime con snprintf «t=%lu ms [%s] gpio=%u nivel=%u». main.cpp crea LED-1, LED-2 y LED-3 en los GPIO 2, 4 y 5 con 500, 800 y 1300 ms, imprime una línea vacía y «Iniciando control multitarea no bloqueante para 3 LEDs intermitentes», y loop() solo llama a los tres update(). Sin delay() en loop() ni en la clase.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi: tres LED con 220 Ω en los GPIO 2, 4 y 5.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de una vuelta de loop() y un cronograma de las tres salidas a la misma escala.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> El nombre en el constructor identifica cada objeto en la traza. La comparación escrita como resta sigue siendo correcta cuando <code>millis()</code> desborda.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Cada objeto guarda su propio instante de referencia, y ningún <code>update()</code> contiene una espera.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué LED cambia después del primer cambio de LED-1? Respuesta: LED-2. setup() espera 100 ms antes de begin(), así que LED-1 cambia hacia 600 ms, LED-2 a 900, LED-1 a 1100 y LED-3 a 1400; en placa real los instantes pueden desplazarse unos milisegundos según el arranque. El período del constructor es medio ciclo: LED-1 completa un parpadeo cada segundo.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>El valor por defecto <code>nombre = "LED"</code> va solo en la declaración del <code>.h</code>. <code>_nombre</code> guarda un puntero a la cadena literal, que existe durante toda la ejecución.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Comparar <code>millis() &gt;= siguiente</code> en vez de restar: falla al desbordar, a los 49,7 días.</li><li>Un <code>delay()</code> en cualquier <code>update()</code> retrasa los tres LED.</li><li>Repetir el valor por defecto en el <code>.cpp</code>: error de compilación.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-tipos-tiempo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Tipos</span>
+				</a>
+				<a class="slide-nav__link" href="15-media-movil.html">
+					<span>Media móvil</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Errores en ejecución · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Integración</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El <em>backtrace</em> localiza un fallo en ejecución
+				</h1>
+
+				<div class="rd panico crece">
+					<div class="codepanel causa">
+						<div class="codepanel__header">
+							<span class="codepanel__path">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+								<span>src/main.cpp · falta el new en setup()</span>
+							</span>
+						</div>
+						<pre class="causa__texto"><span class="causa__n"> 8</span>EntradaAnalogica* entrada = nullptr;
+<span class="causa__n">21</span>    entrada-&gt;update();</pre>
+					</div>
+
+					<div class="codepanel traza">
+						<div class="codepanel__header">
+							<span class="codepanel__path">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								<span>monitor serie</span>
+							</span>
+							<span class="codepanel__tag traza__filtro">monitor_filters = esp32_exception_decoder</span>
+						</div>
+						<pre class="traza__texto"><span class="traza__l is-marca" data-m="1">Guru Meditation Error: Core  1 panic'ed (<b>LoadProhibited</b>). Exception was unhandled.</span>
+<span class="traza__l">Core  1 register dump:</span>
+<span class="traza__l">PC      : 0x400d1a3c  PS      : 0x00060830  A0      : 0x800d0f30  …</span>
+<span class="traza__l">EXCCAUSE: 0x0000001c</span>
+<span class="traza__l is-marca" data-m="2">EXCVADDR: <b>0x00000000</b>  …</span>
+<span class="traza__l">Backtrace: 0x400d1a3c:0x3ffb2270 0x400d0f2d:0x3ffb2290 0x400d3d22:0x3ffb22b0</span>
+<span class="traza__l is-marca" data-m="3">  #0  0x400d1a3c in EntradaAnalogica::update() at <b>lib/EntradaAnalogica/EntradaAnalogica.cpp:16</b></span>
+<span class="traza__l is-marca traza__l--sigue">  #1  0x400d0f2d in loop() at <b>src/main.cpp:21</b></span>
+<span class="traza__l">  #2  0x400d3d22 in loopTask(void*) at …/cores/esp32/main.cpp:50</span>
+<span class="traza__l">Rebooting...</span></pre>
+					</div>
+
+					<ol class="panico__claves" aria-label="Cómo leer la traza">
+						<li><span><b>Excepción</b>: lectura prohibida</span></li>
+						<li><span><b>Dirección 0</b>: puntero nulo</span></li>
+						<li><span><b>Archivo y línea</b>, de dentro afuera</span></li>
+					</ol>
+					<p class="panico__nota" data-paso="1">Un fallo de compilación o de enlace no genera traza; lo informa la etapa que falla (sesión 1 · 19).</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si <code>entrada</code> es un puntero nulo,
+					¿falla la compilación, el enlace o la ejecución? Respuesta: la
+					ejecución; el programa compiló, enlazó y se grabó. Arriba, la causa: en
+					el main del ejemplo 10, entrada pasa a ser un puntero y falta
+					<code>entrada = new EntradaAnalogica(32, 16);</code> en setup(). Leer
+					la traza en tres puntos: la primera línea nombra la excepción; EXCVADDR es la dirección leída, y cero o casi cero indica
+					un puntero nulo; el backtrace da la pila de llamadas, la más interna
+					primero. Las líneas #0, #1, #2 las añade el filtro de PlatformIO al
+					traducir cada dirección con el .elf. Otras causas frecuentes: un
+					índice fuera de rango o un doble delete[], que corrompen el heap y
+					fallan más tarde, en una línea distinta de la que los causa.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						En <code>platformio.ini</code>: <code>monitor_filters = esp32_exception_decoder</code>
+						y, para líneas exactas, <code>build_type = debug</code>. El filtro
+						usa el <code>.elf</code> de la última construcción: si el código
+						cambió sin recompilar, las líneas no corresponden.
+					</p>
+					<h4>Dónde aparece</h4>
+					<ul>
+						<li><code>LoadProhibited</code> / <code>StoreProhibited</code>: leer o escribir por un puntero inválido.</li>
+						<li><code>IntegerDivideByZero</code>: <code>EntradaAnalogica entrada(32, 0)</code> hace <code>% _n</code> con <code>_n = 0</code>.</li>
+						<li><code>CORRUPT HEAP</code> y <code>abort()</code>: doble <code>delete[]</code> o un índice fuera de rango (<code>_buffer[16]</code>) que escribe fuera del bloque; el fallo aparece después.</li>
+					</ul>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Leer la última línea («Rebooting...») en lugar de la primera, que
+						nombra la excepción.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-codigo-10-manual-automatico.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 10 · Orquestación</span>
+				</a>
+				<a class="slide-nav__link" href="22-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 03 · Entrada analógica · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 03</span>
+					</div>
+
+					<h2 class="code-hour__title">Lectura de un potenciómetro en código y en voltios</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Muestreo a 10 Hz con conversión a voltios.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Potenciómetro con el cursor en el GPIO 32.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo, circuito y cadena de acondicionamiento.</span>
+								<span class="deliverable__file">diagrama-flujo · circuito · diagrama-acondicionamiento (.excalidraw)</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Muestrear el GPIO 32 cada 100 ms y publicar el código del conversor y su tensión equivalente.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Potenciómetro con los extremos a 3V3 y GND; cursor al <b>GPIO 32</b> (entrada analógica, ADC1 canal 4).</p>
+								<div class="hw-set hw-set--amplio mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-potentiometer></wokwi-potentiometer>
+										<small>Potenciómetro</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">Iniciando lectura de ADC (GPIO 32)
+[ADC1] canal=4  codigo=   0  v=0.000
+[ADC1] canal=4  codigo=2048  v=1.650
+[ADC1] canal=4  codigo=4095  v=3.300</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Al arrancar imprime «Iniciando lectura de ADC (GPIO 32)». Cada 100 ms lee el GPIO 32 con analogRead() y emite a 115200 baudios el formato exacto «[ADC1] canal=4  codigo=NNNN  v=N.NNN», con el código alineado a 4 caracteres y v = codigo * 3.3 / 4095 con 3 decimales. Sin calibración por eFuse ni filtrado.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con un potenciómetro: extremos a 3V3 y GND, cursor al GPIO 32.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo del muestreo con la conversión a voltios como paso propio, el circuito y la cadena tensión → ADC → código → voltios.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Fijar la fórmula y prohibir la calibración deja a la vista el modelo lineal ideal. El código alineado mantiene las columnas de la traza en la misma posición.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El conversor entrega un código; su conversión a voltios depende del fondo de escala supuesto (3,3 V).</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué tensión corresponde al código 2048? Corresponde a 1,650 V. Recorrer los tres puntos girando el potenciómetro: 0 da 0,000 V, 2048 da 1,650 V y 4095 da 3,300 V. Si la lectura máxima no alcanza el valor esperado, el fondo de escala supuesto no es el real.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>analogRead(32)</code> devuelve 0–4095 (12 bits). <code>analogReadMilliVolts(32)</code> aplica la calibración de fábrica.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Con el WiFi activo, la lectura de un pin del ADC2 falla.</li><li>Dividir entre 4096 o usar aritmética entera: se pierden los decimales.</li><li>Cerca de 0 V y de 3,3 V la respuesta real deja de ser lineal.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-conversion-adc.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Conversión analógica-digital</span>
+				</a>
+				<a class="slide-nav__link" href="13-pwm.html">
+					<span>Modulación por ancho de pulso</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuota e intervalo · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Política de envío</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La cuota mensual fija el <em>intervalo</em> de envío
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Plan gratuito actual de Blynk: <b>100&nbsp;000 mensajes al mes</b>
+								(blynk.io/pricing, octubre de 2026). Cada envío consume cuota.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Más de 10&nbsp;valores por segundo: <b>inundación</b> (<i>flood</i>) y
+								desconexión (docs.blynk.io).
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>al mes = 2 592 000 s / T</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Intervalo T</span>
+								<input type="range" id="intervalo" min="0" max="12" step="1" value="3" />
+								<output id="intervalo-out" for="intervalo" class="s5c-ancho s5c-ancho--corto">5 s</output>
+							</label>
+							<span class="lectura lectura--fin"><small>al día </small><span id="l-dia" class="s5c-ancho">17 280</span></span>
+							<span class="lectura"><small>al mes </small><span id="l-mes" class="s5c-ancho s5c-mal">518 400</span></span>
+							<span class="lectura"><small>cuota </small><span id="l-fin" class="s5c-ancho s5c-ancho--largo s5c-mal">día 5,8</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="cuota"
+								role="img"
+								aria-label="Arriba, una escala logarítmica del intervalo entre envíos con tres zonas: inundación por debajo de 0,1 s, cuota agotada antes de fin de mes hasta 26 s (mes de 30 días) y zona que cabe por encima; se marcan 5 s, 30 s y el intervalo elegido. Abajo, los mensajes acumulados a lo largo de un mes de 30 días frente a la línea de 100 000: con 5 s la cuota se agota el día 5,8; con 30 s el mes termina en 86 400."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: el ESP32 envía la temperatura a V1 cada 5 s.
+					¿Alcanza la cuota del plan gratuito para el mes completo? Recoger respuestas
+					antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: no. 86 400 s al día / 5 s = 17 280 mensajes al día; 518 400 al
+					mes. Los 100 000 se agotan el día 5,8. El mínimo continuo, con un mes de 30
+					días, es 2 592 000 / 100 000 ≈ 26 s (con 31 días, 26,8 s); el Ejemplo 19 usa
+					30 s: 2 880 al día, 86 400 al mes de 30 días (86 %; 89 % con 31), con margen
+					para las órdenes y la sincronización.
+				</p>
+				<p>
+					Es el mismo cálculo que con OpenWeatherMap (4·18), con otra cifra. La página
+					de precios da la cifra por plan («100,000 messages», se renueva cada mes) y
+					no aclara si se reparte entre los 5 dispositivos. Si es común, dos placas a
+					30 s (172 800) la superan. Comprobarlo en el consumo de la consola.
+				</p>
+				<p>
+					La franja roja de la izquierda es otro límite: con <code>virtualWrite</code>
+					en cada vuelta del <code>loop()</code> se superan 10 valores por segundo y
+					el servidor desconecta la placa. La librería espacia los envíos a 15 por
+					segundo como máximo (<code>BLYNK_MSG_LIMIT</code> en BlynkConfig.h, con una
+					espera dentro de <code>virtualWrite</code>), cifra que sigue por encima del
+					límite de 10.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>timer.setInterval(30000L, sendSensorData)</code> con
+						<code>BlynkTimer</code>; nunca <code>virtualWrite</code> suelto en el
+						<code>loop()</code>. Cifras de blynk.io/pricing (plan Free, octubre de
+						2026); el límite ha cambiado en otras ocasiones y debe comprobarse.
+					</p>
+					<p>
+						<code>BLYNK_MSG_LIMIT</code> (15 por defecto) espacia los envíos dentro de la
+						librería; no sustituye a un intervalo razonable.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						En la consola de Blynk el consumo del mes se ve en la organización.
+						Para ahorrar mensajes: enviar por variación (lámina 13) o agrupar.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Calcular la cuota de una placa sin mirar cuántas comparten la cuenta.</li>
+						<li>Copiar un ejemplo con envío cada 1 s y dejarlo encendido el mes entero.</li>
+						<li>Confundir la cuota mensual con el límite de inundación.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-blynk-run.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Blynk.run</span>
+				</a>
+				<a class="slide-nav__link" href="13-telemetria-comandos.html">
+					<span>Dos sentidos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const miles = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+
+			// Blynk, plan Free (blynk.io/pricing, octubre de 2026).
+			const CUOTA = 100000;
+			const DIAS = 30;
+			const SEG_DIA = 86400;
+			const SEG_MES = DIAS * SEG_DIA;
+			const T_MIN = SEG_MES / CUOTA; // 25,92 s
+			// Inundación: más de 10 valores por segundo (docs.blynk.io).
+			const T_FLOOD = 0.1;
+			const INTERVALOS = [1, 2, 3, 5, 10, 15, 20, 26, 30, 45, 60, 90, 120];
+
+			let T = 5;
+
+			const porDia = (t) => SEG_DIA / t;
+			const porMes = (t) => SEG_MES / t;
+			const diaAgota = (t) => (CUOTA * t) / SEG_DIA;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warnSoft: token("--color-warn-soft"),
+					warn: token("--color-warn"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const cabe = T >= T_MIN;
+
+				// --- Panel 1: escala logarítmica del intervalo ---
+				const LMIN = Math.log10(0.05);
+				const LMAX = Math.log10(200);
+				const ax0 = m;
+				const ax1 = w - m;
+				const XL = (t) => ax0 + ((Math.log10(t) - LMIN) / (LMAX - LMIN)) * (ax1 - ax0);
+				texto(ctx, "Intervalo entre envíos (escala logarítmica)", m, fs * 1.0, fs, c.heading, 700, "left", SANS, w * 0.6);
+				const yZ0 = fs * 2.0;
+				const hZ = fs * 2.6;
+				const zonas = [
+					[0.05, T_FLOOD, c.acento, "> 10/s", token("--color-accent-contrast")],
+					[T_FLOOD, T_MIN, c.acentoSoft, "la cuota se agota antes de fin de mes", c.acento],
+					[T_MIN, 200, c.okSoft, "cabe en un mes de 30 días", c.ok],
+				];
+				for (const [a, b, fondo, rot, tinta] of zonas) {
+					ctx.fillStyle = fondo;
+					ctx.fillRect(XL(a), yZ0, XL(b) - XL(a), hZ);
+					texto(ctx, rot, (XL(a) + XL(b)) / 2, yZ0 + hZ * 0.32, fs * 0.95, tinta, 700, "center", SANS, XL(b) - XL(a) - 10);
+				}
+				// Marcas de referencia y la elegida.
+				const yMarca = yZ0 + hZ * 0.74;
+				const refs = [
+					[T_FLOOD, "0,1 s"],
+					[1, "1 s"],
+					[5, "5 s"],
+					[T_MIN, "26 s"],
+					[120, "120 s"],
+				];
+				for (const [t, rot] of refs) {
+					ctx.strokeStyle = c.muted;
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					ctx.moveTo(XL(t), yZ0 + hZ);
+					ctx.lineTo(XL(t), yZ0 + hZ + fs * 0.3);
+					ctx.stroke();
+					texto(ctx, rot, XL(t), yZ0 + hZ + fs * 0.85, fs * 0.85, c.muted, 600, "center", MONO);
+				}
+				// Ejemplo 19 (30 s) como referencia fija.
+				ctx.strokeStyle = c.ok;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(XL(30), yZ0 + hZ * 0.5);
+				ctx.lineTo(XL(30), yZ0 + hZ);
+				ctx.stroke();
+				texto(ctx, "← Ejemplo 19: 30 s", XL(30) + fs * 0.9, yMarca, fs * 0.85, c.ok, 700, "left", SANS, ax1 - XL(30) - fs);
+				// Elegido.
+				const xT = XL(T);
+				ctx.fillStyle = cabe ? c.ok : c.acento;
+				ctx.beginPath();
+				ctx.moveTo(xT, yZ0 + hZ * 0.55);
+				ctx.lineTo(xT - fs * 0.6, yZ0 + hZ + fs * 0.1);
+				ctx.lineTo(xT + fs * 0.6, yZ0 + hZ + fs * 0.1);
+				ctx.closePath();
+				ctx.fill();
+
+				// --- Panel 2: mensajes acumulados en un mes de 30 días ---
+				const yP = yZ0 + hZ + fs * 2.2;
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(m, yP - fs * 0.5);
+				ctx.lineTo(w - m, yP - fs * 0.5);
+				ctx.stroke();
+				texto(ctx, "Mensajes acumulados en un mes de 30 días", m, yP + fs * 0.4, fs, c.heading, 700, "left", SANS, w * 0.55);
+				const resumen = cabe
+					? `T = ${T} s: ${miles(porMes(T))} al mes · ${Math.round((porMes(T) / CUOTA) * 100)} % de la cuota`
+					: `T = ${T} s: agotada el día ${coma(diaAgota(T), 1)}`;
+				texto(ctx, resumen, w - m, yP + fs * 0.4, fs * 1.05, cabe ? c.ok : c.acento, 700, "right", SANS, w * 0.42);
+
+				ctx.font = `600 ${fs * 0.85}px ${MONO}`;
+				const anchoY = ctx.measureText("200 000").width + fs * 0.6;
+				const gx0 = m + anchoY;
+				const gx1 = w - m * 1.4;
+				const gy0 = yP + fs * 1.6;
+				const gy1 = h - fs * 1.7;
+				const YMAX = 200000;
+				const GX = (d) => gx0 + (d / DIAS) * (gx1 - gx0);
+				const GY = (n) => gy1 - (clamp(0, n, YMAX) / YMAX) * (gy1 - gy0);
+
+				// Rejilla y ejes.
+				for (let n = 0; n <= YMAX; n += 50000) {
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.moveTo(gx0, GY(n));
+					ctx.lineTo(gx1, GY(n));
+					ctx.stroke();
+					texto(ctx, miles(n), gx0 - fs * 0.4, GY(n), fs * 0.85, c.muted, 600, "right", MONO);
+				}
+				for (let d = 0; d <= DIAS; d += 5) {
+					texto(ctx, `día ${d}`, GX(d), gy1 + fs * 0.85, fs * 0.85, c.muted, 600, d === 0 ? "left" : d === DIAS ? "right" : "center", MONO);
+				}
+				// Zona por encima de la cuota.
+				ctx.fillStyle = c.acentoSoft;
+				ctx.globalAlpha = 0.6;
+				ctx.fillRect(gx0, GY(YMAX), gx1 - gx0, GY(CUOTA) - GY(YMAX));
+				ctx.globalAlpha = 1;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 3;
+				ctx.beginPath();
+				ctx.moveTo(gx0, GY(CUOTA));
+				ctx.lineTo(gx1, GY(CUOTA));
+				ctx.stroke();
+				texto(ctx, "por encima de la cuota del plan gratuito (100 000)", gx0 + fs * 0.5, GY(YMAX) + fs * 0.9, fs * 0.9, c.acento, 700, "left", SANS, gx1 - gx0 - fs);
+
+				// Una recta por intervalo: crece hasta la cuota y luego queda plana
+				// (el servidor ya no acepta más mensajes ese mes).
+				function recta(t, color, grosor, discontinua) {
+					const fin = Math.min(DIAS, diaAgota(t));
+					ctx.strokeStyle = color;
+					ctx.lineWidth = grosor;
+					ctx.setLineDash(discontinua ? [10, 8] : []);
+					ctx.beginPath();
+					ctx.moveTo(GX(0), GY(0));
+					ctx.lineTo(GX(fin), GY(porDia(t) * fin));
+					ctx.stroke();
+					if (fin < DIAS) {
+						ctx.setLineDash([4, 8]);
+						ctx.beginPath();
+						ctx.moveTo(GX(fin), GY(CUOTA));
+						ctx.lineTo(GX(DIAS), GY(CUOTA));
+						ctx.stroke();
+					}
+					ctx.setLineDash([]);
+					return fin;
+				}
+				if (T !== 5) recta(5, c.muted, 3, true);
+				if (T !== 30) recta(30, c.ok, 3, true);
+				if (T !== 5) texto(ctx, "5 s", GX(diaAgota(5)) + fs * 0.4, GY(CUOTA) + fs * 0.9, fs * 0.85, c.muted, 700, "left", MONO);
+				if (T !== 30) texto(ctx, "30 s", GX(DIAS) - fs * 0.3, GY(porMes(30)) + fs * 0.9, fs * 0.85, c.ok, 700, "right", MONO);
+				const fin = recta(T, cabe ? c.ok : c.acento, 6, false);
+				ctx.fillStyle = cabe ? c.ok : c.acento;
+				ctx.beginPath();
+				ctx.arc(GX(fin), GY(porDia(T) * fin), fs * 0.45, 0, Math.PI * 2);
+				ctx.fill();
+				if (!cabe) {
+					const izq = fin > DIAS * 0.55;
+					texto(ctx, `agotada el día ${coma(diaAgota(T), 1)}`, GX(fin) + (izq ? -fs * 0.7 : fs * 0.7), GY(CUOTA) - fs * 2.0, fs * 0.95, c.acento, 700, izq ? "right" : "left", SANS);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("cuota"), dibujar);
+			const ctrl = document.getElementById("intervalo");
+			const out = document.getElementById("intervalo-out");
+			const lDia = document.getElementById("l-dia");
+			const lMes = document.getElementById("l-mes");
+			const lFin = document.getElementById("l-fin");
+
+			function render() {
+				T = INTERVALOS[Number(ctrl.value)];
+				out.textContent = `${T} s`;
+				const cabe = T >= T_MIN;
+				lDia.textContent = miles(porDia(T));
+				lMes.textContent = miles(porMes(T));
+				lFin.textContent = cabe ? `cabe (${Math.round((porMes(T) / CUOTA) * 100)} %)` : `día ${coma(diaAgota(T), 1)}`;
+				for (const el of [lMes, lFin]) {
+					el.classList.toggle("s5c-mal", !cabe);
+					el.classList.toggle("s5c-bien", cabe);
+				}
+				lienzo.redibujar();
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

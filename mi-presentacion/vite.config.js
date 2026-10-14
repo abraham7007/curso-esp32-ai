@@ -18,6 +18,8 @@ function entradasDeDiapositivas() {
 		// Marco del modo presentación: mantiene viva la pantalla completa
 		// mientras las diapositivas se suceden dentro.
 		presentar: path.join(RAIZ, "presentar.html"),
+		// Vista del ponente: notas y control desde la pantalla del portátil.
+		ponente: path.join(RAIZ, "ponente.html"),
 	};
 	for (const clase of readdirSync(SLIDES)) {
 		const dir = path.join(SLIDES, clase);

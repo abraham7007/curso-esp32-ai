@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Aplicaciones de TinyML · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de TinyML</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Audio, movimiento e imagen se clasifican en el <em>chip</em>
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1800 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis casos reales con su cifra. Audio en el procesador de señal del teléfono: Now Playing de Google Pixel gasta menos del 1 % de batería al día. Audio en un nRF52840: TinyChirp reconoce el canto de un ave con una red de 0,90 de precisión elegida para caber en el chip. Movimiento en un collar con LoRa: ElephantEdge, 10 collares previstos para elefantes con modelos de Edge Impulse. Imagen en un ESP32-S3: una red clasifica cinco enfermedades de la hoja de tomate con 94,6 % de exactitud. Imagen en un microcontrolador: decidir si hay una persona en la imagen cabe en 250 KB de memoria con 85 a 90 % de acierto. Referencia en un Cortex-M4: MLPerf Tiny, cuya red de palabras clave ocupa 52,5 KB.">
+						<rect class="s6a-fila" x="0" y="0" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="30" y="46" font-size="28">Audio</text>
+						<text class="mut fin" x="550" y="46" font-size="26">DSP del teléfono</text>
+						<text class="sans b" x="30" y="110" font-size="38">Now Playing · Pixel</text>
+						<text class="acc b" x="24" y="228" font-size="104">&lt; 1 %</text>
+						<text class="sans" x="30" y="330" font-size="31">de batería al día</text>
+						<rect class="s6a-fila" x="610" y="0" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="640" y="46" font-size="28">Audio</text>
+						<text class="mut fin" x="1160" y="46" font-size="26">nRF52840</text>
+						<text class="sans b" x="640" y="110" font-size="38">TinyChirp · aves</text>
+						<text class="acc b" x="634" y="228" font-size="104">0,90</text>
+						<text class="sans" x="640" y="330" font-size="31">de precisión · red para el chip</text>
+						<rect class="s6a-fila" x="1220" y="0" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="1250" y="46" font-size="28">Movimiento</text>
+						<text class="mut fin" x="1770" y="46" font-size="26">collar LoRa</text>
+						<text class="sans b" x="1250" y="110" font-size="38">ElephantEdge</text>
+						<text class="acc b" x="1244" y="228" font-size="104">10</text>
+						<text class="sans" x="1250" y="330" font-size="31">collares previstos, Edge Impulse</text>
+						<rect class="s6a-fila" x="0" y="415" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="30" y="461" font-size="28">Imagen</text>
+						<text class="mut fin" x="550" y="461" font-size="26">ESP32-S3</text>
+						<text class="sans b" x="30" y="525" font-size="38">Hoja de tomate</text>
+						<text class="acc b" x="24" y="643" font-size="104">94,6 %</text>
+						<text class="sans" x="30" y="745" font-size="31">de exactitud, 5 enfermedades</text>
+						<rect class="s6a-fila" x="610" y="415" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="640" y="461" font-size="28">Imagen</text>
+						<text class="mut fin" x="1160" y="461" font-size="26">microcontrolador</text>
+						<text class="sans b" x="640" y="525" font-size="38">Persona sí o no</text>
+						<text class="acc b" x="634" y="643" font-size="104">250 KB</text>
+						<text class="sans" x="640" y="745" font-size="31">de memoria; 85–90 % de acierto</text>
+						<rect class="s6a-fila" x="1220" y="415" width="580" height="385" rx="14" />
+						<text class="sans b navy" x="1250" y="461" font-size="28">Referencia</text>
+						<text class="mut fin" x="1770" y="461" font-size="26">Cortex-M4</text>
+						<text class="sans b" x="1250" y="525" font-size="38">MLPerf Tiny</text>
+						<text class="acc b" x="1244" y="643" font-size="104">52,5 KB</text>
+						<text class="sans" x="1250" y="745" font-size="31">su red de palabras clave</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Los casos cubren audio, movimiento e imagen. En las cinco aplicaciones, un modelo pequeño clasifica la señal junto a un sensor que mide de forma continua, y la radio, si la hay, transmite solo el resultado.
+				</p>
+				<p>
+					Pregunta de predicción, sobre TinyChirp: ejecutar una red neuronal gasta energía. ¿Cómo puede entonces alargar la batería durante semanas? Respuesta: la alternativa es grabar y guardar o enviar todo el audio; el modelo selecciona los fragmentos que se guardan. Es el mismo argumento de la lámina 03. El artículo no da una cifra única de autonomía (8 semanas en el resumen, 18 en la conclusión), por eso no se proyecta.
+				</p>
+				<p>
+					TinyChirp prueba varias redes; las precisiones son del conjunto de prueba, no medidas en la placa. CNN-Mel, con espectrograma, llega a 0,98 y también cabe en el nRF52840, el chip de la placa de esta sesión. Los autores eligen Transformer-Time, sobre el audio crudo (0,90), porque gasta menos energía por inferencia (19,3 frente a 42,5 mJ) y no tiene que calcular el espectrograma, que tarda unos 2,4 s por cada 3 s de audio.
+				</p>
+				<p>
+					Now Playing (Pixel 2, 2017): un detector de música se ejecuta de forma continua en el procesador de señal y despierta al procesador principal solo cuando detecta música; las huellas de decenas de miles de canciones están en el teléfono. «Persona sí o no» es la tarea <i>Visual Wake Words</i>: decidir si hay alguien en una imagen con menos de 250 KB de RAM y de modelo, la base de timbres y sensores de presencia (el ejemplo person_detection de TFLM usa 96 × 96 píxeles). MLPerf Tiny es un banco de pruebas con el que los fabricantes comparan sus chips; en la figura aparece como referencia.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Fuentes</h4>
+					<ul>
+						<li>Agüera y Arcas et al., «Now Playing: Continuous low-power music recognition», 2017 (arXiv 1711.10958).</li>
+						<li>Huang et al., «TinyChirp: Bird Song Recognition Using TinyML Models on Low-power Wireless Acoustic Sensors», 2024 (arXiv 2407.21453; nRF52840 con RIOT).</li>
+						<li>Desafío ElephantEdge (Hackster.io, Smart Parks, Edge Impulse, IRNAS), 2020.</li>
+						<li>TinyLeafNet-IoT, Discover Internet of Things (Springer), 2025: menos de 140 mW al inferir.</li>
+						<li>Chowdhery et al., «Visual Wake Words Dataset», 2019 (arXiv 1906.05721).</li>
+						<li>Banbury et al., «MLPerf Tiny Benchmark», 2021 (arXiv 2106.07597): la red de palabras clave debe acertar el 90 %.</li>
+					</ul>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Leer una exactitud sin preguntar con qué datos y en qué chip se midió (lámina 11).</li>
+						<li>Confundir el tamaño del modelo con la RAM que necesita al ejecutarse (lámina 16).</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-por-que.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Radio y batería</span>
+				</a>
+				<a class="slide-nav__link" href="05-flujo.html">
+					<span>Flujo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

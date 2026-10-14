@@ -1,0 +1,191 @@
+{
+  "version": 1,
+  "author": "Ejemplo 23 - Inferencia en vivo + Blynk (pot GPIO 32, LED GPIO 25/26/27; el pulsador GPIO 4 no se usa)",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 80,
+      "left": 320,
+      "attrs": {
+        "color": "green",
+        "key": "b",
+        "label": "etiqueta"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 220,
+      "left": 320,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -90,
+      "left": -260,
+      "attrs": {
+        "color": "green",
+        "label": "quieto"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 0,
+      "left": -280,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -90,
+      "left": -190,
+      "attrs": {
+        "color": "blue",
+        "label": "giro"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 0,
+      "left": -210,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led3",
+      "top": -90,
+      "left": -120,
+      "attrs": {
+        "color": "orange",
+        "label": "vaiven"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 0,
+      "left": -140,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:D4",
+      "btn1:2.r",
+      "green",
+      []
+    ],
+    [
+      "esp:GND.1",
+      "btn1:1.l",
+      "purple",
+      []
+    ],
+    [
+      "esp:3V3",
+      "pot1:VCC",
+      "red",
+      []
+    ],
+    [
+      "esp:GND.1",
+      "pot1:GND",
+      "black",
+      []
+    ],
+    [
+      "esp:D32",
+      "pot1:SIG",
+      "orange",
+      []
+    ],
+    [
+      "esp:D25",
+      "r1:2",
+      "green",
+      []
+    ],
+    [
+      "r1:1",
+      "led1:A",
+      "green",
+      []
+    ],
+    [
+      "led1:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "esp:D26",
+      "r2:2",
+      "blue",
+      []
+    ],
+    [
+      "r2:1",
+      "led2:A",
+      "blue",
+      []
+    ],
+    [
+      "led2:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "esp:D27",
+      "r3:2",
+      "orange",
+      []
+    ],
+    [
+      "r3:1",
+      "led3:A",
+      "orange",
+      []
+    ],
+    [
+      "led3:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

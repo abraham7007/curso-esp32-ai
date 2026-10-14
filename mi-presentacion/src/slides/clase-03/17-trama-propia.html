@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Trama propia · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Formato de datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Cabecera y longitud delimitan cada <em>trama</em>
+				</h1>
+
+				<div class="def">
+					<p>La trama 0 del ejemplo 13, byte a byte: el receptor busca AA, lee la longitud y sabe cuántos bytes esperar.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 60 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Los diez bytes de la trama 0 del ejemplo 13: AA cabecera, 00 identificador, 06 longitud, 48 6F 6C 61 20 30 carga con el texto Hola 0, y DA checksum. Dos bytes de ruido anteriores se descartan hasta encontrar AA. El checksum es la suma de identificador, longitud y carga, 0x1DA, de la que se queda el byte bajo, DA.">
+						<!-- rótulos superiores: carga y checksum -->
+						<path class="ln ln--acc" d="M640 150 V128 H1414 V150" />
+						<text class="mid acc" x="1027" y="96" font-size="30">carga útil · "Hola 0" · 6 bytes</text>
+						<text class="mid navy" x="1482" y="96" font-size="30">checksum</text>
+
+						<!-- los diez bytes -->
+						<rect class="caja caja--acc" x="250" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="380" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="510" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="640" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="770" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="900" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="1030" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="1160" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="1290" y="160" width="124" height="160" rx="10" />
+						<rect class="caja" x="1420" y="160" width="124" height="160" rx="10" />
+						<text class="mid acc" x="312" y="240" font-size="58">AA</text>
+						<text class="mid" x="442" y="240" font-size="58">00</text>
+						<text class="mid" x="572" y="240" font-size="58">06</text>
+						<text class="mid" x="702" y="240" font-size="58">48</text>
+						<text class="mid" x="832" y="240" font-size="58">6F</text>
+						<text class="mid" x="962" y="240" font-size="58">6C</text>
+						<text class="mid" x="1092" y="240" font-size="58">61</text>
+						<text class="mid" x="1222" y="240" font-size="58">20</text>
+						<text class="mid" x="1352" y="240" font-size="58">30</text>
+						<text class="mid navy" x="1482" y="240" font-size="58">DA</text>
+						<text class="mid mut" x="702" y="356" font-size="32">H</text>
+						<text class="mid mut" x="832" y="356" font-size="32">o</text>
+						<text class="mid mut" x="962" y="356" font-size="32">l</text>
+						<text class="mid mut" x="1092" y="356" font-size="32">a</text>
+						<text class="mid mut" x="1222" y="356" font-size="32">␣</text>
+						<text class="mid mut" x="1352" y="356" font-size="32">0</text>
+
+						<!-- rótulos de los campos de cabecera -->
+						<path class="ln ln--fina ln--acc" d="M312 320 V580" />
+						<path class="ln ln--fina" d="M442 320 V500 M572 320 V420" />
+						<text class="acc" x="328" y="580" font-size="30">cabecera · inicio de trama</text>
+						<text x="458" y="500" font-size="30">identificador · trama n.º 0</text>
+						<text x="588" y="420" font-size="30">longitud · siguen 6 bytes de carga</text>
+
+						<!-- el ruido previo se descarta -->
+						<g>
+							<rect class="caja caja--fantasma" x="20" y="200" width="90" height="80" rx="8" />
+							<rect class="caja caja--fantasma" x="130" y="200" width="90" height="80" rx="8" />
+							<text class="mid mut" x="65" y="240" font-size="34">3F</text>
+							<text class="mid mut" x="175" y="240" font-size="34">12</text>
+							<text class="mid mut" x="120" y="150" font-size="24">ruido:</text>
+							<text class="mid mut" x="120" y="180" font-size="24">se descarta</text>
+						</g>
+
+						<!-- paso 1: cómo se calcula el checksum -->
+						<g data-paso="1">
+							<text class="mid navy" x="800" y="662" font-size="34">00 + 06 + 48 + 6F + 6C + 61 + 20 + 30 = 1DA → DA</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de comentar la figura: si el receptor se
+					conecta a mitad de una transmisión, ¿cómo identifica el primer byte de un
+					mensaje? Respuesta: busca AA y descarta lo anterior (3F 12). Luego lee el
+					identificador y la longitud: 06 indica que siguen seis bytes de carga y
+					uno de verificación, así que la carga puede llevar cualquier valor,
+					incluso un AA. Antes del paso, pedir que calculen el checksum; el paso
+					muestra el del ejemplo 13: suma de identificador, longitud y carga, sin la
+					cabecera, de la que se conserva el byte bajo.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Emisor: <code>Serial2.write(0xAA)</code>, id, longitud, la carga y
+						<code>calcularChecksum(id, longitud, carga)</code>, que suma en un
+						<code>uint8_t</code> (el desbordamiento hace el módulo 256).
+						Receptor: una máquina de estados
+						<code>ESPERANDO_CABECERA → LEYENDO_ID → LEYENDO_LONGITUD → LEYENDO_CARGA → LEYENDO_CHECKSUM</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 13: monitor <code>Tx: [AA 00 06 48 6F 6C 61 20 30 DA] -> ACEPTADA</code>;
+						diagrama <code>diagrama-trama-bytes.excalidraw</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Usar <code>'\n'</code> como fin de trama binaria: 0x0A puede ser un dato.</li>
+						<li>Sin longitud, el receptor no sabe dónde acaba la carga.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="16-elegir-bus.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Elegir bus</span>
+				</a>
+				<a class="slide-nav__link" href="18-checksum.html">
+					<span>Checksum</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

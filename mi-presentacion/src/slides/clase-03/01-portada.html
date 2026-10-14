@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Sesión 3 · Protocolos de comunicación entre dispositivos</title>
+		<title>Sesión 3 · Comunicación entre dispositivos</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,81 +14,92 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="31">
-		<main class="slide">
-			<div class="slide__content stagger">
-				<div class="layout layout--wide-left" data-animate="fade-up">
-					<div class="layout__text">
-						<span class="badge">
-							Sesión 3 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
-						</span>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<div class="crece grid grid-cols-3 gap-16">
+					<div class="col-span-2 flex flex-col justify-between gap-8 min-h-0">
+						<div class="flex flex-col gap-6">
+							<p class="slide__lede">Sesión 3 · Fundamentos de ESP32 + AI</p>
+							<h1 class="slide__title">Comunicación entre <em>dispositivos</em></h1>
+						</div>
 
-						<h1 class="slide__title">Protocolos de comunicación<br />entre dispositivos</h1>
+						<ol class="puntos agenda">
+							<li><div>Enlace serie<span>acuerdos, trama, baudios y cruce TX/RX</span></div></li>
+							<li><div>UART en el ESP32<span>tres puertos y el que queda libre</span></div></li>
+							<li><div>Buses I²C y SPI<span>direcciones, roles y criterios de elección</span></div></li>
+							<li><div>Formato de datos y robustez<span>tramas, suma de control, JSON y tiempos de espera</span></div></li>
+						</ol>
 
-						<p class="slide__lede">
-							<strong>Comunicación serie y protocolo UART.</strong> Buses I²C y SPI, formato y serialización de datos.
-						</p>
+						<div class="flex flex-col gap-6 portada-pie">
+							<p>
+								<a class="btn btn--primary" href="02-acuerdos-del-enlace.html">Empezar →</a>
+							</p>
+							<div class="credito">
+								<span class="credito__autor">Abraham Caso Torres</span>
+								<span>PIT 2026 · OTI-UNI</span>
+								<a
+									class="credito__licencia"
+									href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+									rel="license noopener"
+									target="_blank"
+									>CC BY-NC-SA 4.0</a
+								>
+							</div>
+						</div>
 					</div>
 
-					<div class="hero-board">
-						<span class="hero-board__part" aria-hidden="true">
-							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
-						</span>
-						<span class="hero-board__caption">
-							<b>ESP32-WROOM-32</b>
-							DevKit V1
-						</span>
-					</div>
-				</div>
-
-				<div data-animate="fade-up">
-					<div class="usecases-label">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						Al terminar la sesión
-					</div>
-					<div class="usecases usecases--rotulos">
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
-						<span class="usecase__name">UART: trama, baud rate y TX/RX</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
-						<span class="usecase__name">I²C: direcciones y pull-up</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
-						<span class="usecase__name">SPI: maestro, esclavo y chip select</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-check" /></svg>
-						<span class="usecase__name">Checksum, JSON y endianness</span>
-					</div>
-					</div>
-				</div>
-
-				<a class="btn btn--primary self-center" href="02-parametros-del-enlace.html" data-animate="fade-up">
-					Empezar →
-				</a>
-
-				<div class="credito">
-					<span class="credito__autor">Abraham Caso Torres</span>
-					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
-						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+					<figure class="s2-uml s3a-trama" aria-label="Trama del ejemplo 13 byte a byte: cabecera AA, identificador 00, longitud 06, carga 48 6F 6C 61 20 30 que es el texto Hola 0, y suma de control DA">
+						<p class="s2-uml__nombre">Trama</p>
+						<ul>
+							<li><span class="s3a-trama__b s3a-trama__b--cab">AA</span><span>cabecera</span></li>
+							<li><span class="s3a-trama__b ">00</span><span>identificador</span></li>
+							<li><span class="s3a-trama__b ">06</span><span>longitud</span></li>
+							<li><span class="s3a-trama__b s3a-trama__b--dato">48 6F 6C</span><span>carga «Hola 0»</span></li>
+							<li><span class="s3a-trama__b s3a-trama__b--dato">61 20 30</span><span></span></li>
+							<li><span class="s3a-trama__b s3a-trama__b--suma">DA</span><span>suma de control</span></li>
+						</ul>
+						<figcaption>10 bytes por UART2 · ejemplo 13</figcaption>
+					</figure>
 				</div>
 			</div>
 
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<span></span>
-				<a class="slide-nav__link" href="02-parametros-del-enlace.html">
-					<span>Los cuatro parámetros de un enlace</span>
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-				</a>
-			</nav>
+			<aside class="notas">
+				<p>
+					Presentar el recorrido en cuatro tramos: transmisión de bits por un enlace
+					serie; UART del ESP32 que queda libre; reparto de dos cables entre varios
+					dispositivos (I²C) y selección con un cable (SPI); empaquetado de los datos
+					para detectar errores. Pregunta de predicción: si la placa recibe los diez
+					bytes de la derecha, ¿cómo sabe dónde termina el mensaje y si llegó intacto?
+					Respuesta: por la longitud y la suma de control, que se tratan en las
+					láminas 17 y 18.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Punto de partida</h4>
+					<p>
+						Se da por conocido: niveles de 3,3 V y tope de 3,6 V en un terminal
+						(sesión 1, lámina 07), resistencias de polarización (sesión 1, lámina
+						09), clases y <code>millis()</code> (sesión 2).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplos 11 (enlace UART2), 12, 12b y 12c (bus I²C), 13 (trama con
+						suma de control) y 14 (JSON). Los ejemplos 11, 12c y 13 necesitan dos
+						placas.
+					</p>
+					<h4>La trama de la figura</h4>
+					<p>
+						<code>DA</code> = (00 + 06 + 48 + 6F + 6C + 61 + 20 + 30) mod 256: la
+						suma no incluye la cabecera.
+					</p>
+				</div>
+			</details>
 		</main>
 
 		<script type="module" src="../../js/deck.js"></script>
-		<script type="module">
-			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
-		</script>
 	</body>
 </html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Puertos UART del ESP32 · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · UART en el ESP32</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>UART2</em> es la única UART libre en sus pines por defecto
+				</h1>
+
+				<div class="crece flex">
+					<svg class="crece w-full" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Los tres controladores UART del ESP32 con sus pines por defecto en el núcleo Arduino-ESP32 2.x; solo UART2 queda libre en ellos. UART0, objeto Serial, en GPIO 1 TX y 3 RX, va al conversor USB-serie: monitor y grabación, ocupado. UART1, objeto Serial1, en GPIO 10 TX y 9 RX, que en el módulo WROOM-32 están conectados a la memoria flash SPI donde se almacena el programa; UART1 debe pasar a otros pines, por ejemplo 25 y 26. UART2, objeto Serial2, en GPIO 17 TX y 16 RX, pines D17 y D16 de la placa: libre para otra placa, un GPS o un módulo"><rect x="10" y="10" width="330" height="780" rx="16" fill="var(--color-surface-2)" stroke="var(--color-heading)" stroke-width="4" /><text x="175" y="46" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="36" font-weight="700" fill="var(--color-heading)">ESP32</text><rect x="40" y="80" width="270" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-navy)" stroke-width="4" /><text x="175" y="132" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="38" font-weight="700" fill="var(--color-navy)">UART0</text><text x="175" y="190" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="600" fill="var(--color-text-muted)">Serial</text><path d="M 310 160 H 690" stroke="var(--color-navy)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round" /><text x="500" y="126" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="700" fill="var(--color-heading)">TX 1 · RX 3</text><text x="500" y="194" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-text-muted)">por defecto · núcleo 2.x</text><rect x="690" y="80" width="520" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-heading)" stroke-width="3" /><text x="950" y="134" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="32" font-weight="700" fill="var(--color-heading)">conversor USB-serie</text><text x="950" y="188" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="26" font-weight="500" fill="var(--color-text-muted)">monitor y grabación</text><g><rect x="1250" y="94" width="340" height="132" rx="66" fill="var(--color-warn-soft)" stroke="var(--color-warn)" stroke-width="4" /><text x="1420" y="142" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="34" font-weight="700" fill="var(--color-warn)">ocupado</text><text x="1420" y="186" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-warn)">por el monitor</text></g><rect x="40" y="330" width="270" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-danger)" stroke-width="4" /><text x="175" y="382" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="38" font-weight="700" fill="var(--color-danger)">UART1</text><text x="175" y="440" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="600" fill="var(--color-text-muted)">Serial1</text><path d="M 310 410 H 690" stroke="var(--color-danger)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round" /><text x="500" y="376" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="700" fill="var(--color-heading)">TX 10 · RX 9</text><text x="500" y="444" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-text-muted)">por defecto · núcleo 2.x</text><rect x="690" y="330" width="520" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-heading)" stroke-width="3" /><text x="950" y="384" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="32" font-weight="700" fill="var(--color-heading)">flash SPI del módulo</text><text x="950" y="438" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="26" font-weight="500" fill="var(--color-text-muted)">GPIO 6–11: el programa</text><g><rect x="1250" y="344" width="340" height="132" rx="66" fill="var(--color-danger-soft)" stroke="var(--color-danger)" stroke-width="4" /><text x="1420" y="392" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="34" font-weight="700" fill="var(--color-danger)">mover pines</text><text x="1420" y="436" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-danger)">p. ej. a 25 y 26</text></g><rect x="40" y="580" width="270" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-ok)" stroke-width="4" /><text x="175" y="632" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="38" font-weight="700" fill="var(--color-ok)">UART2</text><text x="175" y="690" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="600" fill="var(--color-text-muted)">Serial2</text><path d="M 310 660 H 690" stroke="var(--color-ok)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round" /><text x="500" y="626" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="700" fill="var(--color-heading)">TX 17 · RX 16</text><text x="500" y="694" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-text-muted)">por defecto · núcleo 2.x</text><rect x="690" y="580" width="520" height="160" rx="12" fill="var(--color-surface)" stroke="var(--color-heading)" stroke-width="3" /><text x="950" y="634" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="32" font-weight="700" fill="var(--color-heading)">pines D17 y D16</text><text x="950" y="688" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="26" font-weight="500" fill="var(--color-text-muted)">otra placa, GPS, módulo</text><g><rect x="1250" y="594" width="340" height="132" rx="66" fill="var(--color-ok-soft)" stroke="var(--color-ok)" stroke-width="4" /><text x="1420" y="642" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="34" font-weight="700" fill="var(--color-ok)">libre</text><text x="1420" y="686" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans, sans-serif" font-size="24" font-weight="500" fill="var(--color-ok)">ejemplo 11</text></g><path d="M 632 392 L 668 428 M 668 392 L 632 428" stroke="var(--color-danger)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round" /></svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción, antes de señalar la columna derecha: de las tres
+					UART, ¿cuántas quedan para comunicarse con otra placa sin perder el
+					monitor ni el acceso al programa? Respuesta: una. UART0 la ocupa el
+					monitor (y la grabación por USB). UART1 sale por defecto a GPIO 9 y 10,
+					cableados a la flash del módulo: abrirla sin cambiar pines bloquea el
+					acceso al programa. Queda UART2, en D16 y D17, la del ejemplo 11. UART1 es
+					utilizable si la matriz de pines la asigna a otros GPIO, por ejemplo 25
+					y 26.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>Serial2.begin(115200, SERIAL_8N1, 16, 17)</code>: el orden es
+						velocidad, formato, <b>RX</b> y luego <b>TX</b>. UART1 sirve si se le
+						dan otros pines: <code>Serial1.begin(9600, SERIAL_8N1, 25, 26)</code>.
+					</p>
+					<h4>Restricción de UART1</h4>
+					<p>
+						En el ESP32-WROOM-32 los GPIO 6 a 11 van a la flash SPI integrada;
+						Espressif indica no usarlos para otra cosa.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Conectar un módulo a TX0/RX0: compite con el monitor y puede impedir la grabación.</li>
+						<li>En módulos WROVER, GPIO 16 y 17 van a la PSRAM: allí UART2 también necesita otros pines.</li>
+						<li>Dar por fijos los pines por defecto: son los del núcleo 2.x que instala <code>platform = espressif32</code>; el 3.x los cambia (Serial1 a 26/27, Serial2 a 4/25). El ejemplo 11 los fija en <code>begin()</code>.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-cruce-y-masa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cruce y masa</span>
+				</a>
+				<a class="slide-nav__link" href="08-codigo-11-enlace-uart.html">
+					<span>Ejemplo 11 · UART2</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Memoria estática, heap y pila · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Memoria de los objetos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Memoria estática, <em>heap</em> y pila
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p><b>Estática</b>: globales y locales <code>static</code>; existen durante toda la ejecución.</p>
+						</div>
+						<div class="def">
+							<p><b>Heap</b>: memoria reservada con <code>new</code>; existe hasta su <code>delete[]</code>.</p>
+						</div>
+						<div class="def">
+							<p><b>Pila</b> (<i>stack</i>): las locales de una función; se liberan al salir.</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<ol class="s2c-pasos" aria-label="Pasos de la animación">
+							<li><b>0</b> Global en memoria estática</li>
+							<li data-paso="1"><b>1</b> El constructor reserva en el heap</li>
+							<li data-paso="2"><b>2</b> loop() apila sus locales</li>
+							<li data-paso="3"><b>3</b> Fin de la vuelta: se libera el marco</li>
+						</ol>
+						<div class="lienzo-caja">
+							<canvas
+								id="memoria"
+								role="img"
+								aria-label="Código del ejemplo 09 junto a tres zonas de memoria. El objeto global entrada está en memoria estática; su constructor reserva con new uint16_t[16] un arreglo de 32 bytes en el heap, apuntado por _buffer; cada vuelta de loop() apila crudo, voltios, promedio y char buffer[80], que desaparecen al salir mientras el arreglo del heap permanece."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Antes del paso 3. Pregunta de predicción: cuando <code>loop()</code>
+					termina, ¿qué desaparece: el <code>char buffer[80]</code>, el arreglo de
+					la media móvil o los dos? Respuesta: el <code>char buffer[80]</code>; el
+					arreglo permanece en el heap.
+				</p>
+				<p>
+					Paso 1: los constructores de las globales se ejecutan antes de
+					<code>setup()</code>; <code>new</code> deja en el heap 16 ×
+					<code>uint16_t</code> = 32 B y guarda su dirección en
+					<code>_buffer</code>. Paso 2: las locales ocupan la pila de la tarea
+					<code>loop()</code>. Paso 3: el marco de la pila se libera al retornar y
+					se vuelve a crear en la vuelta siguiente; el arreglo sigue en el heap.
+					Por eso el búfer de la media móvil no puede ser una local de
+					<code>update()</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>new uint16_t[_n]</code> en el constructor y
+						<code>delete[] _buffer</code> en el destructor
+						<code>~EntradaAnalogica()</code>: cada <code>new[]</code> con su
+						<code>delete[]</code>. La pila de la tarea <code>loop()</code> mide
+						8 KB por defecto en Arduino-ESP32; <code>ESP.getFreeHeap()</code>
+						informa del heap libre.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Búferes cuyo tamaño se decide al crear el objeto: ventanas de filtrado,
+						colas de mensajes, tramas de comunicación.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Devolver la dirección de una local: apunta a pila ya liberada.</li>
+						<li>Una local de gran tamaño (<code>char[16000]</code>) desborda la pila y reinicia el chip.</li>
+						<li><code>new</code> dentro de <code>loop()</code> sin <code>delete</code>: el heap se agota.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-media-movil.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Media móvil</span>
+				</a>
+				<a class="slide-nav__link" href="17-codigo-09-analogica.html">
+					<span>Ejemplo 09 · Media móvil</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			// [texto, tipo] — tipo: c = comentario, s = sangría
+			const CODIGO = [
+				["// main.cpp · global", "c"],
+				["EntradaAnalogica entrada(PIN_ADC, VENTANA_N);", ""],
+				["// EntradaAnalogica.cpp · constructor", "c"],
+				["_buffer = new uint16_t[_n];", ""],
+				["// main.cpp", "c"],
+				["void loop() {", ""],
+				["  entrada.update();", ""],
+				["  uint16_t crudo = entrada.leerCrudo();", ""],
+				["  float voltios = entrada.leerVoltios();", ""],
+				["  uint16_t promedio = …;", ""],
+				["  char buffer[80];", ""],
+				["  snprintf(buffer, sizeof(buffer), …);", ""],
+				["  Serial.println(buffer);", ""],
+				["  delay(100);", ""],
+				["}", ""],
+			];
+			const RESALTE = [[1], [3], [7, 8, 9, 10], [14]];
+
+			let paso = 0;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function caja(ctx, x, y, w, h, relleno, borde, grosor = 2, discont = false) {
+				ctx.setLineDash(discont ? [8, 6] : []);
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, 8);
+				if (relleno) {
+					ctx.fillStyle = relleno;
+					ctx.fill();
+				}
+				ctx.lineWidth = grosor;
+				ctx.strokeStyle = borde;
+				ctx.stroke();
+				ctx.setLineDash([]);
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+					warnSoft: token("--color-warn-soft"),
+					codeBg: token("--color-code-bg"),
+					codeFg: token("--color-code-fg"),
+					codeDim: token("--color-code-dim"),
+					codeBorde: token("--color-code-border"),
+				};
+				const fs = clamp(20, Math.min(h * 0.042, w * 0.0135), 28);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const pad = fs * 0.7;
+
+				// ---------- Código ----------
+				ctx.font = `600 ${fs}px ${MONO}`;
+				const anchoCod = ctx.measureText(CODIGO[1][0]).width;
+				const cw = anchoCod + pad * 2.4;
+				const lh = Math.min((h - pad * 2) / CODIGO.length, fs * 1.75);
+				const cy0 = (h - lh * CODIGO.length) / 2;
+				ctx.fillStyle = c.codeBg;
+				ctx.fillRect(0, 0, cw, h);
+				for (const [i, [linea, tipo]] of CODIGO.entries()) {
+					const y = cy0 + i * lh + lh / 2;
+					const marcada = RESALTE[paso].includes(i);
+					if (marcada) {
+						ctx.fillStyle = c.acento;
+						ctx.globalAlpha = 0.22;
+						ctx.fillRect(0, y - lh / 2, cw, lh);
+						ctx.globalAlpha = 1;
+						ctx.fillStyle = c.acento;
+						ctx.fillRect(0, y - lh / 2, 6, lh);
+					}
+					texto(ctx, linea, pad * 1.2, y, fs, tipo === "c" ? c.codeDim : c.codeFg, marcada ? 700 : 500);
+				}
+
+				// ---------- Tres zonas de memoria ----------
+				const zx0 = cw + pad * 1.6;
+				const zw = (w - zx0 - pad * 2) / 3;
+				const zT = fs * 3.2;
+				const zB = h - pad;
+				const zonas = [
+					["Estática", "todo el programa", c.navy],
+					["Heap", "hasta delete[]", c.ok],
+					["Pila de loop()", "una vuelta", c.warn],
+				];
+				const zx = (i) => zx0 + i * (zw + pad);
+				for (const [i, [nom, vida, col]] of zonas.entries()) {
+					texto(ctx, nom, zx(i), fs * 0.9, fs * 1.1, col, 700, "left", SANS);
+					texto(ctx, vida, zx(i), fs * 2.2, fs, c.muted, 500, "left", SANS);
+					caja(ctx, zx(i), zT, zw, zB - zT, c.sup, c.borde, 1.5);
+				}
+
+				// Dentro de las zonas la letra crece con el alto disponible: el
+				// objeto (9 filas) ocupa unos dos tercios de la zona.
+				const anchoUtil = zw - pad * 1.2 - fs;
+				const zfs = clamp(fs, Math.min(((zB - zT) * 0.66) / 9 / 1.5, anchoUtil / (16 * 0.6)), fs * 1.35);
+				const fl = zfs * 1.5; // alto de fila de un campo
+				const campo = (x, y, ancho, nombre, valor, col, alto = fl) => {
+					texto(ctx, nombre, x + fs * 0.5, y + alto / 2, zfs, c.heading, 600);
+					texto(ctx, valor, x + ancho - fs * 0.5, y + alto / 2, zfs, col, 700, "right");
+				};
+				const zBaja = zB - pad * 0.6; // borde inferior útil de cada zona
+
+				// Estática: el objeto entrada.
+				const ox = zx(0) + pad * 0.6;
+				const ow = zw - pad * 1.2;
+				// Desde el paso 2 ya corrió entrada.update(): primera muestra, 2048.
+				const m = paso >= 2;
+				const campos = [
+					["_pin", "32"],
+					["_n", "16"],
+					["_buffer", paso >= 1 ? "→ heap" : "—"],
+					["_indice", m ? "1" : "0"],
+					["_cuenta", m ? "1" : "0"],
+					["_suma", m ? "2048" : "0"],
+					["_crudo", m ? "2048" : "0"],
+					["_promedio", m ? "2048" : "0"],
+				];
+				const oy = zT + pad * 0.6;
+				// Debajo del objeto, otra global real: Serial, del núcleo de Arduino.
+				const serialH = fl * 2 + pad * 0.4;
+				const flS = Math.max(fl, (zBaja - oy - serialH - pad - pad * 0.4) / (campos.length + 1));
+				const oh = flS * (campos.length + 1) + pad * 0.4;
+				caja(ctx, ox, oy, ow, oh, paso === 0 ? c.navySoft : c.sup, c.navy, paso === 0 ? 4 : 2);
+				texto(ctx, "entrada", ox + fs * 0.5, oy + flS / 2 + 2, zfs, c.navy, 700);
+				const sy0 = oy + oh + pad;
+				caja(ctx, ox, sy0, ow, zBaja - sy0, c.sup, c.navy, 1.5);
+				texto(ctx, "Serial", ox + fs * 0.5, sy0 + fl * 0.6, zfs, c.navy, 700);
+				texto(ctx, "global del núcleo", ox + fs * 0.5, sy0 + fl * 1.45, Math.min(zfs, (ow - fs) / 9.5), c.muted, 500, "left", SANS);
+				let yPuntero = 0;
+				for (const [i, [n, v]] of campos.entries()) {
+					const y = oy + flS * (i + 1);
+					if (n === "_buffer") yPuntero = y + flS / 2;
+					campo(ox, y, ow, n, v, n === "_buffer" && paso >= 1 ? c.ok : m && v !== "0" && i > 2 ? c.acento : c.muted, flS);
+				}
+
+				// Heap: arreglo de 16 uint16_t.
+				const hx = zx(1) + pad * 0.6;
+				const hw = zw - pad * 1.2;
+				const hy = oy;
+				if (paso >= 1) {
+					const celda = Math.min((hw - pad) / 4, zfs * 2.4);
+					const gw = celda * 4;
+					const gx = hx + (hw - gw) / 2;
+					const gy = hy + fl * 1.3;
+					caja(ctx, hx, hy, hw, zBaja - hy, paso === 1 ? c.okSoft : c.sup, c.ok, paso === 1 ? 4 : 2);
+					// Quién lo libera: el destructor, no el final de una función.
+					const fsD = Math.min(zfs, (hw - fs * 0.6) / (19 * 0.6));
+					const yD = (gy + celda * 4 + fl * 1.2 + zBaja) / 2;
+					texto(ctx, "lo libera", hx + hw / 2, yD - fl * 0.55, zfs, c.muted, 500, "center", SANS);
+					texto(ctx, "~EntradaAnalogica()", hx + hw / 2, yD + fl * 0.45, fsD, c.ok, 700, "center");
+					texto(ctx, "uint16_t[16]", hx + fs * 0.5, hy + fl * 0.65, zfs, c.ok, 700);
+					texto(ctx, "16 × 2 B = 32 B", hx + hw / 2, gy + celda * 4 + fl * 0.6, zfs, c.ok, 700, "center");
+					for (let i = 0; i < 16; i++) {
+						const x = gx + (i % 4) * celda;
+						const y = gy + Math.floor(i / 4) * celda;
+						ctx.strokeStyle = c.ok;
+						ctx.lineWidth = 1.5;
+						ctx.strokeRect(x + 2, y + 2, celda - 4, celda - 4);
+						const lleno = m && i === 0;
+						texto(ctx, lleno ? "2048" : "0", x + celda / 2, y + celda / 2, lleno ? Math.min(zfs, celda / 2.7) : zfs, lleno ? c.acento : c.muted, 700, "center");
+					}
+					// Flecha del puntero _buffer al arreglo.
+					const x1 = ox + ow - fs * 0.2;
+					const x2 = hx;
+					const y2 = hy + fl * 0.65;
+					ctx.strokeStyle = c.ok;
+					ctx.lineWidth = 3;
+					ctx.beginPath();
+					ctx.moveTo(x1, yPuntero);
+					ctx.bezierCurveTo(x1 + pad * 1.5, yPuntero, x2 - pad * 1.5, y2, x2 - 4, y2);
+					ctx.stroke();
+					ctx.fillStyle = c.ok;
+					ctx.beginPath();
+					ctx.moveTo(x2, y2);
+					ctx.lineTo(x2 - fs * 0.55, y2 - fs * 0.35);
+					ctx.lineTo(x2 - fs * 0.55, y2 + fs * 0.35);
+					ctx.fill();
+				} else {
+					caja(ctx, hx, hy, hw, zBaja - hy, null, c.borde, 2, true);
+					texto(ctx, "libre", hx + hw / 2, hy + (zBaja - hy) * 0.42, zfs, c.muted, 700, "center", SANS);
+					texto(ctx, "ninguna reserva", hx + hw / 2, hy + (zBaja - hy) * 0.42 + fl, zfs, c.muted, 500, "center", SANS);
+					texto(ctx, "con new", hx + hw / 2, hy + (zBaja - hy) * 0.42 + fl * 2, zfs, c.muted, 500, "center", SANS);
+				}
+
+				// Pila: toda la columna es la pila de la tarea loopTask (8 KB); el
+				// marco de loop() se apila abajo y se libera al volver.
+				const px = zx(2) + pad * 0.6;
+				const pw = zw - pad * 1.2;
+				const sy = zT + pad * 0.6;
+				const sh = zB - pad * 0.6 - sy;
+				const existe = paso >= 2;
+				caja(ctx, px, sy, pw, sh, null, existe ? c.warn : c.borde, 2, true);
+				texto(ctx, "loopTask", px + fs * 0.5, sy + fl * 0.6, zfs, existe ? c.warn : c.muted, 700);
+				texto(ctx, "8 KB", px + pw - fs * 0.5, sy + fl * 0.6, zfs, existe ? c.warn : c.muted, 700, "right");
+				const centro = (lineas, y0, col, peso = 500) => {
+					for (const [i, l] of lineas.entries()) texto(ctx, l, px + pw / 2, y0 + i * fl, zfs, col, i === 0 ? 700 : peso, "center", SANS);
+				};
+				const locales = [
+					["crudo", "2048"],
+					["voltios", "1.650"],
+					["promedio", "2048"],
+				];
+				const barra = zfs * 2.2;
+				const ph = fl * (locales.length + 2) + barra + pad * 1.2;
+				const py = zB - pad * 1.2 - ph; // el marco se apila desde abajo
+				if (paso < 2) {
+					centro(["aún no existe", "los constructores", "globales se ejecutan", "antes de setup()"], sy + sh * 0.3, c.muted);
+				} else if (paso === 2) {
+					centro(["libre", "≈ 8 KB"], sy + (py - sy) * 0.42, c.muted);
+					caja(ctx, px + pad * 0.4, py, pw - pad * 0.8, ph, c.warnSoft, c.warn, 4);
+					const fx = px + pad * 0.4;
+					const fw = pw - pad * 0.8;
+					texto(ctx, "marco de loop()", fx + fs * 0.5, py + fl / 2 + 2, zfs, c.warn, 700);
+					for (const [i, [n, v]] of locales.entries()) campo(fx, py + fl * (i + 1), fw, n, v, c.acento);
+					const by = py + fl * (locales.length + 1);
+					campo(fx, by, fw, "buffer[80]", "80 B", c.muted);
+					const bx = fx + fs * 0.5;
+					const bw = fw - fs;
+					ctx.fillStyle = c.acentoSoft;
+					ctx.fillRect(bx, by + fl, bw, barra);
+					ctx.strokeStyle = c.acento;
+					ctx.lineWidth = 2;
+					ctx.strokeRect(bx, by + fl, bw, barra);
+					ctx.save();
+					ctx.beginPath();
+					ctx.rect(bx, by + fl, bw, barra);
+					ctx.clip();
+					ctx.font = `600 ${fs}px ${MONO}`;
+					const linea = ctx.measureText("[ADC] crudo=2048 …").width < bw - fs * 0.8 ? "[ADC] crudo=2048 …" : "[ADC] …";
+					texto(ctx, linea, bx + fs * 0.4, by + fl + barra / 2, fs, c.acento, 600);
+					ctx.restore();
+				} else {
+					centro(["Serial ya recibió:"], sy + fl * 2, c.muted);
+					for (const [i, l] of ["[ADC] crudo=2048", "promedio=2048", "v=1.650"].entries()) {
+						texto(ctx, l, px + pw / 2, sy + fl * (3.1 + i), Math.min(zfs, (pw - fs) / (16 * 0.6)), c.heading, 600, "center");
+					}
+					caja(ctx, px + pad * 0.4, py, pw - pad * 0.8, ph, null, c.muted, 2, true);
+					centro(["marco liberado", "la próxima vuelta", "lo vuelve a crear"], py + ph * 0.3, c.muted);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("memoria"), dibujar);
+			document.addEventListener("paso", (e) => {
+				paso = e.detail.mostrados;
+				lienzo.redibujar();
+			});
+			// La lámina puede abrirse con los pasos ya visibles (al retroceder).
+			paso = document.querySelectorAll("[data-paso].is-shown").length;
+			lienzo.redibujar();
+		</script>
+	</body>
+</html>

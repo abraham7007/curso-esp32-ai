@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>RSSI y canales · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Enlace WiFi</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>RSSI</em> y canales de la banda de 2,4 GHz
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>RSSI</b> (<i>Received Signal Strength Indicator</i>): potencia
+								recibida, en dBm y siempre negativa.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								El ESP32 clásico trabaja en <b>2,4 GHz</b>, con canales de 22 MHz separados 5 MHz. Los canales 1, 6 y 11 no se solapan.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>WiFi.RSSI()</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Distancia</span>
+								<input type="range" id="dist" min="1" max="40" step="1" value="12" />
+								<output id="dist-out" for="dist" class="s4c-ancho s4c-ancho--corto">12 m</output>
+							</label>
+							<fieldset class="mandos__grupo" aria-label="Paredes entre el router y el ESP32">
+								<span class="s4c-rotulo">Paredes</span>
+								<button type="button" class="btn btn--secondary" data-paredes="0" aria-pressed="false">0</button>
+								<button type="button" class="btn btn--primary" data-paredes="1" aria-pressed="true">1</button>
+								<button type="button" class="btn btn--secondary" data-paredes="2" aria-pressed="false">2</button>
+							</fieldset>
+							<label class="control">
+								<span>Canal</span>
+								<input type="range" id="canal" min="1" max="13" step="1" value="3" />
+								<output id="canal-out" for="canal" class="s4c-ancho s4c-ancho--corto">3</output>
+							</label>
+							<span class="lectura"><small>se solapa con </small><span id="l-pisa" class="s4c-ancho s4c-ancho--largo">1 y 6</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="rssi"
+								role="img"
+								aria-label="A la izquierda, router y ESP32 separados por la distancia y las paredes elegidas, y una escala de RSSI de −95 a −30 dBm con cuatro zonas de calidad orientativas y una marca en el valor estimado. A la derecha, el espectro de 2,4 GHz con los 13 canales de 22 MHz separados 5 MHz, redes vecinas en 1, 6 y 11 y el router en el canal elegido, resaltando con qué redes se solapa; la banda de 5 GHz aparece fuera del alcance del ESP32 clásico."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: a 12 m y tras una pared, el ESP32 lee −73 dBm; si la distancia baja a la mitad, ¿cuántos dB sube la señal, 3, 9 o 36? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: unos 9 dB con el modelo de interior usado (exponente 3: 30 ×
+					log10 2 ≈ 9). En espacio libre serían 6 dB. Quitar la pared suma otros 6
+					dB. El modelo es ilustrativo; el valor real depende de antenas, materiales y orientación, y se mide con <code>WiFi.RSSI()</code>. Los umbrales de calidad son orientativos.
+				</p>
+				<p>
+					Canales: mover el router al 3. Su espectro de 22 MHz se solapa con las redes del 1 y del 6. En el 1, el 6 o el 11 comparte canal con una sola red; las dos transmiten por turnos y no hay solape parcial. Una red de 5 GHz no aparece en el escaneo del ESP32 clásico.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>WiFi.RSSI()</code> da el RSSI de la red a la que se está
+						conectado; tras <code>WiFi.scanNetworks()</code>,
+						<code>WiFi.RSSI(i)</code> y <code>WiFi.channel(i)</code> describen
+						cada red encontrada (ejemplo 15).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Orientativo: sobre −55 dBm excelente, hasta −70 bueno, hasta −80
+						marginal (reintentos, más consumo), por debajo se pierde el enlace.
+						El ESP32-C5 es el primero de la familia con 5 GHz.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Leer −40 como «peor» que −70; el valor más cercano a cero indica más potencia.</li>
+						<li>Buscar la red de 5 GHz del router desde un ESP32 clásico.</li>
+						<li>Atribuir al código los cortes que causa un canal saturado.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-wifi-estacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Modo estación</span>
+				</a>
+				<a class="slide-nav__link" href="04-codigo-15-escaner.html">
+					<span>Ejemplo 15 · Escáner WiFi</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+
+			// Modelo de interior ilustrativo: −35 dBm a 1 m, exponente 3, 6 dB por pared.
+			const P1M = -35;
+			const EXPONENTE = 3;
+			const POR_PARED = 6;
+			const rssiDe = (d, paredes) => Math.round(P1M - 10 * EXPONENTE * Math.log10(d) - POR_PARED * paredes);
+
+			// Umbrales orientativos de calidad (dBm).
+			const ZONAS = [
+				{ desde: -100, hasta: -80, nombre: "insuficiente", tono: "acento" },
+				{ desde: -80, hasta: -70, nombre: "marginal", tono: "warn" },
+				{ desde: -70, hasta: -55, nombre: "buena", tono: "navy" },
+				{ desde: -55, hasta: -25, nombre: "excelente", tono: "ok" },
+			];
+			const zonaDe = (r) => ZONAS.find((z) => r >= z.desde && r < z.hasta) ?? ZONAS[3];
+
+			const VECINAS = [1, 6, 11];
+			const mhz = (c) => 2407 + 5 * c;
+			const seSolapan = (a, b) => Math.abs(mhz(a) - mhz(b)) < 22;
+
+			let dist = 12;
+			let paredes = 1;
+			let canal = 3;
+
+			const colores = () => ({
+				bg: token("--color-bg-subtle"),
+				borde: token("--color-border"),
+				heading: token("--color-heading"),
+				texto: token("--color-text"),
+				muted: token("--color-text-muted"),
+				acento: token("--color-accent"),
+				acentoSoft: token("--color-accent-soft"),
+				navy: token("--color-navy"),
+				navySoft: token("--color-navy-soft"),
+				ok: token("--color-ok"),
+				okSoft: token("--color-ok-soft"),
+				warn: token("--color-warn"),
+				warnSoft: token("--color-warn-soft"),
+				surface: token("--color-surface"),
+			});
+
+			// Texto que nunca se corta: reduce la letra hasta MIN_FS para caber en maxW.
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = fs;
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function caja(ctx, x, y, w, h, r, relleno, trazo) {
+				ctx.beginPath();
+				ctx.roundRect(x, y, w, h, r);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				if (trazo) {
+					ctx.strokeStyle = trazo;
+					ctx.lineWidth = 2;
+					ctx.stroke();
+				}
+			}
+
+			function dibujarRssi(ctx, w, h) {
+				const c = colores();
+				const fs = clamp(MIN_FS, Math.min(h * 0.05, w * 0.03), 30);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const r = rssiDe(dist, paredes);
+				const z = zonaDe(r);
+				const tono = { acento: c.acento, warn: c.warn, navy: c.navy, ok: c.ok };
+				const suave = { acento: c.acentoSoft, warn: c.warnSoft, navy: c.navySoft, ok: c.okSoft };
+
+				// --- Enlace: router, paredes y ESP32 (arriba) y escala (abajo) ---
+				const m = fs * 1.2;
+				const yG = h - fs * 5;
+				const gh = fs * 1.9;
+				const libre = yG - fs * 3.4;
+				const S = clamp(1, libre / (fs * 7), 1.6);
+				const fsS = fs * S;
+				const rw = fsS * 4.4;
+				const rh = fsS * 2;
+				const ew = fsS * 4.4;
+				const yBase = libre * 0.5 + rh * 0.9;
+				const xR = m;
+				const xMinE = xR + rw + fs * 2;
+				const xMaxE = w - m - ew;
+				const xE = xMinE + ((xMaxE - xMinE) * (dist - 1)) / 39;
+
+				// Ondas que salen del router.
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 2;
+				for (let k = 1; k <= 3; k++) {
+					ctx.globalAlpha = 0.55 - k * 0.12;
+					ctx.beginPath();
+					ctx.arc(xR + rw / 2, yBase - rh, fsS * (0.9 + k * 0.9), -Math.PI * 0.42, -Math.PI * 0.08);
+					ctx.stroke();
+				}
+				ctx.globalAlpha = 1;
+
+				// Router: caja con dos antenas.
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = Math.max(3, fs * 0.14);
+				for (const dx of [0.25, 0.75]) {
+					ctx.beginPath();
+					ctx.moveTo(xR + rw * dx, yBase - rh);
+					ctx.lineTo(xR + rw * dx, yBase - rh - fsS * 1.3);
+					ctx.stroke();
+				}
+				caja(ctx, xR, yBase - rh, rw, rh, fs * 0.3, c.navySoft, c.navy);
+				texto(ctx, "router", xR + rw / 2, yBase - rh / 2, fsS, c.navy, 700, "center", SANS, rw - fs * 0.4);
+
+				// ESP32.
+				caja(ctx, xE, yBase - rh, ew, rh, fs * 0.3, c.surface, tono[z.tono]);
+				texto(ctx, "ESP32", xE + ew / 2, yBase - rh / 2, fsS, c.heading, 700, "center", MONO, ew - fs * 0.4);
+
+				// Paredes repartidas entre ambos.
+				const x0 = xR + rw;
+				const x1 = xE;
+				for (let k = 1; k <= paredes; k++) {
+					const xp = x0 + ((x1 - x0) * k) / (paredes + 1);
+					ctx.fillStyle = c.muted;
+					ctx.fillRect(xp - fsS * 0.25, yBase - rh - fsS * 1.8, fsS * 0.5, rh + fsS * 1.8);
+				}
+
+				// Cota de distancia.
+				const yCota = yBase + fs * 1.3;
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(xR + rw / 2, yCota);
+				ctx.lineTo(xE + ew / 2, yCota);
+				ctx.stroke();
+				for (const x of [xR + rw / 2, xE + ew / 2]) {
+					ctx.beginPath();
+					ctx.moveTo(x, yCota - fs * 0.4);
+					ctx.lineTo(x, yCota + fs * 0.4);
+					ctx.stroke();
+				}
+				const etq = `${dist} m · ${paredes} ${paredes === 1 ? "pared" : "paredes"}`;
+				const xEtq = (xR + rw / 2 + xE + ew / 2) / 2;
+				ctx.font = `600 ${fs}px ${SANS}`;
+				const anchoEtq = ctx.measureText(etq).width;
+				const xEtqC = clamp(m + anchoEtq / 2, xEtq, w - m - anchoEtq / 2);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(xEtqC - anchoEtq / 2 - 6, yCota - fs * 0.6, anchoEtq + 12, fs * 1.2);
+				texto(ctx, etq, xEtqC, yCota, fs, c.muted, 600, "center", SANS, w - 2 * m);
+
+				// --- Escala de RSSI (−95 a −30 dBm) ---
+				const gx0 = m;
+				const gx1 = w - m;
+				const MINR = -95;
+				const MAXR = -30;
+				const X = (v) => gx0 + ((clamp(MINR, v, MAXR) - MINR) / (MAXR - MINR)) * (gx1 - gx0);
+				for (const zz of ZONAS) {
+					const a = X(Math.max(zz.desde, MINR));
+					const b = X(Math.min(zz.hasta, MAXR));
+					ctx.fillStyle = suave[zz.tono];
+					ctx.fillRect(a, yG, b - a, gh);
+					const activo = zz === z;
+					texto(ctx, zz.nombre, (a + b) / 2, yG + gh / 2, fs * (activo ? 1 : 0.9), tono[zz.tono], activo ? 700 : 600, "center", SANS, b - a - 8);
+				}
+				// Marcas del eje.
+				for (const v of [-90, -80, -70, -55, -40, -30]) {
+					const x = X(v);
+					ctx.strokeStyle = c.muted;
+					ctx.lineWidth = 1.5;
+					ctx.beginPath();
+					ctx.moveTo(x, yG + gh);
+					ctx.lineTo(x, yG + gh + fs * 0.35);
+					ctx.stroke();
+					texto(ctx, String(v).replace("-", "−"), x, yG + gh + fs * 0.95, fs * 0.9, c.muted, 600, "center", MONO);
+				}
+				texto(ctx, "dBm · umbrales orientativos", gx0, yG + gh + fs * 2.1, fs * 0.9, c.muted, 600, "left", SANS, gx1 - gx0);
+
+				// Marca del valor estimado.
+				const xr = X(r);
+				ctx.fillStyle = tono[z.tono];
+				ctx.beginPath();
+				ctx.moveTo(xr, yG - 2);
+				ctx.lineTo(xr - fs * 0.55, yG - fs * 0.9);
+				ctx.lineTo(xr + fs * 0.55, yG - fs * 0.9);
+				ctx.closePath();
+				ctx.fill();
+				ctx.fillRect(xr - 2, yG, 4, gh * 0.18);
+				ctx.fillRect(xr - 2, yG + gh * 0.82, 4, gh * 0.18);
+				const lectura = `${String(r).replace("-", "−")} dBm · ${z.nombre}`;
+				ctx.font = `700 ${fs * 1.2}px ${MONO}`;
+				const aw = ctx.measureText(lectura).width;
+				const xl = clamp(gx0 + aw / 2, xr, gx1 - aw / 2);
+				texto(ctx, lectura, xl, yG - fs * 1.6, fs * 1.2, tono[z.tono], 700, "center", MONO, gx1 - gx0);
+			}
+
+			function dibujarCanales(ctx, w, h) {
+				const c = colores();
+				const fs = clamp(MIN_FS, Math.min(h * 0.05, w * 0.03), 30);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const m = fs * 1.2;
+				// Eje de 2 398 a 2 486 MHz y una franja final para «5 GHz».
+				const ancho5 = fs * 5.2;
+				const fx0 = m;
+				const fx1 = w - m - ancho5 - fs * 0.8;
+				const F0 = 2398;
+				const F1 = 2486;
+				const X = (f) => fx0 + ((f - F0) / (F1 - F0)) * (fx1 - fx0);
+				const yEje = h - fs * 3.4;
+				const yTope = fs * 2.6;
+				const alto = yEje - yTope;
+
+				// Campana de un canal: 22 MHz de ancho.
+				const campana = (cn, nivel) => {
+					const f = mhz(cn);
+					ctx.beginPath();
+					ctx.moveTo(X(f - 11), yEje);
+					ctx.bezierCurveTo(X(f - 9), yEje - alto * nivel * 1.05, X(f + 9), yEje - alto * nivel * 1.05, X(f + 11), yEje);
+					ctx.closePath();
+				};
+
+				// Los 13 canales posibles, en trazo tenue.
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				for (let cn = 1; cn <= 13; cn++) {
+					campana(cn, 0.55);
+					ctx.stroke();
+				}
+
+				// Redes vecinas en 1, 6 y 11 (los rótulos van al final, sobre todo).
+				const rotulos = [];
+				for (const v of VECINAS) {
+					const choca = v !== canal && seSolapan(v, canal);
+					campana(v, 0.62);
+					ctx.fillStyle = choca ? c.acentoSoft : c.navySoft;
+					ctx.globalAlpha = 0.85;
+					ctx.fill();
+					ctx.globalAlpha = 1;
+					ctx.strokeStyle = choca ? c.acento : c.navy;
+					ctx.lineWidth = 2.5;
+					ctx.stroke();
+					rotulos.push([v, choca]);
+				}
+
+				// Router en el canal elegido.
+				campana(canal, 0.92);
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = Math.max(4, fs * 0.18);
+				ctx.stroke();
+				const pisa = VECINAS.filter((v) => v !== canal && seSolapan(v, canal));
+				const comparte = VECINAS.includes(canal);
+				texto(ctx, "router", X(mhz(canal)), yEje - alto * 0.92 * 0.79 - fs * 0.9, fs, c.acento, 700, "center", SANS, w - 2 * m);
+				// Anchura de 22 MHz acotada sobre la campana del router.
+				const yAncho = yEje - fs * 0.9;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(X(mhz(canal) - 11), yAncho);
+				ctx.lineTo(X(mhz(canal) + 11), yAncho);
+				ctx.stroke();
+				const etq22 = "22 MHz";
+				ctx.font = `700 ${fs * 0.9}px ${MONO}`;
+				const a22 = ctx.measureText(etq22).width;
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(X(mhz(canal)) - a22 / 2 - 4, yAncho - fs * 0.5, a22 + 8, fs);
+				texto(ctx, etq22, X(mhz(canal)), yAncho, fs * 0.9, c.acento, 700, "center", MONO);
+
+				for (const [v, choca] of rotulos) {
+					ctx.font = `700 ${fs * 0.9}px ${SANS}`;
+					const aw = ctx.measureText("vecina").width;
+					const yv = yEje - alto * 0.62 * 0.3;
+					caja(ctx, X(mhz(v)) - aw / 2 - 6, yv - fs * 0.6, aw + 12, fs * 1.2, fs * 0.3, c.bg);
+					texto(ctx, "vecina", X(mhz(v)), yv, fs * 0.9, choca ? c.acento : c.navy, 700, "center", SANS);
+				}
+
+				// Eje con el número de canal.
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(fx0, yEje);
+				ctx.lineTo(fx1, yEje);
+				ctx.stroke();
+				for (let cn = 1; cn <= 13; cn++) {
+					const limpio = VECINAS.includes(cn);
+					const sel = cn === canal;
+					texto(ctx, String(cn), X(mhz(cn)), yEje + fs * 0.8, fs * (sel ? 1 : 0.9), sel ? c.acento : limpio ? c.navy : c.muted, sel || limpio ? 700 : 500, "center", MONO);
+				}
+				texto(ctx, "canal · 2 412 a 2 472 MHz, cada 5 MHz", fx0, yEje + fs * 2.1, fs * 0.9, c.muted, 600, "left", SANS, fx1 - fx0);
+
+				// Banda de 5 GHz: fuera del alcance del ESP32 clásico.
+				const x5 = w - m - ancho5;
+				ctx.setLineDash([8, 6]);
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.roundRect(x5, yTope, ancho5, yEje - yTope, fs * 0.3);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				const xc5 = x5 + ancho5 / 2;
+				texto(ctx, "5 GHz", xc5, yTope + alto * 0.3, fs * 1.1, c.muted, 700, "center", MONO, ancho5 - 8);
+				texto(ctx, "el ESP32", xc5, yTope + alto * 0.52, fs * 0.9, c.muted, 600, "center", SANS, ancho5 - 8);
+				texto(ctx, "clásico", xc5, yTope + alto * 0.52 + fs * 1.1, fs * 0.9, c.muted, 600, "center", SANS, ancho5 - 8);
+				texto(ctx, "no la usa", xc5, yTope + alto * 0.52 + fs * 2.2, fs * 0.9, c.muted, 600, "center", SANS, ancho5 - 8);
+
+				// Veredicto.
+				const veredicto = pisa.length ? `canal ${canal}: se solapa con ${pisa.join(" y ")}` : comparte ? `canal ${canal}: turnos con una vecina, sin solapes` : `canal ${canal}: libre de vecinas`;
+				texto(ctx, veredicto, fx0, fs * 1.2, fs, pisa.length ? c.acento : c.ok, 700, "left", SANS, fx1 - fx0);
+			}
+
+			// Un solo lienzo con los dos paneles: potencia a la izquierda, canales a la derecha.
+			function dibujar(ctx, w, h) {
+				const wi = Math.round(w * 0.52);
+				const sep = 2;
+				ctx.save();
+				ctx.beginPath();
+				ctx.rect(0, 0, wi, h);
+				ctx.clip();
+				dibujarRssi(ctx, wi, h);
+				ctx.restore();
+				ctx.save();
+				ctx.translate(wi + sep, 0);
+				ctx.beginPath();
+				ctx.rect(0, 0, w - wi - sep, h);
+				ctx.clip();
+				dibujarCanales(ctx, w - wi - sep, h);
+				ctx.restore();
+				ctx.fillStyle = token("--color-border");
+				ctx.fillRect(wi, 0, sep, h);
+			}
+			const lienzo = lienzoAdaptable(document.getElementById("rssi"), dibujar);
+			const ctrlDist = document.getElementById("dist");
+			const outDist = document.getElementById("dist-out");
+			const ctrlCanal = document.getElementById("canal");
+			const outCanal = document.getElementById("canal-out");
+			const lPisa = document.getElementById("l-pisa");
+			const botonesPared = [...document.querySelectorAll("[data-paredes]")];
+
+			function render() {
+				dist = Number(ctrlDist.value);
+				canal = Number(ctrlCanal.value);
+				outDist.textContent = `${dist} m`;
+				outCanal.textContent = String(canal);
+				for (const b of botonesPared) {
+					const on = Number(b.dataset.paredes) === paredes;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				const pisa = VECINAS.filter((v) => v !== canal && seSolapan(v, canal));
+				lPisa.textContent = pisa.length ? pisa.join(" y ") : "ninguna";
+				lPisa.classList.toggle("s4c-mal", pisa.length > 0);
+				lPisa.classList.toggle("s4c-bien", pisa.length === 0);
+				lienzo.redibujar();
+			}
+			ctrlDist.addEventListener("input", render);
+			ctrlCanal.addEventListener("input", render);
+			for (const b of botonesPared) {
+				b.addEventListener("click", () => {
+					paredes = Number(b.dataset.paredes);
+					render();
+				});
+			}
+			render();
+		</script>
+	</body>
+</html>

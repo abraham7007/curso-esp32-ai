@@ -1,0 +1,3371 @@
+/* ============================================================
+   MODO PONENCIA — <body class="ponencia">
+   ============================================================
+
+   Capa para láminas que se proyectan en clase como en una charla: una idea
+   por lámina, letra a escala de proyector, sin la hoja en relieve y sin
+   rótulos que compitan con el contenido. Todo lo de este archivo está
+   prefijado por .ponencia, así que las sesiones que no la declaran siguen
+   exactamente igual.
+
+   La profundidad que sale de la pantalla no se pierde: cambia de capa.
+     · <aside class="notas">      notas del ponente, tecla N
+     · <details class="detalle">  ampliación para estudiar, tecla D
+     · [data-paso="N"]            revelado por pasos con → / espacio
+   Las tres las gestiona deck.js. */
+
+/* ---------- Escala tipográfica de proyección ---------- */
+
+body.ponencia {
+	--fs-eyebrow: clamp(0.85rem, 0.95vw, 1.1rem);
+	--fs-title: clamp(2.6rem, 4.6vw, 5rem);
+	--fs-title-sm: clamp(2rem, 3.3vw, 3.6rem);
+	--fs-lede: clamp(1.25rem, 1.8vw, 2rem);
+	--fs-h3: clamp(1.15rem, 1.5vw, 1.6rem);
+	--fs-body: clamp(1.1rem, 1.45vw, 1.6rem);
+	--fs-small: clamp(0.95rem, 1.1vw, 1.2rem);
+	--fs-micro: clamp(0.8rem, 0.85vw, 0.95rem);
+	--fs-statement: clamp(2.4rem, 4.4vw, 4.8rem);
+	--fs-big: clamp(5rem, 11vw, 11rem);
+}
+
+/* La hora del código es una lámina de trabajo, no de exposición: se lee de
+   cerca mientras se programa. Conserva la escala original para que su
+   contrato (qué hacer, montaje, salida, prompt) siga cabiendo entero. */
+body.ponencia--trabajo {
+	--fs-eyebrow: clamp(0.78rem, 0.85vw, 0.92rem);
+	--fs-title: clamp(2rem, 3.7vw, 3rem);
+	--fs-title-sm: clamp(1.6rem, 2.7vw, 2.2rem);
+	--fs-lede: clamp(1.05rem, 1.4vw, 1.3rem);
+	--fs-h3: clamp(1.05rem, 1.25vw, 1.25rem);
+	--fs-body: clamp(0.95rem, 1.08vw, 1.3rem);
+	--fs-small: clamp(0.85rem, 1vw, 1.2rem);
+	--fs-micro: clamp(0.72rem, 0.8vw, 0.95rem);
+}
+
+/* Aligerado el texto, la lámina de trabajo tenía ~300 px libres: se
+   devuelven a la lectura de la salida, el prompt y el montaje. */
+.ponencia--trabajo .term,
+.ponencia--trabajo .prompt-note {
+	font-size: clamp(0.85rem, 0.88vw, 1.05rem);
+}
+
+.ponencia--trabajo .code-hour__why {
+	font-size: clamp(0.95rem, 0.96vw, 1.15rem);
+}
+
+.ponencia--trabajo .code-hour__title {
+	font-size: clamp(1.4rem, 1.6vw, 1.9rem);
+}
+
+@media (min-width: 1700px) {
+	.ponencia--trabajo .hw-set {
+		zoom: 1.5;
+	}
+}
+
+/* el elemento de Wokwi del servo trae un tamaño propio desproporcionado */
+.ponencia--trabajo .hw-set wokwi-servo {
+	zoom: 0.55;
+}
+
+/* ---------- Escenario sin hoja ---------- */
+
+.ponencia .slide {
+	/* la retícula se conserva como firma, pero apenas perceptible */
+	background-image: radial-gradient(
+		color-mix(in oklab, var(--color-border) 35%, transparent) 1px,
+		transparent 1px
+	);
+	padding-inline: clamp(1.5rem, 4vw, 5rem);
+}
+
+.ponencia .slide__content {
+	background: none;
+	border: 0;
+	box-shadow: none;
+	border-radius: 0;
+	padding: 0;
+	max-width: min(92vw, 110rem);
+	gap: clamp(1rem, 2.2vh, 2rem);
+	justify-content: safe center;
+}
+
+.ponencia .slide--start > .slide__content {
+	justify-content: safe center;
+}
+
+/* ---------- Jerarquía ---------- */
+
+.ponencia .slide__title {
+	font-family: var(--font-sans);
+	font-weight: 600;
+	letter-spacing: -0.02em;
+	line-height: 1.08;
+	max-width: 42ch;
+}
+
+.ponencia .slide__lede {
+	max-width: 52ch;
+}
+
+.ponencia .slide__content p,
+.ponencia .slide__content li {
+	line-height: 1.45;
+}
+
+/* La insignia deja de ser una franja rosa: pasa a rótulo de cabecera. */
+.ponencia .badge {
+	align-self: flex-start;
+	background: none;
+	padding: 0;
+	letter-spacing: 0.14em;
+}
+
+/* ---------- Bloques aligerados ---------- */
+
+/* Sin escuadras: un solo filo izquierdo, del color del bloque. */
+.ponencia .def::before,
+.ponencia .def::after,
+.ponencia .example::before,
+.ponencia .example::after,
+.ponencia .practice::before,
+.ponencia .practice::after,
+.ponencia .warn-box::before,
+.ponencia .warn-box::after,
+.ponencia .conclusion::before,
+.ponencia .conclusion::after {
+	display: none;
+}
+
+.ponencia .def,
+.ponencia .example,
+.ponencia .practice,
+.ponencia .warn-box,
+.ponencia .conclusion {
+	padding: 0.15em 0 0.15em 1.1rem;
+	border-left: 3px solid var(--mark);
+}
+
+/* Los controles de una simulación se accionan delante de la clase: a escala
+   de proyector, no de formulario. */
+.ponencia:not(.ponencia--trabajo) .btn {
+	font-size: var(--fs-small);
+	padding: 0.7em 1.2em;
+}
+
+/* La tarjeta que envuelve una simulación pierde la sombra: un solo marco. */
+.ponencia .card {
+	box-shadow: none;
+}
+
+/* ---------- Composiciones de ponencia ---------- */
+
+/* Lámina de una idea: una frase grande, la palabra clave en rojo. */
+.ponencia .enunciado {
+	font-family: var(--font-sans);
+	font-size: var(--fs-statement);
+	font-weight: 600;
+	line-height: 1.12;
+	letter-spacing: -0.02em;
+	color: var(--color-heading);
+	max-width: 22ch;
+	margin: 0;
+}
+
+.ponencia .enunciado em,
+.ponencia .slide__title em {
+	font-style: normal;
+	color: var(--color-accent);
+}
+
+/* Cifras grandes: la magnitud manda, la explicación es una línea. */
+.ponencia .cifras {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: clamp(1.5rem, 4vw, 4rem);
+	align-items: end;
+}
+
+.ponencia .cifra {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.ponencia .cifra__valor {
+	font-family: var(--font-mono);
+	font-size: var(--fs-big);
+	font-weight: 600;
+	line-height: 0.95;
+	letter-spacing: -0.04em;
+	color: var(--color-accent);
+}
+
+.ponencia .cifra__unidad {
+	font-size: 0.4em;
+	letter-spacing: 0;
+	margin-left: 0.1em;
+	color: var(--color-text-muted);
+}
+
+.ponencia .cifra__que {
+	font-size: var(--fs-body);
+	color: var(--color-text);
+	max-width: 24ch;
+}
+
+.ponencia .cifra--navy .cifra__valor {
+	color: var(--color-navy);
+}
+
+/* Separador de tema: número del temario enorme y nombre del tema. */
+.ponencia .seccion {
+	display: flex;
+	align-items: baseline;
+	gap: clamp(1rem, 3vw, 3rem);
+}
+
+.ponencia .seccion__num {
+	font-family: var(--font-mono);
+	font-size: var(--fs-big);
+	font-weight: 600;
+	line-height: 0.9;
+	color: var(--color-accent);
+}
+
+.ponencia .seccion__nombre {
+	font-family: var(--font-sans);
+	font-size: var(--fs-statement);
+	font-weight: 600;
+	line-height: 1.1;
+	color: var(--color-heading);
+	max-width: 18ch;
+	margin: 0;
+}
+
+.ponencia .seccion__temas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 2rem;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	font-family: var(--font-mono);
+	font-size: var(--fs-small);
+	color: var(--color-text-muted);
+}
+
+/* Escenario: la simulación o la figura ocupa el hueco libre. */
+.ponencia .escenario {
+	display: grid;
+	grid-template-columns: minmax(16rem, 0.7fr) 1.6fr;
+	gap: clamp(1.5rem, 3.5vw, 4rem);
+	align-items: center;
+	min-height: 0;
+}
+
+.ponencia .escenario--solo {
+	grid-template-columns: 1fr;
+}
+
+.ponencia .escenario__texto {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(0.8rem, 2vh, 1.5rem);
+}
+
+.ponencia .escenario__visual {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+/* Lista corta de ideas: sin viñeta, con un número de mono en rojo. */
+.ponencia .puntos {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: clamp(0.6rem, 1.6vh, 1.2rem);
+	counter-reset: punto;
+}
+
+.ponencia .puntos > li {
+	counter-increment: punto;
+	display: grid;
+	grid-template-columns: 2.2em 1fr;
+	align-items: baseline;
+}
+
+.ponencia .puntos > li::before {
+	content: counter(punto, decimal-leading-zero);
+	font-family: var(--font-mono);
+	font-size: 0.75em;
+	font-weight: 700;
+	color: var(--color-accent);
+}
+
+/* Rótulo sobre un control de simulación y lecturas grandes. */
+.ponencia .lectura {
+	font-family: var(--font-mono);
+	font-size: var(--fs-h3);
+	font-weight: 600;
+	color: var(--color-heading);
+}
+
+.ponencia .lectura small {
+	font-size: 0.7em;
+	color: var(--color-text-muted);
+	font-weight: 500;
+}
+
+.ponencia .lecturas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 2.5rem;
+}
+
+.ponencia .control {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	font-size: var(--fs-small);
+	color: var(--color-text-muted);
+}
+
+.ponencia .control input[type="range"] {
+	flex: 1 1 auto;
+	accent-color: var(--color-accent);
+	min-width: 8rem;
+}
+
+.ponencia .control output {
+	font-family: var(--font-mono);
+	font-weight: 600;
+	color: var(--color-heading);
+	min-width: 6ch;
+	text-align: right;
+}
+
+.ponencia .sim-caption p {
+	font-size: var(--fs-small);
+}
+
+.ponencia canvas.lienzo {
+	width: 100%;
+	height: auto;
+	display: block;
+	border-radius: var(--radius-md);
+}
+
+/* ---------- Revelado por pasos ---------- */
+
+/* visibility, no display: el hueco queda reservado y nada salta al revelar */
+.ponencia [data-paso]:not(.is-shown) {
+	visibility: hidden;
+	opacity: 0;
+}
+
+.ponencia [data-paso] {
+	transition:
+		opacity 0.35s ease-out,
+		visibility 0s;
+}
+
+/* ---------- Notas del ponente ---------- */
+
+.ponencia .notas {
+	display: none;
+}
+
+.ponencia.show-notas .notas {
+	display: block;
+	position: fixed;
+	left: 50%;
+	bottom: 3.5rem;
+	transform: translateX(-50%);
+	z-index: 40;
+	width: min(92vw, 60rem);
+	max-height: 40vh;
+	overflow-y: auto;
+	padding: 1rem 1.5rem;
+	border-radius: var(--radius-md);
+	background: var(--color-code-bg);
+	color: var(--color-code-fg);
+	font-size: 1rem;
+	line-height: 1.5;
+	box-shadow: var(--shadow-lg);
+}
+
+.ponencia.show-notas .notas::before {
+	content: "Notas del ponente · Mayús + N para cerrar";
+	display: block;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-code-dim);
+	margin-bottom: 0.5rem;
+}
+
+.ponencia .notas p,
+.ponencia .notas li {
+	font-size: 1rem;
+}
+
+/* ---------- Detalle para estudiar ---------- */
+
+/* Junto a los botones del cromo, cerrado al proyectar: abajo tapaba el pie
+   de las simulaciones. Abierto, se despliega como panel sobre el contenido
+   para no empujar nada fuera de pantalla. */
+.ponencia .detalle {
+	position: fixed;
+	top: 1rem;
+	right: 9.5rem;
+	z-index: 30;
+	max-width: min(92vw, 46rem);
+	font-size: var(--fs-small);
+}
+
+.ponencia .detalle > summary {
+	list-style: none;
+	cursor: pointer;
+	margin-left: auto;
+	width: max-content;
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-navy);
+	opacity: 0.55;
+	padding: 0.35rem 0.75rem;
+	border-radius: var(--radius-full);
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+	transition: opacity 0.15s ease;
+}
+
+.ponencia .detalle > summary::-webkit-details-marker {
+	display: none;
+}
+
+.ponencia .detalle > summary:hover,
+.ponencia .detalle[open] > summary {
+	opacity: 1;
+}
+
+.ponencia .detalle[open] > .detalle__cuerpo {
+	margin-top: 0.5rem;
+	max-height: 60vh;
+	overflow-y: auto;
+	padding: 1.25rem 1.5rem;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+	box-shadow: var(--shadow-lg);
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.ponencia .detalle__cuerpo p,
+.ponencia .detalle__cuerpo li {
+	font-size: var(--fs-small);
+	line-height: 1.5;
+}
+
+.ponencia .detalle__cuerpo h4 {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: var(--fs-micro);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-navy);
+}
+
+/* ---------- Cromo discreto ---------- */
+
+/* Los enlaces de navegación siguen en el DOM (el teclado lee sus href);
+   solo se atenúan para no competir con la lámina proyectada. */
+.ponencia .slide-nav__link {
+	opacity: 0.35;
+	transition: opacity 0.15s ease;
+}
+
+.ponencia .slide-nav__link:hover,
+.ponencia .slide-nav__link:focus-visible {
+	opacity: 1;
+}
+
+/* ---------- Impresión / PDF ---------- */
+
+@media print {
+	.ponencia [data-paso]:not(.is-shown) {
+		visibility: visible;
+		opacity: 1;
+	}
+	.ponencia .detalle,
+	.ponencia.show-notas .notas,
+	.ponencia .notas {
+		display: none;
+	}
+}
+
+/* ---------- Componentes heredados a escala de proyector ---------- */
+
+.ponencia:not(.ponencia--trabajo) .picker__item small {
+	font-size: var(--fs-micro);
+}
+
+.ponencia:not(.ponencia--trabajo) .bd-node__body {
+	font-size: var(--fs-small);
+}
+
+.ponencia:not(.ponencia--trabajo) .codepanel pre,
+.ponencia:not(.ponencia--trabajo) .file-tree {
+	font-size: var(--fs-small);
+}
+
+.ponencia:not(.ponencia--trabajo) .bd-node__title,
+.ponencia:not(.ponencia--trabajo) .bd-arrow {
+	font-size: var(--fs-small);
+}
+
+.ponencia .slide__content a:not(.btn) {
+	color: var(--color-code-inline);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+/* Los selectores clicables se agrupan en <fieldset> (rol de grupo nativo);
+   sin marco ni relleno propios del navegador. */
+.ponencia fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+
+/* ============================================================
+   OCUPACIÓN DEL ESCENARIO
+   ============================================================
+   Primera versión: el bloque se centraba en vertical y el visual tenía alto
+   intrínseco, así que 17 de 23 láminas usaban entre el 34 % y el 81 % del
+   alto, con franjas vacías arriba y abajo. Ahora el encabezado se ancla
+   arriba y el escenario reclama TODO el alto restante; dentro, el visual
+   (.crece) se estira hasta el borde. Criterio de aceptación: el contenido
+   cubre ≥ 88 % del alto útil (medido con ocupacion.mjs). */
+
+.ponencia .slide__content,
+.ponencia .slide--start > .slide__content {
+	justify-content: flex-start;
+}
+
+/* El escenario y cualquier bloque marcado .crece se quedan con el alto libre. */
+.ponencia .slide__content > .escenario,
+.ponencia .slide__content > .crece {
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.ponencia .escenario {
+	align-items: stretch;
+}
+
+.ponencia .escenario__texto {
+	justify-content: center;
+}
+
+.ponencia .escenario__visual {
+	min-height: 0;
+}
+
+.ponencia .escenario__visual > .crece,
+.ponencia .escenario__texto > .crece {
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+/* Lienzo que llena su caja: la caja crece, el canvas la cubre y
+   src/js/lienzo.js ajusta su resolución al tamaño real (sin deformar). */
+.ponencia .lienzo-caja {
+	position: relative;
+	flex: 1 1 auto;
+	min-height: 12rem;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+
+.ponencia .lienzo-caja > canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* Selectores que se reparten el alto: cada fila de casillas crece por igual. */
+.ponencia .picker.crece,
+.ponencia fieldset.crece {
+	display: grid;
+	grid-auto-rows: 1fr;
+	align-content: stretch;
+}
+
+.ponencia:not(.ponencia--trabajo) .picker__item {
+	font-size: var(--fs-body);
+}
+
+/* Diagramas de bloques que llenan el escenario: las cajas se estiran en alto
+   y su texto se centra. */
+.ponencia .blockdiagram.crece {
+	align-items: stretch;
+}
+
+.ponencia .blockdiagram.crece > .bd-node {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: clamp(1rem, 2vw, 2rem);
+}
+
+.ponencia .blockdiagram.crece .bd-node__title {
+	font-size: var(--fs-h3);
+}
+
+.ponencia .blockdiagram.crece .bd-node__body {
+	font-size: var(--fs-body);
+}
+
+/* agente A2: placa de Wokwi a toda altura (portada y lámina 03).
+   El SVG del elemento mide en milímetros y solo responde a `zoom`, que no
+   admite unidades de ventana; por eso la escala se escalona por el alto
+   disponible. */
+.ponencia .hero-board--alta {
+	justify-content: center;
+}
+
+.ponencia .hero-board--alta .hero-board__part {
+	--board-scale: 2.4;
+}
+
+@media (min-height: 760px) {
+	.ponencia .hero-board--alta .hero-board__part {
+		--board-scale: 3.1;
+	}
+}
+
+@media (min-height: 880px) {
+	.ponencia .hero-board--alta .hero-board__part {
+		--board-scale: 3.4;
+	}
+}
+
+@media (min-height: 1000px) {
+	.ponencia .hero-board--alta .hero-board__part {
+		--board-scale: 4;
+	}
+}
+
+/* agente A2: la misma placa bajo un título (lámina 03): algo menor. */
+.ponencia .hero-board--alta.hero-board--bajo-titulo .hero-board__part {
+	--board-scale: 2;
+}
+
+@media (min-height: 760px) {
+	.ponencia .hero-board--alta.hero-board--bajo-titulo .hero-board__part {
+		--board-scale: 2.6;
+	}
+}
+
+@media (min-height: 880px) {
+	.ponencia .hero-board--alta.hero-board--bajo-titulo .hero-board__part {
+		--board-scale: 2.8;
+	}
+}
+
+@media (min-height: 1000px) {
+	.ponencia .hero-board--alta.hero-board--bajo-titulo .hero-board__part {
+		--board-scale: 3.4;
+	}
+}
+
+/* ============================================================
+   SEGUNDA REVISIÓN (revisor independiente)
+   ============================================================ */
+
+/* 1. Escenario apilado por defecto. La columna de texto a la izquierda de
+   la simulación dejaba ~300 px vacíos arriba y abajo en ocho láminas: el
+   defecto exacto que señaló el profesor. Ahora el texto es una franja corta
+   bajo el título, repartida en horizontal, y el visual se queda con todo el
+   ancho y el alto restantes. El reparto lateral sigue disponible con
+   .escenario--lado para los casos que de verdad lo piden. */
+.ponencia .escenario {
+	grid-template-columns: 1fr;
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: clamp(0.75rem, 2vh, 1.75rem);
+}
+
+.ponencia .escenario__texto {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 0.75rem clamp(1.5rem, 3vw, 3.5rem);
+}
+
+.ponencia .escenario__texto > * {
+	flex: 0 1 auto;
+	max-width: 52rem;
+}
+
+.ponencia .escenario.escenario--lado {
+	grid-template-columns: minmax(16rem, 0.6fr) 1.7fr;
+	grid-template-rows: minmax(0, 1fr);
+}
+
+.ponencia .escenario--lado > .escenario__texto {
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	padding-top: 0.5rem;
+}
+
+.ponencia .escenario--solo {
+	grid-template-rows: minmax(0, 1fr);
+}
+
+/* 2. Nada proyectado por debajo de --fs-small (~21 px a 1080p). Los
+   subtítulos de caja, metadatos y rótulos de terminal salían a 10-15 px. */
+.ponencia:not(.ponencia--trabajo)
+:is(
+	.bd-node__meta,
+	.file-tree__annotation,
+	.codepanel__header,
+	.codepanel__tag,
+	.picker__item small,
+	.figure__caption,
+	small
+) {
+	font-size: var(--fs-small);
+}
+
+/* 3. El panel «Para estudiar» se abre bajo el cromo, pegado al borde
+   derecho: no tapa el título. */
+.ponencia .detalle[open] > .detalle__cuerpo {
+	max-height: calc(100dvh - 8rem);
+}
+
+/* ---------- Vista del ponente (ponente.html) ---------- */
+
+.ponente {
+	min-height: 100dvh;
+	margin: 0;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	background: var(--color-code-bg);
+	color: var(--color-code-fg);
+	font-family: var(--font-sans);
+}
+
+.ponente__cabecera,
+.ponente__pie {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.5rem;
+	background: var(--color-code-header);
+	font-family: var(--font-mono);
+	color: var(--color-code-dim);
+}
+
+.ponente__reloj {
+	font-size: 2rem;
+	font-weight: 600;
+	color: var(--color-code-fg);
+}
+
+.ponente__cuerpo {
+	display: grid;
+	align-content: start;
+	gap: 1.5rem;
+	padding: 1.5rem;
+	overflow-y: auto;
+}
+
+.ponente__rotulo {
+	margin: 0 0 0.25rem;
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-code-dim);
+}
+
+.ponente__titulo {
+	margin: 0;
+	font-size: 1.8rem;
+	line-height: 1.2;
+	color: var(--color-code-fg);
+}
+
+.ponente__pasos {
+	margin: 0.25rem 0 0;
+	font-family: var(--font-mono);
+	color: var(--color-accent);
+}
+
+.ponente__notas {
+	font-size: 1.35rem;
+	line-height: 1.55;
+}
+
+.ponente .ponente__notas p {
+	margin: 0 0 0.75rem;
+}
+
+.ponente__siguiente {
+	margin: 0;
+	font-size: 1.2rem;
+	color: var(--color-code-dim);
+}
+
+/* agente R-B: láminas «La hora del código» de la sesión 1 (08, 10, 12, 14,
+   16, 22). El título respira antes de los entregables; el cuerpo estira sus
+   columnas hasta el cierre y el alto sobrante lo ganan el montaje (figuras
+   a escala legible) y la salida esperada, no cajas vacías. */
+.ponencia--trabajo .code-hour__title {
+	padding-top: var(--space-2xs);
+	margin-bottom: var(--space-sm);
+}
+
+.ponencia--trabajo .code-hour__body--pair {
+	align-items: stretch;
+}
+
+.ponencia--trabajo .code-hour__body--pair > .code-hour__stack {
+	justify-content: space-between;
+	gap: var(--space-xs);
+}
+
+/* Figuras de montaje: la placa pasa de ~70–125 px a ≥ 150 px de alto. El
+   rótulo se compensa contra el zoom para quedar en ≥ 16 px reales. */
+.ponencia--trabajo .hw-set {
+	--rb-z: 1.45;
+	zoom: var(--rb-z);
+	gap: 0.9rem;
+	align-items: flex-end;
+}
+
+.ponencia--trabajo .hw-set__item small {
+	font-size: calc(1rem / var(--rb-z));
+}
+
+.ponencia--trabajo .term {
+	font-size: clamp(0.85rem, 0.94vw, 1.2rem);
+	line-height: 1.5;
+}
+
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo .hw-set {
+		--rb-z: 1.8;
+	}
+}
+
+/* agente R-C: barra de mandos de una simulación (09, 11, 13, 15, 21).
+   Pegada encima del lienzo y a escala de aula: botones con letra de cuerpo,
+   deslizador grueso con mando grande y lecturas en mono. */
+.ponencia .mandos {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem clamp(1rem, 2vw, 2.25rem);
+}
+
+.ponencia .mandos__grupo {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.ponencia:not(.ponencia--trabajo) .mandos .btn {
+	font-size: var(--fs-body);
+	padding: 0.55em 1.05em;
+}
+
+.ponencia .mandos .control {
+	flex: 1 1 22rem;
+	font-size: var(--fs-body);
+}
+
+.ponencia .mandos .control output,
+.ponencia .mandos .lectura {
+	font-size: var(--fs-h3);
+}
+
+.ponencia .mandos input[type="range"] {
+	appearance: none;
+	-webkit-appearance: none;
+	height: 0.55rem;
+	border-radius: 999px;
+	background: var(--color-border);
+	cursor: pointer;
+}
+
+.ponencia .mandos input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 1.9rem;
+	height: 1.9rem;
+	border-radius: 50%;
+	background: var(--color-accent);
+	border: 3px solid var(--color-surface);
+	box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.ponencia .mandos input[type="range"]::-moz-range-thumb {
+	width: 1.9rem;
+	height: 1.9rem;
+	border-radius: 50%;
+	background: var(--color-accent);
+	border: 3px solid var(--color-surface);
+}
+
+.ponencia .mandos .lectura--fin {
+	margin-left: auto;
+}
+
+/* agente R-C: franja de texto en una sola fila también a 1440 px: los
+   bloques se reparten el ancho en vez de saltar a otra línea. */
+.ponencia .escenario__texto.franja-fila {
+	flex-wrap: nowrap;
+}
+
+.ponencia .escenario__texto.franja-fila > * {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.ponencia .escenario__texto.franja-fila > .franja-fila__ajusta {
+	flex: 0 1 auto;
+}
+
+/* agente R-D: láminas 17–20 (capas, flujo, cadena, proyecto).
+   Lo que crece es el contenido —letra, código, iconos— con una unidad
+   fluida (--rd-u ≈ 1 % del alto a 16:9), no las cajas. Las utilidades de
+   Tailwind no bastan: viven en una capa que pierde frente a estas reglas de
+   componente y sus tamaños fijos no sirven a la vez para 1080 y 900 px. */
+.ponencia .rd {
+	--rd-u: min(1vh, 0.56vw);
+	--rd-fs: max(1.375rem, calc(var(--rd-u) * 2.6));
+	min-height: 0;
+}
+
+/* 17 · Pila de capas: cuatro franjas, cada una con lo que contiene y la
+   llamada que pasa a la de abajo. Sin tarjeta exterior. */
+.ponencia .capas {
+	display: grid;
+	grid-auto-rows: 1fr;
+	gap: calc(var(--rd-u) * 1.2);
+}
+
+.ponencia .capa {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 0.95fr);
+	align-items: center;
+	column-gap: calc(var(--rd-u) * 4);
+	padding: calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 3);
+	text-align: left;
+	font-weight: 400;
+	border-left: calc(var(--rd-u) * 0.8) solid var(--capa, var(--color-border));
+	background: var(--color-surface);
+}
+
+.ponencia .capa:nth-child(1) {
+	--capa: var(--color-accent);
+}
+.ponencia .capa:nth-child(2) {
+	--capa: var(--color-warn);
+}
+.ponencia .capa:nth-child(3) {
+	--capa: var(--color-navy);
+}
+.ponencia .capa:nth-child(4) {
+	--capa: var(--color-ok);
+}
+
+.ponencia .capa__nombre {
+	display: flex;
+	align-items: center;
+	gap: calc(var(--rd-u) * 2);
+	font-size: max(1.5rem, calc(var(--rd-u) * 3.8));
+	font-weight: 600;
+	line-height: 1.15;
+	color: var(--color-heading);
+}
+
+.ponencia .capa__nombre .icon {
+	width: 1.6em;
+	height: 1.6em;
+	color: var(--capa);
+}
+
+.ponencia .capa__sub,
+.ponencia .capa__donde {
+	display: block;
+	font-size: var(--rd-fs);
+	font-weight: 400;
+	color: var(--color-text-muted);
+}
+
+.ponencia .capa__sub {
+	font-family: var(--font-mono);
+	margin-top: 0.2em;
+}
+
+.ponencia .capa__llamada {
+	display: block;
+	font-family: var(--font-mono);
+	font-size: max(1.5rem, calc(var(--rd-u) * 4));
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--color-heading);
+	white-space: nowrap;
+}
+
+.ponencia .capa__donde {
+	font-family: var(--font-mono);
+	margin-top: 0.3em;
+}
+
+.ponencia .capa__contiene {
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	line-height: 1.35;
+	color: var(--color-text);
+}
+
+/* 18 · Flujo: cuatro estaciones con icono a la medida del rótulo, una
+   llave que agrupa lo que comparte la carpeta y el lazo de vuelta. */
+.ponencia .flujo {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+	grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+	column-gap: calc(var(--rd-u) * 1.5);
+}
+
+.ponencia .flujo__llave {
+	grid-row: 1;
+	grid-column: 3 / 6;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	padding-bottom: calc(var(--rd-u) * 1.5);
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	color: var(--color-navy);
+}
+
+.ponencia .flujo__llave > span {
+	margin-bottom: -0.7em;
+	font-family: var(--font-sans);
+	font-weight: 600;
+	padding: 0 calc(var(--rd-u) * 2);
+	background: var(--color-bg);
+	position: relative;
+}
+
+.ponencia .flujo__llave::before {
+	content: "";
+	align-self: stretch;
+	flex: 1 1 auto;
+	margin-inline: 23.5%;
+	min-height: calc(var(--rd-u) * 4);
+	border: 3px solid currentColor;
+	border-bottom: 0;
+	border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.ponencia .estacion {
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: calc(var(--rd-u) * 1.4);
+}
+
+.ponencia .estacion__icono {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: calc(var(--rd-u) * 24);
+	height: calc(var(--rd-u) * 24);
+	border-radius: var(--radius-md);
+	background: var(--estacion-fondo, var(--color-surface-2));
+	color: var(--estacion, var(--color-heading));
+	font-size: calc(var(--rd-u) * 9);
+}
+
+.ponencia .estacion__icono .icon {
+	width: 1.45em;
+	height: 1.45em;
+}
+
+.ponencia .estacion__icono .estacion__marca {
+	position: absolute;
+	right: 14%;
+	bottom: 14%;
+	width: 0.75em;
+	height: 0.75em;
+	border-radius: 50%;
+	background: var(--estacion-fondo, var(--color-surface-2));
+}
+
+.ponencia .estacion--ia {
+	--estacion: var(--color-text-muted);
+}
+.ponencia .estacion--ia .estacion__icono {
+	background: transparent;
+	border: 3px dashed var(--color-border);
+}
+.ponencia .estacion--pio {
+	--estacion: var(--color-accent);
+	--estacion-fondo: var(--color-accent-soft);
+}
+.ponencia .estacion--sim {
+	--estacion: var(--color-navy);
+	--estacion-fondo: var(--color-navy-soft);
+}
+.ponencia .estacion--placa {
+	--estacion: var(--color-ok);
+	--estacion-fondo: var(--color-ok-soft);
+}
+
+.ponencia .estacion__titulo {
+	font-size: max(1.5rem, calc(var(--rd-u) * 4.6));
+	font-weight: 700;
+	line-height: 1.1;
+	white-space: nowrap;
+	color: var(--color-heading);
+}
+
+.ponencia .estacion__linea {
+	max-width: 13em;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.3));
+	line-height: 1.25;
+	color: var(--color-text-muted);
+}
+
+.ponencia .flujo__flecha {
+	grid-row: 2;
+	align-self: start;
+	margin-top: calc(var(--rd-u) * 9.5);
+	font-size: calc(var(--rd-u) * 4);
+	color: var(--color-text-muted);
+}
+
+.ponencia .flujo__lazo {
+	grid-row: 3;
+	grid-column: 1 / 8;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: calc(var(--rd-u) * 1.5);
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	color: var(--color-warn);
+}
+
+.ponencia .flujo__lazo::before {
+	content: "";
+	align-self: stretch;
+	flex: 1 1 auto;
+	margin-inline: 11.5%;
+	min-height: calc(var(--rd-u) * 4);
+	border: 3px dashed currentColor;
+	border-top: 0;
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.ponencia .flujo__lazo p {
+	margin: calc(-0.7em) 0 0;
+	padding: 0 calc(var(--rd-u) * 2);
+	background: var(--color-bg);
+	color: var(--color-text);
+}
+
+/* 19 · Tubería: archivos arriba, etapas abajo, en zigzag de izquierda a
+   derecha; el trazo lo dibuja el script de la lámina. */
+.ponencia .tuberia {
+	position: relative;
+	display: grid;
+	flex: 1 1 auto;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	grid-template-rows: auto auto;
+	align-content: space-between;
+	row-gap: calc(1vh * 9);
+	column-gap: calc(var(--rd-u) * 0.8);
+}
+
+.ponencia .tuberia > svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	pointer-events: none;
+	color: var(--color-text-muted);
+}
+
+.ponencia .tuberia__archivo,
+.ponencia .tuberia__etapa {
+	position: relative;
+	z-index: 1;
+	grid-column-end: span 2;
+}
+
+.ponencia .tuberia__archivo {
+	grid-row: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: calc(var(--rd-u) * 0.6);
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+.ponencia .tuberia__archivo .icon {
+	width: calc(var(--rd-u) * 12);
+	height: calc(var(--rd-u) * 12);
+	padding: calc(var(--rd-u) * 0.8);
+	background: var(--color-bg);
+	color: var(--color-text-muted);
+}
+
+.ponencia .tuberia__archivo.is-io {
+	color: var(--color-navy);
+}
+.ponencia .tuberia__archivo.is-io .icon {
+	color: var(--color-navy);
+}
+
+.ponencia .tuberia__etapa {
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: calc(var(--rd-u) * 0.5);
+	padding: calc(1vh * 3.2) calc(var(--rd-u) * 1);
+	font-size: max(1.5rem, calc(var(--rd-u) * 4));
+	font-weight: 700;
+	line-height: 1.1;
+}
+
+.ponencia .tuberia__orden {
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 500;
+	color: var(--color-text-muted);
+}
+
+.ponencia .tuberia__etapa.is-selected .tuberia__orden {
+	color: var(--color-navy);
+}
+
+.ponencia .rd .codepanel__header {
+	padding: calc(var(--rd-u) * 1.2) calc(var(--rd-u) * 2.5);
+}
+
+.ponencia .rd .codepanel__path,
+.ponencia .rd .codepanel__tag {
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.4));
+}
+
+.ponencia .rd .codepanel__path .icon {
+	width: 1.2em;
+	height: 1.2em;
+}
+
+.ponencia .rd .codepanel .terminal__error {
+	margin: 0;
+	padding: calc(var(--rd-u) * 2.2) calc(var(--rd-u) * 2.5) calc(var(--rd-u) * 1);
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.3));
+	line-height: 1.35;
+	white-space: pre-wrap;
+	color: var(--color-code-fg);
+}
+
+.ponencia .terminal__orden {
+	color: var(--color-code-dim);
+}
+
+.ponencia .rd .terminal__que {
+	margin: 0;
+	padding: 0 calc(var(--rd-u) * 2.5) calc(var(--rd-u) * 2.4);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.35;
+	color: var(--color-code-dim);
+}
+
+/* 20 · Árbol del proyecto dibujado como árbol (guías en monoespaciado) y
+   platformio.ini a su tamaño, sin estirar el panel. */
+.ponencia .arbol {
+	--fila: calc(1vh * 10.4);
+	--trazo: 3px;
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.9));
+	line-height: 1.2;
+}
+
+.ponencia .arbol li {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.ponencia .arbol ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ponencia .arbol ul ul {
+	margin-left: 1.3em;
+}
+
+/* Ramas del árbol: codo hasta el centro de la fila y, salvo en el último
+   hijo, línea que sigue bajando hacia el hermano siguiente. */
+.ponencia .arbol ul ul li {
+	position: relative;
+	padding-left: 1.5em;
+}
+
+.ponencia .arbol ul ul li::before,
+.ponencia .arbol ul ul li::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	border-left: var(--trazo) solid var(--color-text-muted);
+}
+
+.ponencia .arbol ul ul li::before {
+	top: 0;
+	width: 1.1em;
+	height: calc(var(--fila) / 2);
+	border-bottom: var(--trazo) solid var(--color-text-muted);
+}
+
+.ponencia .arbol ul ul li::after {
+	top: calc(var(--fila) / 2);
+	bottom: 0;
+}
+
+.ponencia .arbol ul ul li:last-child::after {
+	display: none;
+}
+
+.ponencia .arbol__fila {
+	display: flex;
+	align-items: center;
+	height: var(--fila);
+	white-space: nowrap;
+}
+
+.ponencia .arbol__nombre {
+	padding: 0.1em 0.3em;
+	border-radius: var(--radius-sm);
+	font: inherit;
+	font-weight: 600;
+	color: var(--color-heading);
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+}
+
+.ponencia .arbol__nombre:hover {
+	background: var(--color-surface-2);
+}
+
+.ponencia .arbol__nombre.is-selected {
+	background: var(--color-accent);
+	color: var(--color-accent-contrast);
+}
+
+.ponencia .arbol__nota {
+	margin-left: calc(var(--rd-u) * 2.5);
+	font-family: var(--font-sans);
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.8));
+	color: var(--color-text-muted);
+}
+
+.ponencia .rd .ini.codepanel pre {
+	padding: calc(var(--rd-u) * 3) calc(var(--rd-u) * 3.5);
+	font-size: max(1.5rem, calc(var(--rd-u) * 3.5));
+	line-height: 1.7;
+}
+
+.ponencia .ini.is-selected {
+	outline: 3px solid var(--color-accent);
+	outline-offset: 3px;
+}
+
+.ponencia .rd-pie {
+	margin: 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	line-height: 1.35;
+}
+
+/* agente R-A: láminas 01–07 de la sesión 1 (segunda revisión). */
+
+/* La coma decimal en la fuente monoespaciada ocupa una celda entera y
+   separa «3 , 6»: se le recorta el ancho. */
+.ponencia .cifra__coma {
+	margin: 0 -0.12em 0 -0.14em;
+}
+
+/* Portada: la agenda es contenido, no un pie gris; crece y ocupa el centro. */
+.ponencia .agenda {
+	font-size: clamp(1.4rem, 2.2vw, 2.6rem);
+	gap: clamp(0.75rem, 2.5vh, 2.5rem);
+	color: var(--color-heading);
+}
+
+.ponencia .agenda > li {
+	font-size: clamp(1.6rem, 2.6vw, 3.1rem);
+	font-weight: 600;
+	line-height: 1.15;
+}
+
+.ponencia .agenda span {
+	font-weight: 400;
+	margin-top: 0.3rem;
+	display: block;
+	font-size: var(--fs-lede);
+	color: var(--color-text-muted);
+}
+
+/* La placa negra de Wokwi se funde con el fondo oscuro: contorno y halo. */
+:root[data-theme="dark"] .ponencia .hero-board__part {
+	filter: drop-shadow(0 0 2px var(--color-text-muted))
+		drop-shadow(0 0 24px hsl(220 20% 80% / 0.18));
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) .ponencia .hero-board__part {
+		filter: drop-shadow(0 0 2px var(--color-text-muted))
+			drop-shadow(0 0 24px hsl(220 20% 80% / 0.18));
+	}
+}
+
+.ponencia .hero-board--alta .hero-board__caption {
+	font-size: var(--fs-body);
+}
+
+.ponencia .hero-board--alta .hero-board__caption b {
+	font-size: var(--fs-h3);
+}
+
+/* Diagrama de tres cajas con flechas legibles y pies a cuerpo normal. */
+.ponencia .blockdiagram--grande > .bd-arrow {
+	font-size: clamp(2.5rem, 4vw, 4.5rem);
+	color: var(--color-accent);
+}
+
+.ponencia .blockdiagram--grande .bd-node .bd-node__meta {
+	font-size: var(--fs-body);
+}
+
+/* Leyenda de colores en línea (muestra + texto), sin aspecto de botón. */
+.ponencia .leyenda {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 2rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--fs-body);
+	color: var(--color-heading);
+}
+
+.ponencia .leyenda li {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.ponencia .leyenda li::before {
+	content: "";
+	width: 1.1em;
+	height: 1.1em;
+	border-radius: 0.25em;
+	border: 2px solid var(--muestra-borde);
+	background: var(--muestra-fondo);
+}
+
+.ponencia .leyenda .leyenda--ok {
+	--muestra-fondo: var(--color-ok-soft);
+	--muestra-borde: var(--color-ok);
+}
+
+.ponencia .leyenda .leyenda--warn {
+	--muestra-fondo: var(--color-warn-soft);
+	--muestra-borde: var(--color-warn);
+}
+
+.ponencia .leyenda .leyenda--bad {
+	--muestra-fondo: var(--color-danger-soft);
+	--muestra-borde: var(--color-danger);
+}
+
+/* agente R-B: donde el texto deja alto libre (12, 14, 16) el montaje crece
+   en vez de abrir huecos. */
+.ponencia--trabajo .hw-set--amplio {
+	--rb-z: 1.65;
+}
+
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo .hw-set--amplio,
+	.ponencia--trabajo .hw-set--amplio-hd {
+		--rb-z: 2.3;
+	}
+
+	.ponencia--trabajo .prompt-box--amplio {
+		font-size: 1.28rem;
+		line-height: 1.55;
+	}
+}
+
+/* agente R-C: el lienzo bajo una barra de mandos lleva un filete, para que
+   en tema oscuro no se funda con el fondo de la lámina. */
+.ponencia .mandos + .lienzo-caja {
+	border: 1px solid var(--color-border);
+}
+
+/* agente R-A: en el mapa de terminales (06) la placa comparte alto con la
+   franja de detalle; a 900 px de alto se reduce un escalón. */
+@media (max-height: 999px) {
+	.ponencia
+		.mapa-pines
+		.hero-board--alta.hero-board--bajo-titulo
+		.hero-board__part {
+		--board-scale: 2.4;
+	}
+}
+
+/* agente R-C: la lectura del deslizador no cambia de ancho al moverlo
+   (0 % → 100 %), así el deslizador y los botones no se desplazan. */
+.ponencia .mandos .control output,
+.ponencia .mandos .lectura {
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .mandos .control output {
+	flex: none;
+	min-width: 6.5ch;
+}
+
+/* agente R-B (2.ª revisión): rótulos de entregables, nombres de archivo y
+   «Por qué se pide así» a ≥ 20 px a 1080p (proporcionales por debajo); el
+   montaje en fila a todo el ancho de su sección y la placa ≥ 180 px. */
+.ponencia--trabajo .deliverable__name,
+.ponencia--trabajo .deliverable__file,
+.ponencia--trabajo .prompt-note {
+	font-size: clamp(0.85rem, 1.05vw, 1.3rem);
+}
+
+.ponencia--trabajo .deliverable__what {
+	font-size: clamp(0.95rem, 1.1vw, 1.4rem);
+}
+
+.ponencia--trabajo .hw-set {
+	justify-content: space-around;
+}
+
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo .hw-set {
+		--rb-z: 2.3;
+	}
+}
+
+/* agente R-A: pie de portada y botones de la 05 por encima de 20 px. */
+.ponencia .portada-pie,
+.ponencia .portada-pie *,
+.ponencia .controles-grandes .btn {
+	font-size: clamp(1rem, 1.15vw, 1.4rem);
+}
+
+.ponencia .mandos .lectura > span {
+	display: inline-block;
+	min-width: 3ch;
+	text-align: right;
+}
+
+/* agente R-D (2.ª revisión): el terminal de la 19 y el visor de la 20
+   reservan su alto; el contenido cambia sin que nada salte. */
+.ponencia .rd .codepanel .terminal__error {
+	min-height: calc(3 * 1.35em + var(--rd-u) * 3.2);
+}
+
+.ponencia .rd .terminal__que {
+	min-height: calc(2 * 1.35em + var(--rd-u) * 2.4);
+}
+
+.ponencia .rd .visor.codepanel pre {
+	height: calc(8 * 1.5em + var(--rd-u) * 5);
+	padding: calc(var(--rd-u) * 2.5) calc(var(--rd-u) * 3);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.5;
+	overflow: hidden;
+}
+
+.ponencia .rd-pie--fijo {
+	min-height: calc(2 * 1.35em);
+}
+
+/* agente R-B: rótulo y descripción del entregable en la misma línea, para
+   que el cuerpo mayor no alargue la franja de tarjetas. */
+.ponencia--trabajo .deliverable__name,
+.ponencia--trabajo .deliverable__what {
+	display: inline;
+}
+
+.ponencia--trabajo .deliverable__name {
+	margin-right: 0.5em;
+}
+
+.ponencia .portada-pie .btn {
+	font-size: clamp(1rem, 1.15vw, 1.4rem);
+}
+
+/* agente R-A: el rótulo de tema (badge) también ≥ 20 px a 1080p. */
+.ponencia:not(.ponencia--trabajo) .slide__content > .badge {
+	font-size: clamp(0.85rem, 1.06vw, 1.3rem);
+}
+
+/* agente R-B: con dos o tres piezas, el montaje va a la izquierda de su
+   texto: la figura conserva su tamaño y la sección no se alarga. */
+.ponencia--trabajo .montaje--lado {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	column-gap: var(--space-md);
+	align-items: center;
+}
+
+.ponencia--trabajo .montaje--lado > h4 {
+	grid-column: 1 / -1;
+}
+
+.ponencia--trabajo .montaje--lado > .hw-set {
+	grid-column: 1;
+	grid-row: 2;
+	margin-top: 0;
+	flex-wrap: nowrap;
+}
+
+.ponencia--trabajo .montaje--lado > p {
+	grid-column: 2;
+	grid-row: 2;
+}
+
+/* sesión 2 agente A: láminas 01–07 (módulos, clases y objetos).
+   Código a escala de proyección: cada línea es un bloque propio para poder
+   marcarla, etiquetarla o hacerla viajar a otro archivo. Los paneles de
+   código son oscuros en los dos temas: los tintes se mezclan con
+   --color-code-bg para que se lean igual en claro y en oscuro. */
+.ponencia .s2 {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.3));
+	--s2-azul: var(--color-code-inline);
+	min-height: 0;
+}
+
+.ponencia .s2-codigo {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	min-width: 0;
+}
+
+.ponencia .s2-codigo > .codepanel__header {
+	flex: 0 0 auto;
+	padding-block: calc(var(--rd-u) * 0.9);
+}
+
+.ponencia .s2-codigo .codepanel__path {
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.2));
+}
+
+.ponencia .s2-codigo .codepanel__path .icon {
+	width: 1em;
+	height: 1em;
+}
+
+.ponencia .s2-nota {
+	font-family: var(--font-sans);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.1));
+	color: var(--color-code-dim);
+}
+
+.ponencia .s2-lineas {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 2.6);
+	font-family: var(--font-mono);
+	font-size: var(--s2-fs);
+	line-height: 1.42;
+	color: var(--color-code-fg);
+	min-height: 0;
+}
+
+.ponencia .s2-l {
+	display: flex;
+	align-items: center;
+	gap: 0.8em;
+	min-height: 1.42em;
+	margin-inline: -0.6em;
+	padding-inline: 0.45em 0.6em;
+	border-left: 0.18em solid transparent;
+	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	white-space: pre;
+	transition:
+		background-color 0.35s ease-out,
+		border-color 0.35s ease-out,
+		color 0.35s ease-out;
+}
+
+.ponencia .s2-c {
+	color: var(--color-code-dim);
+}
+
+.ponencia .s2-l--h {
+	background: color-mix(in oklab, var(--s2-azul) 26%, var(--color-code-bg));
+	border-left-color: var(--s2-azul);
+}
+
+.ponencia .s2-l--cpp {
+	background: color-mix(in oklab, var(--color-ok) 30%, var(--color-code-bg));
+	border-left-color: var(--color-ok);
+}
+
+.ponencia .s2-l--mal {
+	background: color-mix(
+		in oklab,
+		var(--color-danger) 32%,
+		var(--color-code-bg)
+	);
+	border-left-color: var(--color-danger);
+}
+
+.ponencia .s2-l--clave {
+	background: color-mix(
+		in oklab,
+		var(--color-accent) 30%,
+		var(--color-code-bg)
+	);
+	border-left-color: var(--color-accent);
+}
+
+.ponencia .s2-l--fuera {
+	color: var(--color-code-dim);
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
+}
+
+/* El marcado de una línea se enciende con el paso de su etiqueta, no antes
+   (la línea sigue visible: el data-paso va en la etiqueta). */
+.ponencia .s2-marca:not(:has(> [data-paso].is-shown)) {
+	background: transparent;
+	border-left-color: transparent;
+}
+
+.ponencia .s2-chip {
+	margin-left: auto;
+	padding: 0.05em 0.55em;
+	border-radius: var(--radius-sm);
+	font-family: var(--font-sans);
+	font-size: max(1.25rem, 0.82em);
+	font-weight: 600;
+	white-space: nowrap;
+	color: var(--color-code-fg);
+}
+
+.ponencia .s2-chip--h {
+	background: color-mix(in oklab, var(--s2-azul) 55%, var(--color-code-bg));
+}
+
+.ponencia .s2-chip--cpp {
+	background: color-mix(in oklab, var(--color-ok) 55%, var(--color-code-bg));
+}
+
+.ponencia .s2-chip--mal {
+	background: color-mix(
+		in oklab,
+		var(--color-danger) 60%,
+		var(--color-code-bg)
+	);
+}
+
+.ponencia .s2-chip--clave {
+	background: color-mix(
+		in oklab,
+		var(--color-accent) 60%,
+		var(--color-code-bg)
+	);
+}
+
+.ponencia .s2-chip--bien {
+	background: color-mix(in oklab, var(--color-ok) 55%, var(--color-code-bg));
+}
+
+/* Terminal de PlatformIO: rutas atenuadas, el error en claro. Selector con
+   pre para ganar a la regla general de .codepanel pre (--fs-small). */
+.ponencia .codepanel pre.s2-term {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 2.6);
+	font-family: var(--font-mono);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.15));
+	line-height: 1.38;
+	color: var(--color-code-fg);
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.ponencia .s2-term .s2-c {
+	color: var(--color-code-dim);
+}
+
+.ponencia .s2-term .s2-err {
+	color: color-mix(in oklab, var(--color-danger) 55%, var(--color-code-fg));
+}
+
+.ponencia .s2-term .s2-okt {
+	color: color-mix(in oklab, var(--color-ok) 55%, var(--color-code-fg));
+}
+
+/* Dos estados que ocupan la misma celda: el segundo aparece con su paso y
+   el primero se retira. Solo visibility/opacity: nada cambia de tamaño. */
+.ponencia .s2-capas {
+	display: grid;
+	min-height: 0;
+}
+
+.ponencia .s2-capas > * {
+	grid-area: 1 / 1;
+	min-height: 0;
+	min-width: 0;
+}
+
+.ponencia .s2-sustituido {
+	transition:
+		opacity 0.3s ease-out,
+		visibility 0s 0.3s;
+}
+
+.ponencia .s2-capas:has(> .s2-sustituye.is-shown) > .s2-sustituido {
+	visibility: hidden;
+	opacity: 0;
+}
+
+/* ---------- 01 · Portada: la clase Led como figura ---------- */
+
+.ponencia .s2-uml {
+	--rd-u: min(1vh, 0.56vw);
+	align-self: center;
+	display: flex;
+	flex-direction: column;
+	border: 3px solid var(--color-heading);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.8));
+	color: var(--color-heading);
+	box-shadow: var(--shadow-lg);
+}
+
+.ponencia .s2-uml > * {
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.8) calc(var(--rd-u) * 3);
+}
+
+.ponencia .s2-uml > * + * {
+	border-top: 2px solid var(--color-border);
+}
+
+.ponencia .s2-uml__nombre {
+	font-size: 1.6em;
+	font-weight: 700;
+	text-align: center;
+	color: var(--color-accent);
+}
+
+.ponencia .s2-uml ul {
+	list-style: none;
+}
+
+.ponencia .s2-uml li {
+	font-size: inherit;
+	line-height: 1.55;
+}
+
+.ponencia .s2-uml__priv li {
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2-uml figcaption {
+	font-family: var(--font-sans);
+	font-size: 0.72em;
+	color: var(--color-text-muted);
+	background: var(--color-surface-2);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* Portada: cinco tramos, los mismos números que las cabeceras de sección. */
+.ponencia .s2-agenda > li {
+	font-size: clamp(1.4rem, 2.1vw, 2.5rem);
+}
+
+.ponencia .s2-agenda span {
+	font-size: clamp(1.05rem, 1.35vw, 1.6rem);
+	margin-top: 0.1rem;
+}
+
+/* ---------- 02 · main.cpp coordina ---------- */
+
+.ponencia .s2-migra {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.15));
+}
+
+.ponencia .s2-escena {
+	display: grid;
+	gap: calc(var(--rd-u) * 2.5);
+	min-height: 0;
+}
+
+.ponencia .s2-escena--a > .s2-codigo {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.45));
+}
+
+/* La línea más larga del main del 06 (54 caracteres) debe caber también a
+   1440 px: aquí el cuerpo escala sin suelo fijo (25 px a 1080p). */
+.ponencia .s2-escena--b > .s2-codigo {
+	--s2-fs: calc(var(--rd-u) * 2.35);
+}
+
+.ponencia .s2-escena--a {
+	grid-template-columns: 1.55fr 1fr;
+}
+
+.ponencia .s2-escena--b {
+	grid-template-columns: 1.15fr 1fr;
+}
+
+.ponencia .s2-pila {
+	display: grid;
+	grid-template-rows: auto auto;
+	align-content: stretch;
+	gap: calc(var(--rd-u) * 2);
+	min-height: 0;
+}
+
+.ponencia .s2-pila > .s2-codigo {
+	min-height: 0;
+}
+
+/* Led.h y Led.cpp apilados: 19 líneas en la mitad derecha. */
+.ponencia .s2-migra .s2-pila > .s2-codigo {
+	--s2-fs: calc(var(--rd-u) * 2.15);
+}
+
+.ponencia .s2-monitor {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 3);
+	min-height: 0;
+}
+
+.ponencia .s2-monitor > .s2-codigo {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.9));
+	flex: 1 1 auto;
+}
+
+/* Como en un monitor real, la salida se escribe desde arriba. */
+.ponencia .s2-monitor .s2-lineas {
+	justify-content: flex-start;
+	padding-top: calc(var(--rd-u) * 2.5);
+}
+
+.ponencia .s2-monitor__pie {
+	margin: 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.35;
+	color: var(--color-heading);
+}
+
+.ponencia .s2-vuela {
+	position: fixed;
+	z-index: 30;
+	margin: 0;
+	font-family: var(--font-mono);
+	line-height: 1.42;
+	white-space: pre;
+	color: var(--color-code-fg);
+	pointer-events: none;
+	transition:
+		transform 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.9s ease-in;
+}
+
+/* ---------- 03 · Declaración y definición ---------- */
+
+.ponencia .s2-enlace {
+	display: grid;
+	grid-template-rows: minmax(0, 1fr) auto;
+	gap: calc(var(--rd-u) * 2.2);
+}
+
+.ponencia .s2-tubo {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(
+			0,
+			1fr
+		);
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	column-gap: calc(var(--rd-u) * 6);
+	row-gap: calc(var(--rd-u) * 2.6);
+	min-height: 0;
+}
+
+.ponencia .s2-tubo > svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	pointer-events: none;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2-nodo {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 0.9);
+	padding: calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 2.2);
+	border: 2px solid var(--color-border);
+	border-left: 6px solid var(--s2-nodo, var(--color-text-muted));
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	min-height: 0;
+	transition:
+		border-color 0.3s,
+		background-color 0.3s,
+		opacity 0.3s;
+}
+
+.ponencia .s2-nodo__nombre {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5em;
+	font-family: var(--font-mono);
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .s2-nodo__rol {
+	font-family: var(--font-sans);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.2));
+	font-weight: 600;
+	color: var(--s2-nodo, var(--color-text-muted));
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.ponencia .s2-nodo code {
+	font-family: var(--font-mono);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.35));
+	color: var(--color-text);
+	background: none;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.ponencia .s2-nodo__sub {
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.1));
+	color: var(--color-text-muted);
+	line-height: 1.3;
+}
+
+.ponencia .s2-nodo--h {
+	--s2-nodo: var(--color-navy);
+}
+
+.ponencia .s2-nodo--cpp {
+	--s2-nodo: var(--color-ok);
+}
+
+.ponencia .s2-nodo--main {
+	--s2-nodo: var(--color-accent);
+}
+
+.ponencia .s2-nodo--ld {
+	--s2-nodo: var(--color-heading);
+	background: var(--color-surface-2);
+}
+
+.ponencia .s2-tubo .s2-col-1 {
+	grid-column: 1;
+	grid-row: 1 / span 2;
+	align-self: stretch;
+}
+
+.ponencia .s2-nodo code.s2-nodo__bloque {
+	display: block;
+	white-space: pre;
+	line-height: 1.45;
+}
+
+.ponencia .s2-tubo .s2-ld {
+	grid-column: 4;
+	grid-row: 1 / span 2;
+	align-self: center;
+}
+
+.ponencia .s2-simbolo {
+	font-family: var(--font-mono);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.2));
+	font-weight: 600;
+	padding: 0.15em 0.5em;
+	border-radius: var(--radius-sm);
+	align-self: flex-start;
+	white-space: nowrap;
+}
+
+.ponencia .s2-simbolo--def {
+	background: var(--color-ok-soft);
+	color: var(--color-ok);
+}
+
+.ponencia .s2-simbolo--pide {
+	background: var(--color-warn-soft);
+	color: var(--color-warn);
+}
+
+.ponencia .s2-simbolo--mal {
+	background: var(--color-danger-soft);
+	color: var(--color-danger);
+}
+
+/* Paso 3: sin Led.cpp. El archivo y su objeto se retiran; el enlazador falla. */
+.ponencia .s2-enlace:has(.s2-sin.is-shown) .s2-quitar {
+	border-style: dashed;
+	opacity: 0.35;
+}
+
+.ponencia .s2-enlace:has(.s2-sin.is-shown) .s2-quitar .s2-nodo__nombre {
+	text-decoration: line-through;
+}
+
+.ponencia .s2-enlace:has(.s2-sin.is-shown) .s2-nodo--ld {
+	--s2-nodo: var(--color-danger);
+	border-color: var(--color-danger);
+	background: var(--color-danger-soft);
+}
+
+.ponencia .s2:has(.s2-sin.is-shown) .s2-solo-bien {
+	display: none;
+}
+
+.ponencia .s2:has(.s2-sin.is-shown) .s2-se-quita > .s2-chip {
+	visibility: hidden;
+}
+
+.ponencia .s2:not(:has(.s2-sin.is-shown)) .s2-solo-mal {
+	display: none;
+}
+
+.ponencia .s2:has(.s2-sin.is-shown) .s2-l.s2-se-quita,
+.ponencia .s2-bloque:has(> .s2-l > [data-paso].is-shown) .s2-l.s2-tachable {
+	color: var(--color-code-dim);
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
+}
+
+.ponencia .s2-enlace .s2-terminal {
+	min-height: calc(4 * 1.38em + var(--rd-u) * 2.8 + 3em);
+}
+
+/* ---------- 04 · Guardas ---------- */
+
+.ponencia .s2-guarda {
+	display: grid;
+	grid-template-columns: 0.92fr 1.08fr;
+	gap: calc(var(--rd-u) * 2.5);
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.55));
+}
+
+.ponencia .s2-guarda__der {
+	display: grid;
+	grid-template-rows: minmax(0, 1fr) auto;
+	gap: calc(var(--rd-u) * 2);
+	min-height: 0;
+}
+
+.ponencia .s2-bloque {
+	display: flex;
+	flex-direction: column;
+	border-radius: var(--radius-sm);
+}
+
+.ponencia .s2-bloque + .s2-bloque {
+	margin-top: calc(var(--rd-u) * 1.4);
+}
+
+.ponencia .s2-bloque__titulo {
+	font-family: var(--font-sans);
+	font-size: 0.85em;
+	font-weight: 600;
+	color: var(--color-code-dim);
+	padding-bottom: 0.15em;
+}
+
+.ponencia .s2-guarda__der > .s2-codigo:first-child {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 2.85));
+}
+
+.ponencia .s2-guarda .s2-term {
+	min-height: calc(3 * 1.38em + var(--rd-u) * 2.8);
+}
+
+/* ---------- 05 · lib/ y src/ ---------- */
+
+.ponencia .s2-lib {
+	display: grid;
+	grid-template-columns: 1.1fr 0.9fr;
+	gap: calc(var(--rd-u) * 5);
+	align-items: center;
+}
+
+.ponencia .arbol.s2-arbol {
+	--fila: max(2.6rem, calc(1vh * 6.6));
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.4));
+}
+
+.ponencia .s2-arbol .arbol__nombre {
+	cursor: default;
+}
+
+.ponencia .s2-arbol .arbol__nombre:hover {
+	background: transparent;
+}
+
+.ponencia .s2-arbol .arbol__nota {
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.5));
+}
+
+.ponencia .s2-arbol .s2-origen {
+	margin-left: calc(var(--rd-u) * 2.5);
+	padding: 0.1em 0.6em;
+	border-radius: var(--radius-sm);
+	font-family: var(--font-sans);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.4));
+	font-weight: 600;
+	background: var(--color-ok-soft);
+	color: var(--color-ok);
+}
+
+.ponencia .s2-arbol .s2-origen--cambia {
+	background: var(--color-warn-soft);
+	color: var(--color-warn);
+}
+
+.ponencia .s2-lib__der {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 3);
+	min-width: 0;
+}
+
+.ponencia .s2-lib__der .s2-lineas {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 3.2));
+	flex: 0 0 auto;
+	padding-block: calc(var(--rd-u) * 2.2);
+}
+
+.ponencia .s2-lib__pie {
+	margin: 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.3));
+	line-height: 1.35;
+	color: var(--color-heading);
+}
+
+/* ---------- 06 · Clase y objeto ---------- */
+
+.ponencia .s2-objetos .mandos .btn {
+	font-family: var(--font-mono);
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.ponencia .s2-objetos .lectura {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.2rem 2rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .s2-objetos .lectura > span {
+	display: inline-block;
+	min-width: 22ch;
+	text-align: left;
+}
+
+/* ---------- 07 · Encapsulamiento ---------- */
+
+.ponencia .s2-encap pre.s2-term {
+	font-size: max(1.25rem, calc(var(--rd-u) * 3));
+}
+
+.ponencia .s2-encap__der > .s2-codigo:first-child {
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 3.4));
+}
+
+/* 04: «previous definition of 'class Led'» cabe en una línea a 1440 px. */
+.ponencia .s2-guarda pre.s2-term {
+	font-size: calc(var(--rd-u) * 2.15);
+}
+
+.ponencia .s2-encap {
+	display: grid;
+	grid-template-columns: 0.85fr 1.15fr;
+	gap: calc(var(--rd-u) * 2.5);
+	--s2-fs: max(1.25rem, calc(var(--rd-u) * 3.2));
+}
+
+.ponencia .s2-encap__der {
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 2);
+	min-height: 0;
+}
+
+.ponencia .s2-zona {
+	position: relative;
+	margin-block: 0.25em;
+	padding-block: 0.2em;
+	border-radius: var(--radius-sm);
+}
+
+.ponencia .s2-zona--priv {
+	background: color-mix(
+		in oklab,
+		var(--color-danger) 22%,
+		var(--color-code-bg)
+	);
+}
+
+.ponencia .s2-zona--pub {
+	background: color-mix(in oklab, var(--color-ok) 22%, var(--color-code-bg));
+}
+
+.ponencia .s2-zona__rotulo {
+	position: absolute;
+	right: 0.6em;
+	top: 0.3em;
+	font-family: var(--font-sans);
+	font-size: 0.8em;
+	font-weight: 600;
+	color: var(--color-code-fg);
+}
+/* fin sesión 2 agente A */
+
+/* sesión 2 agente C: simulaciones 09, 11, 13, 15 y 16.
+   Lecturas con ancho fijo para que los mandos no salten al cambiar la
+   cifra, y cifras de la franja (13) a escala de franja, no de lámina. */
+.ponencia .s2c-ancho {
+	display: inline-block;
+	min-width: 5.5ch;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.ponencia .s2c-ancho--corto {
+	min-width: 2ch;
+}
+
+.ponencia .s2c-mal {
+	color: var(--color-accent);
+}
+
+.ponencia .s2c-cifras .cifra__valor {
+	font-size: clamp(2.6rem, 4.6vw, 5.2rem);
+}
+
+.ponencia .s2c-cifras > .cifra {
+	flex: 0 1 auto;
+}
+
+/* sesión 2 agente C: fila de pasos de la animación de memoria (16). */
+.ponencia .s2c-pasos {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem clamp(1rem, 2.5vw, 2.75rem);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--fs-body);
+	color: var(--color-heading);
+}
+
+.ponencia .s2c-pasos b {
+	font-family: var(--font-mono);
+	color: var(--color-accent);
+	margin-right: 0.4em;
+}
+
+/* sesión 2 agente C: coma decimal de una cifra en mono sin el hueco de
+   ancho fijo (13). */
+.ponencia .s2c-coma {
+	margin: 0 -0.22em;
+}
+
+/* sesión 2 agente B: la línea de arranque de los Ejemplos 07 y 08 tiene
+   ~69 caracteres; la salida esperada se ajusta al ancho de su columna para
+   no recortar la traza real (sin partirla ni desplazarla). */
+.ponencia--trabajo .code-hour__section:has(> .term--ancha) {
+	container-type: inline-size;
+}
+
+.ponencia--trabajo .term--ancha {
+	font-size: min(clamp(0.85rem, 0.94vw, 1.2rem), 2.25cqi);
+	overflow-x: hidden;
+}
+
+/* sesión 2 agente D: láminas 10 (begin/update), 18 (referencias),
+   19 (estado), 21 (errores en ejecución). Todo crece con --rd-u (.rd). */
+
+/* 10 · Línea de tiempo: constructor → setup() → vueltas de loop(). Cada
+   hito ocupa una columna; sus filas (subgrid) alinean los puntos sobre el eje. */
+.ponencia .linea-t {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 0.55fr);
+	grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
+	row-gap: calc(var(--rd-u) * 1.5);
+	column-gap: calc(var(--rd-u) * 1.5);
+}
+
+.ponencia .linea-t__eje {
+	grid-column: 1 / -1;
+	grid-row: 3;
+	align-self: center;
+	height: calc(var(--rd-u) * 0.8);
+	margin-right: calc(var(--rd-u) * 2);
+	background: var(--color-text-muted);
+}
+
+.ponencia .linea-t__eje::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	transform: translateY(calc(var(--rd-u) * -2.1));
+	border-left: calc(var(--rd-u) * 3.4) solid var(--color-text-muted);
+	border-top: calc(var(--rd-u) * 2.5) solid transparent;
+	border-bottom: calc(var(--rd-u) * 2.5) solid transparent;
+}
+
+.ponencia .hito {
+	--hito: var(--color-navy);
+	grid-row: 1 / -1;
+	display: grid;
+	grid-template-rows: subgrid;
+	justify-items: center;
+	min-width: 0;
+	text-align: center;
+}
+
+.ponencia .linea-t > .hito:nth-child(2) {
+	grid-column: 1;
+}
+.ponencia .linea-t > .hito:nth-child(3) {
+	grid-column: 2;
+}
+.ponencia .linea-t > .hito:nth-child(4) {
+	grid-column: 3;
+}
+.ponencia .linea-t > .hito:nth-child(5) {
+	grid-column: 4;
+}
+.ponencia .linea-t > .hito:nth-child(6) {
+	grid-column: 5;
+}
+
+.ponencia .hito--setup {
+	--hito: var(--color-warn);
+}
+
+.ponencia .hito--loop {
+	--hito: var(--color-accent);
+}
+
+.ponencia .hito__cuando {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: max(1.75rem, calc(var(--rd-u) * 4.6));
+	font-weight: 700;
+	line-height: 1.1;
+	white-space: nowrap;
+	color: var(--hito);
+}
+
+.ponencia .hito__tallo {
+	width: 0;
+	min-height: calc(var(--rd-u) * 4);
+	border-left: calc(var(--rd-u) * 0.5) dashed var(--hito);
+}
+
+.ponencia .hito__tallo--largo {
+	grid-row: 2;
+}
+
+.ponencia .hito__estado {
+	align-self: stretch;
+	justify-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	gap: calc(var(--rd-u) * 1.2);
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.5) calc(var(--rd-u) * 1.8);
+	border-top: calc(var(--rd-u) * 0.6) solid var(--hito);
+	background: var(--color-surface);
+	list-style: none;
+	text-align: left;
+}
+
+.ponencia .hito__estado > li {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15em;
+	font-family: var(--font-mono);
+	line-height: 1.2;
+}
+
+.ponencia .linea-t .hito__estado span {
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.3));
+	color: var(--color-text-muted);
+	overflow-wrap: anywhere;
+}
+
+.ponencia .linea-t .hito__estado b {
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .hito__punto {
+	position: relative;
+	z-index: 1;
+	width: calc(var(--rd-u) * 5);
+	height: calc(var(--rd-u) * 5);
+	border: calc(var(--rd-u) * 0.8) solid var(--color-bg);
+	border-radius: 50%;
+	background: var(--hito);
+}
+
+.ponencia code.hito__llamada {
+	padding: 0.45em 0.7em;
+	border-radius: var(--radius-md);
+	background: var(--color-code-bg);
+	border: 1px solid var(--color-code-border);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.1));
+	font-weight: 600;
+	white-space: nowrap;
+	color: var(--color-code-fg);
+}
+
+.ponencia .hito__que {
+	margin: calc(var(--rd-u) * 1.5) 0 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 600;
+	line-height: 1.25;
+	color: var(--color-heading);
+}
+
+.ponencia .hito--mas .hito__llamada,
+.ponencia .hito--mas .hito__cuando {
+	background: none;
+	border-color: transparent;
+	color: var(--color-text-muted);
+}
+
+.ponencia .hito--mas .hito__que {
+	color: var(--color-text-muted);
+}
+
+/* 18 · Por valor frente a por referencia: memoria dibujada a cada lado. */
+.ponencia .refs {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-rows: auto auto minmax(0, 1fr) auto;
+	row-gap: calc(var(--rd-u) * 1.5);
+}
+
+.ponencia .modo {
+	--modo: var(--color-danger);
+	grid-row: 1 / -1;
+	display: grid;
+	grid-template-rows: subgrid;
+	min-width: 0;
+	min-height: 0;
+	padding-right: calc(var(--rd-u) * 4);
+}
+
+.ponencia .modo--ref {
+	--modo: var(--color-ok);
+	padding: 0 0 0 calc(var(--rd-u) * 4);
+	border-left: 2px solid var(--color-border);
+}
+
+.ponencia .modo__titulo {
+	display: flex;
+	align-items: center;
+	gap: calc(var(--rd-u) * 2);
+	margin: 0;
+	font-size: max(1.75rem, calc(var(--rd-u) * 4.4));
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--color-heading);
+}
+
+.ponencia .modo__tag {
+	padding: 0.1em 0.7em;
+	border: 2px solid var(--modo);
+	border-radius: var(--radius-full);
+	font-family: var(--font-mono);
+	font-size: var(--rd-fs);
+	font-weight: 600;
+	color: var(--modo);
+}
+
+.ponencia code.modo__firma {
+	display: block;
+	padding: 0.55em 0.9em;
+	border: 1px solid var(--color-code-border);
+	border-radius: var(--radius-md);
+	background: var(--color-code-bg);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 600;
+	white-space: nowrap;
+	color: var(--color-code-fg);
+}
+
+.ponencia .modo__firma em {
+	font-style: normal;
+	color: var(--color-accent);
+}
+
+.ponencia .memoria {
+	position: relative;
+	flex: 1 1 auto;
+	min-height: 0;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+	column-gap: calc(var(--rd-u) * 9);
+	align-items: center;
+}
+
+.ponencia .memoria__trazo {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	pointer-events: none;
+}
+
+.ponencia .memoria__trazo path {
+	fill: none;
+	stroke: var(--color-navy);
+	stroke-width: 4;
+}
+
+.ponencia .memoria__trazo path.is-roto {
+	stroke: var(--color-danger);
+	stroke-dasharray: 10 8;
+}
+
+.ponencia .memoria__trazo path.punta {
+	fill: var(--color-navy);
+	stroke: none;
+}
+
+.ponencia .memoria__trazo path.punta.is-roto {
+	fill: var(--color-danger);
+}
+
+.ponencia .memoria__objetos {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 1.8);
+}
+
+.ponencia .obj {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1em;
+	padding: calc(var(--rd-u) * 0.9) calc(var(--rd-u) * 2);
+	border: 3px solid var(--color-navy);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	transition: opacity 0.35s ease;
+}
+
+.ponencia .memoria .obj > b {
+	font-family: var(--font-mono);
+	font-size: max(1.5rem, calc(var(--rd-u) * 3.2));
+	line-height: 1.1;
+	color: var(--color-heading);
+}
+
+.ponencia:not(.ponencia--trabajo) .obj > small {
+	font-size: var(--rd-fs);
+	color: var(--color-text-muted);
+}
+
+.ponencia .obj__campo {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 0.2em;
+	padding-top: 0.3em;
+	border-top: 1px solid var(--color-border);
+	font-family: var(--font-mono);
+	font-size: var(--rd-fs);
+	color: var(--color-text);
+}
+
+.ponencia .obj__ancla {
+	width: 0.8em;
+	height: 0.8em;
+	border-radius: 50%;
+	background: var(--color-navy);
+}
+
+.ponencia .obj--copia,
+.ponencia .obj--alias {
+	border-style: dashed;
+}
+
+.ponencia .obj--alias {
+	border-color: var(--color-ok);
+}
+
+.ponencia .memoria__trazo path.is-tenue {
+	opacity: 0.45;
+}
+
+.ponencia .obj.is-destruido {
+	opacity: 0.35;
+}
+
+.ponencia .memoria .obj.is-destruido > b {
+	text-decoration: line-through;
+}
+
+.ponencia .obj.is-destruido .obj__ancla {
+	background: transparent;
+}
+
+.ponencia .bloque {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.4);
+	padding: calc(var(--rd-u) * 2);
+	border: 3px solid var(--color-navy);
+	border-radius: var(--radius-md);
+	background: var(--color-navy-soft);
+}
+
+.ponencia .bloque__celdas {
+	display: grid;
+	grid-template-columns: repeat(8, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 0.6);
+}
+
+.ponencia .bloque__celdas > i {
+	aspect-ratio: 1;
+	border-radius: 2px;
+	background: var(--color-navy);
+}
+
+.ponencia .bloque__rotulo {
+	white-space: nowrap;
+	font-family: var(--font-mono);
+	font-size: var(--rd-fs);
+	font-weight: 600;
+	text-align: center;
+	color: var(--color-heading);
+}
+
+.ponencia .bloque.is-libre {
+	border-style: dashed;
+	border-color: var(--color-warn);
+	background: transparent;
+}
+
+.ponencia .bloque.is-libre .bloque__celdas > i {
+	background: var(--color-border);
+}
+
+.ponencia .bloque.is-libre .bloque__rotulo {
+	color: var(--color-warn);
+}
+
+.ponencia .bloque.is-doble {
+	border-color: var(--color-danger);
+	background: var(--color-danger-soft);
+}
+
+.ponencia .bloque.is-doble .bloque__celdas > i {
+	background: var(--color-danger);
+}
+
+.ponencia .bloque.is-doble .bloque__rotulo {
+	color: var(--color-danger);
+}
+
+.ponencia .modo__eventos {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: evento;
+}
+
+.ponencia .modo__eventos > li {
+	counter-increment: evento;
+	display: grid;
+	grid-template-columns: 1.6em 1fr;
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.8));
+	line-height: 1.3;
+}
+
+.ponencia .modo__eventos code {
+	padding-block: 0;
+}
+
+.ponencia .modo__eventos > li::before {
+	content: counter(evento);
+	font-family: var(--font-mono);
+	font-weight: 700;
+	color: var(--modo);
+}
+
+/* 19 · Dos estados y la línea que los alterna. */
+.ponencia .estados {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1fr);
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 2.5) calc(var(--rd-u) * 2);
+}
+
+.ponencia .estados__inicio {
+	grid-column: 1 / 3;
+	grid-row: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: calc(var(--rd-u) * 1.5);
+	margin: 0;
+	font-size: var(--rd-fs);
+	color: var(--color-text-muted);
+}
+
+.ponencia .estados__inicio code {
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 600;
+}
+
+.ponencia .estado {
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	gap: calc(var(--rd-u) * 2.4);
+	min-width: 0;
+	padding: calc(var(--rd-u) * 3) calc(var(--rd-u) * 3.5);
+	border: 4px solid var(--color-border);
+	border-radius: calc(var(--rd-u) * 4);
+	background: var(--color-surface);
+	transition:
+		border-color 0.25s ease,
+		background-color 0.25s ease;
+}
+
+.ponencia .estado[data-estado="auto"] {
+	grid-column: 3;
+}
+
+.ponencia .estado.is-activo {
+	border-color: var(--color-accent);
+	background: var(--color-accent-soft);
+}
+
+.ponencia .estado__nombre {
+	margin: 0;
+	font-family: var(--font-sans);
+	font-size: max(2.5rem, calc(var(--rd-u) * 8));
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	color: var(--color-text-muted);
+}
+
+.ponencia .estado.is-activo .estado__nombre {
+	color: var(--color-accent);
+}
+
+.ponencia code.estado__var {
+	align-self: flex-start;
+	font-size: max(1.5rem, calc(var(--rd-u) * 3.8));
+	white-space: nowrap;
+	font-weight: 600;
+}
+
+.ponencia .estado__hace {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ponencia .estado__hace > li {
+	padding-left: 0.8em;
+	border-left: 4px solid var(--color-border);
+	font-size: max(1.5rem, calc(var(--rd-u) * 3.9));
+	line-height: 1.3;
+	color: var(--color-text);
+}
+
+.ponencia .transiciones {
+	grid-column: 2;
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	gap: calc(var(--rd-u) * 2);
+	min-width: 0;
+}
+
+.ponencia .transicion {
+	--tr: var(--color-text-muted);
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0;
+	text-align: center;
+	font-size: var(--rd-fs);
+	color: var(--color-text-muted);
+}
+
+.ponencia .transicion code {
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	font-weight: 600;
+}
+
+/* Flecha: el trazo es ::before; la punta, un triángulo en ::after. */
+.ponencia .transicion::before {
+	content: "";
+	align-self: stretch;
+	height: calc(var(--rd-u) * 0.7);
+	margin-right: calc(var(--rd-u) * 2.4);
+	background: var(--tr);
+}
+
+.ponencia .transicion::after {
+	content: "";
+	position: absolute;
+	top: calc(var(--rd-u) * -1.3);
+	right: 0;
+	border-left: calc(var(--rd-u) * 3) solid var(--tr);
+	border-top: calc(var(--rd-u) * 1.65) solid transparent;
+	border-bottom: calc(var(--rd-u) * 1.65) solid transparent;
+}
+
+.ponencia .transicion--vuelta::before {
+	order: 9;
+	margin: 0 0 0 calc(var(--rd-u) * 2.4);
+}
+
+.ponencia .transicion--vuelta::after {
+	top: auto;
+	right: auto;
+	bottom: calc(var(--rd-u) * -1.3);
+	left: 0;
+	border-left: 0;
+	border-right: calc(var(--rd-u) * 3) solid var(--tr);
+}
+
+.ponencia .transicion.is-recorrida {
+	--tr: var(--color-accent);
+	color: var(--color-text);
+}
+
+.ponencia .transiciones__centro {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: calc(var(--rd-u) * 2);
+}
+
+.ponencia code.transiciones__linea {
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.ponencia:not(.ponencia--trabajo) .transiciones__centro .btn {
+	font-size: var(--rd-fs);
+}
+
+/* 21 · Traza de pánico anotada y, debajo, cómo leerla y sus causas. */
+.ponencia .panico {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 2.2);
+}
+
+.ponencia .causa {
+	flex: none;
+}
+
+.ponencia .traza {
+	flex: 1 0 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.ponencia .rd .traza pre.traza__texto {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 2.5);
+	font-size: max(1.25rem, calc(var(--rd-u) * 2.45));
+	line-height: 1.4;
+	white-space: pre;
+	overflow: hidden;
+	color: var(--color-code-fg);
+}
+
+.ponencia .rd .traza__filtro {
+	font-family: var(--font-mono);
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.ponencia .traza__l {
+	position: relative;
+	display: block;
+	padding-left: 2.2em;
+}
+
+.ponencia .traza__l.is-marca {
+	background: color-mix(in oklab, var(--color-accent) 22%, transparent);
+}
+
+.ponencia .traza .traza__l b {
+	color: var(--color-warn);
+}
+
+.ponencia .traza__l[data-m]::before,
+.ponencia .panico__claves > li::before {
+	display: inline-grid;
+	place-items: center;
+	width: 1.4em;
+	height: 1.4em;
+	border-radius: 50%;
+	background: var(--color-accent);
+	font-family: var(--font-mono);
+	font-size: 0.85em;
+	font-weight: 700;
+	color: var(--color-accent-contrast);
+}
+
+.ponencia .traza__l[data-m]::before {
+	content: attr(data-m);
+	position: absolute;
+	left: 0.3em;
+	top: 0.1em;
+}
+
+.ponencia .rd .causa pre.causa__texto {
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 2.5);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.45;
+	color: var(--color-code-fg);
+}
+
+.ponencia .causa__n {
+	display: inline-block;
+	width: 3ch;
+	margin-right: 1.5ch;
+	color: var(--color-code-dim);
+}
+
+.ponencia .panico__claves {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	column-gap: calc(var(--rd-u) * 4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: clave;
+}
+
+.ponencia .panico__claves > li {
+	counter-increment: clave;
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.3;
+}
+
+.ponencia .panico__claves > li::before {
+	content: counter(clave);
+	flex: none;
+}
+
+.ponencia .panico__nota {
+	margin: 0;
+	padding-left: 0.8em;
+	border-left: 3px solid var(--color-navy);
+	font-size: var(--rd-fs);
+	color: var(--color-text-muted);
+}
+/* fin sesión 2 agente D */
+
+/* sesión 2 agente B: cinco piezas de montaje (Ejemplo 10) en una sola fila. */
+.ponencia--trabajo .hw-set--cinco {
+	--rb-z: 1.4;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
+
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo .hw-set--cinco {
+		--rb-z: 2.3;
+	}
+}
+
+/* sesión 2 agente B: el pulsador de Wokwi es pequeño junto a la placa (12). */
+.ponencia--trabajo .hw-set--boton wokwi-pushbutton {
+	zoom: 1.2;
+}
+
+/* ============================================================
+   ÍNDICE DEL CURSO (index.html) — <body class="ponencia indice">
+   ============================================================
+   Misma voz que las láminas: cabecera arriba, las seis sesiones como
+   rejilla que ocupa el escenario y un pie con las teclas. Las sesiones
+   aún por rehacer se marcan sin esconderlas. */
+
+.indice .indice__cabecera {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem 3rem;
+}
+
+.indice .indice__titulos {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.indice .indice__acciones {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+.indice .indice__sesiones {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	/* Las filas reparten el alto libre, pero nunca por debajo de lo que pide
+	   su contenido: un título de dos líneas no se recorta contra el borde. */
+	grid-template-rows: repeat(2, minmax(min-content, 1fr));
+	gap: clamp(0.75rem, 1.4vw, 1.5rem);
+}
+
+.indice .sesion {
+	position: relative;
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-rows: auto auto;
+	column-gap: clamp(1rem, 1.8vw, 1.75rem);
+	row-gap: 0.3rem;
+	align-content: center;
+	padding: clamp(1.1rem, 2vw, 2.25rem);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	background:
+		radial-gradient(
+			120% 90% at 100% 0%,
+			color-mix(in oklab, var(--color-accent) 6%, transparent),
+			transparent 60%
+		),
+		var(--color-surface);
+	box-shadow: var(--shadow-sm);
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+.indice .sesion:hover,
+.indice .sesion:focus-visible {
+	border-color: color-mix(
+		in oklab,
+		var(--color-accent) 55%,
+		var(--color-border)
+	);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-3px);
+}
+
+/* Icono en una pastilla del color de acento: identifica el tema de la sesión
+   de un vistazo, sin la franja de color en un solo borde. */
+.indice .sesion__icono {
+	grid-row: 1 / -1;
+	align-self: center;
+	display: grid;
+	place-items: center;
+	width: clamp(3.2rem, min(5vw, 9vh), 6rem);
+	aspect-ratio: 1;
+	border-radius: var(--radius-md);
+	background: var(--color-accent-soft);
+	color: var(--color-accent);
+}
+
+.indice .sesion__icono .icon {
+	width: 55%;
+	height: 55%;
+}
+
+.indice .sesion:hover .sesion__icono,
+.indice .sesion:focus-visible .sesion__icono {
+	background: var(--color-accent);
+	color: var(--color-accent-contrast);
+}
+
+.indice .sesion__num {
+	grid-row: 1;
+	align-self: end;
+	font-family: var(--font-mono);
+	font-size: var(--fs-micro);
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--color-accent);
+}
+
+.indice .sesion__titulo {
+	grid-row: 2;
+	align-self: start;
+	text-wrap: balance;
+	font-size: var(--fs-h3);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--color-heading);
+}
+
+.indice .indice__pie {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem 2rem;
+	font-size: var(--fs-small);
+	color: var(--color-text-muted);
+}
+
+.indice .indice__pie p {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+
+.indice kbd {
+	font-family: var(--font-mono);
+	font-size: 0.85em;
+	padding: 0.05em 0.4em;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+	background: var(--color-surface-2);
+	color: var(--color-text);
+}
+
+/* Las tarjetas son enlaces: sin el subrayado ni el color que la capa
+   ponencia da a los enlaces dentro de la prosa de una lámina. */
+.ponencia.indice .slide__content a.sesion,
+.ponencia.indice .slide__content a.sesion * {
+	text-decoration: none;
+}
+
+.ponencia.indice .slide__content a.sesion {
+	color: var(--color-text);
+}
+
+/* Por debajo de 1100 px (o de 720 px de alto) las tarjetas dejan de
+   repartirse el alto fijo y la lista crece y se desplaza. La especificidad
+   tiene que superar a `.ponencia .slide__content > .crece`. */
+@media (max-width: 1100px), (max-height: 760px) {
+	.ponencia.indice .slide__content > .indice__sesiones {
+		flex: none;
+		grid-template-rows: none;
+	}
+}
+
+@media (max-width: 1100px) {
+	.indice .indice__sesiones {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 680px) {
+	.indice .indice__sesiones {
+		grid-template-columns: 1fr;
+	}
+
+	/* el rótulo no debe meterse bajo los botones fijos del cromo */
+	.indice .indice__titulos {
+		padding-top: 2.5rem;
+	}
+}

@@ -41,6 +41,6 @@
     { "type": "text", "x": 210, "y": 590, "width": 380, "height": 40, "text": "5. Extraer: float precio = doc[\"bitcoin\"][\"usd\"]\nImprimir en Consola", "fontSize": 14, "fontFamily": 1, "textAlign": "center" },
     
     { "type": "arrow", "x": 200, "y": 610, "width": -150, "height": -400, "points": [[0,0],[-150,0],[-150,-400],[0,-400]] },
-    { "type": "text", "x": 60, "y": 400, "width": 100, "height": 20, "text": "Esperar 15s", "fontSize": 14, "fontFamily": 1 }
+    { "type": "text", "x": 60, "y": 400, "width": 100, "height": 20, "text": "Esperar 60s", "fontSize": 14, "fontFamily": 1 }
   ]
 }

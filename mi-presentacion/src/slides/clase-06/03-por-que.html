@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Por qué · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de TinyML</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Datos enviados por radio y duración de la <em>batería</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								Orden de magnitud (Warden, 2018): un microcontrolador activo gasta
+								<b>~1&nbsp;mW</b>; su radio, <b>decenas de mW</b>. Aquí, 30&nbsp;mW.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								<b>Clasificar en el chip</b>: la señal se procesa junto al sensor y por
+								radio sale solo el resultado, unos pocos bytes.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>horas = 3 700 mWh / P media</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Datos por radio</span>
+								<input type="range" id="radio" min="0" max="11" step="1" value="6" />
+								<output id="radio-out" for="radio" class="s6c-ancho s6c-ancho--medio">1 %</output>
+							</label>
+							<span class="lectura lectura--fin"><small>P media </small><span id="l-pot" class="s6c-ancho">1,3 mW</span></span>
+							<span class="lectura"><small>batería </small><span id="l-dur" class="s6c-ancho s6c-ancho--largo s6c-bien">119 días</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="bateria"
+								role="img"
+								aria-label="Arriba, la potencia media en milivatios de dos casos, en barras apiladas: microcontrolador (1 mW) más radio (30 mW por la fracción del tiempo que transmite). Enviarlo todo por radio da 31 mW; con el 1 % de los datos, 1,3 mW. Abajo, cuánto dura una batería de 1000 mAh a 3,7 V en escala logarítmica de tiempo: 119 horas (5 días) enviándolo todo frente a 119 días con el 1 %. Una línea discontinua marca el techo de 154 días que impone el microcontrolador solo."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: un sensor con batería de 1000&nbsp;mAh envía por radio todo lo que mide. ¿Cuánto dura (horas, días o meses), y cuánto si clasifica en el chip y envía el 1&nbsp;% de los datos? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: 1000&nbsp;mAh × 3,7&nbsp;V = 3&nbsp;700&nbsp;mWh. Enviándolo todo, 1&nbsp;mW + 30&nbsp;mW = 31&nbsp;mW: 119&nbsp;horas, unos 5&nbsp;días. Con el 1&nbsp;%, 1&nbsp;mW + 0,3&nbsp;mW = 1,3&nbsp;mW: 119&nbsp;días. Las dos duraciones comparten la cifra 119, en horas y en días.
+				</p>
+				<p>
+					Por debajo del 0,1&nbsp;% la duración crece poco, porque se acerca al techo de 154&nbsp;días que fija el microcontrolador por sí solo (línea discontinua). Superar ese techo exige dormir el microcontrolador entre medidas. Las cifras son órdenes de magnitud del artículo de Pete Warden; un montaje real suma sensor, regulador y autodescarga, y la radio BLE gasta también al anunciarse y al mantener la conexión.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Potencia media = P<sub>MCU</sub> + fracción de tiempo con la radio
+						activa × P<sub>radio</sub>. Duración = energía de la batería (mAh ×
+						V) ÷ potencia media.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Pete Warden, «Why the Future of Machine Learning is Tiny» (2018): MCU
+						en torno a 1&nbsp;mW, radio en decenas de mW. Con esas cifras,
+						Warden defiende procesar el dato crudo junto al sensor.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Sumar los mAh sin multiplicar por la tensión de la batería.</li>
+						<li>Medir solo el pico de la radio y no la fracción del tiempo que está activa.</li>
+						<li>Olvidar que el microcontrolador fija un techo si nunca duerme.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-nube-borde-extremo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Nube, borde, extremo</span>
+				</a>
+				<a class="slide-nav__link" href="04-aplicaciones.html">
+					<span>Aplicaciones</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+			const miles = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+			// Órdenes de magnitud de Warden (2018): MCU ~1 mW, radio decenas de mW.
+			const P_MCU = 1;
+			const P_RADIO = 30;
+			// Batería de 1000 mAh a 3,7 V.
+			const E_MWH = 1000 * 3.7;
+			const FRACS = [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.01];
+
+			let F = 1;
+
+			const potencia = (f) => P_MCU + (f / 100) * P_RADIO;
+			const horas = (f) => E_MWH / potencia(f);
+			const pctTxt = (f) => `${f >= 1 ? f : coma(f, f >= 0.1 ? 1 : 2)} %`;
+			const mwTxt = (p) => `${p >= 10 ? coma(p, 0) : coma(p, p >= 2 ? 1 : 2).replace(/,?0+$/, "")} mW`;
+			function duracion(h) {
+				if (h < 240) return `${Math.round(h)} h · ${Math.round(h / 24)} días`;
+				return `${miles(h / 24)} días`;
+			}
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					ok: token("--color-ok"),
+					contraste: token("--color-accent-contrast"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.045, w * 0.0145), 28);
+				const m = fs * 1.1;
+
+				const filas = [
+					{ nombre: "Todo por radio", det: "100 % de los datos", f: 100, color: c.acento },
+					{ nombre: "Clasificar en el chip", det: `${pctTxt(F)} de los datos`, f: F, color: c.ok },
+				];
+				ctx.font = `700 ${fs}px ${SANS}`;
+				let anchoRot = 0;
+				for (const r of filas) anchoRot = Math.max(anchoRot, ctx.measureText(r.nombre).width);
+				ctx.font = `600 ${Math.max(fs * 0.85, MIN_FS)}px ${MONO}`;
+				anchoRot = Math.max(anchoRot, ctx.measureText("0,01 % de los datos").width);
+				const x0 = m + anchoRot + fs * 1.2;
+				const x1 = w - m;
+
+				// --- Panel 1: potencia media, lineal ---
+				const medio = h * 0.47;
+				texto(ctx, "Potencia media (mW)", m, fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, w * 0.4);
+				// Leyenda.
+				let lx = x1;
+				for (const [rot, col] of [
+					[`radio ${P_RADIO} mW × tiempo activa`, c.acento],
+					[`microcontrolador ${P_MCU} mW`, c.navy],
+				]) {
+					ctx.font = `600 ${Math.max(fs * 0.85, MIN_FS)}px ${SANS}`;
+					const an = ctx.measureText(rot).width;
+					texto(ctx, rot, lx, fs * 0.9, fs * 0.85, c.muted, 600, "right");
+					ctx.fillStyle = col;
+					ctx.fillRect(lx - an - fs * 1.2, fs * 0.9 - fs * 0.4, fs * 0.8, fs * 0.8);
+					lx -= an + fs * 2.4;
+				}
+				const PMAX = 32;
+				const XP = (p) => x0 + (p / PMAX) * (x1 - x0 - fs * 4.5);
+				const pb0 = fs * 2.2;
+				const pb1 = medio - fs * 1.6;
+				for (let p = 0; p <= 30; p += 5) {
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.moveTo(XP(p), pb0);
+					ctx.lineTo(XP(p), pb1);
+					ctx.stroke();
+					texto(ctx, String(p), XP(p), pb1 + fs * 0.7, fs * 0.82, c.muted, 600, "center", MONO);
+				}
+				const altoF = (pb1 - pb0) / 2;
+				for (const [i, r] of filas.entries()) {
+					const yc = pb0 + altoF * (i + 0.5);
+					const hb = Math.min(altoF * 0.62, fs * 2);
+					texto(ctx, r.nombre, m, yc - fs * 0.35, fs, c.heading, 700, "left");
+					texto(ctx, r.det, m, yc + fs * 0.65, fs * 0.85, c.muted, 600, "left", MONO);
+					const pr = (r.f / 100) * P_RADIO;
+					ctx.fillStyle = c.navy;
+					ctx.fillRect(XP(0), yc - hb / 2, XP(P_MCU) - XP(0), hb);
+					ctx.fillStyle = c.acento;
+					ctx.fillRect(XP(P_MCU), yc - hb / 2, Math.max(XP(P_MCU + pr) - XP(P_MCU), pr > 0 ? 2 : 0), hb);
+					texto(ctx, mwTxt(potencia(r.f)), XP(potencia(r.f)) + fs * 0.5, yc, fs * 1.05, r.f === 100 ? c.acento : c.heading, 700, "left", MONO);
+				}
+
+				// Separador.
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(m, medio);
+				ctx.lineTo(w - m, medio);
+				ctx.stroke();
+
+				// --- Panel 2: duración de la batería, escala logarítmica ---
+				const y2 = medio + fs * 1.0;
+				texto(ctx, "Duración de una batería de 1000 mAh a 3,7 V (escala logarítmica)", m, y2, fs * 1.05, c.heading, 700, "left", SANS, w - 2 * m);
+				const H0 = Math.log10(24); // 1 día
+				const H1 = Math.log10(24 * 365); // 1 año
+				const XH = (hh) => x0 + ((Math.log10(hh) - H0) / (H1 - H0)) * (x1 - x0);
+				const db0 = y2 + fs * 1.2;
+				const db1 = h - fs * 1.6;
+				for (const [hh, rot] of [
+					[24, "1 día"],
+					[24 * 7, "1 semana"],
+					[24 * 30, "1 mes"],
+					[24 * 91, "3 meses"],
+					[24 * 182, "6 meses"],
+					[24 * 365, "1 año"],
+				]) {
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.moveTo(XH(hh), db0);
+					ctx.lineTo(XH(hh), db1);
+					ctx.stroke();
+					texto(ctx, rot, XH(hh), db1 + fs * 0.7, fs * 0.82, c.muted, 600, hh === 24 ? "left" : hh === 24 * 365 ? "right" : "center", SANS);
+				}
+				// Techo: el microcontrolador solo.
+				const techo = E_MWH / P_MCU;
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = 3;
+				ctx.setLineDash([10, 8]);
+				ctx.beginPath();
+				ctx.moveTo(XH(techo), db0);
+				ctx.lineTo(XH(techo), db1);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				const altoD = (db1 - db0) / 2;
+				for (const [i, r] of filas.entries()) {
+					const yc = db0 + altoD * (i + 0.5);
+					const hb = Math.min(altoD * 0.62, fs * 2);
+					texto(ctx, r.nombre, m, yc - fs * 0.35, fs, c.heading, 700, "left");
+					texto(ctx, r.det, m, yc + fs * 0.65, fs * 0.85, c.muted, 600, "left", MONO);
+					const hh = horas(r.f);
+					ctx.fillStyle = r.color;
+					ctx.fillRect(x0, yc - hb / 2, XH(hh) - x0, hb);
+					const et = duracion(hh);
+					ctx.font = `700 ${fs * 1.05}px ${MONO}`;
+					const an = ctx.measureText(et).width;
+					if (XH(hh) - x0 > an + fs * 1.2) {
+						texto(ctx, et, XH(hh) - fs * 0.5, yc, fs * 1.05, c.contraste, 700, "right", MONO);
+					} else {
+						texto(ctx, et, XH(hh) + fs * 0.5, yc, fs * 1.05, r.color, 700, "left", MONO);
+					}
+				}
+				// Rótulo del techo, en la franja superior del panel con fondo propio.
+				const rotT = `solo el microcontrolador: ${miles(techo / 24)} días`;
+				ctx.font = `700 ${Math.max(fs * 0.85, MIN_FS)}px ${SANS}`;
+				const anT = ctx.measureText(rotT).width;
+				const xt = Math.min(XH(techo) + fs * 0.4, x1 - anT);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(xt - fs * 0.2, y2 - fs * 0.6, anT + fs * 0.4, fs * 1.2);
+				texto(ctx, rotT, x1, y2, fs * 0.85, c.navy, 700, "right", SANS);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("bateria"), dibujar);
+			const ctrl = document.getElementById("radio");
+			const out = document.getElementById("radio-out");
+			const lPot = document.getElementById("l-pot");
+			const lDur = document.getElementById("l-dur");
+
+			function render() {
+				F = FRACS[Number(ctrl.value)];
+				out.textContent = pctTxt(F);
+				lPot.textContent = mwTxt(potencia(F));
+				lDur.textContent = duracion(horas(F));
+				const corta = horas(F) < 24 * 30;
+				lDur.classList.toggle("s6c-mal", corta);
+				lDur.classList.toggle("s6c-bien", !corta);
+				lienzo.redibujar();
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

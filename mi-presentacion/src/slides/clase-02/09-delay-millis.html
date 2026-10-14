@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Temporización con millis() · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Tiempo sin bloqueo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>millis()</em> mide el tiempo sin detener loop()
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Bloqueante</b>: con <code>delay(500)</code> en
+								<code>loop()</code>, cada <code>update()</code> se ejecuta cada
+								500 ms.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								<b>No bloqueante</b>: <code>update()</code> compara
+								<code>millis()</code> y retorna sin esperar.
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Forma de esperar en loop()">
+								<button type="button" class="btn btn--primary" data-modo="delay" aria-pressed="true">
+									Con delay(500)
+								</button>
+								<button type="button" class="btn btn--secondary" data-modo="millis" aria-pressed="false">
+									Con millis()
+								</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>vuelta de loop() </small><span id="l-vuelta" class="s2c-ancho">500 ms</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="tres-led"
+								role="img"
+								aria-label="Cronograma de los tres LED del ejemplo 08 durante 6 s. Con delay(500) en loop(), el LED-1 conserva sus 500 ms, pero el LED-2 conmuta cada 1000 ms en lugar de 800 y el LED-3 cada 1500 ms en lugar de 1300, con un retraso que se acumula. Con millis() los tres conmutan con su período."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si al ejemplo 08 se le añade un
+					<code>delay(500)</code> al final de <code>loop()</code>, ¿a qué ritmo
+					conmuta el LED-2, configurado a 800 ms? Recoger respuestas antes de
+					mostrar el cronograma.
+				</p>
+				<p>
+					Respuesta: cada 1000 ms. <code>update()</code> se ejecuta en 500,
+					1000, 1500…; a los 500 ms no han pasado 800 ms y a los 1000 ms el
+					instante de conmutar ya quedó atrás. El LED-3 (1300 ms) queda en 1500.
+					El LED-1 mantiene su período porque coincide con la espera. Las franjas
+					ámbar son el retraso, que crece en cada conmutación. Pulsar «Con
+					millis()»: los tres conmutan con su período y <code>loop()</code> no se
+					detiene. Recordar 1·04: <code>delay()</code>
+					bloquea la tarea <code>loop()</code>, no el chip.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>unsigned long now = millis();</code><br />
+						<code>if (now - _lastToggleTime &gt;= _periodo) { _lastToggleTime = now; … }</code><br />
+						Una lectura de <code>millis()</code> por llamada; el tiempo previo es
+						miembro del objeto, uno por LED.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Firmware que atiende varias tareas en el mismo <code>loop()</code>,
+						como parpadeo de estado, lectura de sensores y botón.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Un <code>delay()</code> corto en <code>loop()</code> retrasa todos los objetos.</li>
+						<li>Una sola variable de tiempo previo compartida por los tres LED.</li>
+						<li><code>_lastToggleTime = now</code> acumula el retraso de cada vuelta; <code>+= _periodo</code> conserva la cadencia media.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-codigo-06-clase-led.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 06 · Clase Led</span>
+				</a>
+				<a class="slide-nav__link" href="10-begin-update.html">
+					<span>begin/update</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// Los tres objetos del ejemplo 08: GPIO 2/4/5 con 500/800/1300 ms.
+			const LEDS = [
+				{ nombre: "LED-1", gpio: 2, P: 500 },
+				{ nombre: "LED-2", gpio: 4, P: 800 },
+				{ nombre: "LED-3", gpio: 5, P: 1300 },
+			];
+			const T_MAX = 6000; // ms dibujados
+			const ESPERA = 500; // delay(500) al final de loop()
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			let modo = "delay";
+			let t = 3300;
+			let previo = performance.now();
+
+			// Instantes de conmutación. Con millis(), update() se consulta sin
+			// pausa: conmuta justo al cumplirse el período. Con delay(500), solo se
+			// consulta en 500, 1000, 1500…: conmuta en la primera consulta en que
+			// now - _lastToggleTime >= _periodo, y _lastToggleTime = now.
+			function conmutaciones(P, conDelay) {
+				const lista = [];
+				if (!conDelay) {
+					for (let k = P; k <= T_MAX; k += P) lista.push(k);
+					return lista;
+				}
+				let ultimo = 0;
+				for (let c = ESPERA; c <= T_MAX; c += ESPERA) {
+					if (c - ultimo >= P) {
+						lista.push(c);
+						ultimo = c;
+					}
+				}
+				return lista;
+			}
+			const nivelEn = (lista, s) => lista.filter((x) => x <= s).length % 2;
+
+			// Todo rótulo cabe en el lienzo: si pasaría del borde derecho, la letra
+			// se reduce (nunca por debajo de 20 px) hasta que quepa.
+			let anchoLienzo = Number.POSITIVE_INFINITY;
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				if (alin === "left") {
+					const libre = anchoLienzo - x - 4;
+					const ancho = ctx.measureText(s).width;
+					if (ancho > libre) {
+						fs = Math.max(20, (fs * libre) / ancho);
+						ctx.font = `${peso} ${fs}px ${fam}`;
+					}
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					warn: token("--color-warn"),
+					warnSoft: token("--color-warn-soft"),
+				};
+				const conDelay = modo === "delay";
+				anchoLienzo = w;
+				const fs = clamp(20, Math.min(h * 0.045, w * 0.017), 30);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const L = fs * 9.4;
+				const R = fs * 10.5;
+				const T = fs * 0.9;
+				const ejeH = fs * 2.6;
+				const X = (ms) => L + ((w - L - R) * ms) / T_MAX;
+				const carriles = 4;
+				const sep = fs * 0.7;
+				const cH = (h - T - ejeH - sep * (carriles - 1)) / carriles;
+				const yC = (i) => T + i * (cH + sep);
+
+				// Rejilla de 500 ms: las consultas de update() con delay(500).
+				ctx.lineWidth = 1;
+				ctx.strokeStyle = c.borde;
+				for (let s = 0; s <= T_MAX; s += 500) {
+					ctx.beginPath();
+					ctx.moveTo(X(s), T);
+					ctx.lineTo(X(s), yC(3) + cH);
+					ctx.stroke();
+				}
+
+				for (const [i, led] of LEDS.entries()) {
+					const y0 = yC(i);
+					const yA = y0 + cH * 0.12;
+					const yB = y0 + cH * 0.88;
+					const ideal = conmutaciones(led.P, false);
+					const real = conmutaciones(led.P, conDelay);
+					const desfasado = real[0] !== ideal[0];
+					const color = desfasado ? c.warn : c.ok;
+
+					texto(ctx, led.nombre, 0, y0 + cH * 0.32, fs * 1.05, c.heading, 700);
+					texto(ctx, `GPIO ${led.gpio} · ${led.P} ms`, 0, y0 + cH * 0.72, fs, c.muted, 500, "left", SANS);
+
+					// Retraso de cada conmutación respecto a la que tocaba.
+					if (conDelay) {
+						ctx.fillStyle = c.warnSoft;
+						for (let k = 0; k < Math.min(real.length, ideal.length); k++) {
+							if (real[k] > ideal[k]) ctx.fillRect(X(ideal[k]), yA, X(real[k]) - X(ideal[k]), yB - yA);
+						}
+						// Onda que tocaba, discontinua.
+						ctx.strokeStyle = c.muted;
+						ctx.lineWidth = Math.max(2, fs * 0.09);
+						ctx.setLineDash([fs * 0.4, fs * 0.35]);
+						onda(ctx, ideal, X, yA, yB);
+						ctx.setLineDash([]);
+					}
+					ctx.strokeStyle = color;
+					ctx.lineWidth = Math.max(3, fs * 0.17);
+					onda(ctx, real, X, yA, yB);
+
+					// LED en el instante del cursor y período medido.
+					const r = Math.min(cH * 0.3, fs * 1.25);
+					const lx = w - R + fs * 0.8 + r;
+					const ly = y0 + cH / 2;
+					const on = nivelEn(real, t);
+					ctx.save();
+					ctx.globalAlpha = on ? 1 : 0.12;
+					ctx.shadowColor = c.acento;
+					ctx.shadowBlur = on ? r * 0.9 : 0;
+					ctx.fillStyle = c.acento;
+					ctx.beginPath();
+					ctx.arc(lx, ly, r, 0, Math.PI * 2);
+					ctx.fill();
+					ctx.restore();
+					ctx.lineWidth = 2;
+					ctx.strokeStyle = c.heading;
+					ctx.beginPath();
+					ctx.arc(lx, ly, r, 0, Math.PI * 2);
+					ctx.stroke();
+					const medido = real[1] - real[0];
+					const tx = lx + r + fs * 0.6;
+					texto(ctx, `${medido} ms`, tx, ly - fs * 0.6, fs * 1.05, color, 700);
+					texto(ctx, desfasado ? `debía ${led.P}` : "en su período", tx, ly + fs * 0.65, fs, c.muted, 500, "left", SANS);
+				}
+
+				// Carril de loop(): qué hace la tarea.
+				const y3 = yC(3);
+				texto(ctx, "loop()", 0, y3 + cH * 0.32, fs * 1.05, c.heading, 700);
+				texto(ctx, "tarea", 0, y3 + cH * 0.72, fs, c.muted, 500, "left", SANS);
+				const bA = y3 + cH * 0.1;
+				const bH = cH * 0.8;
+				if (conDelay) {
+					for (let s = 0; s < T_MAX; s += ESPERA) {
+						ctx.fillStyle = c.warnSoft;
+						ctx.fillRect(X(s) + 6, bA, X(s + ESPERA) - X(s) - 6, bH);
+						ctx.fillStyle = c.acento;
+						ctx.fillRect(X(s), bA, 5, bH);
+					}
+				} else {
+					ctx.fillStyle = c.okSoft;
+					ctx.fillRect(X(0), bA, X(T_MAX) - X(0), bH);
+					ctx.strokeStyle = c.ok;
+					ctx.lineWidth = 1;
+					for (let x = X(0); x < X(T_MAX); x += 4) {
+						ctx.beginPath();
+						ctx.moveTo(x, bA);
+						ctx.lineTo(x, bA + bH);
+						ctx.stroke();
+					}
+				}
+
+				// Lo que hace loop(), en la columna de los LED: el carril queda limpio.
+				const lx3 = w - R + fs * 0.8;
+				const col3 = conDelay ? c.warn : c.ok;
+				texto(ctx, conDelay ? "en delay()" : "sin pausa", lx3, y3 + cH / 2 - fs * 0.6, fs * 1.05, col3, 700);
+				texto(ctx, conDelay ? "update() cada 500 ms" : "update() siempre", lx3, y3 + cH / 2 + fs * 0.65, fs, c.muted, 500, "left", SANS);
+
+				// Eje de tiempo.
+				const ejeY = y3 + cH + fs * 0.4;
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(X(0), ejeY);
+				ctx.lineTo(X(T_MAX), ejeY);
+				ctx.stroke();
+				for (let s = 0; s <= T_MAX; s += 1000) {
+					const alin = s === 0 ? "left" : s === T_MAX ? "right" : "center";
+					texto(ctx, String(s), X(s), ejeY + fs * 1.1, fs, c.muted, 600, alin);
+				}
+				texto(ctx, "t (ms)", X(T_MAX) + fs * 0.8, ejeY + fs * 1.1, fs, c.muted, 600);
+
+				// Cursor del instante actual.
+				ctx.strokeStyle = c.heading;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 6]);
+				ctx.beginPath();
+				ctx.moveTo(X(t), T * 0.5);
+				ctx.lineTo(X(t), ejeY);
+				ctx.stroke();
+				ctx.setLineDash([]);
+			}
+
+			function onda(ctx, lista, X, yA, yB) {
+				let nivel = 0;
+				let x = X(0);
+				ctx.beginPath();
+				ctx.moveTo(x, yB);
+				for (const s of lista) {
+					ctx.lineTo(X(s), nivel ? yA : yB);
+					nivel = 1 - nivel;
+					ctx.lineTo(X(s), nivel ? yA : yB);
+					x = X(s);
+				}
+				ctx.lineTo(X(T_MAX), nivel ? yA : yB);
+				ctx.stroke();
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("tres-led"), dibujar);
+			const botones = [...document.querySelectorAll("[data-modo]")];
+			const lVuelta = document.getElementById("l-vuelta");
+
+			function render() {
+				for (const b of botones) {
+					const on = b.dataset.modo === modo;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lVuelta.textContent = modo === "delay" ? "500 ms" : "unos µs";
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					modo = b.dataset.modo;
+					render();
+				});
+			}
+
+			function avanzar(ahora) {
+				t += Math.min(100, ahora - previo);
+				previo = ahora;
+				if (t > T_MAX) t = 0;
+				lienzo.redibujar();
+				requestAnimationFrame(avanzar);
+			}
+			render();
+			if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(avanzar);
+		</script>
+	</body>
+</html>

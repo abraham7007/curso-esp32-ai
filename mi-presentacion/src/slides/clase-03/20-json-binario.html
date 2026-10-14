@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>JSON frente a binario · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Formato de datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Tamaño del mismo registro en <em>JSON</em> y en binario
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								El mismo registro del ejemplo 14 en texto (<b>JSON</b>) y en
+								binario: en texto cada cifra es un byte; en binario un
+								<code>float</code> ocupa siempre 4.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>68 B frente a 13 B</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Formato del registro">
+								<button type="button" class="btn btn--secondary" data-fmt="bonito" aria-pressed="false">JSON con espacios</button>
+								<button type="button" class="btn btn--primary" data-fmt="compacto" aria-pressed="true">JSON compacto</button>
+								<button type="button" class="btn btn--secondary" data-fmt="struct" aria-pressed="false">struct</button>
+								<button type="button" class="btn btn--secondary" data-fmt="packed" aria-pressed="false">struct packed</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><span id="l-bytes" class="s3c-ancho s3c-ancho--corto">68 B</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="formatos"
+								role="img"
+								aria-label="Bytes del registro temp 23,7, hum 57, presion 1012,3 y tiempo_ms 3012: JSON con espacios 90 B, JSON compacto 68 B, struct con relleno 16 B y struct empaquetado 13 B, con cada byte dibujado y coloreado por campo."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: la línea del ejemplo 14 lleva cuatro números;
+					¿cuántos bytes ocupa en JSON y cuántos en binario? Recoger cifras antes
+					de recorrer los formatos.
+				</p>
+				<p>
+					Respuesta: en JSON compacto, 68 B, la línea real del monitor. Con
+					espacios, 90 B: 22 son sangría y saltos de línea (serializeJsonPretty
+					escribe CR LF). En binario, 13 B empaquetado; 16 B si el compilador
+					alinea <code>presion</code> a múltiplo de 4 e inserta 3 bytes de relleno
+					tras <code>hum</code>. A cambio, en binario emisor y receptor deben
+					acordar campos, tamaños, relleno y orden de bytes; el ESP32 es
+					little-endian (9A 99 BD 41 es 0x41BD999A = 23,7). JSON se lee en el
+					monitor y admite campos nuevos.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>serializeJson(doc, Serial)</code> genera la forma compacta;
+						<code>serializeJsonPretty()</code>, la sangrada (2 espacios y fin de línea CR LF: 90 B para este registro). En binario:
+						<code>struct __attribute__((packed)) Registro { … };</code> y
+						<code>Serial2.write((uint8_t*)&amp;r, sizeof(r));</code>
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						JSON: APIs web y MQTT legibles. Binario: radio de bajo consumo (LoRa),
+						registros de sensores, protocolos con ancho de banda escaso.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Enviar un <code>struct</code> sin empaquetar a otra arquitectura: relleno distinto.</li>
+						<li>Suponer el mismo orden de bytes en ambos extremos.</li>
+						<li><code>StaticJsonDocument</code> pequeño: el documento se trunca sin aviso visible.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-codigo-13-trama-checksum.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 13 · Checksum</span>
+				</a>
+				<a class="slide-nav__link" href="21-codigo-14-json.html">
+					<span>Ejemplo 14 · JSON</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const CAMPOS = ["temp", "hum", "presion", "tiempo_ms"];
+
+			// La línea real del ejemplo 14 (ArduinoJson con double: 9 cifras).
+			const VALORES = { temp: "23.70000076", hum: "57", presion: "1012.299988", tiempo_ms: "3012" };
+			const COMPACTO = `{${CAMPOS.map((k) => `"${k}":${VALORES[k]}`).join(",")}}`;
+			// serializeJsonPretty() de ArduinoJson 6.21: sangría de 2 espacios y "\r\n".
+			const BONITO = `{\r\n${CAMPOS.map((k) => `  "${k}": ${VALORES[k]}`).join(",\r\n")}\r\n}`;
+
+			// Cada carácter con su papel: clave o valor de un campo, sintaxis o espacio.
+			function celdasJson(s) {
+				const tipo = new Array(s.length).fill({ t: "sint" });
+				for (const k of CAMPOS) {
+					const ik = s.indexOf(`"${k}"`);
+					for (let i = ik; i < ik + k.length + 2; i++) tipo[i] = { t: "clave", f: k };
+					const iv = s.indexOf(VALORES[k], ik);
+					for (let i = iv; i < iv + VALORES[k].length; i++) tipo[i] = { t: "valor", f: k };
+				}
+				return [...s].map((ch, i) => {
+					if (ch === " ") return { s: "·", t: "esp" };
+					if (ch === "\r") return { s: "CR", t: "esp" };
+					if (ch === "\n") return { s: "LF", t: "esp" };
+					return { s: ch, ...tipo[i] };
+				});
+			}
+
+			// struct Registro { float temp; uint8_t hum; float presion; uint32_t tiempo_ms; }
+			// 23,7f = 0x41BD999A, 1012,3f = 0x447D1333, 3012 = 0x00000BC4; little-endian.
+			const B_TEMP = ["9A", "99", "BD", "41"];
+			const B_HUM = ["39"];
+			const B_PRES = ["33", "13", "7D", "44"];
+			const B_TIEMPO = ["C4", "0B", "00", "00"];
+			const bin = (relleno) => [
+				...B_TEMP.map((s) => ({ s, t: "valor", f: "temp" })),
+				...B_HUM.map((s) => ({ s, t: "valor", f: "hum" })),
+				...(relleno ? ["--", "--", "--"].map((s) => ({ s, t: "relleno" })) : []),
+				...B_PRES.map((s) => ({ s, t: "valor", f: "presion" })),
+				...B_TIEMPO.map((s) => ({ s, t: "valor", f: "tiempo_ms" })),
+			];
+
+			const FORMATOS = {
+				bonito: { nombre: "JSON con espacios", celdas: celdasJson(BONITO) },
+				compacto: { nombre: "JSON compacto", celdas: celdasJson(COMPACTO) },
+				struct: { nombre: "struct", celdas: bin(true) },
+				packed: { nombre: "struct packed", celdas: bin(false) },
+			};
+			const ORDEN = ["bonito", "compacto", "struct", "packed"];
+			const MAX = FORMATOS.bonito.celdas.length;
+
+			let fmt = "compacto";
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function rayado(ctx, x, y, w, h, color) {
+				ctx.save();
+				ctx.beginPath();
+				ctx.rect(x, y, w, h);
+				ctx.clip();
+				ctx.strokeStyle = color;
+				ctx.lineWidth = 1.5;
+				for (let d = -h; d < w; d += 8) {
+					ctx.beginPath();
+					ctx.moveTo(x + d, y + h);
+					ctx.lineTo(x + d + h, y);
+					ctx.stroke();
+				}
+				ctx.restore();
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					text: token("--color-text"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+				};
+				const color = {
+					temp: [token("--color-accent"), token("--color-accent-soft")],
+					hum: [token("--color-navy"), token("--color-navy-soft")],
+					presion: [token("--color-ok"), token("--color-ok-soft")],
+					tiempo_ms: [token("--color-warn"), token("--color-warn-soft")],
+				};
+				const fs = clamp(20, Math.min(h * 0.04, w * 0.0155), 28);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const m = fs * 0.9;
+
+				// Barras: bytes de cada formato a la misma escala.
+				const L = fs * 10.5;
+				const barH = Math.min(fs * 1.5, h * 0.06);
+				const sepB = barH * 0.45;
+				const anchoMax = w - L - m - fs * 13;
+				for (const [i, k] of ORDEN.entries()) {
+					const n = FORMATOS[k].celdas.length;
+					const y = m + i * (barH + sepB);
+					const sel = k === fmt;
+					texto(ctx, FORMATOS[k].nombre, m, y + barH / 2, fs, sel ? c.heading : c.muted, sel ? 700 : 600, "left", SANS);
+					ctx.fillStyle = sel ? c.acento : c.borde;
+					ctx.fillRect(L, y, (anchoMax * n) / MAX, barH);
+					texto(ctx, `${n} B`, L + (anchoMax * n) / MAX + fs * 0.5, y + barH / 2, fs, sel ? c.heading : c.muted, 700);
+				}
+
+				// Celdas: un byte cada una, a la misma escala en todos los formatos.
+				const celdas = FORMATOS[fmt].celdas;
+				const COLS = 23;
+				const yC = m + 4 * (barH + sepB) + fs * 0.6;
+				const notaH = fs * 3.4;
+				const cw = (w - 2 * m) / COLS;
+				const ch = Math.min(cw * 0.95, (h - yC - notaH - m) / 4);
+				const fsC = clamp(16, Math.min(cw * 0.42, ch * 0.5), 30);
+				for (const [i, cel] of celdas.entries()) {
+					const x = m + (i % COLS) * cw;
+					const y = yC + Math.floor(i / COLS) * ch;
+					const g = 2;
+					let fondo = c.sup;
+					let tinta = c.text;
+					if (cel.t === "valor") {
+						fondo = color[cel.f][0];
+						tinta = c.sup;
+					} else if (cel.t === "clave") {
+						fondo = color[cel.f][1];
+						tinta = c.heading;
+					}
+					ctx.fillStyle = fondo;
+					ctx.fillRect(x + g, y + g, cw - 2 * g, ch - 2 * g);
+					if (cel.t === "esp" || cel.t === "relleno") {
+						rayado(ctx, x + g, y + g, cw - 2 * g, ch - 2 * g, c.borde);
+						tinta = c.muted;
+					}
+					texto(ctx, cel.s, x + cw / 2, y + ch / 2, fsC, tinta, 700, "center");
+				}
+
+				// En binario sobra alto: tabla de lo que significa cada grupo de bytes.
+				if (fmt === "struct" || fmt === "packed") {
+					const filasT = [
+						["temp", "float", "4 B", "23,7", "0x41BD999A", B_TEMP.join(" ")],
+						["hum", "uint8_t", "1 B", "57", "0x39", B_HUM.join(" ")],
+						...(fmt === "struct" ? [["relleno", "—", "3 B", "—", "—", "-- -- --"]] : []),
+						["presion", "float", "4 B", "1012,3", "0x447D1333", B_PRES.join(" ")],
+						["tiempo_ms", "uint32_t", "4 B", "3012", "0x00000BC4", B_TIEMPO.join(" ")],
+					];
+					const cols = [0, 7.5, 14, 18, 25, 33].map((k) => m + fs * 1.3 + k * fs);
+					const lh = Math.min(fs * 1.7, (h - yC - ch - m - fs * 4.4) / (filasT.length + 1));
+					const yT = yC + ch + fs * 1.2;
+					const cab = ["campo", "tipo", "tamaño", "valor", "en memoria", "bytes enviados"];
+					for (const [j, t] of cab.entries()) texto(ctx, t, cols[j], yT, fs * 0.9, c.muted, 600, "left", SANS);
+					for (const [i, fila] of filasT.entries()) {
+						const y = yT + (i + 1) * lh;
+						const campo = fila[0];
+						if (color[campo]) {
+							ctx.fillStyle = color[campo][0];
+							ctx.fillRect(m, y - fs * 0.4, fs * 0.8, fs * 0.8);
+						} else rayado(ctx, m, y - fs * 0.4, fs * 0.8, fs * 0.8, c.muted);
+						for (const [j, t] of fila.entries()) texto(ctx, t, cols[j], y, fs, j === 0 || j === 5 ? c.heading : c.text, j === 0 || j === 5 ? 700 : 500);
+					}
+				}
+
+				// Nota al pie del lienzo.
+				const yN = h - m - fs * 2.1;
+				const notas = {
+					bonito: ["22 bytes son sangría (·) y fines de línea CR LF, sin datos.", "23.70000076: 11 bytes de texto para un valor que en binario ocupa 4."],
+					compacto: ["La línea que imprime el ejemplo 14; las claves se repiten en cada envío.", "23.70000076: 11 bytes de texto para un valor que en binario ocupa 4."],
+					struct: ["3 bytes de relleno (--): el compilador alinea presion a un múltiplo de 4.", "Little-endian: temp = 0x41BD999A sale como 9A 99 BD 41, byte bajo primero."],
+					packed: ["__attribute__((packed)): sin relleno, 4 + 1 + 4 + 4 = 13 bytes.", "Little-endian: temp = 0x41BD999A sale como 9A 99 BD 41, byte bajo primero."],
+				};
+				for (const [i, s] of notas[fmt].entries()) texto(ctx, s, m, yN + i * fs * 1.45, fs, i === 0 ? c.heading : c.muted, 600, "left", SANS);
+
+				// Leyenda de campos, a la derecha de las barras.
+				const xL = w - m - fs * 7.5;
+				for (const [i, k] of CAMPOS.entries()) {
+					const y = m + i * (barH + sepB) + barH / 2;
+					ctx.fillStyle = color[k][0];
+					ctx.fillRect(xL, y - fs * 0.45, fs * 0.9, fs * 0.9);
+					texto(ctx, k, xL + fs * 1.3, y, fs, c.heading, 600);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("formatos"), dibujar);
+			const botones = [...document.querySelectorAll("[data-fmt]")];
+			const lBytes = document.getElementById("l-bytes");
+
+			function render() {
+				for (const b of botones) {
+					const on = b.dataset.fmt === fmt;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				lBytes.textContent = `${FORMATOS[fmt].celdas.length} B`;
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					fmt = b.dataset.fmt;
+					render();
+				});
+			}
+			render();
+		</script>
+	</body>
+</html>

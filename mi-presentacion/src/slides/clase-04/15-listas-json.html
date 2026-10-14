@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Listas JSON · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Datos en pantalla</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una lista JSON se recorre con <em>tope</em>
+				</h1>
+
+				<div class="def">
+					<p>La respuesta real de open-notify contiene 12 nombres; la OLED muestra 5 por página y el bucle nunca pasa del tamaño del arreglo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la respuesta de open-notify: una lista people de 12 objetos con craft y name, number 12 y message success, 587 bytes. En el centro, tres pantallas OLED de 128 por 64 píxeles a escala: página 1 con los nombres 1 a 5, página 2 con los nombres 6 a 10 y página 3 con los nombres 11 y 12. El nombre 3, Tracy Caldwell Dyson, ocupa 22 caracteres y la pantalla admite 21: con setTextWrap en false la n final queda fuera del borde. Debajo, el código: JsonArray people, el tope cantidadLeer, que no pasa de 15, el tamaño del arreglo, y el bucle for hasta ese tope.">
+						<!-- la respuesta -->
+						<text class="sans mut" x="0" y="24" font-size="26">GET http://api.open-notify.org/astros.json · 200 · 587 bytes</text>
+						<text x="0" y="70" font-size="28">"people": [ <tspan class="acc">{"craft": "ISS", "name": "Oleg Kononenko"}</tspan>, … <tspan class="acc">12 objetos</tspan> ],</text>
+						<text x="0" y="112" font-size="28">"number": <tspan class="navy">12</tspan>, "message": "success"</text>
+
+						<!-- tres páginas de 5 en la OLED a escala 3,5:1 -->
+						<text class="sans mut" x="1600" y="112" font-size="26" text-anchor="end">OLED 128 × 64 px: 21 caracteres por fila</text>
+						<rect class="s4d-oled" x="0" y="180" width="448" height="224" rx="6" />
+						<text class="s4d-oled-t" x="21.0" y="194" font-size="29" textLength="357.0" lengthAdjust="spacingAndGlyphs">EN EL ESPACIO: 12</text>
+						<line class="s4d-oled-ln" x1="0" y1="216.8" x2="448" y2="216.8" />
+						<text class="s4d-oled-t" x="0.0" y="243" font-size="29" textLength="336.0" lengthAdjust="spacingAndGlyphs">1.Oleg Kononenko</text>
+						<text class="s4d-oled-t" x="0.0" y="278" font-size="29" textLength="294.0" lengthAdjust="spacingAndGlyphs">2.Nikolai Chub</text>
+						<text class="s4d-oled-t" x="0.0" y="313" font-size="29" textLength="441.0" lengthAdjust="spacingAndGlyphs">3.Tracy Caldwell Dyso</text>
+						<text class="s4d-oled-t" x="0.0" y="348" font-size="29" textLength="378.0" lengthAdjust="spacingAndGlyphs">4.Matthew Dominick</text>
+						<text class="s4d-oled-t" x="0.0" y="383" font-size="29" textLength="357.0" lengthAdjust="spacingAndGlyphs">5.Michael Barratt</text>
+						<rect class="s4d-oled" x="576" y="180" width="448" height="224" rx="6" />
+						<text class="s4d-oled-t" x="597.0" y="194" font-size="29" textLength="357.0" lengthAdjust="spacingAndGlyphs">EN EL ESPACIO: 12</text>
+						<line class="s4d-oled-ln" x1="576" y1="216.8" x2="1024" y2="216.8" />
+						<text class="s4d-oled-t" x="576.0" y="243" font-size="29" textLength="315.0" lengthAdjust="spacingAndGlyphs">6.Jeanette Epps</text>
+						<text class="s4d-oled-t" x="576.0" y="278" font-size="29" textLength="441.0" lengthAdjust="spacingAndGlyphs">7.Alexander Grebenkin</text>
+						<text class="s4d-oled-t" x="576.0" y="313" font-size="29" textLength="315.0" lengthAdjust="spacingAndGlyphs">8.Butch Wilmore</text>
+						<text class="s4d-oled-t" x="576.0" y="348" font-size="29" textLength="357.0" lengthAdjust="spacingAndGlyphs">9.Sunita Williams</text>
+						<text class="s4d-oled-t" x="576.0" y="383" font-size="29" textLength="273.0" lengthAdjust="spacingAndGlyphs">10.Li Guangsu</text>
+						<rect class="s4d-oled" x="1152" y="180" width="448" height="224" rx="6" />
+						<text class="s4d-oled-t" x="1173.0" y="194" font-size="29" textLength="357.0" lengthAdjust="spacingAndGlyphs">EN EL ESPACIO: 12</text>
+						<line class="s4d-oled-ln" x1="1152" y1="216.8" x2="1600" y2="216.8" />
+						<text class="s4d-oled-t" x="1152.0" y="243" font-size="29" textLength="210.0" lengthAdjust="spacingAndGlyphs">11.Li Cong</text>
+						<text class="s4d-oled-t" x="1152.0" y="278" font-size="29" textLength="273.0" lengthAdjust="spacingAndGlyphs">12.Ye Guangfu</text>
+						
+						<path class="ln ln--fina ln--mut" d="M456 292 H568 M1032 292 H1144" />
+						<text class="mid mut" x="512" y="266" font-size="24">4 s</text>
+						<text class="mid mut" x="1088" y="266" font-size="24">4 s</text>
+						<text x="0" y="434" font-size="26">página 1 · i = 0…4</text>
+						<text x="576" y="434" font-size="26">página 2 · i = 5…9</text>
+						<text x="1152" y="434" font-size="26">página 3 · i = 10…11</text>
+						<text class="acc" x="0" y="512" font-size="24">22 caracteres; setTextWrap(false) recorta la «n»</text>
+
+						<!-- el código con su tope -->
+						<path class="ln ln--fina ln--mut" d="M0 546 H1600" />
+						<text x="0" y="584" font-size="28">JsonArray people = doc["people"];</text>
+						<text x="0" y="626" font-size="28">int cantidadLeer = (totalAstronautas &gt; <tspan class="acc">15</tspan>) ? <tspan class="acc">15</tspan> : totalAstronautas;<tspan class="mut" x="1150">// String nombres…[15]</tspan></text>
+						<text x="0" y="668" font-size="28">for (int i = 0; <tspan class="acc">i &lt; cantidadLeer</tspan>; i++) nombresAstronautas[i] = people[i]["name"]…;</text>
+
+						<!-- paso 1: 200 no es dato vigente -->
+						<g data-paso="1">
+							<rect class="barra--warn" x="0" y="714" width="1600" height="72" rx="10" />
+							<text class="sans warn" x="24" y="750" font-size="30">open-notify responde 200 con la tripulación de mediados de 2024, un dato no vigente.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer la respuesta: una lista de objetos y, aparte, el total. El firmware copia
+					los nombres a un arreglo de C++ de tamaño fijo; si la API devolviera 20
+					personas, sin el tope se escribiría fuera del arreglo y el programa se
+					reiniciaría. El bucle llega como máximo a 15. Luego la
+					pantalla: 128 px de ancho son 21 caracteres de 6 px; el nombre 3 tiene 22. Con
+					<code>setTextWrap(false)</code> la letra sobrante se recorta en el borde; sin esa línea saltaría de renglón y se superpondría al nombre siguiente. Pregunta de predicción (antes del paso): ¿corresponde la lista a la tripulación actual de la estación? No corresponde: es de mediados de 2024, y el servidor responde 200 igualmente.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>JsonArray people = doc["people"];</code>,
+						<code>people.size()</code>, <code>people[i]["name"].as&lt;String&gt;()</code>.
+						Página: <code>inicio = pagina * 5</code>, se corta con
+						<code>break</code> al llegar al total; páginas = (total + 4) / 5 = 3.
+						Texto de tamaño 1: 6 × 8 px por carácter.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 17 (astronautas en la OLED).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Usar <code>"number"</code> como tope, aunque el arreglo local puede ser menor.</li>
+						<li>Tomar un 200 por dato actual sin comprobar la fecha o la fuente.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-16b-oled.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 16b · OLED cripto</span>
+				</a>
+				<a class="slide-nav__link" href="16-codigo-17-astros.html">
+					<span>Ejemplo 17 · Astronautas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

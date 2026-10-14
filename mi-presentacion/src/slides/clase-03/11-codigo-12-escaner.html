@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 12 · Escáner · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-chip" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 12</span>
+					</div>
+
+					<h2 class="code-hour__title">Un escáner que lista quién responde en el bus I²C</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Barrido de 0x08 a 0x77.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">SSD1306 y BMP180 en el bus.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Conexión del bus y flujo.</span>
+								<span class="deliverable__file">diagrama-conexion-i2c.excalidraw · diagrama-flujo-escaneo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Recorrer cada 5 s las direcciones 0x08 a 0x77 y anotar las que responden con <em>ACK</em>: <code>endTransmission()</code> devuelve 0.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>OLED SSD1306 y BMP180 en el mismo bus, con pull-ups de 4,7 kΩ a 3V3.</p>
+								<svg class="s3-esquema" role="img" aria-label="Bus I²C: ESP32 con 3V3, SDA (GPIO 21), SCL (GPIO 22) y GND hasta SSD1306 en 0x3C, BMP180 en 0x77 y pull-ups de 4,7 kΩ de SDA y SCL a 3V3" viewBox="0 0 470 172" width="470" height="172"><rect class="s3-esq__caja" x="1" y="1" width="99" height="170" rx="6" /><text class="s3-esq__tit" x="50" y="26" text-anchor="middle">ESP32</text><text class="s3-esq__pin" x="92" y="86" text-anchor="end">3V3</text><path class="s3-esq__vcc" d="M100 80 H468" /><circle class="s3-esq__pv" cx="100" cy="80" r="3.5" /><text class="s3-esq__pin" x="92" y="111" text-anchor="end">SDA 21</text><path class="s3-esq__a" d="M100 105 H468" /><circle class="s3-esq__pa" cx="100" cy="105" r="3.5" /><text class="s3-esq__pin" x="92" y="136" text-anchor="end">SCL 22</text><path class="s3-esq__b" d="M100 130 H468" /><circle class="s3-esq__pb" cx="100" cy="130" r="3.5" /><text class="s3-esq__pin" x="92" y="161" text-anchor="end">GND</text><path class="s3-esq__gnd" d="M100 155 H468" /><circle class="s3-esq__pg" cx="100" cy="155" r="3.5" /><text class="s3-esq__sub" x="158" y="24" text-anchor="middle">pull-ups</text><text class="s3-esq__sub" x="158" y="46" text-anchor="middle">4,7 kΩ</text><path class="s3-esq__a" d="M140 80 V105" /><rect class="s3-esq__r" x="135" y="84" width="10" height="16" /><circle class="s3-esq__pv" cx="140" cy="80" r="3.5" /><circle class="s3-esq__pa" cx="140" cy="105" r="3.5" /><path class="s3-esq__b" d="M176 80 V130" /><rect class="s3-esq__r" x="171" y="84" width="10" height="16" /><circle class="s3-esq__pv" cx="176" cy="80" r="3.5" /><circle class="s3-esq__pb" cx="176" cy="130" r="3.5" /><rect class="s3-esq__caja" x="218" y="1" width="100" height="55" rx="6" /><text class="s3-esq__tit" x="268" y="24" text-anchor="middle">SSD1306</text><text class="s3-esq__sub" x="268" y="46" text-anchor="middle">0x3C</text><path class="s3-esq__vcc" d="M238 56 V80" /><circle class="s3-esq__pv" cx="238" cy="80" r="3.5" /><path class="s3-esq__a" d="M258 56 V105" /><circle class="s3-esq__pa" cx="258" cy="105" r="3.5" /><path class="s3-esq__b" d="M278 56 V130" /><circle class="s3-esq__pb" cx="278" cy="130" r="3.5" /><path class="s3-esq__gnd" d="M298 56 V155" /><circle class="s3-esq__pg" cx="298" cy="155" r="3.5" /><rect class="s3-esq__caja" x="344" y="1" width="100" height="55" rx="6" /><text class="s3-esq__tit" x="394" y="24" text-anchor="middle">BMP180</text><text class="s3-esq__sub" x="394" y="46" text-anchor="middle">0x77</text><path class="s3-esq__vcc" d="M364 56 V80" /><circle class="s3-esq__pv" cx="364" cy="80" r="3.5" /><path class="s3-esq__a" d="M384 56 V105" /><circle class="s3-esq__pa" cx="384" cy="105" r="3.5" /><path class="s3-esq__b" d="M404 56 V130" /><circle class="s3-esq__pb" cx="404" cy="130" r="3.5" /><path class="s3-esq__gnd" d="M424 56 V155" /><circle class="s3-esq__pg" cx="424" cy="155" r="3.5" /></svg>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+Iniciando escaneo del bus I2C (SDA=21, SCL=22)
+[I2C] dispositivo en 0x3C
+[I2C] dispositivo en 0x77
+[I2C] 2 dispositivos encontrados</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino y monitor_speed = 115200.
+
+<b>2. Firmware.</b> Con Wire.begin(21, 22), recorre las direcciones 0x08 a 0x77: beginTransmission(dir) y endTransmission(); si devuelve 0, imprime con snprintf «[I2C] dispositivo en 0x%02X». Al terminar el barrido, «[I2C] %d dispositivos encontrados» (en singular si es 1), y repite cada 5 s. setup() imprime una línea vacía y «Iniciando escaneo del bus I2C (SDA=21, SCL=22)».
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con una OLED SSD1306 y un BMP180 en SDA 21 y SCL 22, y pull-ups de 4,7 kΩ a 3V3.
+
+<b>4. Diagramas.</b> En Excalidraw: la conexión del bus con las dos líneas, las pull-ups y la dirección de cada dispositivo, y el flujo del barrido con la decisión de anotar o seguir.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> El rango 0x08–0x77 deja fuera las direcciones que la norma I²C reserva. <code>%02X</code> fija dos cifras hexadecimales, el formato con que las hojas de datos dan la dirección.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El maestro detecta un dispositivo cuando este responde ACK a su dirección; el escáner no lee ningún dato.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: si se desconecta el BMP180, ¿qué cambia en el monitor? Respuesta: desaparece la línea 0x77 y el resumen pasa a «1 dispositivo encontrado». Una cuenta de 0 suele deberse a SDA y SCL intercambiados o a un módulo sin alimentación.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>endTransmission()</code> devuelve 0 si hubo ACK, 2 si la dirección recibió NACK y 5 si se agotó el tiempo. La dirección de 7 bits viaja desplazada un bit, con el de lectura o escritura al final.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Escanear sin <code>Wire.begin()</code>: ninguna dirección responde.</li><li>Confundir la dirección de 7 bits con la de 8 (0x77 frente a 0xEE).</li><li>Sin pull-ups ni en los módulos ni en la placa: el bus no vuelve a nivel alto.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-escaner-i2c.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Escáner</span>
+				</a>
+				<a class="slide-nav__link" href="12-codigo-12b-limite-i2c.html">
+					<span>Ejemplo 12b · Una dirección</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

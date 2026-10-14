@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Referencias · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Memoria de los objetos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Paso de un objeto por valor y por <em>referencia</em>
+				</h1>
+
+				<div class="rd refs crece">
+					<section class="modo modo--valor" aria-label="Paso por valor">
+						<p class="modo__titulo">Por valor <span class="modo__tag">copia</span></p>
+						<code class="modo__firma">void imprimir(EntradaAnalogica e)</code>
+						<div class="memoria" data-memoria="valor">
+							<svg class="memoria__trazo" aria-hidden="true" data-trazo></svg>
+							<div class="memoria__objetos">
+								<div class="obj" data-obj="entrada">
+									<b>entrada</b><small>global</small>
+									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+								</div>
+								<div class="obj obj--copia" data-obj="copia">
+									<b>e</b><small data-copia-estado>copia, en la pila</small>
+									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+								</div>
+							</div>
+							<div class="bloque" data-bloque>
+								<span class="bloque__celdas" aria-hidden="true"></span>
+								<span class="bloque__rotulo" data-bloque-rotulo>new uint16_t[16]</span>
+							</div>
+						</div>
+						<ol class="modo__eventos">
+							<li><span>Ambos objetos apuntan al búfer.</span></li>
+							<li data-paso="1"><span>La copia lo libera al salir.</span></li>
+							<li data-paso="2"><span>Otro <code>delete[]</code> reinicia el chip.</span></li>
+						</ol>
+					</section>
+
+					<section class="modo modo--ref" aria-label="Paso por referencia">
+						<p class="modo__titulo">Por referencia <span class="modo__tag">sin copia</span></p>
+						<code class="modo__firma">void imprimir(EntradaAnalogica<em>&amp;</em> e)</code>
+						<div class="memoria" data-memoria="ref">
+							<svg class="memoria__trazo" aria-hidden="true" data-trazo></svg>
+							<div class="memoria__objetos">
+								<div class="obj" data-obj="entrada">
+									<b>entrada</b><small>global</small>
+									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+								</div>
+								<div class="obj obj--alias" data-obj="alias" data-hacia="entrada">
+									<b>e</b><small>referencia, en la pila</small>
+									<span class="obj__campo">→ entrada <i class="obj__ancla"></i></span>
+								</div>
+							</div>
+							<div class="bloque" data-bloque>
+								<span class="bloque__celdas" aria-hidden="true"></span>
+								<span class="bloque__rotulo">new uint16_t[16]</span>
+							</div>
+						</div>
+						<ol class="modo__eventos">
+							<li><span>e es otro nombre de entrada.</span></li>
+							<li data-paso="3"><span>Sin copia ni destructor.</span></li>
+						</ol>
+					</section>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: ¿compila
+					<code>void imprimir(EntradaAnalogica e)</code>? Respuesta: sí, sin error.
+					EntradaAnalogica declara su destructor pero no su constructor de copia,
+					así que C++ genera uno que copia miembro a miembro, y el puntero
+					<code>_buffer</code> se copia tal cual. Recorrer los pasos: la copia se
+					destruye al salir de imprimir() y libera el búfer que entrada sigue
+					usando en cada update(); en la vuelta siguiente, otra copia lo libera
+					otra vez. Con <code>&amp;</code> no hay segundo objeto ni segundo
+					destructor.
+				</p>
+				<p>
+					Al salir de imprimir(), el destructor de la copia hace delete[] y
+					entrada queda apuntando a memoria liberada, que su update() sigue
+					escribiendo; la llamada siguiente crea otra copia que libera el mismo
+					bloque, con el heap corrupto y el consiguiente reinicio. Con la
+					referencia, el único propietario del búfer es entrada.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Objetos con recursos propios se pasan como
+						<code>EntradaAnalogica&amp;</code>. Una
+						<code>const EntradaAnalogica&amp;</code> solo admite métodos
+						<code>const</code>: en la clase real <code>leerVoltios()</code> no
+						lo es, así que habría que declararlo
+						<code>float leerVoltios() const;</code>. Para que el compilador
+						rechace la copia: <code>EntradaAnalogica(const EntradaAnalogica&amp;) = delete;</code>
+						y el paso por valor da «use of deleted function».
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Regla de tres de C++: quien define destructor, constructor de copia
+						o asignación de copia necesita, casi siempre, los tres.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Copiar un <code>Boton</code> no corrompe el heap, pero
+						<code>fuePulsado()</code> consume el evento en la copia y el
+						original lo vuelve a entregar.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-codigo-09-analogica.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 09 · Media móvil</span>
+				</a>
+				<a class="slide-nav__link" href="19-estado-programa.html">
+					<span>Estado</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			// Dieciséis celdas por bloque: el búfer que reserva el constructor.
+			for (const celdas of document.querySelectorAll(".bloque__celdas")) {
+				celdas.innerHTML = "<i></i>".repeat(16);
+			}
+
+			const valor = document.querySelector('[data-memoria="valor"]');
+			const copia = valor.querySelector('[data-obj="copia"]');
+			const copiaEstado = valor.querySelector("[data-copia-estado]");
+			const bloque = valor.querySelector("[data-bloque]");
+			const rotulo = valor.querySelector("[data-bloque-rotulo]");
+
+			// Una flecha por objeto: del puntero _buffer al borde del bloque.
+			function dibujar(memoria) {
+				const svg = memoria.querySelector("[data-trazo]");
+				const base = memoria.getBoundingClientRect();
+				const destino = memoria.querySelector("[data-bloque]").getBoundingClientRect();
+				const trazos = [];
+				for (const obj of memoria.querySelectorAll("[data-obj]")) {
+					const a = obj.querySelector(".obj__ancla").getBoundingClientRect();
+					const x1 = a.left + a.width / 2 - base.left;
+					const y1 = a.top + a.height / 2 - base.top;
+					const x2 = destino.left - base.left - 6;
+					const y2 = destino.top + destino.height / 2 - base.top;
+					const xm = (x1 + x2) / 2;
+					const roto = memoria.classList.contains("is-colgante");
+					const clase = obj.classList.contains("is-destruido") ? "is-roto is-tenue" : roto ? "is-roto" : "";
+					let d = `M${x1} ${y1}C${xm} ${y1} ${xm} ${y2} ${x2} ${y2}`;
+					if (obj.dataset.hacia) {
+						// La referencia apunta al objeto, no al búfer: sube hasta el borde derecho de entrada.
+						const t = memoria.querySelector(`[data-obj="${obj.dataset.hacia}"]`).getBoundingClientRect();
+						const tx = t.right - base.left + 8;
+						const ty = t.top + t.height * 0.3 - base.top;
+						const cx = Math.max(x1, tx) + 60;
+						d = `M${x1} ${y1}C${cx} ${y1} ${cx} ${ty} ${tx} ${ty}`;
+					}
+					trazos.push(`<path class="${clase}" d="${d}" marker-end="url(#p-${memoria.dataset.memoria}${clase ? "-roto" : ""})"/>`);
+				}
+				const punta = (id, clase) =>
+					`<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="${clase}" d="M0 0L10 5L0 10z"/></marker>`;
+				const id = `p-${memoria.dataset.memoria}`;
+				svg.innerHTML = `<defs>${punta(id, "punta")}${punta(`${id}-roto`, "punta is-roto")}</defs>${trazos.join("")}`;
+			}
+
+			function estado(n) {
+				const liberado = n >= 1;
+				const doble = n >= 2;
+				copia.classList.toggle("is-destruido", liberado);
+				copiaEstado.textContent = liberado ? "destruida al salir" : "copia, en la pila";
+				valor.classList.toggle("is-colgante", liberado);
+				bloque.classList.toggle("is-libre", liberado && !doble);
+				bloque.classList.toggle("is-doble", doble);
+				rotulo.textContent = doble ? "delete[] dos veces" : liberado ? "liberado" : "new uint16_t[16]";
+				for (const m of document.querySelectorAll("[data-memoria]")) dibujar(m);
+			}
+
+			document.addEventListener("paso", (e) => estado(e.detail.mostrados));
+			const revelados = [...document.querySelectorAll("[data-paso].is-shown")].map((el) => Number(el.dataset.paso));
+			const inicial = Math.max(0, ...revelados);
+			for (const m of document.querySelectorAll("[data-memoria]")) new ResizeObserver(() => dibujar(m)).observe(m);
+			document.fonts.ready.then(() => estado(inicial));
+			estado(inicial);
+		</script>
+	</body>
+</html>

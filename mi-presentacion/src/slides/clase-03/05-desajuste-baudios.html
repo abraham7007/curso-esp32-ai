@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Efecto de un desajuste de velocidad · Sesión 3</title>
+		<title>Desajuste de velocidad · Sesión 3</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,408 +14,270 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="31">
+	<body class="ponencia" data-deck-total="24">
 		<main class="slide slide--start">
-			<div class="slide__content stagger">
-				<span class="badge" data-animate="fade-up">
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
-					01 · Fundamentos del enlace serie
-				</span>
+			<div class="slide__content">
+				<span class="badge">01 · Enlace serie</span>
 
-				<h1
-					class="slide__title slide__title--sm"
-					data-animate="fade-up"
-				>
-					Efecto de un desajuste de velocidad
+				<h1 class="slide__title slide__title--sm">
+					El error de <em>velocidad</em> aparece en los últimos bits
 				</h1>
 
-				<div class="slide__split" data-animate="fade-up">
-					<div class="slide__split-text">
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
 						<div class="def">
-							<div class="def__label">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
-								Definición
-							</div>
 							<p>
-								Sin línea de reloj, el receptor sincroniza con el flanco de
-								bajada del bit de inicio y muestrea cada bit en el instante que
-								calcula a partir de <b>su</b> velocidad configurada. Si esa
-								velocidad difiere de la del emisor, los instantes de muestreo se
-								desplazan de forma acumulativa dentro de la trama.
+								Sin reloj compartido, el receptor se sincroniza en el bit de
+								inicio y muestrea cada bit a la mitad con <b>su</b> propio
+								tiempo de bit.
 							</p>
 						</div>
-
-						<div class="practice">
-							<div class="practice__label">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
-								En la práctica
-							</div>
-							<p class="m-0">
-								El valor de <code>Serial2.begin(...)</code> de cada placa es todo
-								el acuerdo: 115 200 en una y 9 600 en la otra es una desviación
-								de más de un orden de magnitud, y aun así la línea entrega bytes
-								sin ningún mensaje de error.
-							</p>
-						</div>
-
-						<div class="sim-caption">
-							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
-							<p class="m-0">
-								Con 10 bits por trama, una desviación superior a
-								aproximadamente el 5 % desplaza el último muestreo fuera de su
-								bit. El error aparece primero en los bits finales, no en los
-								iniciales: el desfase se acumula desde el flanco de inicio. Por
-								eso un desajuste pequeño produce caracteres parcialmente
-								correctos en lugar de silencio.
-							</p>
-						</div>
+						<p class="franja-fila__ajusta">
+							<code>margen ≈ 0,5 bit / 9,5 bits ≈ ±5 %</code>
+						</p>
 					</div>
 
-					<div class="slide__split-visual">
-						<div class="card">
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>Velocidad del receptor</span>
+								<input type="range" id="desv" min="-12" max="12" step="0.5" value="8" />
+								<output id="desv-out" for="desv">+8,0 %</output>
+							</label>
+							<span class="lectura"><small>recibe </small><span id="l-rx" class="s3c-ancho s3c-ancho--corto">0x95</span></span>
+							<span class="lectura lectura--fin"><small>parada </small><span id="l-parada" class="s3c-ancho s3c-ancho--corto">0 ✗</span></span>
+						</div>
+						<div class="lienzo-caja">
 							<canvas
-								id="skew-frame"
-								class="w-full aspect-[16/5]"
-								width="960"
-								height="300"
+								id="desajuste"
 								role="img"
-								aria-label="Trama UART del emisor con los instantes de muestreo del receptor superpuestos como marcas verticales; al aumentar la desviación de velocidad las marcas se desplazan del centro de cada bit hacia sus bordes"
+								aria-label="Carácter U (0x55) emitido a 115 200 baudios y los diez instantes de muestreo de un receptor cuyo reloj se desvía el porcentaje elegido; los muestreos se desplazan acumulando error hasta salirse de su bit."
 							></canvas>
-
-							<div class="controls mt-3">
-								<label for="skew-dev" class="text-sm font-medium">
-									Desviación del receptor
-								</label>
-								<input
-									type="range"
-									id="skew-dev"
-									min="-10"
-									max="10"
-									step="0.5"
-									value="0"
-								/>
-								<span class="readout" id="skew-dev-readout">0,0 %</span>
-							</div>
-
-							<div class="metric mt-3">
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Carácter transmitido
-									</span>
-									<span class="readout" id="skew-tx-out">0x55 · 'U'</span>
-								</div>
-								<div class="metric__item metric__item--ok" id="skew-rx-item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Carácter reconstruido
-									</span>
-									<span class="readout" id="skew-rx-out">0x55 · 'U'</span>
-								</div>
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Desviación
-									</span>
-									<span class="readout" id="skew-pct-out">0,0 %</span>
-								</div>
-								<div class="metric__item" id="skew-stop-item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Bit de parada
-									</span>
-									<span class="readout" id="skew-stop-out">válido</span>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si el receptor cuenta un 8 % más rápido que el
+					emisor, ¿qué bit se lee mal primero, b0 o b7? Recoger respuestas antes de
+					mover el deslizador.
+				</p>
+				<p>
+					Respuesta: los últimos. El error se acumula: el muestreo k cae en
+					(k + 1,5) T / (1 + d). Con +8 %, b6, b7 y la parada caen en el bit
+					anterior; se recibe 0x95 en lugar de 0x55 y la parada se lee 0 (error de
+					trama). Llevar el deslizador a 0 y subir despacio: hasta +5,5 % cada
+					muestreo cae dentro de su bit; a +6 % falla la parada. Hacia abajo, a
+					−6 %, b7 cae en la parada. Se envía «U» porque alterna en cada bit, de
+					modo que cualquier desplazamiento del muestreo cambia el valor leído.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Los dos extremos deben usar la misma cifra:
+						<code>Serial2.begin(115200, …)</code> en ambas placas y
+						<code>monitor_speed = 115200</code> en <code>platformio.ini</code>.
+						El ±5 % es el presupuesto total: se reparte entre el error del
+						divisor de reloj de cada lado.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Causa habitual de caracteres extraños en el monitor serie:
+						<code>monitor_speed</code> distinto del valor de <code>Serial.begin()</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Velocidades distintas en cada placa: llegan bytes, pero erróneos y sin aviso.</li>
+						<li>Atribuir al cable una salida del monitor legible solo en parte.</li>
+						<li>Velocidades no estándar sin comprobar el error real del divisor.</li>
+					</ul>
+				</div>
+			</details>
+
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="04-trama-uart.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Estructura de una trama UART</span>
+					<span>Trama UART</span>
 				</a>
-				<a class="slide-nav__link" href="06-conexion-cruzada.html">
-					<span>Conexión de un enlace UART</span>
+				<a class="slide-nav__link" href="06-cruce-y-masa.html">
+					<span>Cruce y masa</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
 		</main>
 
+		<script type="module" src="../../js/deck.js"></script>
+
 		<script type="module">
-			// Carácter fijo 'U' = 0x55 = 01010101: alterna en cada bit, así que
-			// cualquier desplazamiento del muestreo se manifiesta de inmediato.
-			const CODE = 0x55;
-			const SLOTS = 12; // reposo, inicio, b0..b7, parada, reposo
-			const NAMES = [
-				"reposo",
-				"inicio",
-				"b0",
-				"b1",
-				"b2",
-				"b3",
-				"b4",
-				"b5",
-				"b6",
-				"b7",
-				"parada",
-				"reposo",
-			];
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			// 'U' = 0x55 = 0101 0101: alterna en cada bit; cualquier deslizamiento
+			// del muestreo cambia el valor leído.
+			const CODIGO = 0x55;
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+			const hex = (v) => `0x${v.toString(16).toUpperCase().padStart(2, "0")}`;
+			const NOMBRES = ["inicio", "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "parada"];
 
 			const BITS = [];
-			for (let i = 0; i < 8; i++) BITS.push((CODE >> i) & 1);
-			const LEVELS = [1, 0, ...BITS, 1, 1];
+			for (let i = 0; i < 8; i++) BITS.push((CODIGO >> i) & 1);
+			// Nivel de cada bit emitido desde el flanco de inicio: inicio, datos, parada.
+			const EMITIDO = [0, ...BITS, 1];
+			const nivelEn = (t) => (t < 0 || t >= 10 ? 1 : EMITIDO[Math.floor(t)]);
 
-			const devInput = document.getElementById("skew-dev");
-			const devReadout = document.getElementById("skew-dev-readout");
-			const rxOut = document.getElementById("skew-rx-out");
-			const rxItem = document.getElementById("skew-rx-item");
-			const pctOut = document.getElementById("skew-pct-out");
-			const stopOut = document.getElementById("skew-stop-out");
-			const stopItem = document.getElementById("skew-stop-item");
-			const canvas = document.getElementById("skew-frame");
-			const ctx = canvas.getContext("2d");
+			let desv = 8; // % de velocidad del receptor respecto al emisor
 
-			function cssVar(name) {
-				return getComputedStyle(document.documentElement)
-					.getPropertyValue(name)
-					.trim();
-			}
-
-			function coma(value) {
-				return value.replace(".", ",");
-			}
-
-			function signo(value) {
-				return `${value > 0 ? "+" : ""}${coma(value.toFixed(1))} %`;
-			}
-
-			// Nivel emitido en el instante t, medido en tiempos de bit del emisor
-			// desde el flanco de bajada del bit de inicio.
-			function levelAt(t) {
-				const slot = 1 + Math.floor(t);
-				if (slot < 0 || slot > SLOTS - 1) return 1;
-				return LEVELS[slot];
-			}
-
-			function sample(dev) {
-				const ratio = 1 / (1 + dev / 100); // T de bit del receptor / del emisor
-				const times = [];
-				const read = [];
-				for (let k = 0; k < 9; k++) {
-					const t = (1.5 + k) * ratio;
-					times.push(t);
-					read.push(levelAt(t));
+			// Muestreo j (0 = inicio, 1…8 = datos, 9 = parada) en (j + 0,5)·T_rx,
+			// con T_rx = T / (1 + d). Tiempos en bits del emisor.
+			function recibir(d) {
+				const tRx = 1 / (1 + d / 100);
+				const m = [];
+				for (let j = 0; j < 10; j++) {
+					const t = (j + 0.5) * tRx;
+					// ok: el muestreo cae dentro de su propio bit.
+					m.push({ t, v: nivelEn(t), ok: Math.floor(t) === j });
 				}
-				let code = 0;
-				for (let k = 0; k < 8; k++) code |= read[k] << k;
-				return { times, read, code, stopOk: read[8] === 1 };
+				let byte = 0;
+				for (let k = 0; k < 8; k++) byte |= m[k + 1].v << k;
+				return { tRx, m, byte, parada: m[9].v };
 			}
 
-			function hex(code) {
-				return `0x${code.toString(16).toUpperCase().padStart(2, "0")}`;
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "center", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
 			}
 
-			// Fuera del intervalo imprimible de ASCII no hay glifo que mostrar:
-			// solo el valor del byte reconstruido.
-			function byteLabel(code) {
-				if (code >= 0x20 && code <= 0x7e) {
-					return `${hex(code)} · '${String.fromCharCode(code)}'`;
-				}
-				return hex(code);
-			}
-
-			function draw(dev) {
-				const w = canvas.width;
-				const h = canvas.height;
-				const left = 96;
-				const right = w - 18;
-				const top = 78;
-				const bottom = 152;
-				const slotW = (right - left) / SLOTS;
-
-				ctx.clearRect(0, 0, w, h);
-				ctx.fillStyle = cssVar("--color-surface");
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+				};
+				const fs = clamp(20, Math.min(h * 0.042, w * 0.016), 30);
+				ctx.fillStyle = c.bg;
 				ctx.fillRect(0, 0, w, h);
 
-				const accent = cssVar("--color-accent");
-				const navy = cssVar("--color-navy");
-				const ok = cssVar("--color-ok");
-				const danger = cssVar("--color-danger");
-				const border = cssVar("--color-border");
-				const muted = cssVar("--color-text-muted");
-				const text = cssVar("--color-text");
+				const r = recibir(desv);
+				const L = fs * 7.5;
+				const R = fs * 1.2;
+				// De −0,75 a 11,65 bits: cabe la regla del receptor más lento (−12 %, 11,36 bits).
+				const escala = (w - L - R) / 12.4;
+				const X = (t) => L + (t + 0.75) * escala;
 
-				const x = (i) => left + i * slotW;
-				const y = (level) => (level ? top : bottom);
+				const yNom = fs * 1.1;
+				const yAlto = yNom + fs * 1.5;
+				const yNota = h - fs * 1.2;
+				const yEsperado = yNota - fs * 2.1;
+				const yLeido = yEsperado - fs * 1.6;
+				const altoRegla = fs * 1.9;
+				const yRegla = yLeido - fs * 1.7 - altoRegla;
+				const yBajo = yRegla - fs * 1.9;
 
-				// campo de datos resaltado
-				ctx.globalAlpha = 0.08;
-				ctx.fillStyle = navy;
-				ctx.fillRect(x(2), top - 14, slotW * 8, bottom - top + 28);
-				ctx.globalAlpha = 1;
-
-				// guías y separadores de ranura
-				ctx.strokeStyle = border;
-				ctx.lineWidth = 1;
-				ctx.setLineDash([4, 4]);
-				for (const laneY of [top, bottom]) {
-					ctx.beginPath();
-					ctx.moveTo(left, laneY);
-					ctx.lineTo(right, laneY);
-					ctx.stroke();
+				// Emisor: rótulo de cada bit y sus límites.
+				texto(ctx, "emisor", fs * 0.6, (yAlto + yBajo) / 2, fs, c.acento, 700, "left", SANS);
+				for (let j = 0; j < 10; j++) {
+					const datos = j >= 1 && j <= 8;
+					texto(ctx, NOMBRES[j], X(j + 0.5), yNom, fs, datos ? c.navy : c.muted, 700, "center", datos ? MONO : SANS);
 				}
-				for (let i = 0; i <= SLOTS; i++) {
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1;
+				ctx.setLineDash([5, 5]);
+				for (let j = 0; j <= 10; j++) {
 					ctx.beginPath();
-					ctx.moveTo(x(i), top - 14);
-					ctx.lineTo(x(i), bottom + 14);
+					ctx.moveTo(X(j), yAlto - fs * 0.6);
+					ctx.lineTo(X(j), yBajo + fs * 0.6);
 					ctx.stroke();
 				}
 				ctx.setLineDash([]);
 
-				ctx.fillStyle = muted;
-				ctx.font = "12px system-ui";
-				ctx.textAlign = "right";
-				ctx.fillText("alto", left - 10, top + 4);
-				ctx.fillText("bajo", left - 10, bottom + 4);
-
-				// leyenda
-				ctx.textAlign = "left";
-				ctx.font = "600 13px system-ui";
-				ctx.fillStyle = accent;
-				ctx.fillText("traza del emisor", 18, 30);
-				ctx.fillStyle = navy;
-				ctx.fillText("muestreo del receptor", 190, 30);
-				ctx.font = "12px system-ui";
-				ctx.fillStyle = muted;
-				ctx.fillText(
-					`desviación del receptor: ${signo(dev)}`,
-					400,
-					30,
-				);
-
-				// rótulos de ranura
-				ctx.textAlign = "center";
-				ctx.font = "11px system-ui";
-				for (let i = 1; i <= 10; i++) {
-					ctx.fillStyle = i >= 2 && i <= 9 ? navy : muted;
-					ctx.fillText(NAMES[i], x(i) + slotW / 2, 60);
-				}
-
-				// traza del emisor
-				ctx.strokeStyle = accent;
-				ctx.lineWidth = 2.8;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = Math.max(4, fs * 0.2);
 				ctx.beginPath();
-				ctx.moveTo(x(0), y(LEVELS[0]));
-				for (let i = 0; i < SLOTS; i++) {
-					ctx.lineTo(x(i), y(LEVELS[i]));
-					ctx.lineTo(x(i + 1), y(LEVELS[i]));
+				ctx.moveTo(X(-0.75), yAlto);
+				ctx.lineTo(X(0), yAlto);
+				for (let j = 0; j < 10; j++) {
+					const y = EMITIDO[j] ? yAlto : yBajo;
+					ctx.lineTo(X(j), y);
+					ctx.lineTo(X(j + 1), y);
 				}
+				ctx.lineTo(X(11.65), yAlto);
 				ctx.stroke();
 
-				// marcas de muestreo
-				const result = sample(dev);
-				for (let k = 0; k < 9; k++) {
-					const sx = x(1) + result.times[k] * slotW;
-					const expected = k < 8 ? BITS[k] : 1;
-					const correcto = result.read[k] === expected;
-					const color = correcto ? navy : danger;
+				// Receptor: su propia regla de bits, estirada o comprimida.
+				texto(ctx, "receptor", fs * 0.6, yRegla + altoRegla / 2, fs, c.navy, 700, "left", SANS);
+				for (let j = 0; j < 10; j++) {
+					const x0 = X(j * r.tRx);
+					const x1 = X((j + 1) * r.tRx);
+					ctx.fillStyle = r.m[j].ok ? c.navySoft : c.acentoSoft;
+					ctx.fillRect(x0 + 1, yRegla, x1 - x0 - 2, altoRegla);
+				}
 
-					ctx.strokeStyle = color;
-					ctx.lineWidth = 1.4;
-					ctx.setLineDash([5, 4]);
+				// Muestreos: línea vertical desde la regla hasta la traza.
+				for (const [j, m] of r.m.entries()) {
+					const x = X(m.t);
+					const col = m.ok ? c.navy : c.acento;
+					ctx.strokeStyle = col;
+					ctx.lineWidth = m.ok ? 2 : 3;
+					ctx.setLineDash([6, 5]);
 					ctx.beginPath();
-					ctx.moveTo(sx, top - 6);
-					ctx.lineTo(sx, bottom + 22);
+					ctx.moveTo(x, yAlto - fs * 0.4);
+					ctx.lineTo(x, yRegla + altoRegla);
 					ctx.stroke();
 					ctx.setLineDash([]);
-
-					ctx.fillStyle = color;
+					ctx.fillStyle = col;
 					ctx.beginPath();
-					ctx.arc(sx, y(result.read[k]), 4.5, 0, Math.PI * 2);
+					ctx.arc(x, m.v ? yAlto : yBajo, fs * 0.38, 0, Math.PI * 2);
 					ctx.fill();
-
-					ctx.font = "700 13px ui-monospace, monospace";
-					ctx.textAlign = "center";
-					ctx.fillText(String(result.read[k]), sx, bottom + 42);
-					ctx.font = "9px system-ui";
-					ctx.fillStyle = muted;
-					ctx.fillText(k < 8 ? `m${k}` : "mP", sx, bottom + 56);
+					texto(ctx, String(m.v), x, yLeido, fs * 1.3, col, 700);
+					texto(ctx, String(EMITIDO[j]), x, yEsperado, fs, c.muted, 600);
 				}
+				texto(ctx, "lee", fs * 0.6, yLeido, fs, c.heading, 700, "left", SANS);
+				texto(ctx, "debía", fs * 0.6, yEsperado, fs, c.muted, 600, "left", SANS);
 
-				// eje de tiempo en tiempos de bit del emisor
-				const axisY = 240;
-				ctx.strokeStyle = text;
-				ctx.lineWidth = 1;
-				ctx.globalAlpha = 0.5;
-				ctx.beginPath();
-				ctx.moveTo(x(1), axisY);
-				ctx.lineTo(x(11), axisY);
-				ctx.stroke();
-				ctx.globalAlpha = 1;
-
-				ctx.fillStyle = muted;
-				ctx.font = "11px system-ui";
-				ctx.textAlign = "center";
-				for (let t = 0; t <= 10; t += 2) {
-					const tx = x(1 + t);
-					ctx.beginPath();
-					ctx.moveTo(tx, axisY - 4);
-					ctx.lineTo(tx, axisY + 4);
-					ctx.strokeStyle = text;
-					ctx.stroke();
-					ctx.fillText(`${t}`, tx, axisY + 18);
-				}
-				ctx.textAlign = "left";
-				ctx.fillText("t / T de bit del emisor", x(1), axisY + 36);
-
-				// estado del muestreo
-				const primerFallo = result.read.findIndex(
-					(v, k) => v !== (k < 8 ? BITS[k] : 1),
-				);
-				ctx.textAlign = "right";
-				ctx.font = "600 12px system-ui";
-				ctx.fillStyle = primerFallo === -1 ? ok : danger;
-				ctx.fillText(
-					primerFallo === -1
-						? "los nueve muestreos caen dentro del bit que les corresponde"
-						: `el primer muestreo fuera de su bit es ${primerFallo < 8 ? `m${primerFallo}` : "mP"}`,
-					right,
-					axisY + 36,
-				);
+				// Desfase acumulado del último muestreo (la parada) respecto a su centro.
+				const desfase = r.m[9].t - 9.5;
+				const malos = r.m.filter((m) => !m.ok).length;
+				const cuando = Math.abs(desfase) < 0.005 ? "en su centro" : `${coma(Math.abs(desfase), 2)} bit ${desfase < 0 ? "antes" : "después"} de su centro`;
+				const nota = `la parada se muestrea ${cuando} · ${malos === 0 ? "todos los muestreos dentro de su bit" : `${malos} ${malos === 1 ? "muestreo" : "muestreos"} fuera de su bit`}`;
+				texto(ctx, nota, L, yNota, fs, malos ? c.acento : c.ok, 700, "left", SANS);
 			}
 
-			function update() {
-				const dev = Number(devInput.value);
-				const result = sample(dev);
+			const lienzo = lienzoAdaptable(document.getElementById("desajuste"), dibujar);
+			const ctrl = document.getElementById("desv");
+			const out = document.getElementById("desv-out");
+			const lRx = document.getElementById("l-rx");
+			const lParada = document.getElementById("l-parada");
 
-				devReadout.textContent = signo(dev);
-				pctOut.textContent = signo(dev);
-				rxOut.textContent = byteLabel(result.code);
-
-				const correcto = result.code === CODE;
-				rxItem.classList.toggle("metric__item--ok", correcto);
-				rxItem.classList.toggle("metric__item--bad", !correcto);
-
-				stopOut.textContent = result.stopOk ? "válido" : "error de trama";
-				stopItem.classList.toggle("metric__item--ok", result.stopOk);
-				stopItem.classList.toggle("metric__item--bad", !result.stopOk);
-
-				draw(dev);
+			function render() {
+				desv = Number(ctrl.value);
+				out.textContent = `${desv > 0 ? "+" : desv < 0 ? "−" : ""}${coma(Math.abs(desv), 1)} %`;
+				const r = recibir(desv);
+				lRx.textContent = hex(r.byte);
+				lRx.classList.toggle("s3c-mal", r.byte !== CODIGO);
+				lParada.textContent = r.parada ? "1 ✓" : "0 ✗";
+				lParada.classList.toggle("s3c-mal", !r.parada);
+				lienzo.redibujar();
 			}
-
-			devInput.addEventListener("input", update);
-
-			new MutationObserver(() => draw(Number(devInput.value))).observe(
-				document.documentElement,
-				{ attributes: true, attributeFilter: ["data-theme"] },
-			);
-
-			update();
-
-			for (const el of document.querySelectorAll("[data-animate]")) {
-				el.classList.add("is-visible");
-			}
+			ctrl.addEventListener("input", render);
+			render();
 		</script>
-
-		<script type="module" src="../../js/deck.js"></script>
 	</body>
 </html>

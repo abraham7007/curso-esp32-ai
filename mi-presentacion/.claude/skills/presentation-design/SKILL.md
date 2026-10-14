@@ -21,6 +21,37 @@ drafts (useful as a reference for depth and for concrete numbers/examples — bu
 copy them literally**: the point of this rebuild is a more professional, more interactive,
 higher-quality version of the same content, in this design system).
 
+## Modo ponencia (octubre 2026) — manda sobre las reglas de densidad de abajo
+
+Decisión del profesor tras ver el mazo proyectado: era demasiado cargado. Las
+sesiones rehechas (**las 6**) usan `<body class="ponencia">` y
+`src/css/ponencia.css`. En ellas:
+
+- **Una idea, ~40 palabras proyectadas** por lámina de concepto. Título = afirmación
+  corta con la palabra clave en `<em>` (se pinta en rojo), en IBM Plex Sans.
+- **Sin papers** ni citas `[n]`, sin glosario ni lámina de referencias: el cierre
+  enlaza solo documentación oficial. Sin tiras `.usecases` ni `.practice` visibles.
+- Lo que sale de la pantalla cambia de capa: `<aside class="notas">` (tecla N, notas
+  del ponente, con una pregunta de predicción) y `<details class="detalle">` «Para
+  estudiar» (tecla D: En la práctica, Dónde aparece, Errores frecuentes).
+- Revelado por pasos con `data-paso="N"` (→ / espacio; ← vuelve; la lámina previa
+  se abre con `#fin`). Las simulaciones pueden escuchar el evento `paso`.
+- Composiciones: `.escenario`, `.enunciado`, `.cifras`, `.puntos`, `.control`,
+  `.lectura`, `canvas.lienzo`. Simulación solo donde el concepto es invisible y
+  cabe en un control (entrada flotante, ADC, PWM, pulso de servo, arranque).
+- «La hora del código» conserva su estructura y usa `ponencia ponencia--trabajo`
+  (escala de lectura cercana). Su salida esperada debe ser **la que imprime el
+  proyecto real** de `ejemplos/`, verificada contra el `printf`.
+- Comprobación: `tools/check-slides.mjs` mide a 1440×900 con BASE 5173; revisar
+  además a 1920×1080.
+
+Reglas completas, lecciones de las revisiones y proceso: **`PONENCIA.md`** (en esta carpeta).
+
+El curso pasa a 6 sesiones (1 hardware/GPIO/ADC/PWM/entorno · 2 C++ modular ·
+3 UART/I²C/JSON · 4 WiFi y APIs HTTP · 5 plataformas IoT con Blynk · 6 IA en el
+borde). La numeración «Ejemplo NN» sigue la de las carpetas de `ejemplos/`
+(04b incluido), no la antigua de 51 ejemplos.
+
 ## Typography
 
 - Two typefaces, one job each: `var(--font-display)` (IBM Plex Mono) for

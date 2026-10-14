@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Checksum de la trama · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · Formato de datos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El <em>checksum</em> permite rechazar una trama alterada
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Checksum</b>: el emisor añade la suma de los bytes; el receptor
+								la recalcula y descarta la trama si no coincide.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>(id + longitud + carga) mod 256</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Verificación en el receptor">
+								<button type="button" class="btn btn--primary" data-verif="si" aria-pressed="true">Con checksum</button>
+								<button type="button" class="btn btn--secondary" data-verif="no" aria-pressed="false">Sin checksum</button>
+							</fieldset>
+							<fieldset class="mandos__grupo" aria-label="Errores de ejemplo">
+								<button type="button" class="btn btn--secondary" id="b-limpia">Trama intacta</button>
+								<button type="button" class="btn btn--secondary" id="b-dos">Dos errores que se compensan</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>bits invertidos </small><span id="l-bits" class="s3c-ancho s3c-ancho--min">1</span></span>
+						</div>
+
+						<div class="s3c-panel crece">
+							<section class="s3c-trama" id="trama" aria-label="Trama del ejemplo 13, byte a byte; cada bit es un botón que lo invierte"></section>
+
+							<section class="s3c-receptor" aria-label="Lo que hace el receptor">
+								<p class="s3c-receptor__calculo" id="calculo">suma</p>
+								<p class="s3c-receptor__veredicto" id="veredicto">RECHAZADA</p>
+								<p class="s3c-receptor__entrega" id="entrega">entrega</p>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: en «Sin checksum», si un bit cambia «Hola 0» por
+					«Hola 1», ¿cómo detecta el error el receptor? Recoger respuestas antes de
+					conmutar.
+				</p>
+				<p>
+					Respuesta: no lo detecta. Arranca con el bit 0 de carga[5] invertido
+					(0x30 → 0x31): la suma da 0xDB frente a 0xDA recibido y la trama se
+					rechaza. Pasar a «Sin checksum»: se entrega «Hola 1» como válido. Volver
+					y pulsar «Dos errores que se compensan»: +1 en un byte y −1 en otro dejan
+					la suma igual y se acepta «Hnla 1». Es el límite de la suma simple; un
+					CRC detecta esos casos. Invertir un bit de la cabecera: el receptor no
+					reconoce el inicio de la trama.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Ejemplo 13: <code>uint8_t suma = id + longitud;</code> y
+						<code>suma += carga[i];</code> — el desbordamiento de
+						<code>uint8_t</code> hace el módulo 256. La cabecera 0xAA no entra en
+						la suma.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Sentencias NMEA de los GPS (XOR de los caracteres), Modbus RTU y
+						Ethernet (CRC), paquetes IP (suma de complemento a uno).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Calcular la suma en emisor y receptor sobre campos distintos.</li>
+						<li>Creer que una suma correcta garantiza datos correctos: errores que se compensan pasan.</li>
+						<li>Sin cabecera única ni longitud, un byte perdido desalinea todas las tramas siguientes.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="17-trama-propia.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Trama propia</span>
+				</a>
+				<a class="slide-nav__link" href="19-codigo-13-trama-checksum.html">
+					<span>Ejemplo 13 · Checksum</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			// Primera trama del ejemplo 13: AA 00 06 "Hola 0" DA.
+			const ORIGINAL = [0xaa, 0x00, 0x06, 0x48, 0x6f, 0x6c, 0x61, 0x20, 0x30, 0xda];
+			const CAMPOS = ["cabecera", "id", "longitud", "carga[0]", "carga[1]", "carga[2]", "carga[3]", "carga[4]", "carga[5]", "checksum"];
+			const TIPO = ["cab", "ctl", "ctl", "carga", "carga", "carga", "carga", "carga", "carga", "suma"];
+			const h2 = (v) => v.toString(16).toUpperCase().padStart(2, "0");
+			const imprimible = (v) => (v >= 0x20 && v <= 0x7e ? String.fromCharCode(v) : "·");
+
+			// Máscara XOR por byte: qué bits se han invertido.
+			const mascara = new Array(10).fill(0);
+			mascara[8] = 0x01; // estado inicial: '0' → '1'
+			let verificar = true;
+
+			const trama = document.getElementById("trama");
+			const botonesBit = [];
+			for (const [i, nombre] of CAMPOS.entries()) {
+				const byte = document.createElement("fieldset");
+				byte.className = `s3c-byte s3c-byte--${TIPO[i]}`;
+				byte.setAttribute("aria-label", `${nombre}`);
+				byte.innerHTML = `<span class="s3c-byte__campo">${nombre}</span><span class="s3c-byte__hex"></span><span class="s3c-byte__car"></span><span class="s3c-bits"></span>`;
+				const fila = byte.querySelector(".s3c-bits");
+				for (let b = 7; b >= 0; b--) {
+					const bt = document.createElement("button");
+					bt.type = "button";
+					bt.className = "s3c-bit";
+					bt.dataset.byte = String(i);
+					bt.dataset.bit = String(b);
+					bt.setAttribute("aria-label", `bit ${b} de ${nombre}`);
+					bt.addEventListener("click", () => {
+						mascara[i] ^= 1 << b;
+						render();
+					});
+					fila.append(bt);
+					botonesBit.push(bt);
+				}
+				trama.append(byte);
+			}
+
+			// Receptor del ejemplo 13: máquina de estados sobre el flujo de bytes.
+			function recibir(bytes) {
+				let estado = "cabecera";
+				let id = 0;
+				let lon = 0;
+				const carga = [];
+				for (const b of bytes) {
+					if (estado === "cabecera") {
+						if (b === 0xaa) estado = "id";
+					} else if (estado === "id") {
+						id = b;
+						estado = "longitud";
+					} else if (estado === "longitud") {
+						lon = b;
+						estado = lon > 0 ? "carga" : "checksum";
+					} else if (estado === "carga") {
+						carga.push(b);
+						if (carga.length >= lon) estado = "checksum";
+					} else {
+						const suma = (id + lon + carga.reduce((a, x) => a + x, 0)) & 0xff;
+						return { fin: "completa", id, lon, carga, suma, total: id + lon + carga.reduce((a, x) => a + x, 0), recibido: b };
+					}
+				}
+				if (estado === "cabecera") return { fin: "sin-cabecera" };
+				const faltan = estado === "carga" ? lon - carga.length + 1 : 1;
+				return { fin: "incompleta", faltan, lon };
+			}
+
+			const calculo = document.getElementById("calculo");
+			const veredicto = document.getElementById("veredicto");
+			const entrega = document.getElementById("entrega");
+			const lBits = document.getElementById("l-bits");
+			const botonesVerif = [...document.querySelectorAll("[data-verif]")];
+
+			function render() {
+				const bytes = ORIGINAL.map((v, i) => v ^ mascara[i]);
+				for (const [i, el] of [...trama.children].entries()) {
+					el.querySelector(".s3c-byte__hex").textContent = h2(bytes[i]);
+					const nota = { cab: "no se suma", ctl: `= ${bytes[i]}`, suma: "recibido" };
+					el.querySelector(".s3c-byte__car").textContent = TIPO[i] === "carga" ? `'${imprimible(bytes[i])}'` : nota[TIPO[i]];
+					el.classList.toggle("s3c-byte--alterado", mascara[i] !== 0);
+				}
+				for (const bt of botonesBit) {
+					const i = Number(bt.dataset.byte);
+					const b = Number(bt.dataset.bit);
+					bt.textContent = String((bytes[i] >> b) & 1);
+					const inv = ((mascara[i] >> b) & 1) === 1;
+					bt.classList.toggle("s3c-bit--invertido", inv);
+					bt.setAttribute("aria-pressed", String(inv));
+				}
+				let n = 0;
+				for (const m of mascara) for (let b = 0; b < 8; b++) n += (m >> b) & 1;
+				lBits.textContent = String(n);
+
+				for (const b of botonesVerif) {
+					const on = (b.dataset.verif === "si") === verificar;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+
+				const r = recibir(bytes);
+				let estado = "rechazada";
+				if (r.fin === "sin-cabecera") {
+					calculo.textContent = "ningún byte vale 0xAA: el receptor sigue esperando la cabecera";
+					veredicto.textContent = "NO VISTA";
+					entrega.textContent = "entrega: nada";
+				} else if (r.fin === "incompleta") {
+					calculo.textContent = `longitud ${r.lon}: el receptor espera ${r.faltan} byte${r.faltan === 1 ? "" : "s"} más`;
+					veredicto.textContent = "INCOMPLETA";
+					entrega.textContent = "entrega: nada (aún)";
+				} else {
+					const texto = r.carga.map(imprimible).join("");
+					const sumandos = [r.id, r.lon, ...r.carga].map(h2).join(" + ");
+					const ok = r.suma === r.recibido;
+					if (verificar) {
+						calculo.innerHTML = `${sumandos} = ${r.total.toString(16).toUpperCase()} → <b>${h2(r.suma)}</b> ${ok ? "=" : "≠"} <b>${h2(r.recibido)}</b> recibido`;
+						veredicto.textContent = ok ? "ACEPTADA" : "RECHAZADA";
+						estado = ok ? "aceptada" : "rechazada";
+						entrega.textContent = ok ? `entrega «${texto}»` : "entrega: nada";
+					} else {
+						calculo.textContent = "sin verificación: el receptor no suma nada";
+						veredicto.textContent = "ACEPTADA";
+						estado = "aceptada";
+						entrega.textContent = `entrega «${texto}»`;
+					}
+					// Se acepta algo distinto de lo enviado: el error pasa por bueno.
+					if (estado === "aceptada" && n > 0) estado = "engano";
+				}
+				veredicto.dataset.estado = estado;
+			}
+
+			for (const b of botonesVerif) {
+				b.addEventListener("click", () => {
+					verificar = b.dataset.verif === "si";
+					render();
+				});
+			}
+			document.getElementById("b-limpia").addEventListener("click", () => {
+				mascara.fill(0);
+				render();
+			});
+			document.getElementById("b-dos").addEventListener("click", () => {
+				// 'o' 0x6F → 0x6E (−1) y '0' 0x30 → 0x31 (+1): la suma no cambia.
+				mascara.fill(0);
+				mascara[4] = 0x01;
+				mascara[8] = 0x01;
+				verificar = true;
+				render();
+			});
+			render();
+		</script>
+	</body>
+</html>

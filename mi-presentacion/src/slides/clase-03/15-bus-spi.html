@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Bus SPI · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · SPI y elección de bus</span>
+
+				<h1 class="slide__title slide__title--sm">
+					SPI selecciona cada dispositivo con una <em>línea</em> propia
+				</h1>
+
+				<div class="def">
+					<p>Tres líneas compartidas por todos y una de selección (<i>chip select</i>, CS) por dispositivo: solo el que tiene su CS en 0 escucha y responde.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Bus SPI del ESP32 con los pines VSPI por defecto: SCLK en GPIO 18, MOSI en GPIO 23 y MISO en GPIO 19 llegan a los tres dispositivos, una pantalla, una tarjeta microSD y un convertidor analógico-digital. Cada dispositivo tiene su propia línea CS: GPIO 5, GPIO 27 y GPIO 26. Con CS1 en 0, la pantalla responde y los otros dos dejan MISO en alta impedancia.">
+						<defs>
+							<marker id="f15-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="rel-navy" /></marker>
+							<marker id="f15-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="rel-acc" /></marker>
+							<marker id="f15-rel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="rel" /></marker>
+						</defs>
+
+						<!-- maestro -->
+						<rect class="caja" x="20" y="30" width="300" height="660" rx="14" />
+						<text class="sans mid" x="170" y="84" font-size="40">ESP32</text>
+						<text class="mid mut" x="170" y="128" font-size="26">maestro</text>
+						<text class="mid mut" x="170" y="600" font-size="26">bus VSPI</text>
+						<text class="mid" x="170" y="644" font-size="24">SPI.begin();</text>
+						<text class="fin" x="306" y="200" font-size="26">GPIO 18</text>
+						<text class="fin" x="306" y="270" font-size="26">GPIO 23</text>
+						<text class="fin" x="306" y="340" font-size="26">GPIO 19</text>
+
+						<!-- líneas compartidas -->
+						<path class="ln ln--navy" d="M320 200 H1575" marker-end="url(#f15-navy)" />
+						<path class="ln ln--acc" d="M320 270 H1575" marker-end="url(#f15-acc)" />
+						<path class="ln" d="M1580 340 H326" marker-end="url(#f15-rel)" />
+						<text class="navy" x="336" y="174" font-size="24">SCLK · reloj del maestro</text>
+						<text class="acc" x="336" y="244" font-size="24">MOSI · maestro → esclavo</text>
+						<text x="336" y="314" font-size="24">MISO · esclavo → maestro</text>
+
+						<!-- derivaciones de cada dispositivo -->
+						<path class="ln ln--fina ln--navy" d="M690 200 V560 M1040 200 V560 M1350 200 V560" />
+						<path class="ln ln--fina ln--acc" d="M750 270 V560 M1100 270 V560 M1410 270 V560" />
+						<path class="ln ln--fina" d="M810 340 V560 M1160 340 V560 M1470 340 V560" />
+						<circle class="rel-navy" cx="690" cy="200" r="8" /><circle class="rel-navy" cx="1040" cy="200" r="8" /><circle class="rel-navy" cx="1350" cy="200" r="8" />
+						<circle class="rel-acc" cx="750" cy="270" r="8" /><circle class="rel-acc" cx="1100" cy="270" r="8" /><circle class="rel-acc" cx="1410" cy="270" r="8" />
+						<circle class="punto" cx="810" cy="340" r="8" /><circle class="punto" cx="1160" cy="340" r="8" /><circle class="punto" cx="1470" cy="340" r="8" />
+
+						<!-- dispositivos -->
+						<rect class="caja" x="640" y="560" width="280" height="130" rx="12" />
+						<text class="sans mid" x="780" y="590" font-size="30">Pantalla</text>
+						<rect class="caja" x="990" y="560" width="280" height="130" rx="12" />
+						<text class="sans mid" x="1130" y="590" font-size="30">microSD</text>
+						<rect class="caja" x="1300" y="560" width="280" height="130" rx="12" />
+						<text class="sans mid" x="1440" y="590" font-size="30">Conversor ADC</text>
+
+						<!-- una línea CS por dispositivo -->
+						<g>
+							<text class="fin" x="306" y="420" font-size="26">GPIO 5</text>
+							<text class="fin" x="306" y="470" font-size="26">GPIO 27</text>
+							<text class="fin" x="306" y="520" font-size="26">GPIO 26</text>
+							<path class="ln ln--mut" d="M320 420 H870 V560 M320 470 H1220 V560 M320 520 H1530 V560" />
+							<text class="mut" x="336" y="398" font-size="24">CS1</text>
+							<text class="mut" x="336" y="448" font-size="24">CS2</text>
+							<text class="mut" x="336" y="498" font-size="24">CS3</text>
+							<text class="mid mut" x="780" y="624" font-size="24">CS = GPIO 5</text>
+							<text class="mid mut" x="1130" y="624" font-size="24">CS = GPIO 27</text>
+							<text class="mid mut" x="1440" y="624" font-size="24">CS = GPIO 26</text>
+						</g>
+
+						<!-- paso 1: CS1 en 0 -->
+						<g data-paso="1">
+							<path class="ln ln--warn" d="M320 420 H870 V560" />
+							<text class="warn" x="390" y="398" font-size="24">= 0 → elegido</text>
+							<rect class="caja caja--warn" x="640" y="560" width="280" height="130" rx="12" fill-opacity="0" />
+							<text class="mid warn" x="780" y="658" font-size="24">escucha y responde</text>
+							<text class="mid mut" x="1130" y="658" font-size="24">CS = 1 · ignora</text>
+							<text class="mid mut" x="1440" y="658" font-size="24">CS = 1 · ignora</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: al añadir un cuarto dispositivo, ¿cuántos cables
+					más necesita el ESP32? Respuesta: uno, su CS; las tres líneas compartidas
+					no cambian. Antes del paso, pedir a la clase qué dispositivo responde con
+					CS1 en 0. Al revelar, responde solo la pantalla; los otros dos dejan MISO
+					en alta impedancia para no ocupar la línea. Sin dirección ni ACK, SPI es
+					más rápido que I²C, pero nada avisa si falta el dispositivo. MOSI y MISO
+					transmiten a la vez: es dúplex.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>SPI.begin()</code> usa VSPI: SCK 18, MISO 19, MOSI 23, SS 5.
+						Cada transferencia:
+						<code>SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));</code>
+						<code>digitalWrite(cs, LOW);</code> <code>SPI.transfer(b);</code>
+						<code>digitalWrite(cs, HIGH);</code> <code>SPI.endTransaction();</code>
+					</p>
+					<h4>Modos 0 a 3</h4>
+					<p>
+						Combinan polaridad del reloj en reposo (CPOL) y flanco de muestreo
+						(CPHA). Modo 0: reposo en 0, muestrea en el flanco de subida. El
+						dispositivo fija el modo en su hoja de datos; no se negocia.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>CS de varios dispositivos a 0 a la vez: dos salidas en MISO.</li>
+						<li>Usar como CS un pin de arranque (GPIO 12 o 15) o de la flash (6–11).</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-12c-enlace-i2c.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 12c · Enlace I²C</span>
+				</a>
+				<a class="slide-nav__link" href="16-elegir-bus.html">
+					<span>Elegir bus</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

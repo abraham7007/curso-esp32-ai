@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Chip, módulo y placa de desarrollo · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Arquitectura del ESP32</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Chip ESP32, <em>módulo</em> WROOM-32 y placa DevKit
+				</h1>
+
+				<div class="crece grid grid-cols-4 gap-12">
+					<div class="relative col-span-3 min-h-0"><svg class="absolute inset-0 w-full h-full" viewBox="0 0 1100 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres niveles anidados: la placa de desarrollo, con conversor USB-serie, regulador y botones, contiene el módulo ESP32-WROOM-32, con flash de 4 MB, cristal de 40 MHz y antena, que contiene el chip ESP32"><rect x="8" y="8" width="1084" height="744" rx="30" fill="var(--color-code-bg)" stroke="var(--color-text-muted)" stroke-width="3" /><text x="40" y="50" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="32" font-weight="700" fill="var(--color-code-fg)">PLACA DE DESARROLLO · DevKit</text><g fill="var(--color-code-dim)"><circle cx="60" cy="726" r="9" /><circle cx="100" cy="726" r="9" /><circle cx="140" cy="726" r="9" /><circle cx="180" cy="726" r="9" /><circle cx="220" cy="726" r="9" /><circle cx="260" cy="726" r="9" /><circle cx="540" cy="726" r="9" /><circle cx="580" cy="726" r="9" /><circle cx="620" cy="726" r="9" /><circle cx="660" cy="726" r="9" /><circle cx="700" cy="726" r="9" /><circle cx="740" cy="726" r="9" /><circle cx="780" cy="726" r="9" /><circle cx="820" cy="726" r="9" /><circle cx="860" cy="726" r="9" /><circle cx="900" cy="726" r="9" /><circle cx="940" cy="726" r="9" /><circle cx="980" cy="726" r="9" /><circle cx="1020" cy="726" r="9" /></g><rect x="330" y="690" width="140" height="62" rx="8" fill="var(--color-surface-2)" stroke="var(--color-code-dim)" stroke-width="3" /><text x="400" y="721" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="26" font-weight="700" fill="var(--color-text-muted)">USB</text><rect x="36" y="84" width="690" height="580" rx="14" fill="var(--color-surface)" stroke="var(--color-ok)" stroke-width="5" /><text x="64" y="126" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="32" font-weight="700" fill="var(--color-ok)">MÓDULO · ESP32-WROOM-32</text><g stroke="var(--color-text-muted)" stroke-width="7"><line x1="111" y1="176" x2="111" y2="196" /><line x1="111" y1="494" x2="111" y2="514" /><line x1="56" y1="229" x2="76" y2="229" /><line x1="394" y1="229" x2="414" y2="229" /><line x1="147" y1="176" x2="147" y2="196" /><line x1="147" y1="494" x2="147" y2="514" /><line x1="56" y1="262" x2="76" y2="262" /><line x1="394" y1="262" x2="414" y2="262" /><line x1="182" y1="176" x2="182" y2="196" /><line x1="182" y1="494" x2="182" y2="514" /><line x1="56" y1="295" x2="76" y2="295" /><line x1="394" y1="295" x2="414" y2="295" /><line x1="217" y1="176" x2="217" y2="196" /><line x1="217" y1="494" x2="217" y2="514" /><line x1="56" y1="328" x2="76" y2="328" /><line x1="394" y1="328" x2="414" y2="328" /><line x1="253" y1="176" x2="253" y2="196" /><line x1="253" y1="494" x2="253" y2="514" /><line x1="56" y1="362" x2="76" y2="362" /><line x1="394" y1="362" x2="414" y2="362" /><line x1="288" y1="176" x2="288" y2="196" /><line x1="288" y1="494" x2="288" y2="514" /><line x1="56" y1="395" x2="76" y2="395" /><line x1="394" y1="395" x2="414" y2="395" /><line x1="323" y1="176" x2="323" y2="196" /><line x1="323" y1="494" x2="323" y2="514" /><line x1="56" y1="428" x2="76" y2="428" /><line x1="394" y1="428" x2="414" y2="428" /><line x1="359" y1="176" x2="359" y2="196" /><line x1="359" y1="494" x2="359" y2="514" /><line x1="56" y1="461" x2="76" y2="461" /><line x1="394" y1="461" x2="414" y2="461" /></g><rect x="76" y="196" width="318" height="298" rx="14" fill="var(--color-code-header)" stroke="var(--color-accent)" stroke-width="6" /><text x="235" y="315" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="64" font-weight="700" fill="var(--color-code-fg)">ESP32</text><text x="235" y="380" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="600" fill="var(--color-code-dim)">chip · SoC</text><text x="235" y="566" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="500" fill="var(--color-heading)">CPU, SRAM,</text><text x="235" y="604" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="500" fill="var(--color-heading)">periféricos y radio</text><g><g stroke="var(--color-text-muted)" stroke-width="6"><line x1="470" y1="186" x2="470" y2="200" /><line x1="470" y1="266" x2="470" y2="280" /><line x1="500" y1="186" x2="500" y2="200" /><line x1="500" y1="266" x2="500" y2="280" /><line x1="530" y1="186" x2="530" y2="200" /><line x1="530" y1="266" x2="530" y2="280" /><line x1="560" y1="186" x2="560" y2="200" /><line x1="560" y1="266" x2="560" y2="280" /></g><rect x="455" y="200" width="120" height="66" rx="6" fill="var(--color-code-header)" stroke="var(--color-heading)" stroke-width="3" /><text x="588" y="213" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-heading)">Flash</text><text x="588" y="252" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="500" fill="var(--color-text-muted)">4 MB</text><rect x="455" y="330" width="120" height="60" rx="30" fill="var(--color-surface-2)" stroke="var(--color-heading)" stroke-width="4" /><text x="588" y="343" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-heading)">Cristal</text><text x="588" y="382" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="500" fill="var(--color-text-muted)">40 MHz</text><path d="M 455 500 V 450 H 485 V 490 H 515 V 450 H 545 V 490 H 575 V 450" fill="none" stroke="var(--color-heading)" stroke-width="6" stroke-linejoin="round" /><text x="588" y="463" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-heading)">Antena</text><text x="588" y="502" text-anchor="start" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="28" font-weight="500" fill="var(--color-text-muted)">en PCB</text></g><g><g fill="var(--color-code-dim)"><rect x="870" y="104" width="7" height="10" /><rect x="870" y="186" width="7" height="10" /><rect x="884" y="104" width="7" height="10" /><rect x="884" y="186" width="7" height="10" /><rect x="898" y="104" width="7" height="10" /><rect x="898" y="186" width="7" height="10" /><rect x="912" y="104" width="7" height="10" /><rect x="912" y="186" width="7" height="10" /><rect x="926" y="104" width="7" height="10" /><rect x="926" y="186" width="7" height="10" /></g><rect x="860" y="114" width="80" height="72" rx="6" fill="var(--color-code-header)" stroke="var(--color-code-dim)" stroke-width="2" /><text x="900" y="228" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-code-fg)">USB-serie</text><text x="900" y="264" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="24" font-weight="500" fill="var(--color-code-dim)">grabación y monitor</text><rect x="870" y="306" width="60" height="18" fill="var(--color-code-dim)" /><rect x="850" y="322" width="100" height="56" rx="4" fill="var(--color-code-header)" stroke="var(--color-code-dim)" stroke-width="2" /><g fill="var(--color-code-dim)"><rect x="862" y="378" width="12" height="16" /><rect x="894" y="378" width="12" height="16" /><rect x="926" y="378" width="12" height="16" /></g><text x="900" y="428" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-code-fg)">Regulador</text><text x="900" y="464" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="24" font-weight="500" fill="var(--color-code-dim)">5 V → 3,3 V</text><rect x="815" y="508" width="60" height="60" rx="6" fill="var(--color-surface-2)" stroke="var(--color-code-dim)" stroke-width="3" /><circle cx="845" cy="538" r="16" fill="var(--color-warn-soft)" stroke="var(--color-warn)" stroke-width="3" /><rect x="925" y="508" width="60" height="60" rx="6" fill="var(--color-surface-2)" stroke="var(--color-code-dim)" stroke-width="3" /><circle cx="955" cy="538" r="16" fill="var(--color-warn-soft)" stroke="var(--color-warn)" stroke-width="3" /><text x="900" y="606" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700" fill="var(--color-code-fg)">Botones</text><text x="900" y="642" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="24" font-weight="500" fill="var(--color-code-dim)">EN y BOOT</text></g></svg></div>
+
+					<div class="hero-board hero-board--alta hero-board--bajo-titulo">
+						<span class="hero-board__part" aria-hidden="true">
+							<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+						</span>
+						<span class="hero-board__caption">
+							<b>DevKit V1</b>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer de dentro hacia fuera. El chip no funciona sin componentes
+					externos: el módulo le añade la flash, el cristal y la antena que
+					necesita para arrancar y emitir. La placa añade el conversor USB-serie,
+					el regulador y los botones para programarlo desde un portátil.
+				</p>
+				<p>
+					Pregunta de predicción: ¿qué nivel se integra en un producto comercial,
+					el módulo o la placa? Se integra el módulo, que llega con la
+					certificación de emisiones ya obtenida.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Dónde aparece</h4>
+					<p>
+						Un equipo comercial integra el módulo en su propio circuito impreso y
+						evita repetir los ensayos de compatibilidad electromagnética. La placa de desarrollo se usa para el prototipo y la programación.
+					</p>
+					<h4>Familia ESP32</h4>
+					<p>
+						El ESP32 clásico (Xtensa LX6, 2 núcleos, WiFi y Bluetooth) es el del módulo WROOM-32. El S3 añade memoria para cámara e IA; el C3, C6 y H2
+						son variantes de bajo costo con un núcleo RISC-V.
+					</p>
+					<h4>Xtensa frente a RISC-V</h4>
+					<p>
+						Con Arduino, la diferencia de arquitectura la resuelve la herramienta: PlatformIO elige el compilador según la placa declarada en <code>platformio.ini</code>.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-sistema-en-un-chip.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Sistema en un chip</span>
+				</a>
+				<a class="slide-nav__link" href="04-bloques-funcionales.html">
+					<span>Bloques funcionales</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+
+			// La cápsula metálica es el módulo, no el chip: se rotula como tal.
+			await customElements.whenDefined("wokwi-esp32-devkit-v1");
+			for (const placa of document.querySelectorAll("wokwi-esp32-devkit-v1")) {
+				await placa.updateComplete;
+				const t = [...placa.shadowRoot.querySelectorAll("text")].find(
+					(n) => n.textContent.trim() === "ESP32",
+				);
+				if (!t) continue;
+				t.setAttribute("font-size", "9.5px");
+				t.setAttribute("text-anchor", "middle");
+				t.innerHTML = '<tspan x="52.5" y="56">ESP32-</tspan><tspan x="52.5" y="69">WROOM-32</tspan>';
+			}
+		</script>
+	</body>
+</html>

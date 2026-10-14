@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dos ritmos · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Datos en pantalla</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La red y la pantalla se actualizan a <em>ritmos</em> distintos
+				</h1>
+
+				<div class="def">
+					<p>Una consulta consume tiempo y cuota, y repintar la OLED tiene un coste mínimo. Cada tarea lleva su propio <code>millis()</code> (sesión 2 · 09).</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 80 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cronograma del ejemplo 16b durante 65 segundos. Fila Red, cada 60 segundos: un GET a los 0 segundos trae el dato 1 y otro a los 60 trae el dato 2. Fila Pantalla, cada 5 segundos: alterna BTC y DOGE; el dato 1 se pinta doce veces antes de que llegue el siguiente. Debajo, las dos comparaciones con millis, una por tarea.">
+						<!-- rótulos de fila -->
+						<text class="sans" x="0" y="150" font-size="38" font-weight="700">Red</text>
+						<text class="mut" x="0" y="194" font-size="28">cada 60 s</text>
+						<text class="sans" x="0" y="376" font-size="38" font-weight="700">Pantalla</text>
+						<text class="mut" x="0" y="420" font-size="28">cada 5 s</text>
+
+						<!-- fila Pantalla: BTC y DOGE alternos; el color dice qué dato pinta -->
+						<rect class="barra--ok" x="263" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="311" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="365" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="412" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--ok" x="466" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="514" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="568" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="615" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--ok" x="669" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="717" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="771" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="818" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--ok" x="872" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="920" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="974" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1022" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--ok" x="1075" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1123" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="1177" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1225" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--ok" x="1278" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1326" y="398" font-size="26">BTC·1</text>
+						<rect class="barra--ok" x="1380" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1428" y="398" font-size="26">DOGE·1</text>
+						<rect class="barra--navy" x="1481" y="340" width="96" height="116" rx="8" />
+						<text class="mid" x="1529" y="398" font-size="26">DOGE·2</text>
+
+						<!-- fila Red: una consulta cada 60 s -->
+						<rect class="caja caja--acc" x="260" y="110" width="44" height="116" rx="8" />
+						<text class="acc" x="316" y="168" font-size="30">GET → dato 1</text>
+						<path class="ln ln--fina ln--acc" d="M282 226 V332" stroke-dasharray="6 6" />
+						<rect class="caja caja--acc" x="1456" y="110" width="44" height="116" rx="8" />
+						<text class="acc fin" x="1444" y="168" font-size="30">GET → dato 2</text>
+						<path class="ln ln--fina ln--acc" d="M1478 226 V332" stroke-dasharray="6 6" />
+
+						<!-- eje -->
+						<path class="ln ln--fina ln--mut" d="M260 506 H1580 M260 506 V524 M362 506 V516 M463 506 V524 M565 506 V516 M666 506 V524 M768 506 V516 M869 506 V524 M971 506 V516 M1072 506 V524 M1174 506 V516 M1275 506 V524 M1377 506 V516 M1478 506 V524 M1580 506 V516" />
+						<text class="mid mut" x="260" y="542" font-size="26">0</text>
+						<text class="mid mut" x="463" y="542" font-size="26">10</text>
+						<text class="mid mut" x="666" y="542" font-size="26">20</text>
+						<text class="mid mut" x="869" y="542" font-size="26">30</text>
+						<text class="mid mut" x="1072" y="542" font-size="26">40</text>
+						<text class="mid mut" x="1275" y="542" font-size="26">50</text>
+						<text class="mid mut" x="1478" y="542" font-size="26">60 s</text>
+
+						<!-- las dos comparaciones del loop() -->
+						<path class="ln ln--fina ln--mut" d="M0 616 H1600" />
+						<text x="0" y="664" font-size="30"><tspan class="acc">if (millis() - ultimoFetch &gt;= INTERVALO_FETCH)</tspan><tspan class="mut" x="1100">→ actualizarPreciosHTTP()</tspan></text>
+						<text x="0" y="712" font-size="30"><tspan class="navy">if (millis() - ultimoCambioPantalla &gt;= INTERVALO_PANTALLA)</tspan><tspan class="mut" x="1100">→ refrescarPantallaOLED()</tspan></text>
+
+						<g data-paso="1">
+							<text class="sans" x="0" y="776" font-size="32">Entre dos consultas, la pantalla se repinta 12 veces con el mismo dato.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recordar la sesión 2: cada tarea guarda su último instante y compara con
+					<code>millis()</code>; ninguna espera a la otra. Leer el cronograma: la
+					consulta de las 0 s trae el dato 1, que la pantalla muestra doce veces
+					alternando BTC y DOGE hasta que llega el dato 2. Al llegar un dato se repinta
+					en el acto la moneda que estaba en pantalla y el temporizador de la pantalla se reinicia. Pregunta de predicción: con una consulta cada 5 s, ¿cambia el precio en pantalla con más frecuencia? No cambia: se gasta doce veces más tráfico y cuota para repetir el mismo precio, porque la red de distribución (CDN) de CoinGecko lo guarda en caché 60 s (s-maxage=60). Advertir que el GET bloquea mientras dura y que la pantalla no se actualiza durante ese tiempo.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>const unsigned long INTERVALO_FETCH = 60000;</code> y
+						<code>INTERVALO_PANTALLA = 5000;</code>, cada uno con su
+						<code>ultimoFetch</code> / <code>ultimoCambioPantalla</code>. La resta
+						<code>millis() - ultimo</code> en <code>unsigned long</code> sigue siendo
+						correcta cuando <code>millis()</code> desborda (unos 49,7 días).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 16b (60 s y 5 s) y ejemplo 17 (lista de nombres por páginas).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Usar un único <code>delay(60000)</code>, que impide alternar la pantalla.</li>
+						<li>Repintar antes de la primera respuesta válida, sin dato que mostrar.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-json-a-pantalla.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>JSON → OLED</span>
+				</a>
+				<a class="slide-nav__link" href="14-codigo-16b-oled.html">
+					<span>Ejemplo 16b · OLED cripto</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

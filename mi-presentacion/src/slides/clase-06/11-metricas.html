@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Métricas · Sesión 6</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="19">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Despliegue</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La matriz de confusión separa los dos tipos de <em>error</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Precisión</b>: fracción de avisos que corresponden a un gesto.
+								<b>Exhaustividad</b> (<i>recall</i>): fracción de gestos
+								detectados. <b>Exactitud</b>: aciertos sobre el total.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Con 950 ventanas sin gesto y 50 con gesto, un detector que
+								<b>nunca avisa</b> acierta el 95&nbsp;% y no detecta ningún gesto.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>salida &gt; umbral → gesto</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Conjunto de prueba">
+								<span class="s6c-rotulo">Datos</span>
+								<button type="button" class="btn btn--secondary" data-datos="0" aria-pressed="false">100 + 100</button>
+								<button type="button" class="btn btn--primary" data-datos="1" aria-pressed="true">950 + 50</button>
+							</fieldset>
+							<label class="control">
+								<span>Umbral</span>
+								<input type="range" id="umbral" min="0" max="18" step="1" value="17" />
+								<output id="umbral-out" for="umbral" class="s6c-ancho s6c-ancho--medio">0,90</output>
+							</label>
+							<span class="lectura"><small>exactitud </small><span id="l-exa" class="s6c-ancho s6c-ancho--pct">95,9 %</span></span>
+							<span class="lectura"><small>exhaustividad </small><span id="l-exh" class="s6c-ancho s6c-ancho--pct s6c-mal">18 %</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="matriz"
+								role="img"
+								aria-label="A la izquierda, dos histogramas de la salida del modelo (probabilidad de gesto, de 0 a 1): arriba las 950 ventanas sin gesto, concentradas cerca de 0; abajo las 50 ventanas con gesto, concentradas cerca de 1; las dos se solapan. Una línea vertical marca el umbral, 0,90: a su derecha se decide gesto. Las barras en rojo son errores: falsas alarmas arriba, gestos perdidos abajo. A la derecha, la matriz de confusión de 2 por 2 y las tres métricas con sus cuentas. Con umbral 0,90: 950 aciertos sin gesto, 0 falsas alarmas, 41 gestos perdidos y 9 detectados: exactitud 95,9 %, precisión 100 %, exhaustividad 18 %."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con umbral 0,90 este detector tiene un 95,9&nbsp;% de exactitud. ¿Cuántos de los 50 gestos detecta? Recoger respuestas antes de mover el deslizador.
+				</p>
+				<p>
+					Respuesta: 9 de 50 (exhaustividad 18&nbsp;%). Llevar el umbral al final, «nunca»: la exactitud baja al 95&nbsp;% y no detecta ninguno; la precisión queda indefinida (0 ÷ 0), porque el detector nunca avisa. Bajar a 0,30: detecta los 50, con 121 falsas alarmas, y la exactitud cae al 87,9&nbsp;%. Con clases desequilibradas, la exactitud no mide la capacidad de detectar gestos.
+				</p>
+				<p>
+					Pulsar «100 + 100» con umbral 0,50: con clases equilibradas, la exactitud (92&nbsp;%) refleja mejor los aciertos en las dos clases. Ningún umbral deja a cero las dos casillas rojas, porque las dos distribuciones se solapan. La aplicación determina cuál de los dos errores es más costoso. Los datos son sintéticos.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Exactitud = (VP + VN) ÷ total; precisión = VP ÷ (VP + FP);
+						exhaustividad = VP ÷ (VP + FN). En scikit-learn:
+						<code>confusion_matrix(y, y_pred)</code> y
+						<code>classification_report(y, y_pred)</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Al entrenar en Colab, con datos de prueba que no se usaron al entrenar. En el
+						ejemplo 20 el umbral se aplica a la probabilidad que da softmax.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Dar solo la exactitud con clases desequilibradas.</li>
+						<li>Leer la matriz al revés; en esta figura, las filas son la clase real.</li>
+						<li>Ajustar el umbral con los mismos datos con que se evalúa.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-cuantizacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cuantización</span>
+				</a>
+				<a class="slide-nav__link" href="12-la-placa.html">
+					<span>La placa</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const coma = (x, d) => x.toFixed(d).replace(".", ",");
+			function pct(a, b) {
+				if (!b) return "—";
+				const v = (a / b) * 100;
+				return `${v === 100 || v === 0 || Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v) : coma(v, 1)} %`;
+			}
+
+			function azar(semilla) {
+				let s = semilla;
+				return () => {
+					s = (s + 0x6d2b79f5) | 0;
+					let t = Math.imul(s ^ (s >>> 15), 1 | s);
+					t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+					return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+				};
+			}
+			// Salida sintética del modelo (probabilidad de «gesto»): logits normales que se solapan.
+			const r = azar(11);
+			const gauss = () => {
+				let u = 0;
+				while (!u) u = r();
+				return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r());
+			};
+			const sig = (z) => 1 / (1 + Math.exp(-z));
+			const NO = [];
+			const SI = [];
+			for (let i = 0; i < 950; i++) NO.push(sig(-2.2 + 1.1 * gauss()));
+			for (let i = 0; i < 100; i++) SI.push(sig(1.2 + 1.1 * gauss()));
+			const DATOS = [
+				[100, 100],
+				[950, 50],
+			];
+			const NBIN = 20;
+
+			let D = 1;
+			let U = 0.9;
+
+			function cuenta() {
+				const [nn, ns] = DATOS[D];
+				const no = NO.slice(0, nn);
+				const si = SI.slice(0, ns);
+				const vp = si.filter((x) => x > U).length;
+				const fp = no.filter((x) => x > U).length;
+				return { no, si, vp, fn: ns - vp, fp, vn: nn - fp, total: nn + ns };
+			}
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					surface: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.04, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const k = cuenta();
+				const nunca = U > 1;
+
+				// ===== Izquierda: histogramas de la salida del modelo =====
+				const anchoMat = clamp(fs * 18, w * 0.4, fs * 26);
+				ctx.font = `700 ${fs}px ${SANS}`;
+				const anchoRot = ctx.measureText("no gesto").width + fs * 0.9;
+				const px0 = m + anchoRot;
+				const px1 = w - m - anchoMat - fs * 2.2;
+				const py0 = fs * 2.6;
+				const py1 = h - fs * 2.6;
+				const X = (v) => px0 + clamp(0, v, 1) * (px1 - px0);
+				const xu = nunca ? px1 : X(U);
+				// Lado decidido como gesto.
+				ctx.fillStyle = c.acentoSoft;
+				ctx.globalAlpha = 0.35;
+				ctx.fillRect(xu, py0, px1 - xu, py1 - py0);
+				ctx.globalAlpha = 1;
+				ctx.font = `600 ${Math.max(fs * 0.9, MIN_FS)}px ${SANS}`;
+				for (const [rot, x, alin, sitio] of [
+					["← no gesto", xu - fs * 0.5, "right", xu - px0 - fs * 0.5],
+					["gesto →", xu + fs * 0.5, "left", px1 - xu - fs * 0.5],
+				]) {
+					if (!nunca && ctx.measureText(rot).width <= sitio) texto(ctx, rot, x, fs * 1.4, fs * 0.9, c.muted, 600, alin, SANS, sitio);
+				}
+				if (nunca) texto(ctx, "nunca avisa", xu - fs * 0.5, fs * 1.4, fs * 0.9, c.acento, 700, "right", SANS);
+				for (const v of [0, 0.25, 0.5, 0.75, 1]) {
+					ctx.strokeStyle = c.borde;
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.moveTo(X(v), py0);
+					ctx.lineTo(X(v), py1);
+					ctx.stroke();
+					texto(ctx, coma(v, 2), X(v), py1 + fs * 0.7, fs * 0.85, c.muted, 600, v === 0 ? "left" : v === 1 ? "right" : "center", MONO);
+				}
+				texto(ctx, "salida del modelo: probabilidad de «gesto»", px0, py1 + fs * 1.8, fs * 0.85, c.muted, 600, "left", SANS, px1 - px0);
+				const filaH = (py1 - py0) / 2;
+				const filas = [
+					["no gesto", k.no, c.navy, false],
+					["gesto", k.si, c.ok, true],
+				];
+				const bw = (px1 - px0) / NBIN;
+				for (const [i, [nombre, datos, color, positivo]] of filas.entries()) {
+					const base = py0 + filaH * (i + 1) - fs * 0.2;
+					const techo = py0 + filaH * i + fs * 1.3;
+					const bins = new Array(NBIN).fill(0);
+					const malos = new Array(NBIN).fill(0);
+					for (const v of datos) {
+						const b = Math.min(NBIN - 1, Math.floor(v * NBIN));
+						bins[b]++;
+						if (positivo ? v <= U : v > U) malos[b]++;
+					}
+					const bmax = Math.max(...bins);
+					for (let b = 0; b < NBIN; b++) {
+						if (!bins[b]) continue;
+						const alto = (bins[b] / bmax) * (base - techo);
+						const altoMal = (malos[b] / bmax) * (base - techo);
+						const x = px0 + b * bw;
+						// Parte bien clasificada abajo, errores encima en rojo.
+						const bien = alto - altoMal;
+						ctx.fillStyle = color;
+						ctx.fillRect(x + 1.5, base - bien, bw - 3, bien);
+						ctx.fillStyle = c.acento;
+						ctx.fillRect(x + 1.5, base - alto, bw - 3, altoMal);
+					}
+					texto(ctx, nombre, m, base - filaH * 0.5, fs, color, 700, "left");
+					texto(ctx, `real · ${datos.length}`, m, base - filaH * 0.5 + fs * 1.0, fs * 0.82, c.muted, 600, "left", SANS, anchoRot - fs * 0.3);
+					texto(ctx, `máx. ${bmax} por barra`, px0 + fs * 0.3, techo - fs * 0.55, fs * 0.82, c.muted, 600, "left", SANS, px1 - px0);
+				}
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(px0, py0 + filaH);
+				ctx.lineTo(px1, py0 + filaH);
+				ctx.stroke();
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 4;
+				ctx.beginPath();
+				ctx.moveTo(xu, py0 - fs * 0.2);
+				ctx.lineTo(xu, py1);
+				ctx.stroke();
+
+				// ===== Derecha: matriz de confusión y métricas =====
+				const mx0 = w - m - anchoMat;
+				const cabW = fs * 5.4;
+				const celW = (anchoMat - cabW) / 2;
+				const my0 = fs * 2.8;
+				const celH = clamp(fs * 2.9, (h - fs * 14.5) / 2, fs * 5);
+				texto(ctx, "decidido", mx0 + cabW + celW, fs * 0.7, fs * 0.85, c.muted, 600, "center");
+				texto(ctx, "no gesto", mx0 + cabW + celW * 0.5, fs * 1.85, fs * 0.95, c.navy, 700, "center", SANS, celW - 6);
+				texto(ctx, "gesto", mx0 + cabW + celW * 1.5, fs * 1.85, fs * 0.95, c.ok, 700, "center", SANS, celW - 6);
+				for (const [f, [nom, col]] of [
+					["no gesto", c.navy],
+					["gesto", c.ok],
+				].entries()) {
+					const y = my0 + celH * (f + 0.5);
+					texto(ctx, nom, mx0 + cabW - fs * 0.4, y - fs * 0.35, fs * 0.95, col, 700, "right", SANS, cabW - fs * 0.5);
+					texto(ctx, "real", mx0 + cabW - fs * 0.4, y + fs * 0.6, fs * 0.82, c.muted, 600, "right");
+				}
+				const celdas = [
+					[0, 0, k.vn, "VN", true],
+					[0, 1, k.fp, "FP · falsa alarma", false],
+					[1, 0, k.fn, "FN · perdido", false],
+					[1, 1, k.vp, "VP", true],
+				];
+				for (const [f, col, n, rot, bien] of celdas) {
+					const x = mx0 + cabW + celW * col;
+					const y = my0 + celH * f;
+					ctx.fillStyle = bien ? c.okSoft : n > 0 ? c.acentoSoft : c.surface;
+					ctx.fillRect(x + 3, y + 3, celW - 6, celH - 6);
+					texto(ctx, String(n), x + celW / 2, y + celH * 0.42, fs * 1.8, bien ? c.ok : n > 0 ? c.acento : c.muted, 700, "center", MONO);
+					texto(ctx, rot, x + celW / 2, y + celH - fs * 0.7, fs * 0.82, c.muted, 600, "center", SANS, celW - fs * 0.6);
+				}
+				const fy = my0 + celH * 2 + fs * 1.1;
+				const metricas = [
+					["exactitud", `(VP + VN) / total = ${k.vp + k.vn} / ${k.total}`, pct(k.vp + k.vn, k.total), c.heading],
+					["precisión", `VP / (VP + FP) = ${k.vp} / ${k.vp + k.fp}`, pct(k.vp, k.vp + k.fp), k.vp + k.fp === 0 ? c.acento : c.heading],
+					["exhaustividad", `VP / (VP + FN) = ${k.vp} / ${k.vp + k.fn}`, pct(k.vp, k.vp + k.fn), k.vp / (k.vp + k.fn) < 0.5 ? c.acento : c.ok],
+				];
+				const fh = (h - fy - fs * 0.4) / 3;
+				for (const [i, [nom, form, val, col]] of metricas.entries()) {
+					const y = fy + fh * i;
+					texto(ctx, nom, mx0, y + fs * 0.3, fs, c.heading, 700, "left");
+					texto(ctx, val, w - m, y + fs * 0.5, fs * 1.4, col, 700, "right", MONO);
+					texto(ctx, form, mx0, y + fs * 1.35, fs * 0.82, c.muted, 600, "left", MONO, anchoMat - fs * 5.5);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("matriz"), dibujar);
+			const ctrl = document.getElementById("umbral");
+			const out = document.getElementById("umbral-out");
+			const lExa = document.getElementById("l-exa");
+			const lExh = document.getElementById("l-exh");
+			const botones = [...document.querySelectorAll("[data-datos]")];
+
+			function render() {
+				const i = Number(ctrl.value);
+				U = i === 18 ? 1.01 : 0.05 * (i + 1);
+				out.textContent = i === 18 ? "nunca" : coma(U, 2);
+				const k = cuenta();
+				// Mismo redondeo que el panel del lienzo.
+				lExa.textContent = pct(k.vp + k.vn, k.total);
+				lExh.textContent = pct(k.vp, k.vp + k.fn);
+				const baja = k.vp / (k.vp + k.fn) < 0.5;
+				lExh.classList.toggle("s6c-mal", baja);
+				lExh.classList.toggle("s6c-bien", !baja);
+				for (const b of botones) {
+					const activo = Number(b.dataset.datos) === D;
+					b.classList.toggle("btn--primary", activo);
+					b.classList.toggle("btn--secondary", !activo);
+					b.setAttribute("aria-pressed", String(activo));
+				}
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					D = Number(b.dataset.datos);
+					render();
+				});
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

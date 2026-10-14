@@ -16,7 +16,7 @@
     { "type": "arrow", "x": 380, "y": 197, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
     { "type": "text", "x": 385, "y": 177, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
     { "type": "rectangle", "x": 440, "y": 170, "width": 280, "height": 55, "backgroundColor": "#d0ebff" },
-    { "type": "text", "x": 448, "y": 178, "width": 264, "height": 40, "text": "Serial2.write(Serial.read())\n(un byte; se repite mientras\nhaya bytes disponibles)", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 448, "y": 174, "width": 264, "height": 46, "text": "c = Serial.read()\nSerial.print(c)  // eco local\nSerial2.write(c) // a la otra placa\n(se repite mientras haya bytes)", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
 
     { "type": "arrow", "x": 240, "y": 225, "width": 0, "height": 30, "points": [[0,0],[0,30]] },
     { "type": "text", "x": 250, "y": 228, "width": 30, "height": 20, "text": "NO", "fontSize": 11, "fontFamily": 1 },
@@ -42,7 +42,7 @@
     { "type": "arrow", "x": 380, "y": 517, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
     { "type": "text", "x": 385, "y": 497, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
     { "type": "rectangle", "x": 440, "y": 490, "width": 280, "height": 55, "backgroundColor": "#ffe3e3" },
-    { "type": "text", "x": 448, "y": 498, "width": 264, "height": 40, "text": "Serial.print(\"[recibido] \")\ninicioLineaRx = false", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 448, "y": 498, "width": 264, "height": 40, "text": "Serial.print(\"\\n[recibido] \")\ninicioLineaRx = false", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
 
     { "type": "arrow", "x": 240, "y": 545, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
     { "type": "text", "x": 250, "y": 548, "width": 30, "height": 20, "text": "NO", "fontSize": 11, "fontFamily": 1 },
@@ -52,12 +52,12 @@
     { "type": "arrow", "x": 240, "y": 615, "width": 0, "height": 25, "points": [[0,0],[0,25]] },
 
     { "type": "diamond", "x": 100, "y": 640, "width": 280, "height": 55, "backgroundColor": "#fff3bf" },
-    { "type": "text", "x": 110, "y": 658, "width": 260, "height": 25, "text": "¿c == '\\n'?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 110, "y": 658, "width": 260, "height": 25, "text": "¿c == '\\n' || c == '\\r'?", "fontSize": 11, "fontFamily": 1, "textAlign": "center" },
 
     { "type": "arrow", "x": 380, "y": 667, "width": 60, "height": 0, "points": [[0,0],[60,0]] },
     { "type": "text", "x": 385, "y": 647, "width": 30, "height": 20, "text": "SÍ", "fontSize": 11, "fontFamily": 1 },
     { "type": "rectangle", "x": 440, "y": 640, "width": 280, "height": 55, "backgroundColor": "#ffe3e3" },
-    { "type": "text", "x": 448, "y": 648, "width": 264, "height": 40, "text": "inicioLineaRx = true\n(la próxima línea llevará prefijo)", "fontSize": 10, "fontFamily": 1, "textAlign": "center" },
+    { "type": "text", "x": 448, "y": 644, "width": 264, "height": 46, "text": "inicioLineaRx = true\n(el próximo byte abrirá línea nueva\ncon prefijo; monitor_eol = LF evita\nuna línea vacía extra por el CR)", "fontSize": 9, "fontFamily": 1, "textAlign": "center" },
 
     { "type": "text", "x": 100, "y": 705, "width": 450, "height": 20, "text": "NO: continúa (seguimos dentro de la misma línea)", "fontSize": 10, "fontFamily": 1, "strokeColor": "#868e96" },
     { "type": "text", "x": 100, "y": 730, "width": 500, "height": 20, "text": "El while de B se repite mientras Serial2 tenga bytes; agotado, loop() vuelve a A.", "fontSize": 10, "fontFamily": 1, "strokeColor": "#868e96" },

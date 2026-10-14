@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HTTP y HTTPS · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · HTTP</span>
+
+				<h1 class="slide__title slide__title--sm">
+					HTTPS cifra la conexión y verifica al <em>servidor</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								HTTPS cifra con TLS y, además, comprueba el <b>certificado</b> del
+								servidor contra una autoridad raíz de confianza. Sin esa comprobación, el canal va cifrado, pero la identidad del servidor queda sin confirmar.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta s4c-codigo">
+							<code>WiFiClientSecure cliente;</code>
+							<code>cliente.setCACert(raiz);</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Tipo de conexión">
+								<button type="button" class="btn btn--primary" data-modo="http" aria-pressed="true">HTTP</button>
+								<button type="button" class="btn btn--secondary" data-modo="verificado" aria-pressed="false">HTTPS verificado</button>
+								<button type="button" class="btn btn--secondary" data-modo="inseguro" aria-pressed="false">HTTPS sin verificar</button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>contenido </small><span id="l-contenido" class="s4c-ancho s4c-ancho--largo">legible</span></span>
+							<span class="lectura"><small>servidor </small><span id="l-servidor" class="s4c-ancho s4c-ancho--largo">sin comprobar</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="https"
+								role="img"
+								aria-label="Camino del ESP32 al servidor de OpenWeatherMap pasando por el router, con un tercero en medio, y lo que ese tercero puede leer: con HTTP, la URL completa con la clave appid y la respuesta; con HTTPS verificado, solo el nombre del servidor (SNI) y el tamaño de los datos cifrados; con HTTPS sin verificar, un impostor descifra la petición y responde un dato falso."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con HTTPS sin certificado (lo que hace
+					<code>HTTPClient</code> con una URL <code>https://</code> y nada más),
+					¿puede alguien en la misma WiFi leer la clave? Recoger respuestas antes de pulsar el tercer botón. Respuesta: un tercero que solo escucha ve tráfico cifrado; uno que se interpone en la conexión lee la clave.
+				</p>
+				<p>
+					Empezar por HTTP, que es como viajaba la clave en la versión anterior del ejemplo 18, legible para cualquiera en el camino (la WiFi del aula, el proveedor). HTTPS verificado: el tercero solo ve a qué servidor se
+					conecta (SNI), cuándo y cuántos bytes. HTTPS sin verificar: un impostor
+					presenta su propio certificado, el ESP32 lo acepta porque no verifica certificados (<code>setInsecure()</code>), y el impostor lee la clave y responde 45 °C.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>WiFiClientSecure cliente; cliente.setCACert(raiz);
+						http.begin(cliente, url);</code> verifica el servidor.
+						<code>http.begin(url)</code> con <code>https://</code> y sin
+						certificado cifra el canal, pero llama a <code>setInsecure()</code> y no verifica al servidor. La verificación necesita la hora correcta (NTP) para
+						comprobar la vigencia del certificado.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplos 16 y 16b (cifrado sin verificar) y 18 (clave en HTTPS).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Creer que <code>https://</code> en la URL basta para estar protegido.</li>
+						<li>Enviar claves por HTTP en una prueba y dejarlo así en la versión final.</li>
+						<li>Cargar el certificado del servidor en lugar del de la raíz, que tiene validez de años.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-codigo-16-bitcoin.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 16 · Bitcoin</span>
+				</a>
+				<a class="slide-nav__link" href="12-json-a-pantalla.html">
+					<span>JSON → OLED</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+			const HOST = "api.openweathermap.org";
+			// Clave ficticia, del formato de OpenWeatherMap (32 hex).
+			const CLAVE = "3f9c0e2a7b41d85c96a0e1b2c3d4e5f6";
+			const RUTA = "GET /data/2.5/weather?q=Lima,PE&units=metric&appid=";
+
+			let modo = "http";
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = fs;
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			// Línea de texto hecha de tramos con su propio color; reduce la letra
+			// de todos a la vez hasta que quepa en maxW.
+			function tramos(ctx, partes, x, y, fs, maxW) {
+				let f = fs;
+				const medir = () => {
+					let a = 0;
+					for (const [s, , peso] of partes) {
+						ctx.font = `${peso ?? 600} ${f}px ${MONO}`;
+						a += ctx.measureText(s).width;
+					}
+					return a;
+				};
+				while (f > MIN_FS && medir() > maxW) f -= 1;
+				if (medir() > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(partes.map((p) => p[0]).join(""));
+				}
+				let xx = x;
+				ctx.textAlign = "left";
+				ctx.textBaseline = "middle";
+				for (const [s, color, peso] of partes) {
+					ctx.font = `${peso ?? 600} ${f}px ${MONO}`;
+					ctx.fillStyle = color;
+					ctx.fillText(s, xx, y);
+					xx += ctx.measureText(s).width;
+				}
+				return xx;
+			}
+
+			// Caja con rótulo centrado; devuelve su ancho.
+			function anchoNodo(ctx, s, fs, fam, sub) {
+				ctx.font = `700 ${fs}px ${fam}`;
+				let a = ctx.measureText(s).width;
+				if (sub) {
+					ctx.font = `600 ${fs * 0.9}px ${SANS}`;
+					a = Math.max(a, ctx.measureText(sub).width);
+				}
+				return a + fs * 1.6;
+			}
+
+			function nodo(ctx, s, xc, yc, fs, fam, tono, relleno, sub, subColor) {
+				const aw = anchoNodo(ctx, s, fs, fam, sub);
+				const ah = fs * (sub ? 3 : 2.2);
+				ctx.beginPath();
+				ctx.roundRect(xc - aw / 2, yc - ah / 2, aw, ah, fs * 0.3);
+				ctx.fillStyle = relleno;
+				ctx.fill();
+				ctx.strokeStyle = tono;
+				ctx.lineWidth = 2.5;
+				ctx.stroke();
+				texto(ctx, s, xc, sub ? yc - fs * 0.55 : yc, fs, tono, 700, "center", fam);
+				if (sub) texto(ctx, sub, xc, yc + fs * 0.75, fs * 0.9, subColor ?? tono, 600, "center", SANS);
+				return aw;
+			}
+
+			function tunel(ctx, x0, x1, y, fs, color, rotulo, fondo, xr = (x0 + x1) / 2, maxR = Math.abs(x1 - x0) - 8) {
+				ctx.strokeStyle = color;
+				ctx.lineWidth = fs * 1.3;
+				ctx.globalAlpha = 0.25;
+				ctx.beginPath();
+				ctx.moveTo(x0, y);
+				ctx.lineTo(x1, y);
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+				ctx.lineWidth = 2.5;
+				for (const d of [-0.65, 0.65]) {
+					ctx.beginPath();
+					ctx.moveTo(x0, y + d * fs);
+					ctx.lineTo(x1, y + d * fs);
+					ctx.stroke();
+				}
+				if (rotulo) {
+					ctx.font = `700 ${fs * 0.9}px ${SANS}`;
+					const aw = ctx.measureText(rotulo).width + 12;
+					ctx.fillStyle = fondo;
+					ctx.fillRect(xr - aw / 2, y - fs * 0.55, aw, fs * 1.1);
+					texto(ctx, rotulo, xr, y, fs * 0.9, color, 700, "center", SANS, maxR);
+				}
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					texto: token("--color-text"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0145), 28);
+				const m = fs * 1.2;
+
+				// --- Camino: ESP32 · router · tercero · servidor ---
+				const yW = fs * 5.2;
+				const subEsp = modo === "http" ? "sin TLS" : modo === "verificado" ? "certificado ✓" : "sin verificar";
+				const anchoEsp = anchoNodo(ctx, "ESP32", fs, MONO, subEsp);
+				const anchoRouter = anchoNodo(ctx, "router", fs, SANS, "WiFi del aula");
+				const anchoImp = anchoNodo(ctx, "impostor", fs, SANS, "certificado falso");
+				const xEsp = m + anchoEsp / 2;
+				const xRouter = w * 0.27;
+				const xMedio = w * (modo === "inseguro" ? 0.57 : 0.52);
+				ctx.font = `700 ${fs}px ${SANS}`;
+				const anchoSrv = ctx.measureText(HOST).width + fs * 1.6;
+				const xSrv = w - m - anchoSrv / 2;
+				const inseguro = modo === "inseguro";
+
+				// Enlaces.
+				if (modo === "http") {
+					ctx.strokeStyle = c.muted;
+					ctx.lineWidth = 3;
+					ctx.beginPath();
+					ctx.moveTo(xEsp, yW);
+					ctx.lineTo(xSrv, yW);
+					ctx.stroke();
+					const ini = xRouter + anchoRouter / 2;
+					const fin = xSrv - anchoSrv / 2;
+					tunel(ctx, ini, fin, yW, fs, c.acento, "texto plano, legible", c.bg, (ini + fin) / 2 + fs * 4, fin - ini - 12);
+				} else if (modo === "verificado") {
+					const ini = xRouter + anchoRouter / 2;
+					const fin = xSrv - anchoSrv / 2;
+					tunel(ctx, xEsp, xSrv, yW, fs, c.ok, "túnel TLS de extremo a extremo", c.bg, (ini + fin) / 2 + fs * 3, fin - ini - 12);
+				} else {
+					const iniImp = xRouter + anchoRouter / 2;
+					const finImp = xMedio - anchoImp / 2;
+					tunel(ctx, xEsp, xMedio, yW, fs, c.acento, "TLS con el impostor", c.bg, (iniImp + finImp) / 2, finImp - iniImp - 12);
+					const iniSrv = xMedio + anchoImp / 2;
+					const finSrv = xSrv - anchoSrv / 2;
+					tunel(ctx, xMedio, xSrv, yW, fs, c.muted, "TLS con el servidor", c.bg, (iniSrv + finSrv) / 2, finSrv - iniSrv - 12);
+				}
+
+				// Nodos.
+				const tonoEsp = modo === "verificado" ? c.ok : c.acento;
+				nodo(ctx, "ESP32", xEsp, yW, fs, MONO, c.heading, c.surface, subEsp, tonoEsp);
+				nodo(ctx, "router", xRouter, yW, fs, SANS, c.navy, c.navySoft, "WiFi del aula", c.navy);
+				nodo(ctx, HOST, xSrv, yW, fs, SANS, c.heading, c.surface, "servidor legítimo", c.muted);
+
+				// Tercero: escucha desde arriba o se pone en medio.
+				if (inseguro) {
+					nodo(ctx, "impostor", xMedio, yW, fs, SANS, c.acento, c.acentoSoft, "certificado falso", c.acento);
+					texto(ctx, `suplanta a ${HOST}`, xMedio, yW - fs * 3, fs, c.acento, 700, "center", SANS, w - 2 * m);
+				} else {
+					const yT = yW - fs * 3.6;
+					ctx.strokeStyle = c.muted;
+					ctx.lineWidth = 2;
+					ctx.setLineDash([6, 6]);
+					ctx.beginPath();
+					ctx.moveTo(xMedio, yT + fs);
+					ctx.lineTo(xMedio, yW - fs * 0.7);
+					ctx.stroke();
+					ctx.setLineDash([]);
+					nodo(ctx, "tercero en la red", xMedio, yT, fs, SANS, c.muted, c.surface);
+				}
+
+				// --- Lo que lee el tercero ---
+				const px = m;
+				const pw = w - 2 * m;
+				const yP = yW + fs * 3.4;
+				const yV = h - fs * 1.3;
+				const lineas = 3;
+				const paso = (yV - fs * 1.6 - (yP + fs * 1.2)) / lineas;
+				const yL = (i) => yP + fs * 1.2 + paso * (i + 0.5);
+				const quien = inseguro ? "Lo que lee el impostor (extremo del cifrado)" : "Lo que lee el tercero";
+				texto(ctx, quien, px, yP, fs, c.heading, 700, "left", SANS, pw);
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(px, yP + fs * 0.75);
+				ctx.lineTo(px + pw, yP + fs * 0.75);
+				ctx.stroke();
+
+				// Letra común a las tres líneas: tan grande como permitan el alto de la
+				// fila y la línea más larga del modo (en vez de separar renglones).
+				const largas = {
+					http: [RUTA + CLAVE, '200 OK  {"main":{"temp":19.4,"humidity":83},"name":"Lima"}'],
+					inseguro: [RUTA + CLAVE, '200 OK  {"main":{"temp":45.0,"humidity":83},"name":"Lima"}  ← dato falso'],
+					verificado: ["SNI: api.openweathermap.org  (nombre del servidor, en claro)"],
+				}[modo];
+				ctx.font = `700 100px ${MONO}`;
+				const proporcion = Math.max(...largas.map((x) => ctx.measureText(x).width)) / 100;
+				const fl = clamp(MIN_FS, Math.min(paso * 0.5, fs * 1.6, (pw - fs * 1.8) / proporcion), fs * 1.6);
+				const flecha = (i, s, color) => texto(ctx, s, px, yL(i), fl, color, 700, "left", MONO);
+				const xT = px + fs * 1.8;
+				const anchoT = pw - fs * 1.8;
+				let veredicto;
+				let tonoV;
+				if (modo === "http" || inseguro) {
+					flecha(0, "→", c.navy);
+					tramos(ctx, [[RUTA, c.texto], [CLAVE, c.acento, 700]], xT, yL(0), fl, anchoT);
+					flecha(1, "→", c.navy);
+					tramos(ctx, [["Host: ", c.texto], [HOST, c.texto]], xT, yL(1), fl, anchoT);
+					flecha(2, "←", c.navy);
+					if (inseguro) {
+						tramos(ctx, [['200 OK  {"main":{"temp":', c.texto], ["45.0", c.acento, 700], [',"humidity":83},"name":"Lima"}', c.texto], ["  ← dato falso", c.acento, 700]], xT, yL(2), fl, anchoT);
+						veredicto = "Cifrado sin verificar. El ESP32 acepta al impostor, que lee la clave y falsea el dato";
+						tonoV = c.acento;
+					} else {
+						tramos(ctx, [['200 OK  {"main":{"temp":19.4,"humidity":83},"name":"Lima"}', c.texto]], xT, yL(2), fl, anchoT);
+						veredicto = "Sin cifrar. Un tercero en el camino lee la clave y el dato, y puede cambiarlos";
+						tonoV = c.acento;
+					}
+				} else {
+					// Solo el nombre del servidor (SNI) y tamaños: el resto son bytes cifrados.
+					flecha(0, "→", c.navy);
+					tramos(ctx, [["SNI: ", c.texto], [HOST, c.navy, 700], ["  (nombre del servidor, en claro)", c.muted, 500]], xT, yL(0), fl, anchoT);
+					const barra = (i, frac, rotulo) => {
+						const x0 = xT;
+						ctx.font = `600 ${fl}px ${MONO}`;
+						const rw = ctx.measureText(rotulo).width;
+						const bw = Math.max(fs * 4, (anchoT - rw - fs) * frac);
+						const bh = fl * 0.95;
+						ctx.fillStyle = c.navySoft;
+						ctx.fillRect(x0, yL(i) - bh / 2, bw, bh);
+						ctx.strokeStyle = c.navy;
+						ctx.lineWidth = 1;
+						ctx.globalAlpha = 0.45;
+						for (let x = x0 + 6; x < x0 + bw; x += 9) {
+							ctx.beginPath();
+							ctx.moveTo(x, yL(i) - bh / 2);
+							ctx.lineTo(x - 6, yL(i) + bh / 2);
+							ctx.stroke();
+						}
+						ctx.globalAlpha = 1;
+						texto(ctx, rotulo, x0 + bw + fs * 0.6, yL(i), fl, c.muted, 600, "left", MONO);
+					};
+					flecha(1, "→", c.navy);
+					barra(1, 0.35, "≈ 200 B cifrados");
+					flecha(2, "←", c.navy);
+					barra(2, 0.8, "≈ 500 B cifrados");
+					veredicto = "Cifrado y verificado. El tercero ve el destino, la hora y los tamaños";
+					tonoV = c.ok;
+				}
+				texto(ctx, veredicto, px, yV, fs * 1.05, tonoV, 700, "left", SANS, pw);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("https"), dibujar);
+			const botones = [...document.querySelectorAll("[data-modo]")];
+			const lContenido = document.getElementById("l-contenido");
+			const lServidor = document.getElementById("l-servidor");
+
+			function render() {
+				for (const b of botones) {
+					const on = b.dataset.modo === modo;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+				const cifrado = modo !== "http";
+				lContenido.textContent = cifrado ? "cifrado" : "legible";
+				lContenido.className = `s4c-ancho s4c-ancho--largo ${cifrado ? "s4c-bien" : "s4c-mal"}`;
+				const ver = modo === "verificado";
+				lServidor.textContent = ver ? "verificado" : "sin comprobar";
+				lServidor.className = `s4c-ancho s4c-ancho--largo ${ver ? "s4c-bien" : "s4c-mal"}`;
+				lienzo.redibujar();
+			}
+			for (const b of botones) {
+				b.addEventListener("click", () => {
+					modo = b.dataset.modo;
+					render();
+				});
+			}
+			render();
+		</script>
+	</body>
+</html>

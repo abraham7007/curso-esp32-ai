@@ -1,0 +1,82 @@
+# Salida REAL de: python entrenar_colores.py
+# Fecha: 2026-10-14 00:58  ·  macOS 14.4 arm64
+# Python 3.11.7  ·  keras 3.15.1  numpy 2.4.6  pandas 3.0.6  tensorflow 2.21.0  
+# Variable TF_CPP_MIN_LOG_LEVEL=2 (oculta los avisos internos de TensorFlow en C++).
+
+TensorFlow version = 2.21.0 (Keras 3.15.1), Python 3.11.7
+
+rojo -> salida 0 del clasificador: 150 lecturas ['r', 'g', 'b']
+verde -> salida 1 del clasificador: 150 lecturas ['r', 'g', 'b']
+azul -> salida 2 del clasificador: 150 lecturas ['r', 'g', 'b']
+Data set parsing and preparation complete.
+Entrenamiento: 270 lecturas, prueba: 90, validación: 90
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Layer (type)                    ┃ Output Shape           ┃       Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ dense (Dense)                   │ (None, 8)              │            32 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense_1 (Dense)                 │ (None, 3)              │            27 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+ Total params: 59 (236.00 B)
+ Trainable params: 59 (236.00 B)
+ Non-trainable params: 0 (0.00 B)
+época  50: loss=0.0233 val_loss=0.0268 accuracy=0.996 val_accuracy=0.989
+época 100: loss=0.0101 val_loss=0.0137 accuracy=0.996 val_accuracy=0.989
+época 150: loss=0.0066 val_loss=0.0113 accuracy=0.996 val_accuracy=0.989
+época 200: loss=0.0050 val_loss=0.0109 accuracy=1.000 val_accuracy=0.989
+época 250: loss=0.0040 val_loss=0.0109 accuracy=1.000 val_accuracy=0.989
+época 300: loss=0.0034 val_loss=0.0111 accuracy=1.000 val_accuracy=0.989
+
+Pérdida final: entrenamiento=0.0034 validación=0.0111 prueba=0.0011
+Exactitud (Keras float32, prueba): 100.0 %
+Saved artifact at '/var/folders/3v/2lvfc53d1hzfh9nnhjtngm380000gn/T/tmpr9btk03m'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 3), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 3), dtype=tf.float32, name=None)
+Captures:
+  5180436368: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180437136: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180437328: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180436560: TensorSpec(shape=(), dtype=tf.resource, name=None)
+Saved artifact at '/var/folders/3v/2lvfc53d1hzfh9nnhjtngm380000gn/T/tmplq7ho9wm'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 3), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 3), dtype=tf.float32, name=None)
+Captures:
+  5180436368: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180437136: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180437328: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  5180436560: TensorSpec(shape=(), dtype=tf.resource, name=None)
+/private/tmp/claude-501/-Users-mecatronica-Documents-UNI-cursos-esp32-curso-web-esp/b4a12d19-ab22-47aa-ad12-1b3b9ff24e30/scratchpad/venv-tf/lib/python3.11/site-packages/tensorflow/lite/python/convert.py:846: UserWarning: Statistics for quantized inputs were expected, but not specified; continuing anyway.
+  warnings.warn(
+fully_quantize: 0, inference_type: 6, input_inference_type: INT8, output_inference_type: INT8
+/private/tmp/claude-501/-Users-mecatronica-Documents-UNI-cursos-esp32-curso-web-esp/b4a12d19-ab22-47aa-ad12-1b3b9ff24e30/scratchpad/venv-tf/lib/python3.11/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+Parámetros de la red: 59 (float32: 236 bytes de pesos; int8: ~59 bytes)
+
+[float32] .tflite: 1,992 bytes · model.h: 12,543 bytes de texto
+[float32] exactitud en prueba: 100.0 % (90/90)
+[float32] entrada float32 scale=0.000000 zero_point=0 · salida float32 scale=0.000000 zero_point=0
+[float32] operaciones: FULLY_CONNECTED, SOFTMAX
+
+[int8] .tflite: 2,360 bytes · model.h: 14,813 bytes de texto
+[int8] exactitud en prueba: 100.0 % (90/90)
+[int8] entrada int8 scale=0.003922 zero_point=-128 · salida int8 scale=0.003906 zero_point=-128
+[int8] operaciones: FULLY_CONNECTED, SOFTMAX
+
+Relación de tamaño int8/float32: 1.18
+Con 59 parámetros, casi todo el archivo son metadatos (nombres, formas, escalas):
+la cuantización solo encoge de verdad cuando los pesos dominan (ejemplo 20: 36 547 parámetros).
+Header file, model.h, is 14,911 bytes.
+Escrito en /Users/mecatronica/Documents/UNI/cursos/esp32/ejemplos/21-colores-apds9960-nano33/include/model.h
+
+# Tiempo total: 17 s

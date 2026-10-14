@@ -1,0 +1,13 @@
+/* Vista del ponente: el fondo es oscuro en ambos temas, así que los botones
+   secundarios (pensados para fondo claro) se repintan con la tinta del panel
+   de código; si no, «Reiniciar tiempo» y «Anterior» casi no se leían. */
+.ponente .btn--secondary {
+	color: var(--color-code-fg);
+	border-color: var(--color-code-border);
+	background: var(--color-code-bg);
+}
+
+.ponente .btn--secondary:hover {
+	color: var(--color-code-fg);
+	border-color: var(--color-code-dim);
+}

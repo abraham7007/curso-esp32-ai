@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 01 · Salida digital · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 01</span>
+					</div>
+
+					<h2 class="code-hour__title">Un LED que se enciende y se apaga cada 2 s</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Configurado para el monitor a 115 200 baudios.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">LED y resistencia en el GPIO 2.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo: qué corre una vez y qué se repite.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Conmutar el GPIO 2 cada 2 s (período de 4 s) y anotar cada cambio por el puerto serie.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p><b>GPIO 2</b> (salida digital) → resistencia de 220 Ω → ánodo del LED; cátodo a GND. El GPIO 2 es pin de arranque (<em>strapping</em>) y sirve como salida: lleva el LED integrado de la DevKit.</p>
+								<div class="hw-set hw-set--amplio-hd mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="red" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-resistor value="220"></wokwi-resistor>
+										<small>220 Ω</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">Iniciando salida digital en GPIO 2
+t = 0 s   GPIO2 = ALTO
+t = 2 s   GPIO2 = BAJO
+t = 4 s   GPIO2 = ALTO
+t = 6 s   GPIO2 = BAJO</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y monitor_speed = 115200.
+
+<b>2. Firmware.</b> Configura el GPIO 2 como salida y conmútalo cada 2 s con delay(). Al arrancar imprime «Iniciando salida digital en GPIO 2»; en cada cambio, una línea con el formato exacto «t = N s   GPIO2 = ALTO» (o BAJO), con N en segundos. Usa solo setup() y loop(), sin librerías ni clases.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi al mismo proyecto: LED con resistencia de 220 Ω entre el GPIO 2 y GND.
+
+<b>4. Diagrama.</b> Un diagrama de flujo en Excalidraw que separe lo que se ejecuta una sola vez de lo que se repite y marque dónde el programa espera.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Un proyecto nuevo valida placa, puerto y velocidad antes de que un error de programa pueda confundirse con uno de instalación. El formato exacto permite comparar la traza línea a línea.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> <code>setup()</code> corre una vez y <code>loop()</code> se repite; <code>delay()</code> bloquea la tarea de <code>loop()</code> y no detiene las interrupciones, el otro núcleo ni la pila WiFi.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>El ejercicio recorre la cadena completa: crear el proyecto, compilar, grabar y leer el puerto serie. Pregunta de predicción: ¿cuánto tiempo pasa entre dos líneas consecutivas de la traza? Pasan 2 s, y el nivel alterna en cada línea; pedir que lo cronometren. El retardo entre el encendido y la primera línea lo introduce el monitor serie al abrir el puerto, no el programa. Durante delay(), FreeRTOS cede el núcleo a otras tareas y la secuencia de loop() queda en pausa.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>pinMode(2, OUTPUT)</code>, <code>digitalWrite(2, HIGH)</code> y <code>delay(ms)</code> pertenecen al núcleo de Arduino y no requieren librerías adicionales.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Abrir el monitor a otra velocidad produce caracteres ilegibles.</li><li>Dos líneas seguidas con el mismo nivel indican que la escritura no ocurre donde parece.</li><li>Un LED sin resistencia lleva la corriente fuera del límite del terminal.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-limites-electricos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Límites eléctricos</span>
+				</a>
+				<a class="slide-nav__link" href="09-entrada-flotante.html">
+					<span>Entrada flotante y pull-up</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

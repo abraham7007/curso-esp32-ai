@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Sesión 5 · Máquinas de estados finitos</title>
+		<title>Sesión 5 · Protocolo MQTT y plataformas de IoT</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,79 +14,98 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="31">
-		<main class="slide">
-			<div class="slide__content stagger">
-				<div class="layout layout--wide-left" data-animate="fade-up">
-					<div class="layout__text">
-						<span class="badge">
-							Sesión 5 · Fundamentos de ESP32 + AI · PIT 2026 — OTI-UNI
-						</span>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<div class="crece s4a-portada-grid">
+					<div class="s4a-portada-grid__tit flex flex-col gap-6">
+						<p class="slide__lede">Sesión 5 · Fundamentos de ESP32 + AI</p>
+						<h1 class="slide__title">Protocolo MQTT y plataformas de <em>IoT</em></h1>
+					</div>
 
-						<h1 class="slide__title">Máquinas de<br />estados finitos</h1>
+					<ol class="puntos agenda s4a-agenda s5a-agenda">
+						<li><div>Conexión persistente<span>sondeo frente a conexión abierta, broker y garantías</span></div></li>
+						<li><div>Plataforma Blynk<span>qué añade, sus piezas y su protocolo</span></div></li>
+						<li><div>Pines virtuales<span>widget y función; configuración previa</span></div></li>
+						<li><div>Política de envío<span>Blynk.run, cuota, telemetría y comandos</span></div></li>
+						<li><div>Seguridad y estado<span>token cifrado, estado real y fallos</span></div></li>
+					</ol>
 
-						<p class="slide__lede">
-							<strong>Modelado del comportamiento mediante estados.</strong> Implementación no bloqueante y casos de aplicación.
+					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
+						<p>
+							<a class="btn btn--primary" href="02-preguntar-escuchar.html">Empezar →</a>
 						</p>
+						<div class="credito">
+							<span class="credito__autor">Abraham Caso Torres</span>
+							<span>PIT 2026 · OTI-UNI</span>
+							<a
+								class="credito__licencia"
+								href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+								rel="license noopener"
+								target="_blank"
+								>CC BY-NC-SA 4.0</a
+							>
+						</div>
 					</div>
 
-					<div class="hero-board">
-						<span class="hero-board__part" aria-hidden="true">
-							<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
-						</span>
-						<span class="hero-board__caption">
-							<b>ESP32-WROOM-32</b>
-							DevKit V1
-						</span>
-					</div>
-				</div>
-
-				<div data-animate="fade-up">
-					<div class="usecases-label">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						Al terminar la sesión
-					</div>
-					<div class="usecases usecases--rotulos">
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-						<span class="usecase__name">Estados, eventos y transiciones</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
-						<span class="usecase__name">Moore, Mealy y tabla de transiciones</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-clock" /></svg>
-						<span class="usecase__name">Implementación con enum y switch</span>
-					</div>
-					<div class="usecase">
-						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
-						<span class="usecase__name">Rutas de excepción y recuperación</span>
-					</div>
-					</div>
-				</div>
-
-				<a class="btn btn--primary self-center" href="02-acumulacion-banderas.html" data-animate="fade-up">
-					Empezar →
-				</a>
-
-				<div class="credito">
-					<span class="credito__autor">Abraham Caso Torres</span>
-					<a class="credito__licencia" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
-						rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>
+					<figure class="s2-uml s4a-portada s5a-portada" aria-label="Monitor serie del ejemplo 19 conectado a Blynk: la librería se conecta a blynk.cloud por el puerto 443, valida el certificado y queda lista con un ping de 89 ms; el programa sincroniza V0, recibe la orden del interruptor del panel y enciende el LED (estado 1), y publica la temperatura 23.40 en V1.">
+						<p class="s2-uml__nombre">Monitor serie</p>
+						<ul>
+							<li class="s4a-portada__cab">[2209] Connecting to blynk.cloud:443</li>
+							<li class="s4a-portada__cab">[3412] Certificate OK</li>
+							<li><span class="s4a-portada__estado">[3501] Ready (ping: 89ms).</span></li>
+							<li class="s4a-portada__cab">Conectado a Blynk. Sincronizando V0...</li>
+							<li>Comando recibido de Blynk! Estado del LED: 1</li>
+						</ul>
+						<p class="s4a-portada__cuerpo">Enviando Temperatura a Blynk: 23.40</p>
+						<figcaption>ejemplo 19 · orden recibida y temperatura publicada</figcaption>
+					</figure>
 				</div>
 			</div>
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<span></span>
-				<a class="slide-nav__link" href="02-acumulacion-banderas.html">
-					<span>Acumulación de variables de control</span>
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-alert" /></svg>
-				</a>
-			</nav>
+
+			<aside class="notas">
+				<p>
+					En la sesión 4 el ESP32 consultaba al servidor: cada petición abría una
+					conexión, recibía la respuesta y la cerraba. En esta sesión la conexión
+					queda abierta y el servidor puede enviar órdenes al ESP32 en cualquier
+					momento. Recorrer los cinco bloques: la conexión persistente, lo que añade
+					una plataforma, los pines virtuales, la política de envío, y la protección
+					del token y del estado.
+				</p>
+				<p>
+					Pregunta de predicción: en el monitor de la derecha, la línea «Estado del
+					LED: 1» aparece sin que nadie haya tocado el panel durante esta conexión.
+					¿De dónde salió esa orden?
+				</p>
+				<p>
+					Respuesta: del valor de V0 que guardaba el servidor (láminas 04 y 15).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Punto de partida</h4>
+					<p>
+						Se da por conocido: WiFi en modo estación, HTTP y HTTPS, la cuota de una
+						API y la clave fuera del código (sesión 4, láminas 02, 11, 18 y 19), y
+						<code>millis()</code> para varios ritmos en un <code>loop()</code>
+						(sesión 2).
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 19 (panel IoT con Blynk): interruptor en V0 que gobierna el LED
+						del GPIO 15 y temperatura simulada publicada en V1 cada 30 s.
+					</p>
+					<h4>La figura</h4>
+					<p>
+						Las líneas con <code>[ms]</code> las imprime la librería Blynk
+						(<code>BLYNK_PRINT Serial</code>); las otras, el programa. Los
+						milisegundos y el ping cambian en cada arranque.
+					</p>
+				</div>
+			</details>
 		</main>
-		<script type="module">
-			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
-		</script>
 
 		<script type="module" src="../../js/deck.js"></script>
 	</body>

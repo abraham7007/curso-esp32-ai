@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 02 · Entrada digital · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 02</span>
+					</div>
+
+					<h2 class="code-hour__title">Pulsador en el GPIO 4, sin y con pull-up</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Una sola línea alterna INPUT e INPUT_PULLUP.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Pulsador entre el GPIO 4 y GND.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo del muestreo y circuito con la resistencia interna.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw · diagrama-circuito.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Leer el GPIO 4 cada 200 ms y publicar su nivel; repetir con <code>INPUT</code> para ver la entrada flotante.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Pulsador entre el <b>GPIO 4</b> (entrada digital) y GND, sin resistencia externa. Wokwi: DevKitC V4; vale cualquier DevKit ESP32.</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-pushbutton color="green"></wokwi-pushbutton>
+										<small>Pulsador</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">[GPIO4] nivel=1
+[GPIO4] nivel=1
+[GPIO4] nivel=0
+[GPIO4] nivel=0
+[GPIO4] nivel=1</div>
+								<p class="mt-2">Con <code>INPUT_PULLUP</code>: reposo 1, pulsado 0. Con <code>INPUT</code> el nivel cambia sin tocar nada.</p>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino.
+
+<b>2. Firmware.</b> Configura el GPIO 4 como INPUT_PULLUP en una sola línea, de modo que cambiarla a INPUT sea la única edición necesaria. Lee el pin con digitalRead() cada 200 ms y emite cada lectura a 115200 baudios con el formato exacto «[GPIO4] nivel=N». Sin antirrebote ni interrupciones.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el pulsador entre el GPIO 4 y GND, sin resistencia externa.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo del muestreo periódico y el circuito en las dos configuraciones, con la resistencia interna dibujada donde actúa.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> La configuración en una sola línea deja la polarización como única variable del experimento. Sin antirrebote, la señal llega tal como la entrega el contacto.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Una entrada sin polarizar no tiene nivel definido; con pull-up la lógica se invierte: pulsado = 0.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Arrancar con INPUT_PULLUP y comprobar reposo 1 y pulsado 0. Pregunta de predicción: al cambiar a INPUT, ¿qué se leerá con el botón suelto? Un nivel que cambia sin tocar el pulsador. En placa real, acercar la mano al cable; si el nivel cambia, la entrada responde al entorno y no al pulsador.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>pinMode(4, INPUT_PULLUP)</code> y <code>digitalRead(4)</code>, del núcleo de Arduino. Los GPIO 34–39 no tienen pull-up interna.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Esperar 1 al pulsar: con pull-up, pulsado se lee 0.</li><li>Wokwi no modela el ruido del entorno, así que la entrada flotante no se comporta como en la placa.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-entrada-flotante.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Entrada flotante y pull-up</span>
+				</a>
+				<a class="slide-nav__link" href="11-conversion-adc.html">
+					<span>Conversión analógica-digital</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

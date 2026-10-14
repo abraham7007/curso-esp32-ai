@@ -11,9 +11,9 @@ void loop() {
     StaticJsonDocument<200> doc;
     
     // 2. Simular lectura de sensores con datos aleatorios
-    float temp_simulada = 20.0 + random(0, 100) / 10.0;     // Entre 20.0 y 30.0
-    int hum_simulada = random(40, 80);                      // Entre 40 y 80
-    float presion_simulada = 1010.0 + random(0, 50) / 10.0; // Entre 1010.0 y 1015.0
+    float temp_simulada = 20.0 + random(0, 100) / 10.0;     // Entre 20.0 y 29.9 (random excluye el 100)
+    int hum_simulada = random(40, 80);                      // Entre 40 y 79 (random excluye el 80)
+    float presion_simulada = 1010.0 + random(0, 50) / 10.0; // Entre 1010.0 y 1014.9 (random excluye el 50)
     
     // 3. Asignar los valores al documento
     doc["temp"] = temp_simulada;

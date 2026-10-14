@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 10 · Orquestación · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 10</span>
+					</div>
+
+					<h2 class="code-hour__title">Un botón que alterna el LED entre modo manual y automático</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Tres clases reutilizadas.</span>
+								<span class="deliverable__file">platformio.ini · lib/ (Led, Boton, EntradaAnalogica) · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Pulsador, potenciómetro y LED.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de main.cpp y bloques.</span>
+								<span class="deliverable__file">diagrama-flujo-main.excalidraw · diagrama-bloques-clases.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Cada pulsación cambia de modo; en automático, el potenciómetro fija el brillo del LED.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Pulsador: <b>GPIO 4</b>. Potenciómetro: <b>GPIO 32</b>. LED con 220 Ω: <b>GPIO 2</b> (PWM).</p>
+								<div class="hw-set hw-set--cinco mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-pushbutton color="green"></wokwi-pushbutton>
+										<small>Pulsador</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-potentiometer></wokwi-potentiometer>
+										<small>Potenciómetro</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="red" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-resistor value="220"></wokwi-resistor>
+										<small>220 Ω</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">[MODO] MANUAL
+[MODO] AUTOMATICO
+[AUTO] adc=1.650V pwm=127
+...
+[AUTO] adc=3.300V pwm=255
+[MODO] MANUAL</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO para esp32dev con Arduino; copia en lib/ Led (06), Boton (07) y EntradaAnalogica (09), las dos últimas sin cambios.
+
+<b>2. Firmware.</b> En Led, amplía begin() para que configure también el LEDC (5 kHz, 8 bits; ledcAttach en 3.x, ledcSetup y ledcAttachPin en 2.x, con #if ESP_ARDUINO_VERSION_MAJOR &gt;= 3) y añade escribirPWM(uint8_t duty). main.cpp crea led(2), boton(4) y entrada(32, 16), imprime «[MODO] MANUAL» y en loop() llama a los dos update(); cada pulsación alterna bool automatico e imprime «[MODO] AUTOMATICO» o «[MODO] MANUAL». En automático aplica duty = (uint8_t)(leerVoltios() / 3.3 * 255) y, si cambió, imprime «[AUTO] adc=N.NNNV pwm=N». main.cpp no usa pinMode ni ledcWrite.
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi: pulsador en el GPIO 4, potenciómetro en el 32 y LED con 220 Ω en el 2.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de main.cpp y un diagrama de bloques de las tres clases con su interfaz pública.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Nombrar la única clase que cambia (<code>Led</code>) acota el código nuevo.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> <code>main.cpp</code> coordina tres objetos con una variable de estado; ninguna clase incluye la cabecera de otra.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>La línea [AUTO] se imprime cuando cambia el duty porque loop() no tiene pausa; imprimir en cada vuelta repetiría la misma línea sin interrupción. Pregunta de predicción: con el potenciómetro a 1,650 V, ¿qué valor de pwm imprime la traza? Respuesta: 127, porque el cast trunca 127,53. La etiqueta adc= muestra voltios, no el código del conversor. setup() no espera antes de imprimir; en placa real «[MODO] MANUAL» puede perderse si el monitor se abre después del arranque.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>ESP_ARDUINO_VERSION_MAJOR</code> viene de <code>esp_arduino_version.h</code>. En el núcleo 3.x el LEDC se maneja por pin, <code>ledcWrite(pin, duty)</code>; en 2.x, por canal.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Pasar <code>entrada</code> a una función por valor: la copia libera dos veces el búfer.</li><li>Olvidar <code>boton.begin()</code>: el pin queda sin pull-up y aparecen pulsaciones falsas.</li><li>Imprimir en cada vuelta, con lo que las líneas [AUTO] ocultan los cambios de modo.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-estado-programa.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Estado</span>
+				</a>
+				<a class="slide-nav__link" href="21-errores-ejecucion.html">
+					<span>Errores en ejecución</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

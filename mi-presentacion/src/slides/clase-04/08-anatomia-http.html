@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Petición · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · HTTP</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Petición y respuesta HTTP tienen la misma <em>estructura</em>
+				</h1>
+
+				<div class="crece flex flex-col gap-6 min-h-0">
+					<div class="mandos">
+						<fieldset class="mandos__grupo" aria-label="Parte del mensaje">
+							<button type="button" class="btn btn--primary" data-parte="inicio" aria-pressed="true">Línea inicial</button>
+							<button type="button" class="btn btn--secondary" data-parte="cab" aria-pressed="false">Cabeceras</button>
+							<button type="button" class="btn btn--secondary" data-parte="vacia" aria-pressed="false">Línea vacía</button>
+							<button type="button" class="btn btn--secondary" data-parte="cuerpo" aria-pressed="false">Cuerpo</button>
+						</fieldset>
+					</div>
+
+					<div class="s4a-http">
+						<div class="s4a-http__col">
+						<section class="codepanel" aria-label="Petición real del ejemplo 16">
+							<div class="codepanel__header">
+								<span class="codepanel__path">Petición · ESP32 → api.coingecko.com</span>
+							</div>
+							<pre><code><span class="s4a-ln" data-parte="inicio"><b>GET</b> /api/v3/simple/price <i class="s4a-sigue">↩</i></span><span class="s4a-ln" data-parte="inicio">    ?ids=bitcoin&amp;vs_currencies=usd <b>HTTP/1.1</b></span><span class="s4a-ln" data-parte="cab">Host: api.coingecko.com</span><span class="s4a-ln" data-parte="cab">User-Agent: ESP32HTTPClient</span><span class="s4a-ln" data-parte="cab">Connection: keep-alive</span><span class="s4a-ln" data-parte="cab">Accept-Encoding: identity;q=1,chunked;q=0.1,*;q=0</span><span class="s4a-ln s4a-ln--marca" data-parte="vacia">\r\n</span><span class="s4a-ln s4a-ln--marca" data-parte="cuerpo">(GET no lleva cuerpo)</span></code></pre>
+						</section>
+
+						<div class="def s4a-explica"><p id="s4a-explica" aria-live="polite"></p></div>
+						</div>
+
+						<section class="codepanel" aria-label="Respuesta real de CoinGecko">
+							<div class="codepanel__header">
+								<span class="codepanel__path">Respuesta · api.coingecko.com → ESP32</span>
+							</div>
+							<pre><code><span class="s4a-ln" data-parte="inicio"><b>HTTP/1.1</b> <b>200</b> OK</span><span class="s4a-ln" data-parte="cab">Date: Tue, 13 Oct 2026 12:35:42 GMT</span><span class="s4a-ln" data-parte="cab">Content-Type: application/json; charset=utf-8</span><span class="s4a-ln" data-parte="cab">Transfer-Encoding: chunked</span><span class="s4a-ln" data-parte="cab">Connection: keep-alive</span><span class="s4a-ln" data-parte="cab">Cache-Control: max-age=30, …, <b>s-maxage=60</b></span><span class="s4a-ln" data-parte="cab">vary: Accept-Encoding, Origin</span><span class="s4a-ln" data-parte="cab">Age: 13</span><span class="s4a-ln" data-parte="cab">cf-cache-status: HIT</span><span class="s4a-ln" data-parte="cab">Server: cloudflare</span><span class="s4a-ln s4a-ln--marca" data-parte="cab">… y 16 cabeceras más</span><span class="s4a-ln s4a-ln--marca" data-parte="vacia">\r\n</span><span class="s4a-ln" data-parte="cuerpo"><b>{"bitcoin":{"usd":83257}}</b></span></code></pre>
+						</section>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si se borra la línea vacía de la respuesta,
+					¿dónde termina la última cabecera y empieza el JSON? El receptor no puede determinarlo, porque esa línea marca el límite entre cabeceras y cuerpo. Recorrer las cuatro partes en los dos paneles: la petición empieza con método y ruta, y la respuesta con el código de estado; el resto de la estructura coincide.
+				</p>
+				<p>
+					Detenerse en <code>Cache-Control</code>. El ESP32 no guarda copia; la red de distribución de Cloudflare (<code>Server: cloudflare</code>) entrega la misma copia durante 60 s como máximo (<code>s-maxage=60</code>), y la cabecera <code>Age: 13</code> indica que esta copia tenía 13 s. Con consultas cada 5 s llega muchas veces el mismo precio (lámina 18). Petición
+					y respuesta son reales: la petición, tal como la compone HTTPClient; la
+					respuesta, capturada con curl enviando esas mismas cabeceras.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>http.begin(url)</code> separa host y ruta;
+						<code>http.GET()</code> envía la petición y devuelve el código;
+						<code>http.getString()</code> entrega el cuerpo. Para leer una cabecera:
+						<code>http.collectHeaders(nombres, n)</code> antes de
+						<code>GET()</code> y <code>http.header("Cache-Control")</code> después.
+					</p>
+					<h4>Detalle técnico</h4>
+					<p>
+						En el cable, la línea inicial de la petición es una sola; aquí se parte (↩) para que quepa. <code>Transfer-Encoding: chunked</code>: el cuerpo llega en bloques
+						precedidos de su longitud; <code>getString()</code> los une. Cada línea
+						termina en <code>\r\n</code>. La cabecera completa es <code>Cache-Control: max-age=30, public, must-revalidate, s-maxage=60</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>Olvidar <code>http.end()</code>, con lo que la conexión queda abierta y la memoria se agota tras varias consultas.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-cliente-pregunta.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>NAT</span>
+				</a>
+				<a class="slide-nav__link" href="09-codigos-estado.html">
+					<span>Códigos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			const textos = {
+				inicio:
+					"<b>Línea inicial</b>: método y ruta en la petición (<code>GET</code> + ruta), código de estado en la respuesta (<code>200</code>). <code>http.GET()</code> devuelve ese código.",
+				cab: "<b>Cabeceras</b>: «nombre: valor», una por línea. Con <code>s-maxage=60</code> y <code>HIT</code>, Cloudflare entrega la misma copia durante 60 s como máximo.",
+				vacia: "<b>Línea vacía</b>: separa cabeceras y cuerpo. Sin ella, el receptor no puede delimitar dónde empieza el cuerpo.",
+				cuerpo:
+					"<b>Cuerpo</b>: 25 bytes de JSON. Llega en bloques (<code>chunked</code>); <code>http.getString()</code> los une. Un <code>GET</code> no lleva cuerpo.",
+			};
+			const botones = document.querySelectorAll("button[data-parte]");
+			const lineas = document.querySelectorAll(".s4a-ln");
+			const explica = document.getElementById("s4a-explica");
+
+			function elegir(parte) {
+				for (const b of botones) {
+					const sel = b.dataset.parte === parte;
+					b.classList.toggle("btn--primary", sel);
+					b.classList.toggle("btn--secondary", !sel);
+					b.setAttribute("aria-pressed", String(sel));
+				}
+				for (const l of lineas) {
+					l.classList.toggle("is-selected", l.dataset.parte === parte);
+				}
+				explica.innerHTML = textos[parte];
+			}
+
+			for (const b of botones) b.addEventListener("click", () => elegir(b.dataset.parte));
+			elegir("inicio");
+		</script>
+	</body>
+</html>

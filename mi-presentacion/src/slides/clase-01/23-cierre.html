@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title">Resumen de la <em>sesión 1</em></h1>
+
+				<ol class="puntos crece justify-evenly">
+					<li class="text-4xl">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Restricciones</p>
+							<p class="slide__lede col-span-3">3,3 V, corriente limitada, pines reservados y entradas que requieren polarización.</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="1">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">ADC y PWM</p>
+							<p class="slide__lede col-span-3">Cuantización en escalones (ADC) y valor medio fijado por el ciclo de trabajo (PWM).</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="2">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Construcción</p>
+							<p class="slide__lede col-span-3">Cinco programas encadenados; la primera línea del error identifica la etapa.</p>
+						</div>
+					</li>
+					<li class="text-4xl" data-paso="3">
+						<div class="grid grid-cols-5 items-center gap-12">
+							<p class="enunciado col-span-2">Reproducibilidad</p>
+							<p class="slide__lede col-span-3"><code>platformio.ini</code> y la simulación permiten repetir el trabajo en cualquier equipo.</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="def">
+					<p>
+						<b>Documentación de referencia</b> ·
+						<a href="https://documentation.espressif.com/esp32_datasheet_en.pdf" target="_blank" rel="noopener">Hoja de datos del ESP32 (Espressif)</a>
+						·
+						<a href="https://docs.platformio.org/en/latest/platforms/espressif32.html" target="_blank" rel="noopener">PlatformIO: plataforma Espressif 32</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Revelar una idea por vez y pedir a la clase un ejemplo de la sesión para
+					cada una. Ejemplos posibles: el GPIO 12 que impide arrancar, el error de
+					±½ escalón del ADC y el LED que brilla igual a 500 Hz que a 5 kHz, el
+					<code>undefined reference</code> que no señala línea, el
+					<code>platformio.ini</code> de cinco líneas que basta para compilar en
+					otro equipo. La hoja de datos es la fuente de toda cifra eléctrica
+					citada hoy.
+				</p>
+				<p>
+					Pregunta de predicción: con el WiFi activo, ¿qué conversor deja de
+					medir, el ADC1 o el ADC2? Deja de medir el ADC2.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Términos de la sesión</h4>
+					<ul>
+						<li><b>SoC</b> (<i>system on a chip</i>): CPU, memoria, periféricos y radio en un solo circuito integrado.</li>
+						<li><b>Strapping pin</b>: terminal leído al salir del reset que fija el modo de arranque (GPIO 0, 2, 12, 15).</li>
+						<li><b>Entrada flotante</b>: terminal sin nada que fije su potencial; su lectura no es reproducible.</li>
+						<li><b>Pull-up</b>: resistencia a 3,3 V que fija el reposo en 1 (~45 kΩ interna; no en GPIO 34–39).</li>
+						<li><b>Ciclo de trabajo</b> (<i>duty cycle</i>): fracción del período en alto de una señal PWM.</li>
+						<li><b>LEDC</b>: controlador PWM por hardware del ESP32.</li>
+						<li><b>Toolchain cruzada</b>: compilador, ensamblador y enlazador que generan código para otra arquitectura (Xtensa).</li>
+						<li><b>Tabla de particiones</b>: mapa de regiones de la Flash (aplicación, datos, sistema de archivos).</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="22-codigo-05-memoria-wifi.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 05 · Costo del WiFi</span>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

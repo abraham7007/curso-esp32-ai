@@ -8,7 +8,7 @@ mirar qué hay dentro y confirmarlo.
 
 | Carpeta | Qué es | Se edita |
 |---|---|---|
-| `mi-presentacion/` | **El curso actual.** 12 sesiones, 322 láminas HTML + sus herramientas. Es donde se trabaja. | Sí |
+| `mi-presentacion/` | **El curso actual.** 6 sesiones en láminas HTML + sus herramientas. Es donde se trabaja. Lo retirado está en `mi-presentacion/archivo/`. | Sí |
 | `metodologia-curso/` | Kit portátil para arrancar un curso **de otro tema**: sistema de diseño, 17 herramientas genéricas y `METODOLOGIA-DE-CURSO.md`. Autocontenido a propósito. | Solo al mejorar el método |
 | `ejemplos/` | Los proyectos PlatformIO terminados que el estudiante construye en «La hora del código». Uno por ejemplo. | Sí |
 | `borrador ejemplos/` | Pruebas desechables (`prueba1`…`prueba8`) previas a los ejemplos definitivos. **El material del estudiante nunca cita estos nombres.** | No |

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Datos en pantalla · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Datos en pantalla</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Los <em>campos</em> útiles del JSON pasan a variables
+				</h1>
+
+				<div class="def">
+					<p>Respuesta real de CoinGecko en el ejemplo 16b: ArduinoJson (sesión 3 · 20) recorre la ruta de claves y copia el número en una variable.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, el cuerpo de la respuesta de CoinGecko, 53 bytes: bitcoin, usd 83257; dogecoin, usd 0.083771. En el centro, las rutas doc corchete bitcoin corchete usd, que va a la variable float precioBTC, y doc corchete dogecoin corchete usd, que va a precioDOGE. A la derecha, la pantalla OLED de 128 por 64 píxeles dibujada a escala 4 a 1: MERCADO CRIPTO, una línea, BTC en tamaño 2 y el precio 83257.00 USD. A los 5 segundos muestra DOGE, 0.0838 USD.">
+						<!-- A · cuerpo de la respuesta -->
+						<text class="sans mut" x="0" y="28" font-size="30">cuerpo · 53 bytes de texto</text>
+						<rect class="caja" x="0" y="64" width="520" height="496" rx="12" />
+						<text x="28" y="116" font-size="36">{</text>
+						<text x="64" y="172" font-size="36">"bitcoin": {</text>
+						<text class="acc" x="100" y="228" font-size="36">"usd": 83257</text>
+						<text x="64" y="284" font-size="36">},</text>
+						<text x="64" y="340" font-size="36">"dogecoin": {</text>
+						<text class="navy" x="100" y="396" font-size="36">"usd": 0.083771</text>
+						<text x="64" y="452" font-size="36">}</text>
+						<text x="28" y="508" font-size="36">}</text>
+
+						<!-- B · rutas -->
+						<text class="sans mut" x="560" y="28" font-size="30">ruta de claves → variable</text>
+						<path class="ln ln--acc" d="M366 228 H540 V230 H560" />
+						<path class="ln ln--navy" d="M446 396 H548 V410 H560" />
+						<rect class="caja caja--acc" x="560" y="160" width="480" height="140" rx="12" />
+						<text class="acc" x="584" y="205" font-size="32">doc["bitcoin"]["usd"]</text>
+						<text x="584" y="260" font-size="32">→ float precioBTC</text>
+						<rect class="caja" x="560" y="340" width="480" height="140" rx="12" />
+						<text class="navy" x="584" y="385" font-size="32">doc["dogecoin"]["usd"]</text>
+						<text x="584" y="440" font-size="32">→ float precioDOGE</text>
+
+						<!-- C · OLED a escala 4:1: el vidrio rodea el área activa de 512 × 256 -->
+						<text class="sans mut" x="1060" y="28" font-size="30">OLED 128 × 64 px · escala 4:1</text>
+						<path class="ln ln--acc" d="M1040 230 H1060" />
+						<rect class="s4d-oled" x="1060" y="56" width="540" height="284" rx="8" />
+						<text class="s4d-oled-t" x="1134" y="86" font-size="34" textLength="336" lengthAdjust="spacingAndGlyphs">MERCADO CRIPTO</text>
+						<line class="s4d-oled-ln" x1="1074" y1="112" x2="1586" y2="112" />
+						<text class="s4d-oled-t" x="1074" y="202" font-size="68" textLength="144" lengthAdjust="spacingAndGlyphs">BTC</text>
+						<text class="s4d-oled-t" x="1074" y="278" font-size="34" textLength="336" lengthAdjust="spacingAndGlyphs">$ 83257.00 USD</text>
+						<text class="sans mut" x="1060" y="396" font-size="30">a los 5 s: DOGE · $ 0.0838 USD</text>
+						<text class="mut" x="1060" y="448" font-size="26">printf("$ %.2f USD", precioBTC)</text>
+
+						<!-- paso 1 · qué sobrevive -->
+						<g data-paso="1">
+							<path class="ln ln--fina ln--mut" d="M0 610 H1600" />
+							<text class="sans" x="0" y="666" font-size="34">Al salir de la función se liberan payload y doc; de los 53 bytes quedan dos <tspan class="acc">float</tspan> (8 bytes).</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Señalar la ruta de izquierda a derecha: la respuesta es texto; deserializeJson
+					lo convierte en un árbol dentro de doc; la ruta ["bitcoin"]["usd"] baja dos
+					niveles y entrega un número, que se copia a una variable global. La pantalla no lee JSON; dibuja el valor de la variable. Pregunta de predicción (antes del paso): cuando la función termina, ¿qué queda en memoria de la respuesta? Quedan los dos float, 8 bytes; payload y doc se liberan. La OLED está a escala: cada píxel real son 4 × 4
+					del dibujo, y el texto de tamaño 1 ocupa 6 × 8 píxeles por carácter.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>String payload = http.getString();</code>,
+						<code>StaticJsonDocument&lt;256&gt; doc;</code>,
+						<code>deserializeJson(doc, payload)</code> y, si no hay error,
+						<code>precioBTC = doc["bitcoin"]["usd"];</code>. Una clave inexistente devuelve 0 sin señalar error; se comprueba con
+						<code>doc["bitcoin"]["usd"].is&lt;float&gt;()</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplos 16 (monitor serie) y 16b (OLED SSD1306 en 0x3C por I²C, sesión 3 · 09).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Escribir mal una clave (<code>"USD"</code>), con lo que el precio sale 0.00 sin aviso.</li>
+						<li>Dibujar dentro de la función de red, con lo que la pantalla solo cambia al ritmo de la consulta.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-http-https.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>HTTPS</span>
+				</a>
+				<a class="slide-nav__link" href="13-dos-ritmos.html">
+					<span>Dos ritmos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>lib/ y src/ · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Módulos y archivos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Los módulos reutilizables van en <em>lib/</em>
+				</h1>
+
+				<div class="rd s2 s2-lib crece">
+					<section class="arbol s2-arbol" aria-label="Archivos del ejemplo 10">
+						<ul>
+							<li>
+								<div class="arbol__fila"><span class="arbol__nombre">10-modo-manual-automatico/</span></div>
+								<ul>
+									<li>
+										<div class="arbol__fila"><span class="arbol__nombre">lib/</span><span class="arbol__nota">módulos</span></div>
+										<ul>
+											<li>
+												<div class="arbol__fila"><span class="arbol__nombre">Boton/</span><span class="s2-origen" data-paso="1">del 07, idéntica</span></div>
+												<ul>
+													<li><div class="arbol__fila"><span class="arbol__nombre">Boton.h · Boton.cpp</span></div></li>
+												</ul>
+											</li>
+											<li>
+												<div class="arbol__fila"><span class="arbol__nombre">EntradaAnalogica/</span><span class="s2-origen" data-paso="1">del 09, idéntica</span></div>
+												<ul>
+													<li><div class="arbol__fila"><span class="arbol__nombre">EntradaAnalogica.h · .cpp</span></div></li>
+												</ul>
+											</li>
+											<li>
+												<div class="arbol__fila"><span class="arbol__nombre">Led/</span><span class="s2-origen s2-origen--cambia" data-paso="2">del 06 + LEDC en begin() y escribirPWM()</span></div>
+												<ul>
+													<li><div class="arbol__fila"><span class="arbol__nombre">Led.h · Led.cpp</span></div></li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<div class="arbol__fila"><span class="arbol__nombre">src/</span><span class="arbol__nota">la aplicación</span></div>
+										<ul>
+											<li><div class="arbol__fila"><span class="arbol__nombre">main.cpp</span></div></li>
+										</ul>
+									</li>
+									<li><div class="arbol__fila"><span class="arbol__nombre">platformio.ini</span><span class="arbol__nota">sin lib_deps</span></div></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<div class="s2-lib__der">
+						<section class="codepanel s2-codigo" aria-label="Comienzo de src/main.cpp del ejemplo 10">
+							<div class="codepanel__header">
+								<span class="codepanel__path">
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+									<span>src/main.cpp · ejemplo 10</span>
+								</span>
+							</div>
+							<div class="s2-lineas">
+								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
+								<span class="s2-l s2-l--h">#include "Led.h"</span>
+								<span class="s2-l s2-l--h">#include "Boton.h"</span>
+								<span class="s2-l s2-l--h">#include "EntradaAnalogica.h"</span>
+								<span class="s2-l"> </span>
+								<span class="s2-l">Led led(2);</span>
+								<span class="s2-l">Boton boton(4);</span>
+								<span class="s2-l">EntradaAnalogica entrada(32, 16);</span>
+								<span class="s2-l">bool automatico = false;</span>
+								<span class="s2-l">uint8_t dutyPrevio = 0;</span>
+							</div>
+						</section>
+						<p class="s2-lib__pie">
+							PlatformIO encuentra cada <code>#include</code> en <code>lib/</code> y
+							compila esa carpeta como una librería más.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: para usar el botón del ejemplo 07 en el 10,
+					¿qué hay que cambiar en <code>Boton.cpp</code>? Respuesta: ninguna
+					línea. Paso 1: <code>Boton</code> y <code>EntradaAnalogica</code> son
+					copias exactas de las carpetas del 07 y del 09. Paso 2:
+					<code>Led</code> cambia; añade <code>escribirPWM(uint8_t)</code>, y
+					<code>begin()</code> conecta el pin al LEDC (5 kHz, 8 bits) con código
+					que compila en el núcleo Arduino 2.x y 3.x. Lo que no se reutiliza (el
+					modo, los pines concretos) queda en <code>src/main.cpp</code>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Una carpeta por módulo: <code>lib/Nombre/Nombre.h</code> y
+						<code>lib/Nombre/Nombre.cpp</code>. El buscador de dependencias de
+						PlatformIO (LDF) recorre los <code>#include</code> de
+						<code>src/</code> y compila cada módulo de <code>lib/</code> que
+						encuentra; no hace falta declararlo en <code>platformio.ini</code>.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						En el 10, <code>Led::begin()</code> conecta el pin al LEDC con
+						<code>ledcAttach()</code> (núcleo 3.x) o con <code>ledcSetup()</code> +
+						<code>ledcAttachPin()</code> (2.x), según
+						<code>#if ESP_ARDUINO_VERSION_MAJOR &gt;= 3</code>, y
+						<code>escribirPWM()</code> llama a <code>ledcWrite()</code>.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Colocar <code>Boton.h</code> y <code>Boton.cpp</code> directamente en
+						<code>lib/</code>, sin carpeta propia. PlatformIO no los reconoce
+						como librería.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-guardas-inclusion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Guardas</span>
+				</a>
+				<a class="slide-nav__link" href="06-clase-objeto.html">
+					<span>Clase y objeto</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

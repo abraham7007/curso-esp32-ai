@@ -1,0 +1,11 @@
+# Versiones con las que se ejecutaron simular_datos.py y entrenar.py
+# (Python 3.11.7, macOS arm64, octubre de 2026). pandas 3 exige Python >= 3.11.
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r requirements.txt      (Windows: .venv\Scripts\pip)
+emlearn==0.23.2
+scikit-learn==1.9.1
+numpy==2.4.6
+pandas==3.0.6
+scipy==1.17.1
+joblib==1.6.0
+threadpoolctl==3.7.0

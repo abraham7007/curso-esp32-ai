@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Clave de la API · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">05 · APIs con clave</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La clave se guarda fuera del <em>código</em> y viaja por HTTPS
+				</h1>
+
+				<div class="def">
+					<p>En el ejemplo 18, la clave está en un archivo que git ignora, y la petición va por HTTPS porque la clave forma parte de la URL.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del proyecto 18: include/secrets.h, que no se sube; include/secrets.example.h, src/main.cpp y .gitignore, que sí se suben; el .gitignore lista include/secrets.h. A la derecha, secrets.h define OWM_API_KEY con la clave real y secrets.example.h con TU_API_KEY_AQUI, que responde 401. En el centro, main.cpp incluye secrets.h si existe y, si no, la plantilla; la URL se arma con https y appid igual a OWM_API_KEY. Abajo, la misma petición por HTTP deja leer la clave en la red; por HTTPS viaja cifrada frente a quien solo escucha, pero sin verificar el certificado un impostor la lee.">
+						<!-- árbol del proyecto -->
+						<text class="sans mut" x="0" y="20" font-size="26">18-clima-openweathermap/</text>
+						<text x="0" y="66" font-size="28">include/</text>
+						<text class="acc" x="40" y="108" font-size="28">secrets.h</text>
+						<text class="sans acc" x="560" y="108" font-size="26" text-anchor="end">✗ no se sube</text>
+						<text x="40" y="150" font-size="28">secrets.example.h</text>
+						<text class="sans ok" x="560" y="150" font-size="26" text-anchor="end">✓ se sube</text>
+						<text x="0" y="192" font-size="28">src/main.cpp</text>
+						<text class="sans ok" x="560" y="192" font-size="26" text-anchor="end">✓ se sube</text>
+						<text x="0" y="234" font-size="28">.gitignore</text>
+						<text class="sans ok" x="560" y="234" font-size="26" text-anchor="end">✓ se sube</text>
+						<text class="mut" x="40" y="272" font-size="24">↳ contiene: include/secrets.h</text>
+						<path class="ln ln--fina ln--mut" d="M14 84 V150 H34 M14 108 H34" />
+
+						<!-- los dos archivos de la clave -->
+						<rect class="caja caja--acc" x="620" y="0" width="980" height="126" rx="12" />
+						<text class="sans acc" x="644" y="36" font-size="26">include/secrets.h · solo en el equipo local</text>
+						<text x="644" y="86" font-size="30">#define OWM_API_KEY "<tspan class="acc">clave de 32 caracteres</tspan>"</text>
+						<rect class="caja" x="620" y="152" width="980" height="126" rx="12" />
+						<text class="sans mut" x="644" y="188" font-size="26">include/secrets.example.h · plantilla versionada</text>
+						<text x="644" y="238" font-size="30">#define OWM_API_KEY "TU_API_KEY_AQUI"<tspan class="mut" font-size="26">  → 401</tspan></text>
+
+						<!-- main.cpp -->
+						<rect class="caja" x="0" y="339" width="1600" height="196" rx="12" />
+						<text class="sans mut" x="24" y="373" font-size="26">src/main.cpp</text>
+						<text x="24" y="417" font-size="28">#if __has_include("secrets.h")  #include "secrets.h"  #else  #include "secrets.example.h"</text>
+						<text x="24" y="461" font-size="28">String url = "<tspan class="ok">https</tspan>://api.openweathermap.org/data/2.5/weather?q=" + ciudad</text>
+						<text x="244" y="501" font-size="28">+ "&amp;units=metric&amp;appid=" + <tspan class="acc">OWM_API_KEY</tspan>;</text>
+
+						<!-- lo que ve la red -->
+						<text class="sans dan" x="0" y="612" font-size="30" font-weight="700">HTTP</text>
+						<rect class="barra--dan" x="150" y="582" width="1450" height="60" rx="8" />
+						<text class="dan" x="170" y="612" font-size="26">GET /data/2.5/weather?q=Lima,PE&amp;units=metric&amp;appid=3f9a…  ← legible en la red</text>
+						<text class="sans ok" x="0" y="688" font-size="30" font-weight="700">HTTPS</text>
+						<rect class="barra--ok" x="150" y="658" width="1450" height="60" rx="8" />
+						<text class="ok" x="170" y="688" font-size="26">▮▮▮▮ cifrado frente a escuchas pasivas; un impostor (lámina 11) lee la clave</text>
+
+						<!-- paso 1: qué hacer si ya se subió -->
+						<g data-paso="1">
+							<text class="sans" x="0" y="752" font-size="28">Clave publicada en un repositorio: <tspan class="acc">revocarla y crear otra</tspan>; el historial de git conserva la clave borrada.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer el árbol: de los cuatro archivos, solo secrets.h queda fuera de git.
+					Quien clona el proyecto recibe la plantilla; el main.cpp la usa si falta
+					secrets.h, así que compila igual y la API responde 401 hasta que se coloca una clave propia. Abajo, el porqué del HTTPS: OpenWeatherMap pide la clave en la URL
+					(appid), y por HTTP esa URL viaja legible por cualquiera en la red (la
+					simulación de la lámina 11). Recordar que sin certificado cargado el canal
+					va cifrado pero no verificado: protege frente a quien escucha, pero no frente a un impostor que suplanta al servidor. Pregunta de predicción (antes del paso): si la clave ya se subió a GitHub, ¿basta con borrarla del repositorio? No basta, porque queda en el historial; hay que revocarla y crear otra.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>cp include/secrets.example.h include/secrets.h</code> y poner la clave
+						de <code>home.openweathermap.org/api_keys</code>. En
+						<code>.gitignore</code>: <code>include/secrets.h</code>. Sin el archivo,
+						la compilación avisa con <code>#warning</code> y usa la plantilla.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 18 (clima de Lima,PE).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Añadir secrets.h al <code>.gitignore</code> después de subirlo, cuando git ya lo sigue.</li>
+						<li>Suponer que la clave queda protegida dentro del binario, del que se extrae leyendo la flash.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-limite-uso.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cuota</span>
+				</a>
+				<a class="slide-nav__link" href="20-codigo-18-clima.html">
+					<span>Ejemplo 18 · Clima</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

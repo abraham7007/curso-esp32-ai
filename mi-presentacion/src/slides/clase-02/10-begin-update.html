@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>begin() y update() · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Tiempo sin bloqueo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Secuencia constructor, <em>begin()</em> y update() de un módulo
+				</h1>
+
+				<div class="rd linea-t crece">
+					<span class="linea-t__eje" aria-hidden="true"></span>
+					<section class="hito hito--ctor" aria-label="Constructor">
+						<p class="hito__cuando">Constructor</p>
+						<ul class="hito__estado">
+							<li><span>_pin</span><b>4</b></li>
+							<li><span>_state</span><b>false</b></li>
+							<li><span>_lastDebounceTime</span><b>0</b></li>
+						</ul>
+						<span class="hito__punto" aria-hidden="true"></span>
+						<span class="hito__tallo" aria-hidden="true"></span>
+						<code class="hito__llamada">Boton boton(4);</code>
+						<p class="hito__que" data-paso="1">guarda el pin</p>
+					</section>
+					<section class="hito hito--setup" aria-label="setup()">
+						<p class="hito__cuando">setup()</p>
+						<ul class="hito__estado">
+							<li><span>GPIO 4</span><b>INPUT_PULLUP</b></li>
+							<li><span>_state</span><b>lectura del pin</b></li>
+							<li><span>_lastDebounceTime</span><b>millis()</b></li>
+						</ul>
+						<span class="hito__punto" aria-hidden="true"></span>
+						<span class="hito__tallo" aria-hidden="true"></span>
+						<code class="hito__llamada">boton.begin();</code>
+						<p class="hito__que" data-paso="2">configura el pin, una vez</p>
+					</section>
+					<section class="hito hito--loop" aria-label="loop(), vuelta 1">
+						<p class="hito__cuando">loop() · 1</p>
+						<ul class="hito__estado">
+							<li><span>lectura</span><b>digitalRead(4)</b></li>
+							<li><span>si cambió</span><b>reinicia la ventana</b></li>
+							<li><span>_state</span><b>sin cambio</b></li>
+						</ul>
+						<span class="hito__punto" aria-hidden="true"></span>
+						<span class="hito__tallo" aria-hidden="true"></span>
+						<code class="hito__llamada">boton.update();</code>
+						<p class="hito__que" data-paso="3">lee y retorna</p>
+					</section>
+					<section class="hito hito--loop" aria-label="loop(), vuelta n">
+						<p class="hito__cuando">loop() · n</p>
+						<ul class="hito__estado">
+							<li><span>lectura</span><b>estable</b></li>
+							<li><span>now − _lastDebounceTime</span><b>≥ 30 ms</b></li>
+							<li><span>_state</span><b>true → fuePulsado()</b></li>
+						</ul>
+						<span class="hito__punto" aria-hidden="true"></span>
+						<span class="hito__tallo" aria-hidden="true"></span>
+						<code class="hito__llamada">boton.update();</code>
+						<p class="hito__que" data-paso="3">evento tras 30 ms estable</p>
+					</section>
+					<section class="hito hito--loop hito--mas" aria-label="Vueltas siguientes">
+						<p class="hito__cuando">…</p>
+						<span class="hito__tallo hito__tallo--largo" aria-hidden="true"></span>
+						<span class="hito__punto" aria-hidden="true"></span>
+						<span class="hito__tallo" aria-hidden="true"></span>
+						<code class="hito__llamada">…</code>
+						<p class="hito__que" data-paso="3">tiempo →</p>
+					</section>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer la línea de tiempo con un objeto, el Boton del ejemplo 07.
+					El constructor se ejecuta antes que setup(), durante el arranque;
+					guarda el pin y pone a cero la ventana antirrebote. setup() llama a
+					begin() una vez: pinMode(4, INPUT_PULLUP). Después, loop() llama a
+					update() en cada vuelta, miles de veces por segundo; update() lee el
+					pin, comprueba si lleva 30 ms estable y retorna sin esperar. En el
+					ejemplo 10, tres objetos siguen la misma secuencia; EntradaAnalogica no
+					tiene begin() porque analogRead() no necesita pinMode(). Pregunta de
+					predicción: si update() esperara los 30 ms con delay(), ¿qué ocurriría
+					con el resto de loop()? Respuesta: quedaría detenido durante la espera
+					(sesión 1 · 04).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						El constructor de un objeto global se ejecuta durante el arranque,
+						antes de <code>app_main()</code> y, por tanto, antes de
+						<code>initArduino()</code> y de <code>setup()</code>; el orden
+						entre archivos distintos no está definido. Por eso
+						<code>pinMode()</code> va en <code>begin()</code>. El constructor de
+						<code>EntradaAnalogica</code> sí reserva memoria
+						(<code>new uint16_t[16]</code>), pero no accede al ADC.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplos 07 (<code>Boton</code>), 09 (<code>EntradaAnalogica</code>)
+						y 10, cuyo <code>main.cpp</code> sigue exactamente esta secuencia.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Olvidar <code>begin()</code>: compila, pero el pin queda sin configurar y el LED no responde.</li>
+						<li>Un <code>delay()</code> dentro de <code>update()</code> detiene todos los módulos.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-delay-millis.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>millis()</span>
+				</a>
+				<a class="slide-nav__link" href="11-antirrebote.html">
+					<span>Antirrebote</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

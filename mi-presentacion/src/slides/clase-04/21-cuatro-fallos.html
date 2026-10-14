@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cuatro fallos · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">06 · Robustez</span>
+
+				<h1 class="slide__title slide__title--sm">
+					«Sin dato» tiene cuatro <em>causas</em>
+				</h1>
+
+				<div class="def">
+					<p>En el aparato solo se ve la falta de dato; el monitor serie distingue los cuatro casos, y cada uno requiere una acción distinta.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de cuatro causas. WiFi caído: el monitor muestra Sin conexión tras 20 segundos o no se llega a llamar a GET; acción, reintentar la asociación. DNS: Error HTTP menos 1, connection refused, tras hasta 14 segundos; WiFi.hostByName devuelve 0; acción, red sin salida, reintentar más tarde. Tiempo agotado: menos 1 si no conecta, tras 5 segundos o, con HTTPS, hasta 120 del saludo TLS; menos 11 read Timeout si conecta y no contesta; acción, reintentar con espera creciente y conservar el último dato. El servidor responde con error: 401 clave, 404 ciudad, 429 demasiadas peticiones, 5xx servidor; acción, corregir 401 y 404 sin reintentar, espaciar ante 429, reintentar ante 5xx. Abajo, el dato caducado: guardar el último valor con su instante y mostrar su edad.">
+						<!-- cabecera -->
+						<text class="sans mut" x="0" y="22" font-size="26">causa</text>
+						<text class="sans mut" x="340" y="22" font-size="26">mensaje en el monitor serie</text>
+						<text class="sans mut" x="1150" y="22" font-size="26">acción</text>
+						<path class="ln ln--fina" d="M0 46 H1600" />
+
+						<!-- 1 · WiFi -->
+						<rect class="s4d-fila" x="0" y="56" width="1600" height="120" rx="8" />
+						<text class="sans" x="16" y="98" font-size="32" font-weight="700">1 · WiFi caído</text>
+						<text class="sans mut" x="16" y="140" font-size="26">o tope de 20 s</text>
+						<text class="navy" x="340" y="98" font-size="26">[WiFi] Sin conexión tras 20 s. …</text>
+						<text class="mut" x="340" y="140" font-size="24">WiFi.status() != WL_CONNECTED → no hay GET</text>
+						<text class="sans" x="1150" y="98" font-size="26">Reintentar la asociación;</text>
+						<text class="sans" x="1150" y="140" font-size="26">sin intento de HTTP.</text>
+
+						<!-- 2 · DNS -->
+						<text class="sans" x="16" y="228" font-size="32" font-weight="700">2 · DNS</text>
+						<text class="sans mut" x="16" y="270" font-size="26">el nombre no resuelve</text>
+						<text class="acc" x="340" y="228" font-size="26">Error HTTP: -1 (connection refused)</text>
+						<text class="mut" x="340" y="270" font-size="24">hasta 14 s · WiFi.hostByName() devuelve 0</text>
+						<text class="sans" x="1150" y="228" font-size="26">Red sin salida a Internet;</text>
+						<text class="sans" x="1150" y="270" font-size="26">avisar y reintentar luego.</text>
+
+						<!-- 3 · tiempo agotado -->
+						<rect class="s4d-fila" x="0" y="316" width="1600" height="120" rx="8" />
+						<text class="sans" x="16" y="358" font-size="32" font-weight="700">3 · Tiempo agotado</text>
+						<text class="sans mut" x="16" y="400" font-size="26">sin respuesta del servidor</text>
+						<text class="acc" x="340" y="358" font-size="26">-1 si no conecta <tspan class="mut" font-size="24">(5 s; con HTTPS, TLS hasta 120 s)</tspan></text>
+						<text class="acc" x="340" y="400" font-size="26">-11 (read Timeout) <tspan class="mut" font-size="24">si conecta y no contesta</tspan></text>
+						<text class="sans" x="1150" y="358" font-size="26">Reintentar con espera</text>
+						<text class="sans" x="1150" y="400" font-size="26">creciente; conservar el dato.</text>
+
+						<!-- 4 · el servidor responde con error -->
+						<text class="sans" x="16" y="488" font-size="32" font-weight="700">4 · Código de error</text>
+						<text class="sans mut" x="16" y="530" font-size="26">código positivo</text>
+						<text class="navy" x="340" y="488" font-size="26">Error HTTP 401 · 404 · 429 · 503</text>
+						<text class="mut" x="340" y="530" font-size="24">el servidor contestó; la red funciona</text>
+						<text class="sans" x="1150" y="488" font-size="26">401/404: corregir sin reintentar.</text>
+						<text class="sans" x="1150" y="530" font-size="26">429: espaciar · 5xx: reintentar.</text>
+
+						<path class="ln ln--fina ln--mut" d="M0 572 H1600" />
+						<text class="sans" x="0" y="610" font-size="28"><tspan class="acc">-1</tspan> no separa DNS de conexión; <tspan class="s4d-mono">WiFi.hostByName()</tspan> antes del GET los distingue.</text>
+
+						<!-- paso 1: el dato caducado -->
+						<g data-paso="1">
+							<rect class="barra--warn" x="0" y="640" width="1600" height="76" rx="10" />
+							<text class="sans warn" x="24" y="678" font-size="28">Dato caducado: guardar el último valor con su millis() y mostrar su edad junto al número.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Ante un negativo, el 16 imprime solo el texto («[HTTP] Error de conexión:
+					connection refused»); el 16b y el 17, número y texto («Error HTTP: -1
+					(connection refused)»); el 18 tiene un mensaje propio para 401, 404 y 429 y
+					solo usa <code>HTTPClient::errorToString()</code> con los negativos. Los negativos los genera la biblioteca: -1 cubre DNS, conexión que no se completa en 5 s y fallo del TLS, cuyo saludo tiene un tope de 120 s; -11 llega cuando la conexión se abrió y la respuesta no.
+					Resolver el nombre antes del GET separa el fallo de DNS de los demás. Un código positivo indica que la red funciona y que el problema está en la petición o en el servicio. Pregunta de predicción (antes del paso): si el WiFi cae una hora, ¿qué debe mostrar la OLED del ejemplo 18? Lo correcto es el último valor válido junto con su edad, para no presentarlo como vigente. El ejemplo 18 tal como está muestra «ERROR DE CONEXION» hasta la consulta siguiente; guardar el último dato con su hora queda como mejora.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>HTTPClient.h</code> (núcleo 2.0.17): -1
+						<code>HTTPC_ERROR_CONNECTION_REFUSED</code>, -11
+						<code>HTTPC_ERROR_READ_TIMEOUT</code>; plazos por defecto de 5000 ms,
+						ajustables con <code>http.setConnectTimeout()</code> y
+						<code>http.setTimeout()</code>; con HTTPS el saludo TLS espera hasta 120 s
+						(<code>WiFiClientSecure::setHandshakeTimeout()</code>, en segundos). <code>IPAddress ip;
+						WiFi.hostByName("api.openweathermap.org", ip)</code> devuelve 0 si el DNS falla.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 18: un mensaje distinto para 401, 404, 429 y negativos. Ejemplos 16b y 17: código y texto.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Reintentar un 401 cada minuto, que no se resuelve repitiendo y gasta cuota.</li>
+						<li>Leer -1 como un rechazo del servidor, cuando puede venir del DNS o del TLS.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-codigo-18-clima.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 18 · Clima</span>
+				</a>
+				<a class="slide-nav__link" href="22-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

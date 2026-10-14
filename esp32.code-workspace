@@ -68,6 +68,15 @@
 		},
 		{
 			"path": "ejemplos/18-clima-openweathermap"
+		},
+		{
+			"path": "ejemplos/19-blynk-dashboard-iot"
+		},
+		{
+			"path": "ejemplos/20-gestos-imu-nano33"
+		},
+		{
+			"path": "ejemplos/21-colores-apds9960-nano33"
 		}
 	],
 	"settings": {}

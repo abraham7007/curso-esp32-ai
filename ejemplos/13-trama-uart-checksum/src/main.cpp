@@ -44,7 +44,7 @@ void enviarTrama() {
     uint8_t id = contadorPaquetes++;
     String texto = "Hola " + String(id);
     uint8_t longitud = texto.length();
-    uint8_t carga[longitud];
+    uint8_t carga[longitud + 1]; // +1: getBytes() escribe también el terminador nulo
     texto.getBytes(carga, longitud + 1);
 
     uint8_t checksum = calcularChecksum(id, longitud, carga);

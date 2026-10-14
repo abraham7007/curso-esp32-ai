@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 17 · Astronautas · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s4b-compacto">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-layers" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 17</span>
+					</div>
+
+					<h2 class="code-hour__title">La lista de astronautas, paginada de cinco en cinco en la OLED</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Lista JSON paginada.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">ESP32 y OLED por I²C.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de descarga y páginas.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Descargar cada 60 s la lista de open-notify, guardar hasta 15 nombres y mostrarlos en páginas de 5, cada 4 s.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>La OLED del Ejemplo 16b, en 0x3C.</p>
+								<svg class="s3-esquema s4b-esquema" role="img" aria-label="OLED SSD1306 en 0x3C: GND a GND, VCC a 3V3, SCL al GPIO 22 y SDA al GPIO 21 del ESP32" viewBox="0 0 340 160" width="340" height="160"><rect class="s3-esq__caja" x="1" y="1" width="95" height="158" rx="6" /><rect class="s3-esq__caja" x="244" y="1" width="95" height="158" rx="6" /><text class="s3-esq__tit" x="48" y="26" text-anchor="middle">ESP32</text><text class="s3-esq__tit" x="291.5" y="26" text-anchor="middle">SSD1306</text><text class="s3-esq__sub" x="291.5" y="46" text-anchor="middle">0x3C</text><text class="s3-esq__pin" x="88" y="76" text-anchor="end">GND</text><text class="s3-esq__pin" x="252" y="76" text-anchor="start">GND</text><path class="s3-esq__gnd" d="M96 70 H244" /><circle class="s3-esq__pg" cx="96" cy="70" r="3.5" /><circle class="s3-esq__pg" cx="244" cy="70" r="3.5" /><text class="s3-esq__pin" x="88" y="102" text-anchor="end">3V3</text><text class="s3-esq__pin" x="252" y="102" text-anchor="start">VCC</text><path class="s3-esq__vcc" d="M96 96 H244" /><circle class="s3-esq__pv" cx="96" cy="96" r="3.5" /><circle class="s3-esq__pv" cx="244" cy="96" r="3.5" /><text class="s3-esq__pin" x="88" y="128" text-anchor="end">SCL 22</text><text class="s3-esq__pin" x="252" y="128" text-anchor="start">SCL</text><path class="s3-esq__b" d="M96 122 H244" /><circle class="s3-esq__pb" cx="96" cy="122" r="3.5" /><circle class="s3-esq__pb" cx="244" cy="122" r="3.5" /><text class="s3-esq__pin" x="88" y="154" text-anchor="end">SDA 21</text><text class="s3-esq__pin" x="252" y="154" text-anchor="start">SDA</text><path class="s3-esq__a" d="M96 148 H244" /><circle class="s3-esq__pa" cx="96" cy="148" r="3.5" /><circle class="s3-esq__pa" cx="244" cy="148" r="3.5" /><text class="s3-esq__sub" x="170" y="56" text-anchor="middle">I²C</text></svg>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="s4b-salida s4b-salida--1">
+									<figure class="s3-monitor s4b-fig">
+										<figcaption>Monitor · lista de 2024 que la API sigue sirviendo</figcaption>
+										<div class="s4b-fila">
+											<div class="term s4b-term--cols">......
+WiFi conectado!
+
+--- ASTRONAUTAS EN EL ESPACIO ---
+Total: 12
+1. Oleg Kononenko
+2. Nikolai Chub
+3. Tracy Caldwell Dyson
+4. Matthew Dominick
+5. Michael Barratt
+6. Jeanette Epps
+7. Alexander Grebenkin
+8. Butch Wilmore
+9. Sunita Williams
+10. Li Guangsu
+11. Li Cong
+12. Ye Guangfu
+---------------------------------</div>
+										</div>
+									</figure>
+								</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps ArduinoJson @ ^6.21.5, Adafruit SSD1306 @ ^2.5.7 y Adafruit GFX Library @ ^1.11.5.
+<b>2. Firmware.</b> OLED en 0x3C con setTextWrap(false); WiFi a Wokwi-GUEST con tope de 20 s y ESP.restart(). Cada 60 s, GET a http://api.open-notify.org/astros.json; con 200 (DynamicJsonDocument(2048)), number y hasta 15 nombres de people en un String[15]: «\n--- ASTRONAUTAS EN EL ESPACIO ---», «Total: %d», «%d. %s» y 33 guiones. Si falla, «Error HTTP: %d» (más errorToString() si es negativo) y, sin lista, el código en la OLED. Cada 4 s, páginas de 5: « EN EL ESPACIO: %d», línea y «%d.%s».
+<b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
+<b>4. Diagrama.</b> En Excalidraw: flujo de descarga, tope y páginas.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> El tope de 15 protege el arreglo; sin ajuste de línea, el nombre se recorta.
+								</p>
+							</div>
+							<div class="s4b-oled-aviso">
+								<span class="s4b-pantalla">
+									<svg class="s4b-oled" role="img" aria-label="OLED, página 1: EN EL ESPACIO: 12 y 1.Oleg Kononenko, 2.Nikolai Chub, 3.Tracy Caldwell Dyson, 4.Matthew Dominick, 5.Michael Barratt" viewBox="-5 -5 138 74"><rect class="s4b-oled__marco" x="-5" y="-5" width="138" height="74" rx="4" /><clipPath id="s4b-recorte-3"><rect x="0" y="0" width="128" height="64" /></clipPath><g clip-path="url(#s4b-recorte-3)"><text class="s4b-oled__t" x="6" y="7" font-size="8.5" textLength="101" lengthAdjust="spacingAndGlyphs">EN EL ESPACIO: 12</text><line class="s4b-oled__ln" x1="0" y1="10.5" x2="128" y2="10.5" /><text class="s4b-oled__t" x="0" y="21" font-size="8.5" textLength="95" lengthAdjust="spacingAndGlyphs">1.Oleg Kononenko</text><text class="s4b-oled__t" x="0" y="31" font-size="8.5" textLength="83" lengthAdjust="spacingAndGlyphs">2.Nikolai Chub</text><text class="s4b-oled__t" x="0" y="41" font-size="8.5" textLength="131" lengthAdjust="spacingAndGlyphs">3.Tracy Caldwell Dyson</text><text class="s4b-oled__t" x="0" y="51" font-size="8.5" textLength="107" lengthAdjust="spacingAndGlyphs">4.Matthew Dominick</text><text class="s4b-oled__t" x="0" y="61" font-size="8.5" textLength="101" lengthAdjust="spacingAndGlyphs">5.Michael Barratt</text></g></svg>
+								</span>
+								<p class="s3-remedio s4b-aviso">
+									<b>Aviso.</b> open-notify responde <b>200</b> con la tripulación de 2024; el código no informa de la vigencia del dato.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El firmware recorre un <code>JsonArray</code> con tope propio y lo pagina; el servidor envía doce nombres y la pantalla admite cinco.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿cómo se ve en la OLED «3.Tracy Caldwell Dyson», con 22 caracteres en una fila de 21? Con setTextWrap(false), la «n» queda fuera del borde. La API dejó de actualizarse y sirve la tripulación de mediados de 2024 con 200 OK; el código de estado no garantiza la vigencia. La consulta va por http, sin cifrar, y no lleva clave. Tres páginas: 5, 5 y 2 nombres; la página 2 (6 a 10) se ve de 4 a 8 s.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>JsonArray people = doc["people"];</code> y <code>people[i]["name"].as&lt;String&gt;()</code>. <code>DynamicJsonDocument doc(2048)</code> reserva en el montón: la respuesta mide 587 bytes y el árbol ocupa más. Páginas: <code>(total + 4) / 5</code>, división redondeada hacia arriba.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Recorrer hasta <code>number</code> sin tope y escribir fuera del arreglo.</li><li>Dar por vigente un 200.</li><li>Dejar <code>setTextWrap(true)</code>, con lo que el nombre largo invade la fila de abajo.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-listas-json.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Listas</span>
+				</a>
+				<a class="slide-nav__link" href="17-leer-api.html">
+					<span>Documentación</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

@@ -14,294 +14,270 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body data-deck-total="33">
+	<body class="ponencia" data-deck-total="23">
 		<main class="slide slide--start">
-			<div class="slide__content stagger">
-				<span class="badge" data-animate="fade-up">
-					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
-					03 · Conversión de señales analógicas
-				</span>
+			<div class="slide__content">
+				<span class="badge">02 · Terminales de entrada y salida</span>
 
-				<h1
-					class="slide__title slide__title--sm"
-					data-animate="fade-up"
-				>
-					Modulación por ancho de pulso
+				<h1 class="slide__title slide__title--sm">
+					El ciclo de trabajo fija el <em>valor medio</em>
 				</h1>
 
-				<div class="is-stretch slide__split" data-animate="fade-up">
-					<div class="slide__split-text">
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
 						<div class="def">
-							<div class="def__label">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-book" /></svg>
-								Definición
-							</div>
 							<p>
-								<b>PWM</b>: el terminal conmuta entre 0 V y 3,3 V a frecuencia
-								fija. La magnitud controlada es la fracción del periodo en
-								nivel alto, el <b>ciclo de trabajo</b>. La carga responde al
-								valor medio si su constante de tiempo supera el periodo de
-								conmutación.
+								<b>PWM</b> (<i>pulse width modulation</i>): el terminal conmuta
+								entre 0 y 3,3 V; el ciclo de trabajo <i>D</i> es la fracción del
+								período en alto.
 							</p>
 						</div>
-
-						<div class="practice">
-							<div class="practice__label">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
-								En la práctica
-							</div>
-							<p>
-								Núcleo 3.x: <code>ledcAttach(pin, freq, bits)</code>
-								en <code>setup()</code>, luego <code>ledcWrite(pin, valor)</code>.
-								En proyectos con núcleo 2.x: <code>ledcSetup()</code> +
-								<code>ledcAttachPin()</code> + <code>ledcWrite(canal, ...)</code>
-								— la diferencia es la versión en <code>platformio.ini</code>.
-							</p>
-						</div>
-
-						<div class="sim-caption">
-							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
-							<p class="m-0">
-								La traza es siempre 0 V o 3,3 V, nunca un valor intermedio; la
-								línea discontinua marca el valor medio. Frecuencia y
-								resolución comparten el reloj de 80 MHz del LEDC:
-								2<sup>resolución</sup> × frecuencia ≤ 80 MHz.
-							</p>
-						</div>
+						<p class="franja-fila__ajusta" data-paso="1">
+							<code>V<sub>m</sub> = D × 3,3 V</code>
+						</p>
 					</div>
 
-					<div class="slide__split-visual">
-						<div class="card">
-							<canvas
-								id="pwm-wave"
-								class="w-full aspect-[9/4]"
-								width="900"
-								height="200"
-								role="img"
-								aria-label="Forma de onda PWM: nivel lógico del terminal en el tiempo, con el valor medio marcado"
-							></canvas>
-
-							<div class="controls mt-3">
-								<label for="pwm-freq" class="text-sm font-medium">
-									Frecuencia
-								</label>
-								<input
-									type="range"
-									id="pwm-freq"
-									min="500"
-									max="100000"
-									step="500"
-									value="5000"
-								/>
-								<span class="readout" id="pwm-freq-readout">5 000 Hz</span>
-							</div>
-
-							<div class="controls mt-2">
-								<label for="pwm-duty" class="text-sm font-medium">
-									Ciclo de trabajo
-								</label>
-								<input
-									type="range"
-									id="pwm-duty"
-									min="0"
-									max="100"
-									step="1"
-									value="25"
-								/>
-								<span class="readout" id="pwm-duty-readout">25 %</span>
-							</div>
-
-							<div class="metric mt-3">
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Periodo
-									</span>
-									<span class="readout" id="pwm-period-out">200 µs</span>
-								</div>
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Valor medio
-									</span>
-									<span class="readout" id="pwm-avg-out">0,825 V</span>
-								</div>
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Resolución
-									</span>
-									<span class="readout" id="pwm-bits-out">13 bits</span>
-								</div>
-								<div class="metric__item">
-									<span class="text-xs text-[var(--color-text-muted)]">
-										Escalones
-									</span>
-									<span class="readout" id="pwm-steps-out">8 192</span>
-								</div>
-							</div>
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span><i>D</i></span>
+								<input type="range" id="duty" min="0" max="100" step="1" value="25" />
+								<output id="duty-out" for="duty">25 %</output>
+							</label>
+							<fieldset class="mandos__grupo" aria-label="Frecuencia">
+								<button type="button" class="btn btn--primary" data-freq="500" aria-pressed="true">500 Hz</button>
+								<button type="button" class="btn btn--secondary" data-freq="5000" aria-pressed="false">5 kHz</button>
+							</fieldset>
+							<span class="lectura"><small>duty </small><span id="l-duty">64</span><small> / 255</small></span>
 						</div>
+						<div class="lienzo-caja"><canvas id="pwm" aria-label="Señal PWM, su valor medio y el brillo del LED"></canvas></div>
 					</div>
 				</div>
 			</div>
 
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: si se multiplica la frecuencia por diez, ¿el LED
+					brilla más, menos o igual? Brilla igual. Al cambiar a 5 kHz hay diez
+					veces más pulsos, y la línea de V<sub>m</sub> y el brillo no cambian.
+				</p>
+				<p>
+					Recorrer después el ciclo de trabajo. El ojo, y un motor por su inercia,
+					responden al valor medio y no a cada pulso. La frecuencia se elige para
+					evitar parpadeo visible y zumbido; el brillo depende de D.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						El periférico se llama LEDC. En Core 3.x:
+						<code>ledcAttach(pin, freq, bits)</code> y
+						<code>ledcWrite(pin, duty)</code>. En Core 2.x, el que fija
+						<code>espressif32 @ 6.9.0</code> en el Ejemplo 04:
+						<code>ledcSetup(canal, freq, bits)</code>,
+						<code>ledcAttachPin(pin, canal)</code> y
+						<code>ledcWrite(canal, duty)</code>.
+					</p>
+					<h4>Compromiso</h4>
+					<p>
+						A más bits de resolución, menor frecuencia máxima: 8 bits a 5 kHz
+						quedan dentro del límite; con 16 bits el máximo ronda 1,2 kHz.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Usar la API de Core 3.x en un proyecto con Core 2.x, que no compila,
+						o escribir un duty mayor que 2<sup>bits</sup> − 1.
+					</p>
+				</div>
+			</details>
+
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="12-paper-adc-caracterizacion.html">
+				<a class="slide-nav__link" href="12-codigo-03-entrada-analogica.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Artículo · Caracterización del ADC integrado</span>
+					<span>Ejemplo 03 · Entrada analógica</span>
 				</a>
-				<a class="slide-nav__link" href="14-codigo-04-pwm.html">
-					<span>La hora del código · PWM</span>
+				<a class="slide-nav__link" href="14-codigo-04-pwm-ledc.html">
+					<span>Ejemplo 04 · Brillo por PWM</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
 		</main>
 
+		<script type="module" src="../../js/deck.js"></script>
+
 		<script type="module">
-			const CLK = 80e6;
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
 			const VCC = 3.3;
+			const VENTANA_MS = 4; // tiempo dibujado
+			const duty = document.getElementById("duty");
+			const dutyOut = document.getElementById("duty-out");
+			const lDuty = document.getElementById("l-duty");
+			const freqBtns = [...document.querySelectorAll("[data-freq]")];
 
-			const freqInput = document.getElementById("pwm-freq");
-			const dutyInput = document.getElementById("pwm-duty");
-			const freqReadout = document.getElementById("pwm-freq-readout");
-			const dutyReadout = document.getElementById("pwm-duty-readout");
-			const periodOut = document.getElementById("pwm-period-out");
-			const avgOut = document.getElementById("pwm-avg-out");
-			const bitsOut = document.getElementById("pwm-bits-out");
-			const stepsOut = document.getElementById("pwm-steps-out");
-			const canvas = document.getElementById("pwm-wave");
-			const ctx = canvas.getContext("2d");
+			let freq = 500;
+			const coma = (x, d) => (x + 1e-9).toFixed(d).replace(".", ",");
+			const MONO = "'IBM Plex Mono', monospace";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
 
-			function miles(n) {
-				return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-			}
+			function draw(ctx, w, h) {
+				const D = Number(duty.value) / 100;
+				const vm = D * VCC;
+				const C = {
+					bg: token("--color-bg-subtle"),
+					grid: token("--color-border"),
+					text: token("--color-text"),
+					dim: token("--color-text-muted"),
+					accent: token("--color-accent"),
+					navy: token("--color-navy"),
+					ok: token("--color-ok"),
+					surface: token("--color-surface"),
+				};
+				// Letra y grosores proporcionales al tamaño real del lienzo.
+				const fs = clamp(20, Math.min(w * 0.021, h * 0.05), 34);
+				const lw = fs / 12;
 
-			function cssVar(name) {
-				return getComputedStyle(document.documentElement)
-					.getPropertyValue(name)
-					.trim();
-			}
-
-			function drawWave(freq, dutyPct) {
-				const w = canvas.width;
-				const h = canvas.height;
-				const top = 26;
-				const bottom = h - 34;
-				const left = 62;
-				const right = w - 20;
-
-				ctx.clearRect(0, 0, w, h);
-				ctx.fillStyle = cssVar("--color-surface");
+				ctx.fillStyle = C.bg;
 				ctx.fillRect(0, 0, w, h);
 
-				const accent = cssVar("--color-accent");
-				const border = cssVar("--color-border");
-				const muted = cssVar("--color-text-muted");
-				const text = cssVar("--color-text");
+				// Onda: ocupa la parte izquierda; el LED, la derecha.
+				const R = clamp(fs * 9, w * 0.25, fs * 14);
+				const L = fs * 4.6, T = fs * 2.6, B = fs * 3.4;
+				const pw = w - L - R, ph = h - T - B;
+				const toX = (t) => L + (t / VENTANA_MS) * pw;
+				const toY = (v) => T + ph - (v / VCC) * ph;
 
-				// ejes
-				ctx.strokeStyle = border;
-				ctx.lineWidth = 1;
-				ctx.setLineDash([4, 4]);
-				for (const y of [top, bottom]) {
-					ctx.beginPath();
-					ctx.moveTo(left, y);
-					ctx.lineTo(right, y);
-					ctx.stroke();
-				}
-				ctx.setLineDash([]);
-				ctx.strokeStyle = text;
-				ctx.globalAlpha = 0.5;
-				ctx.beginPath();
-				ctx.moveTo(left, top - 14);
-				ctx.lineTo(left, bottom + 14);
-				ctx.stroke();
-				ctx.globalAlpha = 1;
-
-				ctx.fillStyle = muted;
-				ctx.font = "13px system-ui";
+				ctx.lineWidth = lw;
+				ctx.strokeStyle = C.grid;
+				ctx.font = `500 ${fs}px ${MONO}`;
+				ctx.fillStyle = C.dim;
 				ctx.textAlign = "right";
-				ctx.fillText("3,3 V", left - 8, top + 4);
-				ctx.fillText("0 V", left - 8, bottom + 4);
+				ctx.textBaseline = "middle";
+				for (const v of [0, VCC]) {
+					ctx.beginPath(); ctx.moveTo(L, toY(v)); ctx.lineTo(L + pw, toY(v)); ctx.stroke();
+					ctx.fillText(`${coma(v, 1)} V`, L - fs * 0.5, toY(v));
+				}
+				ctx.textAlign = "center";
+				ctx.textBaseline = "top";
+				for (let t = 0; t <= VENTANA_MS; t++) {
+					ctx.beginPath(); ctx.moveTo(toX(t), T + ph); ctx.lineTo(toX(t), T + ph + fs * 0.4); ctx.stroke();
+					ctx.fillText(String(t), toX(t), T + ph + fs * 0.6);
+				}
+				ctx.fillText("tiempo (ms)", L + pw / 2, T + ph + fs * 1.9);
 
-				// tres periodos completos de la señal
-				const duty = dutyPct / 100;
-				const cyclePx = (right - left) / 3;
-				const highPx = cyclePx * duty;
-
-				ctx.strokeStyle = accent;
-				ctx.lineWidth = 2.6;
+				// Onda cuadrada
+				const per = 1000 / freq; // ms
+				const n = Math.round(VENTANA_MS / per);
+				ctx.strokeStyle = C.accent;
+				ctx.lineWidth = freq > 1000 ? lw * 1.5 : lw * 2.6;
+				ctx.lineJoin = "miter";
 				ctx.beginPath();
-				let x = left;
-				ctx.moveTo(x, bottom);
-				for (let i = 0; i < 3; i++) {
-					const xHigh = x + highPx;
-					const xEnd = x + cyclePx;
-					ctx.lineTo(x, top);
-					ctx.lineTo(xHigh, top);
-					ctx.lineTo(xHigh, bottom);
-					ctx.lineTo(xEnd, bottom);
-					x = xEnd;
+				for (let k = 0; k < n; k++) {
+					const t0 = k * per;
+					const hi = D > 0 ? VCC : 0;
+					const lo = D < 1 ? 0 : VCC;
+					if (k === 0) ctx.moveTo(toX(t0), toY(hi));
+					else ctx.lineTo(toX(t0), toY(hi));
+					ctx.lineTo(toX(t0 + D * per), toY(hi));
+					ctx.lineTo(toX(t0 + D * per), toY(lo));
+					ctx.lineTo(toX(t0 + per), toY(lo));
 				}
 				ctx.stroke();
 
-				// valor medio
-				const avgY = bottom - (bottom - top) * duty;
-				ctx.strokeStyle = cssVar("--color-navy");
-				ctx.lineWidth = 1.6;
-				ctx.setLineDash([6, 4]);
-				ctx.beginPath();
-				ctx.moveTo(left, avgY);
-				ctx.lineTo(right, avgY);
-				ctx.stroke();
+				// Período marcado (solo a 500 Hz, donde cabe)
+				ctx.fillStyle = C.dim;
+				ctx.textBaseline = "bottom";
+				if (freq === 500) {
+					const y = T - fs * 0.9, tk = fs * 0.33;
+					ctx.strokeStyle = C.dim; ctx.lineWidth = lw;
+					ctx.beginPath(); ctx.moveTo(toX(0), y); ctx.lineTo(toX(per), y); ctx.stroke();
+					ctx.beginPath(); ctx.moveTo(toX(0), y - tk); ctx.lineTo(toX(0), y + tk);
+					ctx.moveTo(toX(per), y - tk); ctx.lineTo(toX(per), y + tk); ctx.stroke();
+					ctx.fillText("período 2 ms", toX(per / 2), y - fs * 0.2);
+				} else {
+					ctx.fillText("período 0,2 ms · 20 pulsos", toX(VENTANA_MS / 2), T - fs * 0.5);
+				}
+
+				// Valor medio
+				ctx.strokeStyle = C.ok;
+				ctx.lineWidth = lw * 2.6;
+				ctx.setLineDash([fs * 0.66, fs * 0.42]);
+				ctx.beginPath(); ctx.moveTo(L, toY(vm)); ctx.lineTo(L + pw, toY(vm)); ctx.stroke();
 				ctx.setLineDash([]);
+				const fe = fs * 1.1;
+				ctx.font = `700 ${fe}px ${MONO}`;
+				const etq = `Vm = ${coma(vm, 2)} V`;
+				const ew = ctx.measureText(etq).width + fe * 0.8;
+				const ey = Math.min(Math.max(toY(vm), T + fe * 0.8), T + ph - fe * 0.8);
+				ctx.fillStyle = C.surface;
+				ctx.fillRect(L + pw - ew - fe * 0.25, ey - fe * 0.7, ew, fe * 1.4);
+				ctx.fillStyle = C.ok;
+				ctx.textAlign = "right";
+				ctx.textBaseline = "middle";
+				ctx.fillText(etq, L + pw - fe * 0.65, ey);
 
-				ctx.fillStyle = cssVar("--color-navy");
-				ctx.font = "600 12px system-ui";
-				ctx.textAlign = "left";
-				const avgV = (VCC * duty).toFixed(3);
-				ctx.fillText(`valor medio ≈ ${avgV} V`, left + 6, avgY - 8);
-
-				// leyenda de tiempo
-				const periodUs = (1 / freq) * 1e6;
-				ctx.fillStyle = muted;
-				ctx.font = "12px system-ui";
-				ctx.textAlign = "left";
-				ctx.fillText(
-					`periodo = ${periodUs < 10 ? periodUs.toFixed(2) : Math.round(periodUs)} µs · 3 periodos mostrados`,
-					left,
-					h - 18,
-				);
+				// LED: centrado en la franja derecha, tan grande como permita el alto.
+				const r = Math.min(R * 0.3, h * 0.17);
+				const cx = w - R / 2, cy = T + (h - T - B) * 0.42;
+				const rg = Math.min(r * 2.1, R / 2 - lw);
+				const glow = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, rg);
+				ctx.save();
+				ctx.globalAlpha = D;
+				glow.addColorStop(0, C.accent);
+				glow.addColorStop(1, "transparent");
+				ctx.fillStyle = glow;
+				ctx.beginPath(); ctx.arc(cx, cy, rg, 0, 2 * Math.PI); ctx.fill();
+				ctx.restore();
+				// cuerpo apagado + capa encendida
+				ctx.fillStyle = C.surface;
+				ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fill();
+				ctx.save();
+				ctx.globalAlpha = 0.08 + 0.92 * D;
+				ctx.fillStyle = C.accent;
+				ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fill();
+				ctx.restore();
+				ctx.strokeStyle = C.accent; ctx.lineWidth = lw * 1.5;
+				ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.stroke();
+				// patas
+				ctx.strokeStyle = C.dim; ctx.lineWidth = lw * 2.6;
+				ctx.beginPath();
+				ctx.moveTo(cx - r * 0.32, cy + r); ctx.lineTo(cx - r * 0.32, cy + r * 1.95);
+				ctx.moveTo(cx + r * 0.32, cy + r); ctx.lineTo(cx + r * 0.32, cy + r * 1.7);
+				ctx.stroke();
+				ctx.fillStyle = C.text;
+				ctx.font = `600 ${fe}px ${MONO}`;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "top";
+				ctx.fillText(`brillo ${Math.round(D * 100)} %`, cx, cy + r * 1.95 + fs * 0.6);
 			}
 
-			function update() {
-				const f = Number(freqInput.value);
-				const duty = Number(dutyInput.value);
-				const bits = Math.floor(Math.log2(CLK / f));
-				const steps = 2 ** bits;
-				const periodUs = (1 / f) * 1e6;
-				const avgV = (VCC * duty) / 100;
+			const lienzo = lienzoAdaptable(document.getElementById("pwm"), draw);
 
-				freqReadout.textContent = `${miles(f)} Hz`;
-				dutyReadout.textContent = `${duty} %`;
-				periodOut.textContent = `${periodUs < 10 ? periodUs.toFixed(2) : miles(Math.round(periodUs))} µs`;
-				avgOut.textContent = `${avgV.toFixed(3).replace(".", ",")} V`;
-				bitsOut.textContent = `${bits} bits`;
-				stepsOut.textContent = miles(steps);
-
-				drawWave(f, duty);
+			function actualizar() {
+				const p = Number(duty.value);
+				const D = p / 100;
+				dutyOut.textContent = `${p} %`;
+				lDuty.textContent = String(Math.round(D * 255));
+				freqBtns.forEach((b) => {
+					const on = Number(b.dataset.freq) === freq;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				});
+				lienzo.redibujar();
 			}
 
-			freqInput.addEventListener("input", update);
-			dutyInput.addEventListener("input", update);
-			new MutationObserver(() => drawWave(Number(freqInput.value), Number(dutyInput.value))).observe(
-				document.documentElement,
-				{ attributes: true, attributeFilter: ["data-theme"] },
-			);
-			update();
+			duty.addEventListener("input", actualizar);
+			for (const b of freqBtns)
+				b.addEventListener("click", () => {
+					freq = Number(b.dataset.freq);
+					actualizar();
+				});
 
-			for (const el of document.querySelectorAll("[data-animate]")) {
-				el.classList.add("is-visible");
-			}
+			actualizar();
 		</script>
-
-		<script type="module" src="../../js/deck.js"></script>
 	</body>
 </html>

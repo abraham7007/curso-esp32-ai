@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Configurar el panel · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="17">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s5b-panel-hoja">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-sliders" /></svg>
+						<span class="code-hour__label">Antes del código · Blynk.Console</span>
+						<span class="code-hour__ref">Ejemplo 19</span>
+					</div>
+
+					<h2 class="code-hour__title">El panel se configura <em>antes</em> del firmware</h2>
+
+					<div class="code-hour__body s5b-consola">
+					<svg class="s3d-svg" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cinco pasos en Blynk.Console. 1, plantilla: Developer Zone, My Templates, New Template, con nombre ESP32 PIT 2026, hardware ESP32 y conexión WiFi. 2, datastreams de tipo Virtual Pin: V0, LED, Integer de 0 a 1, para el Switch; V1, Temperatura, Double de 0 a 50 grados Celsius, para el Gauge. 3, Web Dashboard: en modo Edit se arrastran un Switch asociado a V0 y un Gauge asociado a V1 desde el Widget Box. 4, dispositivo: Devices, New Device, From template, ESP32 PIT 2026; al crearlo aparecen las tres líneas. 5, se copian a include/secrets.h: BLYNK_TEMPLATE_ID, BLYNK_TEMPLATE_NAME y BLYNK_AUTH_TOKEN, con el token propio en lugar de TU_TOKEN_AQUI; el archivo está en .gitignore.">
+						<!-- 1 · plantilla -->
+						<rect class="s5b-panel" x="0" y="0" width="500" height="350" rx="14" />
+						<circle class="caja caja--acc" cx="38" cy="38" r="24" />
+						<text class="acc mid" x="38" y="38" font-size="28">1</text>
+						<text class="sans" x="76" y="38" font-size="30">Plantilla</text>
+						<text class="sans mut" x="24" y="96" font-size="24">Developer Zone → My Templates</text>
+						<text class="acc" x="24" y="140" font-size="26">+ New Template</text>
+						<text class="sans mut" x="24" y="200" font-size="24">Name</text>
+						<text x="220" y="200" font-size="26">ESP32 PIT 2026</text>
+						<text class="sans mut" x="24" y="250" font-size="24">Hardware</text>
+						<text x="220" y="250" font-size="26">ESP32</text>
+						<text class="sans mut" x="24" y="300" font-size="24">Connection</text>
+						<text x="220" y="300" font-size="26">WiFi</text>
+
+						<!-- 2 · datastreams -->
+						<rect class="s5b-panel" x="530" y="0" width="1070" height="350" rx="14" />
+						<circle class="caja caja--acc" cx="568" cy="38" r="24" />
+						<text class="acc mid" x="568" y="38" font-size="28">2</text>
+						<text class="sans" x="606" y="38" font-size="30">Datastreams</text>
+						<text class="sans mut" x="800" y="38" font-size="24">New Datastream → Virtual Pin</text>
+						<text class="sans mut" x="560" y="104" font-size="22">Pin</text>
+						<text class="sans mut" x="650" y="104" font-size="22">Name</text>
+						<text class="sans mut" x="870" y="104" font-size="22">Data Type</text>
+						<text class="sans mut" x="1060" y="104" font-size="22">Min – Max</text>
+						<text class="sans mut" x="1250" y="104" font-size="22">Units</text>
+						<text class="sans mut" x="1380" y="104" font-size="22">Widget</text>
+						<path class="ln ln--fina ln--mut" d="M554 130 H1576 M554 196 H1576" />
+						<text class="acc" x="560" y="164" font-size="28">V0</text>
+						<text x="650" y="164" font-size="28">LED</text>
+						<text x="870" y="164" font-size="28">Integer</text>
+						<text x="1060" y="164" font-size="28">0 – 1</text>
+						<text class="mut" x="1250" y="164" font-size="28">—</text>
+						<text x="1380" y="164" font-size="28">Switch</text>
+						<text class="acc" x="560" y="230" font-size="28">V1</text>
+						<text x="650" y="230" font-size="28">Temperatura</text>
+						<text x="870" y="230" font-size="28">Double</text>
+						<text x="1060" y="230" font-size="28">0 – 50</text>
+						<text x="1250" y="230" font-size="28">°C</text>
+						<text x="1380" y="230" font-size="28">Gauge</text>
+						<text class="sans" x="560" y="300" font-size="24">El pin V es el nombre que usa el firmware: <tspan class="acc">BLYNK_WRITE(V0)</tspan> y <tspan class="acc">virtualWrite(V1, …)</tspan>.</text>
+
+						<!-- 3 · web dashboard -->
+						<rect class="s5b-panel" x="0" y="380" width="520" height="380" rx="14" />
+						<circle class="caja caja--acc" cx="38" cy="418" r="24" />
+						<text class="acc mid" x="38" y="418" font-size="28">3</text>
+						<text class="sans" x="76" y="418" font-size="30">Web Dashboard</text>
+						<text class="sans mut" x="24" y="474" font-size="24">Edit → arrastrar desde el Widget Box</text>
+						<rect class="barra--ok" x="40" y="560" width="120" height="64" rx="32" />
+						<circle class="rel-ok" cx="128" cy="592" r="24" />
+						<text class="sans mid" x="100" y="672" font-size="26">Switch → V0</text>
+						<path class="s5b-arco" d="M270 620 A100 100 0 0 1 470 620" />
+						<path class="s5b-arco s5b-arco--valor" d="M270 620 A100 100 0 0 1 359.96 520.5" />
+						<text class="mid" x="370" y="598" font-size="28">23.4</text>
+						<text class="mut mid" x="270" y="652" font-size="22">0</text>
+						<text class="mut mid" x="470" y="652" font-size="22">50</text>
+						<text class="sans mid" x="370" y="690" font-size="26">Gauge ← V1</text>
+						<text class="sans mut mid" x="260" y="734" font-size="22">engranaje: elegir el datastream y guardar</text>
+
+						<!-- 4 · dispositivo -->
+						<rect class="s5b-panel" x="545" y="380" width="360" height="380" rx="14" />
+						<circle class="caja caja--acc" cx="583" cy="418" r="24" />
+						<text class="acc mid" x="583" y="418" font-size="28">4</text>
+						<text class="sans" x="621" y="418" font-size="30">Dispositivo</text>
+						<text class="sans mut" x="569" y="478" font-size="24">Devices → New Device</text>
+						<text class="acc" x="569" y="528" font-size="26">From template</text>
+						<text x="569" y="578" font-size="26">ESP32 PIT 2026</text>
+						<text class="sans mut" x="569" y="650" font-size="22">Al crearlo aparecen</text>
+						<text class="sans mut" x="569" y="684" font-size="22">las tres líneas (también</text>
+						<text class="sans mut" x="569" y="718" font-size="22">en Device Info).</text>
+
+						<!-- 5 · secrets.h -->
+						<rect class="s5b-panel" x="930" y="380" width="670" height="380" rx="14" />
+						<circle class="caja caja--acc" cx="968" cy="418" r="24" />
+						<text class="acc mid" x="968" y="418" font-size="28">5</text>
+						<text class="sans" x="1006" y="418" font-size="30">Copiar a include/secrets.h</text>
+						<rect class="caja" x="950" y="458" width="630" height="176" rx="10" />
+						<text x="966" y="500" font-size="22">#define BLYNK_TEMPLATE_ID "TMPLxxxxxxxx"</text>
+						<text x="966" y="546" font-size="22">#define BLYNK_TEMPLATE_NAME "ESP32 PIT 2026"</text>
+						<text x="966" y="592" font-size="22">#define BLYNK_AUTH_TOKEN "<tspan class="acc">TU_TOKEN_AQUI</tspan>"</text>
+						<text class="sans" x="950" y="676" font-size="24">En <tspan class="acc">.gitignore</tspan>, fuera del repositorio.</text>
+						<text class="sans mut" x="950" y="720" font-size="22">Antes de incluir BlynkSimpleEsp32_SSL.h.</text>
+					</svg>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Por qué antes.</b> El firmware solo usa lo que aquí se nombra: los pines V0 y V1 y las tres líneas del dispositivo.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Hacer los cinco pasos en vivo y en este orden. El firmware del Ejemplo 19 no
+					crea nada en la nube; usa lo que ya existe.
+				</p>
+				<p>
+					Pregunta de predicción: si el datastream V1 no se crea, ¿qué ocurre al
+					llamar a virtualWrite(V1, 23.4)?
+				</p>
+				<p>
+					Respuesta: el ESP32 sigue conectado, pero el valor no llega al Gauge; el
+					servidor lo ignora porque el pin no existe en la plantilla.
+				</p>
+				<p>
+					V0 como Integer de 0 a 1 encaja con param.asInt() y digitalWrite(); V1 como
+					Double guarda el decimal. Los nombres de la consola están en inglés y
+					cambian con las versiones; si un botón tiene otro nombre, el paso es el
+					mismo. No proyectar el token real; la lámina muestra el marcador
+					TU_TOKEN_AQUI.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Activar <em>Developer Mode</em> en el perfil para ver Developer Zone. La
+						plantilla define datastreams y paneles para todos sus dispositivos; cada
+						dispositivo tiene su propio token. Copiar
+						<code>secrets.example.h</code> como <code>secrets.h</code> y pegar las
+						tres líneas.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19 (lámina siguiente).</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Dejar un widget sin datastream asignado; el widget no cambia.</li>
+						<li>Crear V1 como Integer, que descarta el decimal.</li>
+						<li>Pegar el token de otro dispositivo (respuesta «Invalid auth token»).</li>
+						<li>Usar el Template ID de otra plantilla, que no corresponde al panel configurado.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-pines-virtuales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Pines V</span>
+				</a>
+				<a class="slide-nav__link" href="10-codigo-19-blynk.html">
+					<span>Ejemplo 19 · Blynk</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

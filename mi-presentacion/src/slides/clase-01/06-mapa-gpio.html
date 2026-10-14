@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mapa de terminales GPIO · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Terminales de entrada y salida</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Restricciones de los <em>terminales</em> GPIO
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto">
+						<ul class="leyenda" aria-label="Leyenda de colores">
+							<li class="leyenda--ok">Uso libre</li>
+							<li class="leyenda--warn">Con precaución</li>
+							<li class="leyenda--bad">No disponible</li>
+						</ul>
+						<div class="def" aria-live="polite">
+							<p id="pin-detail"></p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<section class="crece flex gap-8 mapa-pines" aria-label="Terminales de la placa DevKit V1 con ESP32-WROOM-32">
+							<div class="flex-1 flex flex-col gap-1 min-h-0" id="col-izq"></div>
+							<div class="hero-board hero-board--alta hero-board--bajo-titulo justify-center">
+								<span class="hero-board__part" aria-hidden="true">
+									<wokwi-esp32-devkit-v1 led1="1"></wokwi-esp32-devkit-v1>
+								</span>
+							</div>
+							<div class="flex-1 flex flex-col gap-1 min-h-0" id="col-der"></div>
+						</section>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: ¿se comporta igual un LED conectado al GPIO 12
+					que uno conectado al GPIO 13? No. Seleccionar el 12: si el circuito lo
+					mantiene en alto al encender, la placa no arranca y el monitor serie
+					muestra errores de lectura de la flash.
+				</p>
+				<p>
+					Los GPIO 6–11 no salen a los pines porque los ocupa la flash. Recorrer
+					después los GPIO 34–39, de entrada únicamente, y los del ADC2, que dejan
+					de medir al activar el WiFi.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>pinMode()</code>, <code>digitalWrite()</code> y
+						<code>digitalRead()</code> reciben el número de GPIO, no el rótulo
+						serigrafiado en la placa; comprobarlo con el diagrama de pines de la
+						placa concreta.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>
+							<i>Strapping pins</i> (0, 2, 5, 12, 15): su nivel se lee durante el
+							reinicio. GPIO 0 bajo entra en modo de grabación; GPIO 12 alto
+							selecciona flash de 1,8 V y el arranque falla con errores de lectura de flash.
+						</li>
+						<li>Lecturas analógicas en el ADC2 con el WiFi activo; el ADC1 (32–39) sí funciona.</li>
+						<li>Pulsador en 34–39 sin resistencia externa; esos terminales no tienen pull-up interno.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="05-memoria-flash-sram.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Flash y SRAM</span>
+				</a>
+				<a class="slide-nav__link" href="07-limites-electricos.html">
+					<span>Límites eléctricos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+
+			// La cápsula metálica es el módulo, no el chip: se rotula como tal.
+			customElements.whenDefined("wokwi-esp32-devkit-v1").then(async () => {
+				for (const placa of document.querySelectorAll("wokwi-esp32-devkit-v1")) {
+					await placa.updateComplete;
+					const t = [...placa.shadowRoot.querySelectorAll("text")].find(
+						(n) => n.textContent.trim() === "ESP32",
+					);
+					if (!t) continue;
+					t.setAttribute("font-size", "9.5px");
+					t.setAttribute("text-anchor", "middle");
+					t.innerHTML = '<tspan x="52.5" y="56">ESP32-</tspan><tspan x="52.5" y="69">WROOM-32</tspan>';
+				}
+			});
+
+			// Cabeceras de la DevKit V1 (30 terminales), de la antena al USB.
+			const IZQ = [
+				{ n: "EN", k: "pwr", l: "Reinicio", d: "Reinicia el chip; lo acciona el botón EN de la placa." },
+				{ n: "36", k: "warn", l: "VP", d: "Solo entrada (rotulado VP): sin salida ni resistencias internas." },
+				{ n: "39", k: "warn", l: "VN", d: "Solo entrada (rotulado VN): sin salida ni resistencias internas." },
+				{ n: "34", k: "warn", l: "Entrada", d: "Solo entrada: sin salida y sin pull-up ni pull-down internos; un pulsador necesita resistencia externa." },
+				{ n: "35", k: "warn", l: "Entrada", d: "Solo entrada, como el 34: sin salida ni resistencias internas." },
+				{ n: "32", k: "ok", l: "ADC1", d: "Libre. ADC1: mide tensiones también con el WiFi activo." },
+				{ n: "33", k: "ok", l: "ADC1", d: "Libre. ADC1: disponible también con WiFi activo." },
+				{ n: "25", k: "ok", l: "DAC1", d: "Libre. También es salida analógica real de 8 bits (DAC1)." },
+				{ n: "26", k: "ok", l: "DAC2", d: "Libre. Segundo canal de salida analógica de 8 bits (DAC2)." },
+				{ n: "27", k: "ok", l: "ADC2", d: "Libre como digital. Analógico sujeto al ADC2: no disponible con WiFi." },
+				{ n: "14", k: "warn", l: "Pulso", d: "Emite un pulso al arrancar; no conviene para cargas como un relé." },
+				{ n: "12", k: "warn", l: "Inicio", d: "Strapping: alto al reiniciar fija la flash a 1,8 V; el arranque falla y la ROM muestra errores de lectura de flash." },
+				{ n: "13", k: "ok", l: "ADC2", d: "Libre como digital. Analógico sujeto al ADC2: no disponible con WiFi." },
+				{ n: "GND", k: "pwr", l: "Masa", d: "Referencia de 0 V común a todo el circuito." },
+				{ n: "VIN", k: "pwr", l: "5 V", d: "Entrada de 5 V (la del USB); el regulador la baja a 3,3 V." },
+			];
+			const DER = [
+				{ n: "23", k: "ok", l: "SPI", d: "Libre. Por convención, MOSI del bus SPI." },
+				{ n: "22", k: "ok", l: "SCL", d: "Libre. Por convención, reloj del bus I²C." },
+				{ n: "1", k: "bad", l: "TX0", d: "Transmisión del puerto serie: lo usan el monitor serie y la grabación del firmware." },
+				{ n: "3", k: "bad", l: "RX0", d: "Recepción del puerto serie: ocupado por el monitor serie y la grabación." },
+				{ n: "21", k: "ok", l: "SDA", d: "Libre. Por convención, datos del bus I²C." },
+				{ n: "19", k: "ok", l: "SPI", d: "Libre. Por convención, MISO del bus SPI." },
+				{ n: "18", k: "ok", l: "SPI", d: "Libre. Por convención, reloj del bus SPI." },
+				{ n: "5", k: "warn", l: "Inicio", d: "Strapping: debe estar alto al reiniciar (la placa lo garantiza) y emite un pulso breve al arrancar." },
+				{ n: "17", k: "ok", l: "TX2", d: "Libre. Habitual para TX de UART2. En módulos WROVER lo ocupa la PSRAM." },
+				{ n: "16", k: "ok", l: "RX2", d: "Libre. Habitual para RX de UART2. En módulos WROVER lo ocupa la PSRAM." },
+				{ n: "4", k: "ok", l: "ADC2", d: "Libre como digital. Su entrada analógica es del ADC2: deja de funcionar con el WiFi activo." },
+				{ n: "2", k: "warn", l: "Inicio", d: "Strapping: debe quedar bajo o libre al reiniciar. En esta placa lleva el LED integrado." },
+				{ n: "15", k: "warn", l: "Inicio", d: "Strapping: bajo al reiniciar silencia los mensajes del cargador de arranque." },
+				{ n: "GND", k: "pwr", l: "Masa", d: "Referencia de 0 V común a todo el circuito." },
+				{ n: "3V3", k: "pwr", l: "3,3 V", d: "Salida del regulador: alimenta sensores de 3,3 V con poca corriente." },
+			];
+
+			const detail = document.getElementById("pin-detail");
+			const botones = [];
+			const esGpio = (p) => /^\d+$/.test(p.n);
+
+			function select(p, btn) {
+				for (const b of botones) b.classList.toggle("is-selected", b === btn);
+				detail.innerHTML = `<b>${esGpio(p) ? `GPIO ${p.n}` : p.n}</b> · ${p.d}`;
+			}
+
+			function columna(id, pines, izquierda) {
+				const col = document.getElementById(id);
+				for (const p of pines) {
+					const btn = document.createElement("button");
+					btn.type = "button";
+					const tipo = p.k === "pwr" ? "" : ` picker__item--${p.k}`;
+					btn.className = `picker__item${tipo} flex-1 min-h-0 flex items-center justify-between gap-2`;
+					const num = `<b>${p.n}</b>`;
+					const lab = `<span>${p.l}</span>`;
+					btn.innerHTML = izquierda ? lab + num : num + lab;
+					btn.setAttribute("aria-label", `${esGpio(p) ? "GPIO " : ""}${p.n}, ${p.l}`);
+					btn.addEventListener("click", () => select(p, btn));
+					col.appendChild(btn);
+					botones.push(btn);
+					if (p.n === "12") select(p, btn);
+				}
+			}
+
+			columna("col-izq", IZQ, true);
+			columna("col-der", DER, false);
+		</script>
+	</body>
+</html>

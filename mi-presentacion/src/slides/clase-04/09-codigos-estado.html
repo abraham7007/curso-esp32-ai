@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Códigos · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · HTTP</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Códigos de estado HTTP y códigos <em>negativos</em> de HTTPClient
+				</h1>
+
+				<div class="def">
+					<p>Los códigos positivos los envía el servidor. Los negativos los genera <b>HTTPClient</b> cuando la respuesta no llega.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 660" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de códigos con su significado, la acción que corresponde y lo que imprime el ejemplo 16. El servidor respondió, httpCode mayor que 0: 200 OK, petición atendida, leer el cuerpo, imprime PRECIO BITCOIN 83257.00 USD; 401 o 404, clave o ruta errónea, corregir la petición, imprime Error de servidor 404; 429, demasiadas peticiones, bajar la frecuencia, imprime Error de servidor 429; 5xx, fallo del servidor, reintentar más tarde, imprime Error de servidor 503. No hubo respuesta, httpCode menor que 0, lo genera HTTPClient: menos 1, no se conectó por falta de red, DNS o servidor, revisar WiFi y URL, imprime Error de conexión connection refused; menos 11, conectó pero la respuesta no llegó en 5 segundos, reintentar o ampliar el tope, imprime Error de conexión read Timeout.">
+						<!-- cabecera -->
+						<text class="sans mut" x="30" y="24" font-size="24">código</text>
+						<text class="sans mut" x="220" y="24" font-size="24">significado</text>
+						<text class="sans mut" x="640" y="24" font-size="24">acción</text>
+						<text class="sans mut" x="1050" y="24" font-size="24">en el monitor · ejemplo 16</text>
+
+						<!-- banda 1: respondió el servidor -->
+						<rect class="rel-navy" x="0" y="62" width="8" height="318" rx="4" />
+						<text class="sans navy b" x="30" y="84" font-size="26">Respondió el servidor · httpCode &gt; 0</text>
+
+						<text class="ok b" x="30" y="146" font-size="40">200</text>
+						<text class="sans" x="220" y="146" font-size="26">petición atendida</text>
+						<text class="sans b" x="640" y="146" font-size="26">leer el cuerpo</text>
+						<text x="1050" y="146" font-size="20.5">PRECIO BITCOIN: $ 83257.00 USD</text>
+						<path class="ln ln--fina ln--mut" d="M30 182 H 1600" />
+
+						<text class="warn b" x="30" y="218" font-size="36">401·404</text>
+						<text class="sans" x="220" y="218" font-size="26">clave o ruta errónea</text>
+						<text class="sans b" x="640" y="218" font-size="26">corregir la petición</text>
+						<text x="1050" y="218" font-size="20.5">[HTTP] Error de servidor: 404</text>
+						<path class="ln ln--fina ln--mut" d="M30 254 H 1600" />
+
+						<text class="warn b" x="30" y="290" font-size="40">429</text>
+						<text class="sans" x="220" y="290" font-size="26">demasiadas peticiones</text>
+						<text class="sans b" x="640" y="290" font-size="26">bajar la frecuencia</text>
+						<text x="1050" y="290" font-size="20.5">[HTTP] Error de servidor: 429</text>
+						<path class="ln ln--fina ln--mut" d="M30 326 H 1600" />
+
+						<text class="warn b" x="30" y="356" font-size="40">5xx</text>
+						<text class="sans" x="220" y="356" font-size="26">fallo del servidor</text>
+						<text class="sans b" x="640" y="356" font-size="26">reintentar más tarde</text>
+						<text x="1050" y="356" font-size="20.5">[HTTP] Error de servidor: 503</text>
+
+						<!-- banda 2: no hubo respuesta -->
+						<rect class="rel-acc" x="0" y="408" width="8" height="186" rx="4" />
+						<text class="sans acc b" x="30" y="430" font-size="26">No hubo respuesta · httpCode &lt; 0 · lo genera HTTPClient</text>
+
+						<text class="acc b" x="30" y="492" font-size="40">−1</text>
+						<text class="sans" x="220" y="492" font-size="26">sin conexión: red, DNS o servidor</text>
+						<text class="sans b" x="640" y="492" font-size="26">revisar WiFi y URL</text>
+						<text x="1050" y="492" font-size="20.5">[HTTP] Error de conexión: connection refused</text>
+						<path class="ln ln--fina ln--mut" d="M30 528 H 1600" />
+
+						<text class="acc b" x="30" y="564" font-size="40">−11</text>
+						<text class="sans" x="220" y="564" font-size="26">conectó; sin respuesta en 5 s</text>
+						<text class="sans b" x="640" y="564" font-size="26">reintentar o ampliar el tope</text>
+						<text x="1050" y="564" font-size="20.5">[HTTP] Error de conexión: read Timeout</text>
+
+						<!-- la rama -->
+						<path class="ln ln--fina ln--mut" d="M0 612 H 1600" />
+						<text class="navy" x="0" y="642" font-size="26">if (httpCode &gt; 0) { … } else { http.errorToString(httpCode); }</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con el router desconectado de Internet y el ESP32 todavía unido al WiFi, ¿qué número devuelve <code>http.GET()</code>? Devuelve −1. Ningún servidor contestó, de modo que no puede haber un 4xx ni un 5xx; fallan el DNS o la conexión. El ejemplo 16 comprueba primero <code>httpCode &gt; 0</code> y, dentro de esa rama, si el código es 200.
+				</p>
+				<p>
+					La reacción depende del origen del fallo. Un 4xx indica un error en la petición, y repetirla sin cambios devuelve el mismo código. Un 5xx o un código negativo pueden desaparecer en un intento posterior. Ante un 429 se reduce la frecuencia de las consultas.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Constantes de <code>HTTPClient.h</code> (núcleo Arduino-ESP32 2.0.17):
+						<code>HTTP_CODE_OK</code> = 200, <code>HTTPC_ERROR_CONNECTION_REFUSED</code>
+						= −1, <code>HTTPC_ERROR_CONNECTION_LOST</code> = −5,
+						<code>HTTPC_ERROR_READ_TIMEOUT</code> = −11. La espera de respuesta es de
+						5000 ms por defecto; se cambia con <code>http.setTimeout(ms)</code>.
+					</p>
+					<h4>Por qué −1 también cubre el DNS</h4>
+					<p>
+						Cuando el nombre no se resuelve, la conexión no llega a abrirse y <code>http.GET()</code> devuelve −1, el mismo código que con el servidor caído.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<p>Tratar igual todo código distinto de 200, con lo que un 401 se reintenta sin fin o un 429 se ignora.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-anatomia-http.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Petición</span>
+				</a>
+				<a class="slide-nav__link" href="10-codigo-16-bitcoin.html">
+					<span>Ejemplo 16 · Bitcoin</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

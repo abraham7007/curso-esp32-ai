@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 11 · UART2 · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="24">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s3-salida-ancha">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-link" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 11</span>
+					</div>
+
+					<h2 class="code-hour__title">Dos ESP32 enlazados por UART2 con TX y RX cruzados</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Un firmware para las dos placas.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Dos ESP32 cruzados por UART2.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de loop() y conexión.</span>
+								<span class="deliverable__file">diagrama-flujo-loop.excalidraw · diagrama-conexion-placas.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Lo escrito en el monitor de una placa aparece en la otra con el prefijo <code>[recibido]</code>, en ambos sentidos.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p><b>GPIO 17</b> (TX2) de cada placa al <b>GPIO 16</b> (RX2) de la otra, y GND común.</p>
+								<svg class="s3-esquema s3-esquema--bajo" role="img" aria-label="TX2 (GPIO 17) de cada placa al RX2 (GPIO 16) de la otra, cruzados, y GND común" viewBox="0 0 340 146" width="340" height="146"><rect class="s3-esq__caja" x="1" y="1" width="95" height="144" rx="6" /><rect class="s3-esq__caja" x="244" y="1" width="95" height="144" rx="6" /><text class="s3-esq__tit" x="48" y="26" text-anchor="middle">Placa 1</text><text class="s3-esq__tit" x="291.5" y="26" text-anchor="middle">Placa 2</text><text class="s3-esq__pin" x="88" y="68" text-anchor="end">TX2 17</text><text class="s3-esq__pin" x="252" y="68" text-anchor="start">TX2 17</text><text class="s3-esq__pin" x="88" y="98" text-anchor="end">RX2 16</text><text class="s3-esq__pin" x="252" y="98" text-anchor="start">RX2 16</text><text class="s3-esq__pin" x="88" y="128" text-anchor="end">GND</text><text class="s3-esq__pin" x="252" y="128" text-anchor="start">GND</text><path class="s3-esq__a" d="M96 62 H124 L216 92 H238" /><path class="s3-esq__fa" d="M234 86 L244 92 L234 98 Z" /><path class="s3-esq__b" d="M244 62 H216 L124 92 H102" /><path class="s3-esq__fb" d="M106 86 L96 92 L106 98 Z" /><path class="s3-esq__gnd" d="M96 122 H244" /><text class="s3-esq__sub" x="170" y="142" text-anchor="middle">GND común</text><circle class="s3-esq__pa" cx="96" cy="62" r="3.5" /><circle class="s3-esq__pb" cx="96" cy="92" r="3.5" /><circle class="s3-esq__pg" cx="96" cy="122" r="3.5" /><circle class="s3-esq__pb" cx="244" cy="62" r="3.5" /><circle class="s3-esq__pa" cx="244" cy="92" r="3.5" /><circle class="s3-esq__pg" cx="244" cy="122" r="3.5" /></svg>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, monitor_speed = 115200 y monitor_eol = LF. El mismo firmware se carga en las dos placas.
+<b>2. Firmware.</b> Serial a 115200 y Serial2.begin(115200, SERIAL_8N1, 16, 17) para el enlace. setup() imprime «\n--- ENLACE UART INICIADO ---» y «Escribe algo para enviarlo al otro ESP32...». En loop(), sin delay(): cada byte del monitor se repite en el monitor como eco y sale por Serial2; lo que llega por Serial2 se imprime, y cada línea nueva empieza con «\n[recibido] ».
+<b>3. Simulación.</b> Añade la simulación de Wokwi: dos ESP32 con el GPIO 17 de cada uno al GPIO 16 del otro y las masas unidas.
+<b>4. Diagramas.</b> En Excalidraw: el flujo de loop() con los dos sentidos sin bloqueo, y la conexión con el cruce y la masa común.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> <code>monitor_eol = LF</code>: Enter envía solo <code>\n</code>, el fin de línea del receptor. Sin <code>delay()</code>, <code>loop()</code> atiende los dos sentidos sin pausas.
+								</p>
+							</div>
+						</div>
+						<section aria-label="Salida esperada" class="code-hour__section code-hour__section--full s3-salida">
+							<h4>
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								Salida esperada
+							</h4>
+							<div class="s3-monitores s3-monitores--dos">
+								<figure class="s3-monitor">
+									<figcaption>Placa 1 · se escribe «hola» y Enter</figcaption>
+									<div class="term">
+--- ENLACE UART INICIADO ---
+Escribe algo para enviarlo al otro ESP32...
+hola</div>
+								</figure>
+								<figure class="s3-monitor">
+									<figcaption>Placa 2</figcaption>
+									<div class="term">
+--- ENLACE UART INICIADO ---
+Escribe algo para enviarlo al otro ESP32...
+
+[recibido] hola</div>
+								</figure>
+							</div>
+						</section>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El enlace asíncrono necesita a la vez TX y RX cruzados, masa común y la misma velocidad en los dos extremos.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué muestra la placa 2 si se retira el cable de GND? Respuesta: nada o caracteres sueltos, sin ningún mensaje de error. La línea vacía antes de «[recibido] hola» la produce el \n del prefijo; la de antes del banner, el \n inicial del println. En la placa 1, «hola» es el eco local: el monitor no repite lo tecleado. Probar después con TX unido a TX: no llega nada y tampoco hay error.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>Serial2.begin(baudios, SERIAL_8N1, rx, tx)</code>: el pin de recepción va antes que el de transmisión. UART0 (GPIO 1 y 3) queda para el USB y el monitor; el enlace usa UART2.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>TX con TX: las dos salidas se enfrentan y no llega nada.</li><li>Sin GND común: bytes erráticos o ninguno.</li><li>Baudios distintos en cada extremo: caracteres ilegibles.</li><li>Monitor en CRLF: aparecen prefijos «[recibido]» sin texto.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-puertos-uart.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>UART0–2</span>
+				</a>
+				<a class="slide-nav__link" href="09-bus-i2c.html">
+					<span>Bus I²C</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+
+		</script>
+	</body>
+</html>

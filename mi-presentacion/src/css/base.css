@@ -3,6 +3,11 @@
 @import "./slides.css";
 @import "./animations.css";
 @import "./components.css";
+@import "./ponencia.css";
+@import "./clase-03.css";
+@import "./clase-04.css";
+@import "./clase-05.css";
+@import "./clase-06.css";
 
 *,
 *::before,

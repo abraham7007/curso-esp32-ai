@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Media móvil y su retraso · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="22">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Memoria de los objetos</span>
+
+				<h1 class="slide__title slide__title--sm">
+					La <em>media móvil</em> retrasa la respuesta
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Media móvil</b> (<i>moving average</i>): promedio de las
+								últimas N muestras. El búfer circular sobrescribe la más antigua
+								en cada <code>update()</code>.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								Con una muestra cada 100 ms, un salto de la entrada tarda
+								N × 100 ms en reflejarse entero en el promedio.
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<label class="control">
+								<span>N</span>
+								<input type="range" id="n" min="1" max="32" step="1" value="16" />
+								<output id="n-out" for="n" class="s2c-ancho s2c-ancho--corto">16</output>
+							</label>
+							<span class="lectura lectura--fin"><small>retraso N × 100 ms = </small><span id="l-retraso" class="s2c-ancho">1,6 s</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="media"
+								role="img"
+								aria-label="Búfer circular de N celdas del ejemplo 09 y gráfica de la entrada y del promedio. La entrada salta de 2048 a 4095; cada 100 ms entra una muestra nueva en el búfer y el promedio sube en escalones hasta 4095 tras N muestras: 1,6 s con N = 16."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con N = 16, una muestra cada 100 ms y un salto
+					de la entrada de 1,65 V a 3,3 V, ¿cuánto tarda el promedio en marcar
+					3,3 V?
+				</p>
+				<p>
+					Respuesta: 1,6 s, el tiempo de reemplazar las 16 muestras antiguas del
+					búfer. La primera muestra nueva sube el promedio a 2175, como en la
+					salida del ejemplo 09. Mover N: con 1 no hay filtro ni retraso; con 32
+					el retraso es 3,2 s. N fija el compromiso entre ruido y rapidez de
+					respuesta; un termostato admite segundos de retraso y un control de
+					motor requiere un retraso mucho menor.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						En <code>EntradaAnalogica::update()</code>:
+						<code>_suma -= _buffer[_indice]; _buffer[_indice] = muestra; _suma += muestra;</code>
+						y <code>_indice = (_indice + 1) % _n</code>. Mantener la suma corriente
+						evita recorrer el búfer en cada vuelta.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Lectura de potenciómetros, sensores de temperatura y de nivel, consumo
+						medido con un sensor de corriente.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Una suma de 16 bits: 16 × 4095 = 65 520 cabe en 16 bits y con N = 32 desborda. Por eso <code>_suma</code> es <code>uint32_t</code>.</li>
+						<li>Dividir por N antes de llenar el búfer: el ejemplo 09 divide por <code>_cuenta</code>.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-codigo-08-intermitentes.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 08 · Tres LED</span>
+				</a>
+				<a class="slide-nav__link" href="16-pila-heap.html">
+					<span>Pila y heap</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const BAJO = 2048; // 1,65 V
+			const ALTO = 4095; // 3,3 V
+			const K_SALTO = 5; // primera muestra tras el salto (t = 0,5 s; la entrada cambia a 0,4 s)
+			// Eje: hasta medio segundo después de que el promedio alcanza la entrada.
+			const kMax = (N) => Math.ceil((K_SALTO - 1 + N + 4) / 5) * 5;
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+
+			const nIn = document.getElementById("n");
+			const nOut = document.getElementById("n-out");
+			const lRetraso = document.getElementById("l-retraso");
+
+			let k = 11; // muestra actual del cursor
+			const muestra = (i) => (i >= K_SALTO ? ALTO : BAJO);
+
+			// Ventana ya llena de 2048 antes del salto, como tras varios segundos
+			// en reposo. promedio = suma / N con división entera, como _suma / _cuenta.
+			function promedio(i, N) {
+				let suma = 0;
+				for (let j = i - N + 1; j <= i; j++) suma += muestra(j);
+				return Math.floor(suma / N);
+			}
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function dibujar(ctx, w, h) {
+				const N = Number(nIn.value);
+				const c = {
+					bg: token("--color-bg-subtle"),
+					sup: token("--color-surface"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					warn: token("--color-warn"),
+				};
+				const fs = clamp(20, Math.min(h * 0.045, w * 0.016), 30);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const pad = fs * 0.8;
+				const L = fs * 7.5;
+				const R = fs * 10;
+
+				// ---------- Búfer circular ----------
+				// Hasta 16 celdas por fila: con N = 32, dos filas y cada valor legible.
+				const porFila = Math.min(N, 16);
+				const filas = Math.ceil(N / porFila);
+				const bx0 = L;
+				const bx1 = w - R;
+				const cw = (bx1 - bx0) / porFila;
+				const cy = pad + fs * 0.4;
+				const ch = fs * 2.3;
+				const sepF = fs * 1.2;
+				const yF = (f) => cy + f * (ch + sepF);
+				texto(ctx, "_buffer", pad, cy + fs * 0.7, fs, c.heading, 700);
+				texto(ctx, `N = ${N}`, pad, cy + fs * 1.9, fs, c.muted, 500, "left", SANS);
+				texto(ctx, "▲ _indice", pad, cy + fs * 3.1, fs, c.heading, 700);
+				const escrita = ((k % N) + N) % N; // celda que recibió la última muestra
+				const sig = (escrita + 1) % N; // _indice: la próxima a sobrescribir
+				let suma = 0;
+				for (let i = 0; i < N; i++) {
+					// La celda i guarda la muestra más reciente j ≤ k con j ≡ i (mod N).
+					const j = k - ((escrita - i + N) % N);
+					const v = muestra(j);
+					suma += v;
+					const nuevo = v === ALTO;
+					const x = bx0 + (i % porFila) * cw;
+					const y = yF(Math.floor(i / porFila));
+					ctx.fillStyle = nuevo ? c.acentoSoft : c.navySoft;
+					ctx.fillRect(x + 1.5, y, cw - 3, ch);
+					ctx.strokeStyle = i === escrita ? c.heading : nuevo ? c.acento : c.navy;
+					ctx.lineWidth = i === escrita ? 4 : 1.5;
+					ctx.strokeRect(x + 1.5, y, cw - 3, ch);
+					if (cw >= fs * 2.6) texto(ctx, String(v), x + cw / 2, y + ch / 2, fs, nuevo ? c.acento : c.navy, 700, "center");
+					if (i === sig) {
+						const px = x + cw / 2;
+						ctx.fillStyle = c.heading;
+						ctx.beginPath();
+						ctx.moveTo(px, y + ch + fs * 0.15);
+						ctx.lineTo(px - fs * 0.45, y + ch + fs * 0.95);
+						ctx.lineTo(px + fs * 0.45, y + ch + fs * 0.95);
+						ctx.fill();
+					}
+				}
+				const prom = Math.floor(suma / N);
+				texto(ctx, "suma / N", w - pad, cy + ch * 0.3, fs, c.muted, 500, "right");
+				texto(ctx, `= ${prom}`, w - pad, cy + ch * 0.85, fs * 1.2, c.navy, 700, "right");
+				const bufB = Math.max(yF(filas - 1) + ch + fs * 1.0, cy + fs * 3.7);
+
+				// ---------- Gráfica ----------
+				const gT = bufB + fs * 0.8;
+				const K_MAX = kMax(N);
+				const gB = h - fs * 2.8;
+				const X = (i) => L + ((bx1 - L) * i) / K_MAX;
+				const vMin = 1800;
+				const vMax = 4700;
+				const Y = (v) => gB - ((gB - gT) * (v - vMin)) / (vMax - vMin);
+
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = 1;
+				for (const v of [BAJO, ALTO]) {
+					ctx.beginPath();
+					ctx.moveTo(L, Y(v));
+					ctx.lineTo(bx1, Y(v));
+					ctx.stroke();
+					texto(ctx, String(v), L - fs * 0.5, Y(v), fs, c.muted, 600, "right");
+				}
+				texto(ctx, "código ADC", pad, Y(3100), fs, c.muted, 500, "left", SANS);
+				// Eje de tiempo
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(L, gB);
+				ctx.lineTo(bx1, gB);
+				ctx.stroke();
+				const paso = K_MAX > 30 ? 10 : 5;
+				for (let i = 0; i <= K_MAX; i += paso) {
+					const etqT = i === 0 ? "0" : (i / 10).toFixed(1).replace(".", ",");
+					texto(ctx, etqT, X(i), gB + fs * 1.1, fs, c.muted, 600, i === 0 ? "left" : i === K_MAX ? "right" : "center");
+				}
+				texto(ctx, "t (s)", bx1 + fs * 1.2, gB + fs * 1.1, fs, c.muted, 600);
+
+				// Retraso: de la entrada que cambia (0,4 s) al promedio completo.
+				const kLleno = K_SALTO - 1 + N;
+				ctx.fillStyle = c.acentoSoft;
+				ctx.globalAlpha = 0.6;
+				ctx.fillRect(X(K_SALTO - 1), gT, X(kLleno) - X(K_SALTO - 1), gB - gT);
+				ctx.globalAlpha = 1;
+				const yb = gT + fs * 1.7;
+				ctx.strokeStyle = c.acento;
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.moveTo(X(K_SALTO - 1), yb);
+				ctx.lineTo(X(kLleno), yb);
+				ctx.stroke();
+				const etq = N === 1 ? "1 muestra" : `${N} muestras`;
+				texto(ctx, etq, X(K_SALTO - 1) + fs * 0.4, yb - fs * 0.75, fs, c.acento, 700);
+
+				// Entrada analógica (continua) y su muestra.
+				const trazar = (f, hasta, col, grosor, discont) => {
+					ctx.strokeStyle = col;
+					ctx.lineWidth = grosor;
+					ctx.setLineDash(discont ? [fs * 0.4, fs * 0.3] : []);
+					ctx.beginPath();
+					ctx.moveTo(X(0), Y(f(0)));
+					for (let i = 1; i <= hasta; i++) {
+						ctx.lineTo(X(i), Y(f(i - 1)));
+						ctx.lineTo(X(i), Y(f(i)));
+					}
+					ctx.stroke();
+					ctx.setLineDash([]);
+				};
+				const entrada = (i) => (i >= K_SALTO - 1 ? ALTO : BAJO);
+				trazar(entrada, K_MAX, c.acento, Math.max(3, fs * 0.13), true);
+				// Promedio: fantasma completo y trazo fuerte hasta el cursor.
+				ctx.globalAlpha = 0.25;
+				trazar((i) => promedio(i, N), K_MAX, c.navy, Math.max(4, fs * 0.2), false);
+				ctx.globalAlpha = 1;
+				trazar((i) => promedio(i, N), k, c.navy, Math.max(4, fs * 0.2), false);
+				// Muestras tomadas
+				ctx.fillStyle = c.acento;
+				for (let i = 0; i <= k; i++) {
+					ctx.beginPath();
+					ctx.arc(X(i), Y(muestra(i)), fs * 0.18, 0, Math.PI * 2);
+					ctx.fill();
+				}
+				// Leyenda a la derecha
+				texto(ctx, "entrada", bx1 + fs * 1.2, Y(ALTO) - fs * 0.7, fs, c.acento, 700);
+				texto(ctx, "promedio", bx1 + fs * 1.2, Y(ALTO) + fs * 0.7, fs, c.navy, 700);
+				texto(ctx, "animación 3× más", bx1 + fs * 1.2, Y(BAJO) - fs * 0.7, fs, c.muted, 500, "left", SANS);
+				texto(ctx, "lenta que el chip", bx1 + fs * 1.2, Y(BAJO) + fs * 0.5, fs, c.muted, 500, "left", SANS);
+				// Cursor
+				ctx.strokeStyle = c.heading;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 6]);
+				ctx.beginPath();
+				ctx.moveTo(X(k), gT);
+				ctx.lineTo(X(k), gB);
+				ctx.stroke();
+				ctx.setLineDash([]);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("media"), dibujar);
+			const lento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+			function actualizar() {
+				const N = Number(nIn.value);
+				nOut.textContent = String(N);
+				lRetraso.textContent = `${(N / 10).toFixed(1).replace(".", ",")} s`;
+				if (!lento) k = K_SALTO - 1;
+				lienzo.redibujar();
+			}
+			nIn.addEventListener("input", actualizar);
+
+			// En el ejemplo 09 entra una muestra cada 100 ms (delay(100)); aquí se
+			// anima tres veces más lento para poder seguir el búfer. Al final del
+			// eje espera 3 s y vuelve a empezar justo antes del salto.
+			let espera = 0;
+			if (!lento) {
+				setInterval(() => {
+					if (k < kMax(Number(nIn.value))) k++;
+					else if (++espera > 10) {
+						espera = 0;
+						k = K_SALTO - 2;
+					}
+					lienzo.redibujar();
+				}, 300);
+			}
+			actualizar();
+			k = 11;
+			lienzo.redibujar();
+		</script>
+	</body>
+</html>

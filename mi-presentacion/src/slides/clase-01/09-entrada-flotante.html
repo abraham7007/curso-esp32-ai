@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Entrada flotante y resistencia de pull-up · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Terminales de entrada y salida</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Una entrada sin polarizar <em>no tiene nivel definido</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Entrada flotante</b> (<i>floating input</i>): el terminal
+								toma el potencial que induce el entorno.
+							</p>
+						</div>
+						<div class="def">
+							<p>
+								<b>Pull-up</b>: resistencia interna de ~45 kΩ a 3,3 V que fija
+								el reposo en 1 · <code>pinMode(4, INPUT_PULLUP)</code>
+							</p>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<button type="button" class="btn btn--secondary" id="pullup-btn" aria-pressed="false">
+								Pull-up: desactivado
+							</button>
+							<button type="button" class="btn btn--secondary" id="press-btn">
+								Mantener pulsado
+							</button>
+							<span class="lectura lectura--fin" id="lectura">digitalRead(4) = 1</span>
+						</div>
+						<div class="lienzo-caja"><canvas id="scope" aria-label="Nivel leído en el GPIO 4 a lo largo del tiempo"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Empezar con el pull-up desactivado. Pregunta de predicción: ¿qué leerá
+					el pin con el botón suelto? Error frecuente: responder «1» o «0»; la
+					traza no muestra un valor estable. Al activar el pull-up y mantener el
+					botón pulsado, el nivel baja a 0 mientras dura la pulsación: pulsado se
+					lee como 0 (lógica invertida).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>INPUT_PULLUP</code> habilita la resistencia interna sin
+						componente externo. <code>INPUT_PULLDOWN</code> es el caso simétrico,
+						con el pulsador a 3,3 V. Los GPIO 34–39 no tienen resistencias
+						internas: necesitan una externa.
+					</p>
+					<h4>Dónde aparece</h4>
+					<ul>
+						<li>Final de carrera: si flota, la máquina detecta un tope inexistente.</li>
+						<li>Bus I²C: SDA y SCL son de drenador abierto y necesitan pull-up para llegar a 1.</li>
+						<li>Sensor de puerta: varios metros de cable captan el ruido electromagnético del entorno.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-codigo-01-salida-digital.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 01 · Salida digital</span>
+				</a>
+				<a class="slide-nav__link" href="10-codigo-02-entrada-digital.html">
+					<span>Ejemplo 02 · Entrada digital</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const pullBtn = document.getElementById("pullup-btn");
+			const pressBtn = document.getElementById("press-btn");
+			const lectura = document.getElementById("lectura");
+
+			const N = 60;
+			let pullup = false;
+			let pressed = false;
+
+			const muestra = () => ({ v: pressed ? 0 : pullup ? 1 : Math.random() < 0.5 ? 0 : 1, p: pullup });
+			const samples = Array.from({ length: N }, muestra);
+
+			const lienzo = lienzoAdaptable(document.getElementById("scope"), (ctx, w, h) => {
+				const fs = Math.max(20, Math.min(30, h * 0.055, w * 0.02));
+				const L = fs * 6.5, R = fs, T = h * 0.18, B = h * 0.18;
+				const yHi = T, yLo = h - B;
+				ctx.fillStyle = token("--color-code-bg");
+				ctx.fillRect(0, 0, w, h);
+
+				ctx.strokeStyle = token("--color-code-border");
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 6]);
+				ctx.beginPath();
+				ctx.moveTo(L, yHi); ctx.lineTo(w - R, yHi);
+				ctx.moveTo(L, yLo); ctx.lineTo(w - R, yLo);
+				ctx.stroke();
+				ctx.setLineDash([]);
+
+				ctx.fillStyle = token("--color-code-dim");
+				ctx.font = `600 ${fs}px 'IBM Plex Mono', monospace`;
+				ctx.textBaseline = "middle";
+				ctx.fillText("1 · 3,3 V", fs * 0.6, yHi);
+				ctx.fillText("0 · 0 V", fs * 0.6, yLo);
+				ctx.textBaseline = "alphabetic";
+				ctx.fillText("tiempo →", w - R - fs * 5, h - fs * 0.6);
+
+				// Cada tramo con el color del estado en que se tomó la muestra:
+				// el ruido previo sigue en rojo aunque ya se haya activado el pull-up.
+				const cOk = token("--color-ok"), cMal = token("--color-accent");
+				ctx.lineCap = "square";
+				ctx.lineWidth = Math.max(3, h * 0.012);
+				ctx.lineJoin = "round";
+				const dx = (w - L - R) / (N - 1);
+				const y = (s) => (s.v ? yHi : yLo);
+				for (let i = 1; i < N; i++) {
+					const a = samples[i - 1], b = samples[i];
+					const x = L + i * dx;
+					ctx.strokeStyle = b.p ? cOk : cMal;
+					ctx.beginPath();
+					ctx.moveTo(x - dx, y(a));
+					ctx.lineTo(x, y(a));
+					ctx.lineTo(x, y(b));
+					ctx.stroke();
+				}
+			});
+
+			function tick() {
+				samples.push(muestra());
+				samples.shift();
+				lectura.textContent = `digitalRead(4) = ${samples[N - 1].v}`;
+				lienzo.redibujar();
+			}
+
+			function render() {
+				pullBtn.textContent = pullup ? "Pull-up: activado" : "Pull-up: desactivado";
+				pullBtn.setAttribute("aria-pressed", String(pullup));
+				pullBtn.classList.toggle("btn--primary", pullup);
+				pullBtn.classList.toggle("btn--secondary", !pullup);
+			}
+
+			// Al conmutar el pull-up, la traza avanza deprisa (~0,9 s) para que el
+			// historial anterior salga de la pantalla y se vea solo el nuevo régimen.
+			let rapido = 0;
+			let vaciado = null;
+			function vaciar() {
+				rapido = N;
+				if (vaciado) return;
+				vaciado = setInterval(() => {
+					tick();
+					if (--rapido <= 0) { clearInterval(vaciado); vaciado = null; }
+				}, 15);
+			}
+
+			pullBtn.addEventListener("click", () => {
+				pullup = !pullup;
+				render();
+				vaciar();
+			});
+			pressBtn.addEventListener("pointerdown", () => { pressed = true; });
+			for (const ev of ["pointerup", "pointerleave", "pointercancel"]) {
+				pressBtn.addEventListener(ev, () => { pressed = false; });
+			}
+
+			render();
+			setInterval(tick, 150);
+		</script>
+	</body>
+</html>

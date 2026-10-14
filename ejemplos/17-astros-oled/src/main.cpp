@@ -13,7 +13,16 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
+// Tope de espera para conectarse al WiFi. Si se agota, se reinicia la placa:
+// sin red este programa no tiene nada que hacer, y el reinicio vuelve a
+// intentarlo desde cero con la pila WiFi limpia.
+const unsigned long WIFI_TIMEOUT_MS = 20000;
+
 // URL abierta de astronautas (¡Ojo! Es HTTP normal, sin la S)
+// AVISO: open-notify ya no se mantiene y devuelve datos CONGELADOS (la
+// tripulación de 2024). Responde 200 OK igual: un 200 sólo dice que el
+// servidor contestó, no que el dato esté vigente. Úsalo para practicar el
+// parseo de arrays JSON, no como fuente de quién está hoy en el espacio.
 const char* url = "http://api.open-notify.org/astros.json";
 
 // Variables Globales
@@ -39,6 +48,9 @@ void setup() {
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(WHITE);
+    // Sin salto de línea automático: un nombre que no cabe en 128 px se recorta
+    // en el borde en lugar de pasar al renglón de abajo y pisar el siguiente
+    display.setTextWrap(false);
     display.setCursor(0, 20);
     display.println("Conectando WiFi...");
     display.display();
@@ -46,12 +58,29 @@ void setup() {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
     
+    unsigned long inicio = millis();
     while (WiFi.status() != WL_CONNECTED) {
+        // Si pasan 20 s sin conectar, avisar y reiniciar (no esperar para siempre)
+        if (millis() - inicio >= WIFI_TIMEOUT_MS) {
+            Serial.println("\n[WiFi] Sin conexión tras 20 s. Revisa el SSID, la contraseña o la cobertura.");
+            Serial.println("[WiFi] Reiniciando la placa en 5 s para volver a intentarlo...");
+            display.clearDisplay();
+            display.setCursor(0, 20);
+            display.println("Sin WiFi tras 20 s");
+            display.println("Reiniciando...");
+            display.display();
+            delay(5000);
+            ESP.restart();
+        }
         delay(500);
         Serial.print(".");
     }
     
     Serial.println("\nWiFi conectado!");
+    display.clearDisplay();
+    display.setCursor(0, 20);
+    display.println("WiFi OK!");
+    display.display();
 }
 
 void descargarListaAstronautas() {
@@ -86,20 +115,31 @@ void descargarListaAstronautas() {
             } else {
                 Serial.println("Error parseando JSON de astronautas");
             }
+        } else {
+            // No fallar en silencio: decir qué pasó
+            if (httpCode > 0) {
+                // El servidor respondió, pero no con 200 (p. ej. 404 o 503)
+                Serial.printf("Error HTTP: %d\n", httpCode);
+            } else {
+                // Código negativo: ni siquiera hubo respuesta (DNS, conexión, tiempo agotado...)
+                Serial.printf("Error HTTP: %d (%s)\n", httpCode, HTTPClient::errorToString(httpCode).c_str());
+            }
+
+            // Si todavía no hay lista que mostrar, avisar también en la OLED
+            if (totalAstronautas == 0) {
+                display.clearDisplay();
+                display.setCursor(0, 20);
+                display.println("Error al consultar");
+                display.printf("Cod: %d", httpCode);
+                display.display();
+            }
         }
         http.end();
     }
 }
 
 void refrescarPantallaOLED() {
-    if (totalAstronautas == 0) {
-        display.clearDisplay();
-        display.setCursor(0, 25);
-        display.println("Buscando astros...");
-        display.display();
-        return;
-    }
-
+    // Sólo se llama desde loop() cuando totalAstronautas > 0
     display.clearDisplay();
     display.setTextSize(1);
     display.setCursor(0, 0);
@@ -120,7 +160,7 @@ void refrescarPantallaOLED() {
         }
         
         display.setCursor(0, y);
-        // Mostrar numeración requerida por el profesor: "1. Nombre"
+        // Mostrar con numeración: "1.Nombre"
         display.printf("%d.%s", indiceAst + 1, nombresAstronautas[indiceAst].c_str());
         y += 10; // Bajar un renglón
     }
@@ -129,7 +169,9 @@ void refrescarPantallaOLED() {
     
     // Lógica para avanzar de página en el siguiente turno
     paginaActual++;
-    int totalPaginas = (totalAstronautas + astrosPorPagina - 1) / astrosPorPagina; // División redondeada hacia arriba
+    // Sólo se guardan hasta 15 nombres: las páginas se cuentan con ese mismo tope
+    int cantidadMostrar = (totalAstronautas > 15) ? 15 : totalAstronautas;
+    int totalPaginas = (cantidadMostrar + astrosPorPagina - 1) / astrosPorPagina; // División redondeada hacia arriba
     if (paginaActual >= totalPaginas) {
         paginaActual = 0; // Volver a la primera página si ya vimos todos
     }

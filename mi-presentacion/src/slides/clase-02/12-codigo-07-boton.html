@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 07 · Botón · Sesión 2</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-keyboard" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 07</span>
+					</div>
+
+					<h2 class="code-hour__title">Un pulsador que cuenta cada pulsación una sola vez</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Clase Boton con antirrebote.</span>
+								<span class="deliverable__file">platformio.ini · lib/Boton/ · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Pulsador entre el GPIO 4 y GND.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de update() y cronograma.</span>
+								<span class="deliverable__file">diagrama-flujo-update.excalidraw · cronograma-antirrebote.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Contar las pulsaciones del GPIO 4 sin que los rebotes del contacto sumen eventos falsos y sin detener <code>loop()</code>.</p>
+							</div>
+							<div class="code-hour__section montaje--lado">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Pulsador entre el <b>GPIO 4</b> (entrada digital, <code>INPUT_PULLUP</code>) y GND, sin resistencia externa: reposo 1, pulsado 0, como en el Ejemplo 02.</p>
+								<div class="hw-set hw-set--amplio-hd hw-set--boton mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-pushbutton color="green"></wokwi-pushbutton>
+										<small>Pulsador</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+Iniciando detección de pulsaciones con filtrado antirrebote (30 ms)
+[BOTON] pulsacion #1 t=2145 ms
+[BOTON] pulsacion #2 t=3870 ms
+[BOTON] pulsacion #3 t=5012 ms</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, con la clase Boton en lib/Boton/.
+
+<b>2. Firmware.</b> Boton(uint8_t pin); begin() configura INPUT_PULLUP; update(), en cada vuelta de loop(), lee el pin una vez y filtra el rebote con millis() y static const unsigned long DEBOUNCE_DELAY = 30, sin esperar; fuePulsado() devuelve true una vez por pulsación. Imprime una línea vacía y «Iniciando detección de pulsaciones con filtrado antirrebote (30 ms)»; en cada evento, con snprintf, «[BOTON] pulsacion #N t=NNNN ms» (N uint32_t con PRIu32, t = millis()). Sin delay() en loop().
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el pulsador entre el GPIO 4 y GND.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de update() y un cronograma del contacto con la ventana de 30 ms superpuesta y los flancos descartados.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Sin <code>delay()</code>, el filtro depende del instante guardado en el objeto y <code>loop()</code> sigue ejecutándose. <code>PRIu32</code> imprime el contador igual en cualquier versión del núcleo.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> Una pulsación se acepta cuando la lectura lleva 30 ms estable; cada flanco del rebote reinicia esa cuenta.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pulsar varias veces; el contador avanza de uno en uno. Pregunta de predicción: ¿en qué instante se imprime la línea de una pulsación? Respuesta: al pulsar, 30 ms después del último rebote; al soltar no se imprime nada. Los instantes de la traza son ilustrativos. Wokwi simula el rebote del pulsador por defecto: con DEBOUNCE_DELAY = 0 el contador puede saltar varias unidades por pulsación.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>millis()</code> devuelve <code>unsigned long</code> de 32 bits; la resta <code>now - _lastDebounceTime</code> sigue siendo correcta cuando el contador desborda. <code>PRIu32</code> es la macro de <code>&lt;inttypes.h&gt;</code> para imprimir un <code>uint32_t</code>.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li><code>delay(30)</code> dentro de <code>update()</code>, que bloquea todo el bucle.</li><li>Leer el pin dos veces en la misma vuelta: durante el rebote, las dos lecturas pueden diferir.</li><li>Olvidar <code>boton.update()</code> en <code>loop()</code>: <code>fuePulsado()</code> nunca devuelve true.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-antirrebote.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Antirrebote</span>
+				</a>
+				<a class="slide-nav__link" href="13-tipos-tiempo.html">
+					<span>Tipos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/pushbutton-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

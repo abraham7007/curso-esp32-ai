@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 15 · Escáner WiFi · Sesión 4</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="22">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour s4b-compacto">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 15</span>
+					</div>
+
+					<h2 class="code-hour__title">Un escáner que lista las redes WiFi que alcanza la antena</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Barrido de redes cada 5 s.</span>
+								<span class="deliverable__file">platformio.ini · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Una placa, salida por USB.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo con las tres ramas.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Cada 5 s, listar las redes de 2,4 GHz al alcance con su nombre (<em>SSID</em>), potencia en dBm, canal y cifrado; un resultado negativo es un código de error.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Una sola placa, sin conexiones externas. El barrido usa la antena del módulo y la lista sale por USB. Nombres, dBm y canales de la salida son ilustrativos.</p>
+								<div class="hw-set mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term term--ancha">
+--- ESCÁNER DE REDES WIFI INICIADO ---
+Iniciando escaneo...
+Escaneo finalizado.
+3 redes encontradas:
+1: LAB-ELECTRONICA (-48 dBm) canal 6 [Red Cifrada]
+2: Invitados (-67 dBm) canal 1 [Red Abierta]
+3: CASA_2.4G (-81 dBm) canal 11 [Red Cifrada]
+
+-----------------------------------
+
+Iniciando escaneo...</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino y monitor_speed = 115200.
+<b>2. Firmware.</b> En setup(), WiFi.mode(WIFI_STA) y WiFi.disconnect(), e imprime «\n--- ESCÁNER DE REDES WIFI INICIADO ---». En cada vuelta: «Iniciando escaneo...», n = WiFi.scanNetworks() y «Escaneo finalizado.». Si n &lt; 0, «Error: el escaneo falló (código %d). Se reintenta en el próximo ciclo.»; si n es 0, «No se encontraron redes WiFi.»; si no, «n redes encontradas:» («1 red encontrada:» si es una) y una línea por red, «i: SSID (RSSI dBm) canal C [Red Abierta]» o «[Red Cifrada]» según WiFi.encryptionType(i). Cierra con «\n», 35 guiones y «\n», y espera 5 s.
+<b>3. Simulación.</b> Añade la simulación de Wokwi con un ESP32 solo.
+<b>4. Diagrama.</b> En Excalidraw: el flujo de loop() con las tres ramas de n (error, ninguna red, lista).</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> Un <code>n</code> negativo es un código de error (−2 = <code>WIFI_SCAN_FAILED</code>); sin esa rama, el bucle no imprime nada y el fallo no se detecta. El escaneo funciona en modo estación sin conectarse a ninguna red.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> La lista contiene solo redes de 2,4 GHz, cada una con su potencia en dBm y su canal; una red de 5 GHz no aparece.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿aparece en la lista la red de 5 GHz del aula? No aparece, porque la radio del ESP32 trabaja únicamente en 2,4 GHz, canales 1 a 13. Los nombres, potencias y canales de la traza son ilustrativos. En Wokwi el barrido devuelve la red simulada Wokwi-GUEST; el firmware imprime entonces «1 red encontrada:». scanNetworks() bloquea unos 2 s mientras recorre los canales. Comparar con la simulación de la lámina 03: −48 dBm es una señal excelente y −81 dBm, marginal.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p><code>WiFi.scanNetworks()</code> devuelve la cantidad de redes o un negativo. Después, por índice: <code>WiFi.SSID(i)</code>, <code>WiFi.RSSI(i)</code> (dBm), <code>WiFi.channel(i)</code> y <code>WiFi.encryptionType(i)</code>, que vale <code>WIFI_AUTH_OPEN</code> en una red abierta.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>Buscar la red de 5 GHz del router, que el ESP32 no detecta.</li><li>Tratar un −2 como cantidad de redes.</li><li>Escanear en modo AP sin <code>WIFI_STA</code>.</li><li>Leer el RSSI como valor positivo; −48 dBm es más potencia que −81 dBm.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-rssi-canales.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>RSSI y canales</span>
+				</a>
+				<a class="slide-nav__link" href="05-ip-dns.html">
+					<span>IP y DNS</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

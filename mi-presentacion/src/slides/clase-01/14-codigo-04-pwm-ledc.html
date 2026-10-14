@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplo 04 · Brillo por PWM · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia ponencia--trabajo" data-deck-total="23">
+		<main class="slide">
+			<div class="slide__content slide__content--flush">
+				<div class="code-hour">
+					<div class="code-hour__header">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-wave" /></svg>
+						<span class="code-hour__label">La hora del código</span>
+						<span class="code-hour__ref">Ejemplo 04</span>
+					</div>
+
+					<h2 class="code-hour__title">El brillo de un LED gobernado por el potenciómetro</h2>
+
+					<div class="deliverables">
+						<div class="deliverable">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-project" /></svg>
+							<div>
+								<span class="deliverable__name">Proyecto</span>
+								<span class="deliverable__what">Amplía el Ejemplo 03 con el controlador LEDC.</span>
+								<span class="deliverable__file">platformio.ini (espressif32 @ 6.9.0) · src/main.cpp</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--sim">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
+							<div>
+								<span class="deliverable__name">Simulación</span>
+								<span class="deliverable__what">Potenciómetro en el GPIO 32 y LED en el GPIO 2.</span>
+								<span class="deliverable__file">diagram.json · wokwi.toml</span>
+							</div>
+						</div>
+						<div class="deliverable deliverable--diagram">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-diagram" /></svg>
+							<div>
+								<span class="deliverable__name">Diagrama</span>
+								<span class="deliverable__what">Flujo de una vuelta y cronograma de la señal.</span>
+								<span class="deliverable__file">diagrama-flujo.excalidraw · cronograma-pwm.excalidraw</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__body code-hour__body--pair">
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
+									Qué debe hacer
+								</h4>
+								<p>Reescalar la lectura de 12 bits a un ciclo de trabajo de 8 bits y aplicarlo al LED cada 100 ms.</p>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
+									Montaje
+								</h4>
+								<p>Potenciómetro con el cursor en el <b>GPIO 32</b> (ADC1), como en el Ejemplo 03. LED con 220 Ω en el <b>GPIO 2</b> (salida PWM del LEDC, 5 kHz, 8 bits).</p>
+								<div class="hw-set hw-set--amplio mt-3" aria-hidden="true">
+									<span class="hw-set__item hw-set__board">
+										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
+										<small>ESP32-WROOM-32</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-potentiometer></wokwi-potentiometer>
+										<small>Potenciómetro</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-led color="red" value="1"></wokwi-led>
+										<small>LED</small>
+									</span>
+									<span class="hw-set__item">
+										<wokwi-resistor value="220"></wokwi-resistor>
+										<small>220 Ω</small>
+									</span>
+								</div>
+							</div>
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+									Salida esperada
+								</h4>
+								<div class="term">[LEDC] adc=   0 duty=  0   0.0% Vm=0.000 V
+[LEDC] adc=2048 duty=127  49.8% Vm=1.644 V
+[LEDC] adc=4095 duty=255  100.0% Vm=3.300 V</div>
+							</div>
+						</div>
+
+						<div class="code-hour__stack">
+							<div class="code-hour__section">
+								<h4>
+									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-robot" /></svg>
+									Prompt para el asistente
+								</h4>
+								<div class="prompt-box"><b>1. Proyecto.</b> Parte del Ejemplo 03 o crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, fijando platform = espressif32 @ 6.9.0.
+
+<b>2. Firmware.</b> Configura el LEDC a 5000 Hz y 8 bits sobre el GPIO 2 con ledcSetup() y ledcAttachPin() en el canal 0. Cada 100 ms lee el GPIO 32, reescala con map(adc, 0, 4095, 0, 255), aplícalo con ledcWrite() y emite a 115200 baudios «[LEDC] adc=NNNN duty=NNN  PP.P% Vm=N.NNN V». No uses analogWrite().
+
+<b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 32 y el LED con 220 Ω en el GPIO 2.
+
+<b>4. Diagramas.</b> En Excalidraw: el flujo de una vuelta (leer, reescalar, aplicar) y un cronograma de la señal para tres ciclos de trabajo, con el valor medio marcado.</div>
+								<p class="prompt-note">
+									<b>Por qué se pide así.</b> La plataforma fijada determina la API: en el núcleo 3.x <code>ledcSetup()</code> desaparece y se usa <code>ledcAttach()</code>. Sin <code>analogWrite()</code> quedan a la vista canal, frecuencia y resolución.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="code-hour__why">
+						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
+						<p><b>Qué comprueba.</b> El PWM no genera tensiones intermedias; la carga responde al valor medio, proporcional al ciclo de trabajo.</p>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>Pregunta de predicción: ¿qué duty sale para adc = 2048? Sale 127, la mitad de la escala de 8 bits (map trunca 127,5). El valor medio de 1,644 V corresponde al 49,8 %. El LED se ve encendido de forma continua aunque conmuta 5000 veces por segundo, porque el ojo responde al valor medio.</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>Núcleo 2.x: <code>ledcSetup(canal, f, bits)</code>, <code>ledcAttachPin(pin, canal)</code>, <code>ledcWrite(canal, duty)</code>. Núcleo 3.x: <code>ledcAttach(pin, f, bits)</code> y <code>ledcWrite(pin, duty)</code>.</p>
+					<h4>Errores frecuentes</h4>
+					<ul><li>El código del núcleo 3.x no compila en un proyecto 2.x.</li><li>Dividir entre 16 en vez de usar <code>map()</code> cambia la escala y la traza.</li><li>Con frecuencia y resolución incompatibles, <code>ledcSetup()</code> devuelve 0.</li></ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-pwm.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Modulación por ancho de pulso</span>
+				</a>
+				<a class="slide-nav__link" href="15-pulso-servo.html">
+					<span>Pulso de control de un servo</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+		<script type="module">
+			import "@wokwi/elements/dist/esm/potentiometer-element.js";
+			import "@wokwi/elements/dist/esm/led-element.js";
+			import "@wokwi/elements/dist/esm/resistor-element.js";
+			import "@wokwi/elements/dist/esm/esp32-devkit-v1-element.js";
+		</script>
+	</body>
+</html>

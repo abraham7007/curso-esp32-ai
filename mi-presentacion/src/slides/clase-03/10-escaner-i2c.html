@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Escáner del bus I²C · Sesión 3</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="24">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Bus I²C</span>
+
+				<h1 class="slide__title slide__title--sm">
+					El escáner anota las direcciones que responden con <em>ACK</em>
+				</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								El maestro envía START, la dirección de 7 bits y R/W. En el
+								noveno pulso suelta SDA: si un dispositivo la baja
+								(<b>ACK</b>), está en el bus; si queda en 1, <b>NACK</b>.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<code>0x08 … 0x77 · 112 direcciones</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo" aria-label="Recorrido del escáner">
+								<button type="button" class="btn btn--secondary" id="b-paso">Paso</button>
+								<button type="button" class="btn btn--secondary" id="b-play" aria-pressed="false">Reproducir</button>
+							</fieldset>
+							<button type="button" class="btn btn--secondary" id="b-tres" aria-pressed="false">Tres BMP180 iguales</button>
+							<span class="lectura lectura--fin"><span id="l-dir" class="s3c-ancho s3c-ancho--corto">0x3C → ACK</span></span>
+						</div>
+						<div class="lienzo-caja">
+							<canvas
+								id="escaner"
+								role="img"
+								aria-label="Escáner I2C del ejemplo 12. Arriba, SDA y SCL de una sonda: START, siete bits de dirección, R/W = 0, el bit de reconocimiento y STOP. Abajo, la tabla de direcciones 0x08 a 0x77 con las que respondieron y la salida del monitor serie."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: con tres BMP180 iguales en el mismo bus, ¿cuántos
+					dispositivos informa el escáner? Recoger respuestas antes de activar el
+					interruptor.
+				</p>
+				<p>
+					Arranca detenido en 0x3C: la pantalla SSD1306 baja SDA en el noveno
+					pulso. «Paso» avanza una dirección (NACK: SDA queda en 1 por la
+					pull-up); «Reproducir» recorre y se detiene en cada ACK. Respuesta: uno.
+					Los tres BMP180 bajan SDA a la vez en 0x77 y el maestro ve un único ACK,
+					«1 dispositivo encontrado» (así lo imprime el ejemplo 12b). Cada
+					dirección del bus debe ser única.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						<code>Wire.beginTransmission(dir); uint8_t e = Wire.endTransmission();</code>
+						— <code>e == 0</code>: ACK; <code>2</code>: NACK (de dirección o de
+						dato, el núcleo no los distingue); <code>4</code>: otro error;
+						<code>5</code>: tiempo agotado (códigos del núcleo Arduino-ESP32 2.x, el
+						que instala PlatformIO con <code>platform = espressif32</code>). Sin datos, la sonda es solo
+						dirección + STOP.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Primer diagnóstico de cualquier montaje I²C. Si la dirección
+						se repite: sensor con dirección configurable (BMP280: 0x76/0x77),
+						multiplexor TCA9548A o segundo controlador (<code>Wire1</code>).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Usar la dirección de 8 bits de la hoja de datos (0x78) en lugar de la de 7 (0x3C).</li>
+						<li>Sin pull-up, SDA no vuelve a 1: el bus no funciona o «responde» todo.</li>
+						<li>Dar por averiado un sensor que comparte dirección con otro.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-bus-i2c.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Bus I²C</span>
+				</a>
+				<a class="slide-nav__link" href="11-codigo-12-escaner.html">
+					<span>Ejemplo 12 · Escáner</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const hex = (v) => `0x${v.toString(16).toUpperCase().padStart(2, "0")}`;
+			const PRIMERA = 0x08;
+			const ULTIMA = 0x77;
+
+			// Ejemplo 12: SSD1306 en 0x3C y BMP180 en 0x77. Ejemplo 12b: tres BMP180.
+			const BUS_12 = new Map([
+				[0x3c, "SSD1306"],
+				[0x77, "BMP180"],
+			]);
+			const BUS_12B = new Map([[0x77, "3 × BMP180"]]);
+			const verbo = (n) => (n.startsWith("3") ? "bajan" : "baja");
+
+			let tres = false;
+			let dir = 0x3c; // última dirección sondeada
+			let fin = false; // escaneo completo: se imprime el resumen
+			let reloj = null;
+
+			const bus = () => (tres ? BUS_12B : BUS_12);
+			const responde = (d) => bus().has(d);
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+				ctx.font = `${peso} ${fs}px ${fam}`;
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+			}
+
+			function lineasMonitor() {
+				const l = ["Iniciando escaneo del bus I2C (SDA=21, SCL=22)"];
+				let n = 0;
+				for (let d = PRIMERA; d <= dir; d++) {
+					if (responde(d)) {
+						l.push(`[I2C] dispositivo en ${hex(d)}`);
+						n++;
+					}
+				}
+				if (fin) l.push(`[I2C] ${n} ${n === 1 ? "dispositivo encontrado" : "dispositivos encontrados"}`);
+				return l;
+			}
+
+			function dibujarSonda(ctx, x0, y0, w, h, fs, c) {
+				// Ranuras: reposo, START, A6…A0, R/W, ACK, STOP, reposo.
+				const ack = responde(dir);
+				const bits = [];
+				for (let i = 6; i >= 0; i--) bits.push((dir >> i) & 1);
+				bits.push(0); // R/W = 0: escritura
+				const L = fs * 3.6;
+				const n = 13;
+				const u = (w - L) / n;
+				const X = (k) => x0 + L + k * u;
+				const yRot = y0 + fs * 0.7;
+				const carril = (h - fs * 2.2) / 2;
+				const ySdaA = y0 + fs * 1.8;
+				const ySdaB = ySdaA + carril * 0.62;
+				const ySclA = ySdaA + carril;
+				const ySclB = ySclA + carril * 0.62;
+				const grosor = Math.max(3, fs * 0.16);
+
+				texto(ctx, "SDA", x0, (ySdaA + ySdaB) / 2, fs, c.heading, 700);
+				texto(ctx, "SCL", x0, (ySclA + ySclB) / 2, fs, c.heading, 700);
+
+				// Rótulos de cada ranura.
+				texto(ctx, "START", X(1.5), yRot, fs * 0.9, c.navy, 700, "center", SANS);
+				for (let i = 0; i < 7; i++) texto(ctx, String(bits[i]), X(2.5 + i), yRot, fs * 1.1, c.navy, 700, "center");
+				texto(ctx, "W=0", X(9.5), yRot, fs * 0.9, c.navy, 700, "center");
+				texto(ctx, ack ? "ACK" : "NACK", X(10.5), yRot, fs * 0.95, ack ? c.ok : c.acento, 700, "center");
+				texto(ctx, "STOP", X(11.5), yRot, fs * 0.9, c.navy, 700, "center", SANS);
+
+				// Banda de la dirección y de la respuesta.
+				ctx.fillStyle = c.navySoft;
+				ctx.fillRect(X(2), ySdaA - fs * 0.35, u * 7, ySclB - ySdaA + fs * 0.7);
+				ctx.fillStyle = ack ? c.okSoft : c.acentoSoft;
+				ctx.fillRect(X(10), ySdaA - fs * 0.35, u, ySclB - ySdaA + fs * 0.7);
+
+				// SCL: alto en reposo; un pulso en el centro de cada bit (9).
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(X(0), ySclA);
+				ctx.lineTo(X(1.75), ySclA);
+				ctx.lineTo(X(1.75), ySclB);
+				for (let k = 2; k <= 10; k++) {
+					ctx.lineTo(X(k + 0.25), ySclB);
+					ctx.lineTo(X(k + 0.25), ySclA);
+					ctx.lineTo(X(k + 0.75), ySclA);
+					ctx.lineTo(X(k + 0.75), ySclB);
+				}
+				ctx.lineTo(X(11.25), ySclB);
+				ctx.lineTo(X(11.25), ySclA);
+				ctx.lineTo(X(n), ySclA);
+				ctx.stroke();
+
+				// SDA del maestro: START (baja con SCL alto), bits, suelta en ACK, STOP.
+				const y = (v) => (v ? ySdaA : ySdaB);
+				ctx.strokeStyle = c.navy;
+				ctx.beginPath();
+				ctx.moveTo(X(0), ySdaA);
+				ctx.lineTo(X(1.5), ySdaA);
+				ctx.lineTo(X(1.5), ySdaB);
+				let prev = 0;
+				for (let i = 0; i < 8; i++) {
+					ctx.lineTo(X(2 + i), y(prev));
+					ctx.lineTo(X(2 + i), y(bits[i]));
+					prev = bits[i];
+				}
+				ctx.lineTo(X(10), y(prev));
+				ctx.stroke();
+				// Noveno bit: SDA la baja el esclavo o la sube la pull-up.
+				ctx.strokeStyle = ack ? c.ok : c.acento;
+				ctx.lineWidth = grosor * 1.4;
+				ctx.beginPath();
+				ctx.moveTo(X(10), y(prev));
+				ctx.lineTo(X(10), y(!ack));
+				ctx.lineTo(X(11), y(!ack));
+				ctx.stroke();
+				ctx.strokeStyle = c.navy;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(X(11), y(!ack));
+				ctx.lineTo(X(11), ySdaB);
+				ctx.lineTo(X(11.5), ySdaB);
+				ctx.lineTo(X(11.5), ySdaA);
+				ctx.lineTo(X(n), ySdaA);
+				ctx.stroke();
+
+				const quien = ack ? `${bus().get(dir)} ${verbo(bus().get(dir))} SDA` : "nadie: SDA queda en 1";
+				texto(ctx, quien, X(n), ySclB + fs * 0.95, fs * 0.95, ack ? c.ok : c.acento, 700, "right", SANS);
+				texto(ctx, `${hex(dir)} = ${bits.slice(0, 7).join("")}`, X(2), ySclB + fs * 0.95, fs * 0.95, c.navy, 700, "left");
+			}
+
+			function dibujarTabla(ctx, x0, y0, w, h, fs, c) {
+				const lab = fs * 2.4;
+				const cw = (w - lab) / 16;
+				const ch = (h - fs * 1.4) / 8;
+				const fsC = clamp(18, Math.min(cw * 0.36, ch * 0.55), fs);
+				for (let col = 0; col < 16; col++) texto(ctx, col.toString(16).toUpperCase(), x0 + lab + (col + 0.5) * cw, y0 + fs * 0.6, fsC, c.muted, 600, "center");
+				for (let fila = 0; fila < 8; fila++) {
+					const yc = y0 + fs * 1.4 + fila * ch;
+					texto(ctx, `${fila.toString(16)}0`, x0, yc + ch / 2, fsC, c.muted, 600);
+					for (let col = 0; col < 16; col++) {
+						const d = fila * 16 + col;
+						const xc = x0 + lab + col * cw;
+						if (d < PRIMERA || d > ULTIMA) continue;
+						const visto = d <= dir;
+						const si = visto && responde(d);
+						ctx.fillStyle = si ? c.ok : visto ? c.sup : c.bgCelda;
+						ctx.fillRect(xc + 1.5, yc + 1.5, cw - 3, ch - 3);
+						if (si) texto(ctx, d.toString(16).toUpperCase(), xc + cw / 2, yc + ch / 2, fsC, c.sup, 700, "center");
+						else if (visto) texto(ctx, "--", xc + cw / 2, yc + ch / 2, fsC, c.muted, 500, "center");
+						if (d === dir) {
+							ctx.strokeStyle = c.acento;
+							ctx.lineWidth = 3;
+							ctx.strokeRect(xc + 1.5, yc + 1.5, cw - 3, ch - 3);
+						}
+					}
+				}
+			}
+
+			function dibujarMonitor(ctx, x0, y0, w, h, fs, c) {
+				ctx.fillStyle = c.codeBg;
+				ctx.beginPath();
+				ctx.roundRect(x0, y0, w, h, fs * 0.4);
+				ctx.fill();
+				ctx.strokeStyle = c.codeBorde;
+				ctx.lineWidth = 2;
+				ctx.stroke();
+				texto(ctx, "Monitor serie · 115 200", x0 + fs * 0.7, y0 + fs * 0.9, fs * 0.9, c.codeDim, 600, "left", SANS);
+				const l = lineasMonitor();
+				const fsM = clamp(16, Math.min(fs, (w - fs * 1.4) / (46 * 0.61)), fs);
+				const lh = Math.min(fsM * 1.55, (h - fs * 2.2) / 5);
+				for (const [i, s] of l.entries()) {
+					const final = fin && i === l.length - 1;
+					texto(ctx, s, x0 + fs * 0.7, y0 + fs * 2.1 + lh * (i + 0.5), fsM, final ? c.okCode : c.codeFg, final ? 700 : 500);
+				}
+			}
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					bgCelda: token("--color-bg"),
+					sup: token("--color-surface"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					codeBg: token("--color-code-bg"),
+					codeFg: token("--color-code-fg"),
+					codeDim: token("--color-code-dim"),
+					codeBorde: token("--color-code-border"),
+					okCode: token("--color-ok"),
+				};
+				const fs = clamp(20, Math.min(h * 0.04, w * 0.0155), 28);
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+				const m = fs * 0.8;
+				const altoSonda = h * 0.44;
+				dibujarSonda(ctx, m, m * 0.4, w - 2 * m, altoSonda, fs, c);
+				const yAbajo = m + altoSonda + fs * 0.6;
+				const altoAbajo = h - yAbajo - m;
+				const anchoTabla = (w - 3 * m) * 0.55;
+				dibujarTabla(ctx, m, yAbajo, anchoTabla, altoAbajo, fs, c);
+				dibujarMonitor(ctx, 2 * m + anchoTabla, yAbajo, w - 3 * m - anchoTabla, altoAbajo, fs, c);
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("escaner"), dibujar);
+			const bPaso = document.getElementById("b-paso");
+			const bPlay = document.getElementById("b-play");
+			const bTres = document.getElementById("b-tres");
+			const lDir = document.getElementById("l-dir");
+
+			function render() {
+				lDir.textContent = `${hex(dir)} → ${responde(dir) ? "ACK" : "NACK"}${fin ? " · fin" : ""}`;
+				lDir.classList.toggle("s3c-bien", responde(dir));
+				bTres.setAttribute("aria-pressed", String(tres));
+				bTres.classList.toggle("btn--primary", tres);
+				bTres.classList.toggle("btn--secondary", !tres);
+				bPlay.setAttribute("aria-pressed", String(reloj !== null));
+				bPlay.textContent = reloj ? "Pausa" : "Reproducir";
+				lienzo.redibujar();
+			}
+
+			function paso() {
+				if (fin) {
+					fin = false;
+					dir = PRIMERA;
+				} else {
+					dir++;
+					// Sondeada la última dirección, el ejemplo imprime el resumen.
+					if (dir >= ULTIMA) fin = true;
+				}
+				render();
+			}
+
+			function parar() {
+				clearInterval(reloj);
+				reloj = null;
+				render();
+			}
+
+			bPaso.addEventListener("click", () => {
+				if (reloj) parar();
+				paso();
+			});
+			bPlay.addEventListener("click", () => {
+				if (reloj) {
+					parar();
+					return;
+				}
+				reloj = setInterval(() => {
+					paso();
+					if (fin || responde(dir)) parar();
+				}, 90);
+				render();
+			});
+			bTres.addEventListener("click", () => {
+				tres = !tres;
+				render();
+			});
+			render();
+		</script>
+	</body>
+</html>

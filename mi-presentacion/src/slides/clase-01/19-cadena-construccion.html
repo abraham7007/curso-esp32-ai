@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cadena de construcción · Sesión 1</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="23">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Entorno de desarrollo</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Etapas de la <em>cadena de construcción</em> y sus errores
+				</h1>
+
+				<div class="rd crece flex flex-col gap-6">
+					<div class="tuberia" data-stage-picker>
+						<svg aria-hidden="true" data-tuberia-trazo></svg>
+						<div class="tuberia__archivo col-start-1" data-file="0">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>main.cpp</span>
+						</div>
+						<div class="tuberia__archivo col-start-3" data-file="1">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>main.ii</span>
+						</div>
+						<div class="tuberia__archivo col-start-5" data-file="2">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>main.s</span>
+						</div>
+						<div class="tuberia__archivo col-start-7" data-file="3">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>main.o</span>
+						</div>
+						<div class="tuberia__archivo col-start-9" data-file="4">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>firmware.elf</span>
+						</div>
+						<div class="tuberia__archivo col-start-11" data-file="5">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>firmware.bin</span>
+						</div>
+						<button class="picker__item tuberia__etapa col-start-2" type="button" data-index="0">
+							<span class="etapa-nombre">Preprocesador</span>
+							<span class="tuberia__orden">g++ -E</span>
+						</button>
+						<button class="picker__item tuberia__etapa col-start-4" type="button" data-index="1">
+							<span class="etapa-nombre">Compilador</span>
+							<span class="tuberia__orden">g++ -S</span>
+						</button>
+						<button class="picker__item tuberia__etapa col-start-6" type="button" data-index="2">
+							<span class="etapa-nombre">Ensamblador</span>
+							<span class="tuberia__orden">as</span>
+						</button>
+						<button class="picker__item tuberia__etapa col-start-8" type="button" data-index="3">
+							<span class="etapa-nombre">Enlazador</span>
+							<span class="tuberia__orden">ld</span>
+						</button>
+						<button class="picker__item tuberia__etapa col-start-10" type="button" data-index="4">
+							<span class="etapa-nombre">esptool</span>
+							<span class="tuberia__orden">elf2image</span>
+						</button>
+					</div>
+
+					<div class="codepanel flex flex-col">
+						<div class="codepanel__header">
+							<span class="codepanel__path">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
+								<span>terminal · <span data-stage-name></span></span>
+							</span>
+							<span class="codepanel__tag codepanel__tag--no">error típico</span>
+						</div>
+						<div class="flex-1 flex flex-col justify-center">
+							<pre class="terminal__error"><span class="terminal__orden">$ pio run</span>
+<span data-stage-error></span></pre>
+							<p class="terminal__que" data-stage-desc></p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					PlatformIO encadena cinco programas, y cada uno produce errores de forma
+					distinta. Antes de pulsar el enlazador, plantear la pregunta. Pregunta de
+					predicción: si el
+					compilador ya revisó el código, ¿por qué puede fallar una etapa
+					posterior? El compilador procesa cada archivo por separado, y el
+					enlazador es la etapa que comprueba que todo lo declarado esté definido.
+					La primera línea del error identifica la etapa y acota dónde buscar.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Las cuatro primeras etapas son la <i>toolchain</i> cruzada
+						<code>xtensa-esp32-elf-</code> (GCC); la quinta,
+						<code>esptool.py elf2image</code>. <code>pio run -v</code> muestra
+						cada orden que se ejecuta.
+					</p>
+					<h4>Dónde aparece</h4>
+					<ul>
+						<li><code>.pio/build/esp32dev/</code> guarda los <code>.o</code>, el <code>.elf</code> y el <code>.bin</code>.</li>
+						<li>El <code>.elf</code> conserva símbolos de depuración y no se graba; el <code>.bin</code> es mucho menor.</li>
+						<li>«The program size … is greater than maximum allowed» lo emite la comprobación de tamaño que PlatformIO hace tras enlazar, no esptool.</li>
+					</ul>
+					<h4>Errores frecuentes</h4>
+					<p>
+						Corregir una línea que no contiene el error. Un
+						<code>undefined reference</code> indica que falta un archivo o una
+						librería.
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="18-flujo-trabajo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Flujo de trabajo</span>
+				</a>
+				<a class="slide-nav__link" href="20-proyecto-platformio.html">
+					<span>Proyecto PlatformIO</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			const etapas = [
+				{
+					error: "src/main.cpp:2:10: fatal error: DHT.h: No such file or directory",
+					desc: "Inserta las cabeceras y expande las macros. Falla si un #include no aparece: librería sin declarar o nombre mal escrito.",
+				},
+				{
+					error: "src/main.cpp:12:3: error: 'ledPin' was not declared in this scope",
+					desc: "Traduce el C++ a instrucciones Xtensa. Indica archivo, línea y columna de cada error.",
+				},
+				{
+					error: "— rara vez falla —",
+					desc: "Convierte cada instrucción en código máquina. Como su entrada la genera el compilador, rara vez produce errores.",
+				},
+				{
+					error: "main.cpp:(.text.loop+0x4): undefined reference to `leerSensor()'",
+					desc: "Une los objetos y las librerías y asigna direcciones. Falla si algo declarado no está definido en ningún archivo.",
+				},
+				{
+					error: "— rara vez falla —",
+					desc: "Extrae lo que va a la Flash y antepone la cabecera de arranque. Si el programa no cabe, PlatformIO lo avisa antes, al medir el .elf.",
+				},
+			];
+
+			const tuberia = document.querySelector("[data-stage-picker]");
+			const items = tuberia.querySelectorAll(".tuberia__etapa");
+			const archivos = tuberia.querySelectorAll(".tuberia__archivo");
+			const trazo = tuberia.querySelector("[data-tuberia-trazo]");
+			const campo = (k) => document.querySelector(`[data-stage-${k}]`);
+			const [nombre, error, desc] = ["name", "error", "desc"].map(campo);
+
+			// Zigzag archivo → etapa → archivo, medido sobre las cajas reales.
+			function dibujar() {
+				const base = tuberia.getBoundingClientRect();
+				const abajo = (el) => {
+					const r = el.getBoundingClientRect();
+					return `${r.left + r.width / 2 - base.left} ${r.bottom - base.top}`;
+				};
+				const arriba = (el) => {
+					const r = el.getBoundingClientRect();
+					return `${r.left + r.width / 2 - base.left} ${r.top - base.top}`;
+				};
+				const tramos = [];
+				items.forEach((etapa, i) => {
+					tramos.push(`M${abajo(archivos[i])}L${arriba(etapa)}`);
+					tramos.push(`M${arriba(etapa)}L${abajo(archivos[i + 1])}`);
+				});
+				trazo.innerHTML =
+					'<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>' +
+					tramos.map((d) => `<path d="${d}" fill="none" stroke="currentColor" stroke-width="3" marker-end="url(#punta)"/>`).join("");
+			}
+
+			function elegir(i) {
+				const e = etapas[i];
+				for (const it of items) it.classList.toggle("is-selected", Number(it.dataset.index) === i);
+				for (const [k, a] of archivos.entries()) a.classList.toggle("is-io", k === i || k === i + 1);
+				nombre.textContent = items[i].querySelector(".etapa-nombre").textContent;
+				error.textContent = e.error;
+				desc.textContent = e.desc;
+			}
+
+			for (const it of items) it.addEventListener("click", () => elegir(Number(it.dataset.index)));
+			new ResizeObserver(dibujar).observe(tuberia);
+			document.fonts.ready.then(dibujar);
+			elegir(0);
+		</script>
+	</body>
+</html>
