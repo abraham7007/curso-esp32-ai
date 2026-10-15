@@ -3317,21 +3317,6 @@ body.ponencia--trabajo {
 	color: var(--color-text-muted);
 }
 
-.indice .indice__pie p {
-	margin: 0;
-	font-size: var(--fs-small);
-}
-
-.indice kbd {
-	font-family: var(--font-mono);
-	font-size: 0.85em;
-	padding: 0.05em 0.4em;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-sm);
-	background: var(--color-surface-2);
-	color: var(--color-text);
-}
-
 /* Las tarjetas son enlaces: sin el subrayado ni el color que la capa
    ponencia da a los enlaces dentro de la prosa de una lámina. */
 .ponencia.indice .slide__content a.sesion,
