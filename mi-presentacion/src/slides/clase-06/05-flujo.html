@@ -19,9 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">01 · Fundamentos de TinyML</span>
 
-				<h1 class="slide__title slide__title--sm">
-					El modelo se entrena en Colab y se ejecuta en la <em>placa</em>
-				</h1>
+				<h1 class="slide__title slide__title--sm">Flujo de trabajo de TinyML entre Colab y la <em>placa</em></h1>
 
 				<div class="crece flex">
 					<svg class="s4a-svg crece" viewBox="-16 0 1832 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis etapas en fila, agrupadas por dónde ocurren. En la placa: 1, capturar ejemplos etiquetados de cada clase con el monitor serie a un archivo CSV. En Google Colab: 2, entrenar, ajustar los pesos de la red con TensorFlow y Keras, produce un modelo float32; 3, evaluar con los datos de prueba, exactitud y matriz de confusión, con model.evaluate; 4, convertir a .tflite con TFLiteConverter y, si se le dan entre 100 y 500 muestras, cuantizar a int8 en el mismo paso, opcional, lo usa el ejemplo 21; 5, exportar a C, el .tflite como arreglo de bytes con un script de Python o xxd -i, produce model.h. En el PC y la placa: 6, desplegar, compilar con PlatformIO, grabar y ejecutar en la placa con TensorFlow Lite Micro, produce el gesto o el color. Una flecha vuelve de la etapa 6 a la 1: si falla con datos nuevos, más ejemplos y volver a entrenar.">

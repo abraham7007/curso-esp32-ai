@@ -6,7 +6,9 @@ Proyectos reales de los estudiantes: /Users/mecatronica/Documents/UNI/cursos/esp
 
 ## Qué quiere el profesor
 1. Estilo de clase/ponencia, minimalista: una idea por lámina, ~40 palabras proyectadas como máximo
-   en láminas de concepto. Título = afirmación corta con la palabra clave en `<em>` (se pinta en rojo).
+   en láminas de concepto. Título = sintagma nominal descriptivo, sin verbo conjugado ni conclusión
+   («Suavizado y retraso de la media móvil», no «La media móvil retrasa la respuesta»), con la
+   palabra clave en `<em>` (se pinta en rojo).
 2. Sin láminas de papers, sin citas [n], sin glosario ni lámina de referencias (el cierre enlaza solo
    documentación oficial). Sin tiras `.usecases` ni `.practice` visibles.
 3. Gráficos y simulaciones donde aclaran algo abstracto o invisible (no en todas).
@@ -80,7 +82,7 @@ Tabla por lámina (alto/visual a 1920 y 1440), qué hiciste, dudas técnicas sin
 
 ## Proceso que funcionó (sesiones 1–3)
 1. Auditoría de la sesión contra `ejemplos/` (salidas reales carácter a carácter, .excalidraw reales).
-2. Plan de láminas (archivo, etiqueta, título-afirmación, visual) y reparto entre 4 grupos:
+2. Plan de láminas (archivo, etiqueta, título descriptivo, visual) y reparto entre 4 grupos:
    conceptos · «La hora del código» · simulaciones · diagramas y cierre.
 3. Construcción + `tools/check-ocupacion.mjs` a 1920×1080 y 1440×900.
 4. **Revisor independiente** (no escribió las láminas), dos rondas: la primera siempre encuentra

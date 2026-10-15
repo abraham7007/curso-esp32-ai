@@ -27,8 +27,11 @@ Decisión del profesor tras ver el mazo proyectado: era demasiado cargado. Las
 sesiones rehechas (**las 6**) usan `<body class="ponencia">` y
 `src/css/ponencia.css`. En ellas:
 
-- **Una idea, ~40 palabras proyectadas** por lámina de concepto. Título = afirmación
-  corta con la palabra clave en `<em>` (se pinta en rojo), en IBM Plex Sans.
+- **Una idea, ~40 palabras proyectadas** por lámina de concepto. Título = sintagma
+  nominal que dice de qué trata la lámina, sin verbo conjugado ni conclusión
+  («Publicación y suscripción por temas en un broker», no «El broker entrega cada
+  mensaje según su tema»), con la palabra clave en `<em>` (se pinta en rojo), en IBM
+  Plex Sans. Criterio de la skill `correccion-anti-ia`, pedido por el profesor.
 - **Sin papers** ni citas `[n]`, sin glosario ni lámina de referencias: el cierre
   enlaza solo documentación oficial. Sin tiras `.usecases` ni `.practice` visibles.
 - Lo que sale de la pantalla cambia de capa: `<aside class="notas">` (tecla N, notas
