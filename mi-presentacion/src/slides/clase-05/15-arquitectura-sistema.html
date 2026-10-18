@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arquitectura del sistema IoT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Plataformas de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>Comando</em> y confirmación en la arquitectura IoT
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la arquitectura en cinco bloques agrupados por las capas de la lámina 03: dispositivo ESP32 en la capa de percepción; red; broker y almacenamiento del historial en la capa de plataforma; visualización en panel o app y usuario en la capa de aplicación. La telemetría recorre los bloques de izquierda a derecha con QoS 0. El comando baja del usuario a la visualización, de ahí al broker sin pasar por el almacenamiento, con el mensaje casa/sala/luz igual a 1, y del broker al dispositivo con QoS 1. El dispositivo publica además casa/sala/estado hacia el broker, como mensaje retenido y de última voluntad. Abajo, diagrama de secuencia de la confirmación de ejecución entre dispositivo, broker y aplicación: 1, la aplicación envía el comando casa/sala/luz igual a 1 al broker; 2, el broker lo entrega al dispositivo; 3, el dispositivo ejecuta y enciende la luz; 4, el dispositivo publica el estado real; 5, el broker entrega a la aplicación el estado real, luz igual a 1; 6, la aplicación muestra encendida. Nota: sin los pasos 4 y 5, la aplicación solo puede mostrar el valor pedido.">
+						<!-- capas (lámina 03) -->
+						<text class="mid sans mut" x="120" y="16" font-size="24">percepción</text>
+						<text class="mid sans mut" x="320" y="16" font-size="24">red</text>
+						<text class="mid sans mut" x="680" y="16" font-size="24">plataforma</text>
+						<text class="mid sans mut" x="1320" y="16" font-size="24">aplicación</text>
+						<path class="ln ln--fina ln--mut" d="M2 36 H 240 M 400 36 H 960 M 1040 36 H 1598" />
+
+						<!-- cinco bloques -->
+						<rect class="caja caja--acc" x="2" y="52" width="238" height="120" rx="14" />
+						<text class="mid sans  b" x="121" y="92" font-size="28">Dispositivo</text>
+						<text class="mid sans mut" x="121" y="138" font-size="24">ESP32</text>
+						<rect class="caja caja--navy" x="400" y="52" width="240" height="120" rx="14" />
+						<text class="mid sans navy b" x="520" y="112" font-size="28">Broker</text>
+						<rect class="caja caja--navy" x="720" y="52" width="240" height="120" rx="14" />
+						<text class="mid sans navy b" x="840" y="92" font-size="26">Almacenamiento</text>
+						<text class="mid sans mut" x="840" y="138" font-size="24">historial</text>
+						<rect class="caja caja" x="1040" y="52" width="240" height="120" rx="14" />
+						<text class="mid sans  b" x="1160" y="92" font-size="28">Visualización</text>
+						<text class="mid sans mut" x="1160" y="138" font-size="24">panel o app</text>
+						<rect class="caja caja" x="1360" y="52" width="238" height="120" rx="14" />
+						<text class="mid sans  b" x="1479" y="112" font-size="28">Usuario</text>
+
+						<!-- telemetría -->
+						<path class="ln ln--navy" d="M240 92 H 380 M640 92 H 700 M960 92 H 1020 M1280 92 H 1340" />
+						<path class="rel-navy" d="M400 92 L 380 81 L 380 103 Z" />
+						<path class="rel-navy" d="M720 92 L 700 81 L 700 103 Z" />
+						<path class="rel-navy" d="M1040 92 L 1020 81 L 1020 103 Z" />
+						<path class="rel-navy" d="M1360 92 L 1340 81 L 1340 103 Z" />
+						<text class="mid navy" x="320" y="70" font-size="22">QoS 0</text>
+
+						<!-- comando -->
+						<path class="ln ln--acc" d="M1360 140 H 1300 M1160 172 V 206 H 520 V 192 M400 140 H 260" />
+						<path class="rel-acc" d="M1280 140 L 1300 129 L 1300 151 Z" />
+						<path class="rel-acc" d="M520 172 L 509 192 L 531 192 Z" />
+						<path class="rel-acc" d="M240 140 L 260 129 L 260 151 Z" />
+						<text class="mid acc" x="320" y="162" font-size="22">QoS 1</text>
+						<text class="mid acc" x="840" y="230" font-size="22">casa/sala/luz = 1</text>
+
+						<!-- estado de conexión -->
+						<path class="ln ln--mut ln--trazo" d="M120 172 V 206 H 460 V 192" />
+						<path class="rel-mut" d="M460 172 L 449 192 L 471 192 Z" />
+						<text class="sans mut" x="2" y="232" font-size="22"><tspan class="s5v5-mono">casa/sala/estado</tspan> · retenido + última voluntad</text>
+
+						<!-- secuencia de la confirmación -->
+						<path class="ln ln--fina ln--mut" d="M0 262 H 1600" />
+						<text class="sans ok b" x="2" y="294" font-size="28">Confirmación de ejecución</text>
+						<rect class="caja caja--acc" x="10" y="318" width="220" height="44" rx="10" />
+						<text class="mid sans b" x="120" y="340" font-size="24">Dispositivo</text>
+						<rect class="caja caja--navy" x="420" y="318" width="200" height="44" rx="10" />
+						<text class="mid sans navy b" x="520" y="340" font-size="24">Broker</text>
+						<rect class="caja" x="1040" y="318" width="240" height="44" rx="10" />
+						<text class="mid sans b" x="1160" y="340" font-size="24">Aplicación</text>
+						<path class="ln ln--vida" d="M120 362 V 696 M520 362 V 696 M1160 362 V 696" />
+
+						<!-- 1 y 2: comando -->
+						<path class="ln ln--acc" d="M1160 404 H 540" />
+						<path class="rel-acc" d="M520 404 L 540 393 L 540 415 Z" />
+						<text class="mid sans" x="840" y="384" font-size="24"><tspan class="acc b">1</tspan>  comando <tspan class="s5v5-mono">casa/sala/luz = 1</tspan></text>
+						<path class="ln ln--acc" d="M520 458 H 140" />
+						<path class="rel-acc" d="M120 458 L 140 447 L 140 469 Z" />
+						<text class="mid sans" x="320" y="438" font-size="24"><tspan class="acc b">2</tspan>  entrega</text>
+
+						<!-- 3: ejecución -->
+						<rect class="caja caja--acc" x="108" y="478" width="24" height="56" rx="4" />
+						<text class="sans" x="150" y="506" font-size="24"><tspan class="acc b">3</tspan>  ejecuta: enciende la luz</text>
+
+						<!-- 4 y 5: estado real -->
+						<path class="ln ln--ok ln--trazo" d="M132 568 H 500" />
+						<path class="rel-ok" d="M520 568 L 500 557 L 500 579 Z" />
+						<text class="mid sans" x="320" y="548" font-size="24"><tspan class="ok b">4</tspan>  publica el estado real</text>
+						<path class="ln ln--ok ln--trazo" d="M520 622 H 1140" />
+						<path class="rel-ok" d="M1160 622 L 1140 611 L 1140 633 Z" />
+						<text class="mid sans" x="840" y="602" font-size="24"><tspan class="ok b">5</tspan>  estado real <tspan class="s5v5-mono">luz = 1</tspan></text>
+
+						<!-- 6: la aplicación lo muestra -->
+						<rect class="caja caja--ok" x="1148" y="640" width="24" height="52" rx="4" />
+						<text class="sans ok b" x="1190" y="666" font-size="26"><tspan class="ok">6</tspan>  muestra «encendida»</text>
+
+						<!-- sin confirmación -->
+						<rect class="caja caja--dan" x="1320" y="388" width="278" height="200" rx="12" />
+						<text class="sans dan b" x="1342" y="426" font-size="25">Sin los pasos 4 y 5</text>
+						<text class="sans" x="1342" y="476" font-size="24">la aplicación solo</text>
+						<text class="sans" x="1342" y="512" font-size="24">puede mostrar</text>
+						<text class="sans" x="1342" y="548" font-size="24">el valor pedido</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Arriba, la síntesis de los bloques 1 a 3: capas de la lámina 03,
+					telemetría con QoS 0 y comando con QoS 1 (lámina 10). El comando pasa
+					del panel al broker sin tocar el almacenamiento. casa/sala/estado,
+					retenido y con última voluntad (lámina 11), dice si la placa está
+					conectada.
+				</p>
+				<p>
+					Abajo, lo nuevo: la secuencia completa de un comando. Recorrer los seis
+					mensajes. El comando lleva el estado deseado (luz = 1), así que un
+					duplicado de QoS 1 deja el mismo resultado; el estado real que publica
+					el dispositivo tras ejecutar es lo único que confirma la orden.
+				</p>
+				<p>
+					Pregunta de predicción: la placa está desconectada cuando el usuario
+					pulsa el interruptor. ¿Qué muestra la aplicación? Respuesta: con
+					confirmación, sigue mostrando «apagada», porque no llega el paso 5, y
+					casa/sala/estado indica que la placa está fuera de línea. Sin
+					confirmación, mostraría «encendida» con la luz apagada.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Ejemplo 19: la temperatura (simulada entre 18,0 y 27,9 °C) se envía
+						cada 30 s; el interruptor del panel envía 1 o 0 y el firmware pone el
+						GPIO 15 en ese valor, de modo que recibir la orden dos veces deja el LED
+						igual. Al reconectar, el firmware pide el último valor del interruptor
+						para recuperar el estado (lámina 17).
+					</p>
+					<h4>Confirmación</h4>
+					<p>
+						El ejemplo 19 imprime la orden recibida en el monitor serie, pero el
+						panel solo muestra el valor pedido. Para confirmarla, el ESP32 lee el
+						GPIO después de moverlo y envía ese estado por un canal propio; ese envío
+						también cuenta en la cuota (lámina 18).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Enviar «conmutar» como comando: con un duplicado, la luz vuelve al estado anterior.</li>
+						<li>Tomar el valor del interruptor del panel como el estado real del actuador.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-plataformas-comparacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Comparación de plataformas de IoT</span>
+				</a>
+				<a class="slide-nav__link" href="16-blynk-modelo.html">
+					<span>Plantilla, dispositivo y token</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -14,7 +14,7 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body class="ponencia" data-deck-total="17">
+	<body class="ponencia" data-deck-total="21">
 		<main class="slide slide--start">
 			<div class="slide__content">
 				<div class="crece s4a-portada-grid">
@@ -24,15 +24,15 @@
 					</div>
 
 					<ol class="puntos agenda s4a-agenda s5a-agenda">
-						<li><div>Sistema IoT<span>el dato que sube y la orden que baja</span></div></li>
-						<li><div>Protocolo MQTT<span>cómo se reparten los mensajes</span></div></li>
-						<li><div>Plataforma Blynk<span>el panel del celular y su configuración</span></div></li>
-						<li><div>Operación<span>ritmo de envío, estado y fallos</span></div></li>
+						<li><div>Fundamentos de IoT<span>definición, capas, redes y despliegue</span></div></li>
+						<li><div>Protocolos de IoT<span>petición-respuesta y publicación-suscripción</span></div></li>
+						<li><div>Protocolo MQTT<span>broker, temas, QoS, retenido y seguridad</span></div></li>
+						<li><div>Plataformas de IoT<span>funciones, comparación y Blynk</span></div></li>
 					</ol>
 
 					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
 						<p>
-							<a class="btn btn--primary" href="02-sistema-iot.html">Empezar →</a>
+							<a class="btn btn--primary" href="02-internet-de-las-cosas.html">Empezar →</a>
 						</p>
 						<div class="credito">
 							<span class="credito__autor">Abraham Caso Torres</span>
@@ -49,67 +49,64 @@
 
 					<section class="s5v4-guia" aria-label="Pregunta guía de la sesión">
 						<p class="s5v4-guia__rotulo">Pregunta guía</p>
-						<p class="s5v4-guia__pregunta">¿Cómo llega una orden del celular a un ESP32 que está <em>detrás del router</em>?</p>
-						<svg class="s4a-svg s5v4-guia__dibujo" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Estación del aula 1. A la izquierda, el celular del profesor, fuera de la universidad, con la temperatura 23,4 °C y un interruptor para el LED. A la derecha, dentro de la red del aula 1, el router y el ESP32, que mide la temperatura y tiene un LED de aviso en el GPIO 15. La temperatura sale del ESP32, atraviesa el router y llega al celular. La orden de encender el LED sale del celular y se detiene en el router, con un signo de interrogación.">
-							<!-- celular -->
-							<text class="sans mut" x="0" y="24" font-size="30">fuera de la universidad</text>
-							<rect class="caja" x="30" y="62" width="230" height="560" rx="34" />
-							<path class="ln ln--fina ln--mut" d="M110 96 H 180" />
-							<text class="mid sans mut" x="145" y="168" font-size="30">aula 1</text>
-							<text class="mid sans navy b" x="145" y="232" font-size="52">23,4 °C</text>
-							<rect class="caja caja--acc" x="78" y="372" width="134" height="72" rx="36" />
-							<circle class="rel-acc" cx="176" cy="408" r="26" />
-							<text class="mid sans b" x="145" y="492" font-size="32">LED</text>
+						<p class="s5v4-guia__pregunta">¿Qué arquitectura permite el intercambio de datos entre múltiples dispositivos y aplicaciones sin que ninguno conozca la <em>dirección</em> de los demás?</p>
+						<svg class="s4a-svg s5v4-guia__dibujo" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres dispositivos a la izquierda, de temperatura, de luz y de energía, y tres aplicaciones a la derecha: panel web, aplicación móvil y registro histórico. Entre ellos, nueve enlaces directos posibles en línea discontinua y un signo de interrogación en el centro: con enlaces directos, cada extremo necesita la dirección de los otros.">
+							<text class="sans mut" x="0" y="20" font-size="28">dispositivos</text>
+							<text class="sans mut fin" x="1000" y="20" font-size="28">aplicaciones</text>
 
-							<!-- aula 1 -->
-							<rect class="caja caja--zona" x="560" y="62" width="430" height="560" rx="18" />
-							<text class="mid sans mut" x="775" y="24" font-size="30">aula 1 · red local</text>
-							<rect class="caja caja--navy" x="488" y="190" width="144" height="300" rx="14" />
-							<text class="mid navy b" x="560" y="290" font-size="32">router</text>
+							<!-- nueve enlaces directos: 3 × 3 -->
+							<path class="ln ln--fina ln--mut ln--trazo" d="M260 110 L 740 110 M260 110 L 740 290 M260 110 L 740 470 M260 290 L 740 110 M260 290 L 740 290 M260 290 L 740 470 M260 470 L 740 110 M260 470 L 740 290 M260 470 L 740 470" />
 
-							<rect class="caja caja--acc" x="690" y="110" width="275" height="465" rx="16" />
-							<text class="mid b" x="827" y="172" font-size="46">ESP32</text>
-							<path class="ln ln--fina ln--mut" d="M714 214 H 941" />
-							<text class="mid sans" x="827" y="300" font-size="32">temperatura</text>
-							<text class="mid sans" x="827" y="420" font-size="32">LED · GPIO 15</text>
-							<circle class="rel-acc" cx="827" cy="490" r="20" />
+							<!-- dispositivos -->
+							<rect class="caja caja--acc" x="0" y="56" width="260" height="108" rx="14" />
+							<text class="mid b" x="130" y="92" font-size="30">ESP32</text>
+							<text class="mid sans" x="130" y="134" font-size="26">temperatura</text>
+							<rect class="caja caja--acc" x="0" y="236" width="260" height="108" rx="14" />
+							<text class="mid b" x="130" y="272" font-size="30">ESP32</text>
+							<text class="mid sans" x="130" y="314" font-size="26">luz</text>
+							<rect class="caja caja--acc" x="0" y="416" width="260" height="108" rx="14" />
+							<text class="mid b" x="130" y="452" font-size="30">ESP32</text>
+							<text class="mid sans" x="130" y="494" font-size="26">energía</text>
 
-							<!-- la temperatura sale -->
-							<path class="ln ln--navy" d="M690 250 H 632 M488 250 H 280" />
-							<path class="rel-navy" d="M264 250 L 284 238 L 284 262 Z" />
-							<text class="mid sans navy b" x="375" y="212" font-size="30">temperatura</text>
+							<!-- aplicaciones -->
+							<rect class="caja caja--navy" x="740" y="56" width="260" height="108" rx="14" />
+							<text class="mid sans navy b" x="870" y="110" font-size="28">panel web</text>
+							<rect class="caja caja--navy" x="740" y="236" width="260" height="108" rx="14" />
+							<text class="mid sans navy b" x="870" y="290" font-size="28">app móvil</text>
+							<rect class="caja caja--navy" x="740" y="416" width="260" height="108" rx="14" />
+							<text class="mid sans navy b" x="870" y="452" font-size="28">registro</text>
+							<text class="mid sans navy b" x="870" y="490" font-size="28">histórico</text>
 
-							<!-- la orden no entra -->
-							<path class="ln ln--acc ln--trazo" d="M260 408 H 448" />
-							<path class="rel-acc" d="M468 408 L 448 396 L 448 420 Z" />
-							<text class="mid sans acc b" x="365" y="452" font-size="30">orden</text>
-							<text class="mid acc b" x="560" y="406" font-size="80">?</text>
+							<!-- la incógnita -->
+							<text class="mid acc b halo" x="500" y="290" font-size="110">?</text>
+							<text class="mid sans mut" x="500" y="576" font-size="26">3 × 3 enlaces directos · cada extremo conoce la dirección del otro</text>
 						</svg>
-						<p class="s5v4-guia__antes">Sesión 4: el ESP32 consultaba cada minuto un dato que cambia cada hora; sobraban 59 de 60 consultas.</p>
+						<p class="s5v4-guia__antes">Sesión 4 · HTTP: el cliente consulta; no escucha.</p>
 					</section>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Presentar la estación del aula 1: un ESP32 mide la temperatura y tiene un
-					LED de aviso en el GPIO 15. El profesor quiere ver la temperatura y
-					encender el LED desde el celular, fuera de la universidad. Es el ejemplo 19,
-					y el mismo caso recorre toda la sesión.
+					Leer la pregunta guía y señalar el dibujo: tres dispositivos y tres
+					aplicaciones. Con enlaces directos hacen falta nueve conexiones, y cada
+					extremo tiene que conocer la dirección de los otros; un cuarto
+					dispositivo añade tres enlaces más.
 				</p>
 				<p>
-					Recordar la sesión 4: el ESP32 preguntaba cada minuto y, con un dato que
-					cambia cada hora, sobraban 59 de 60 consultas. Ahora el problema se
-					invierte: la orden nace en el celular y el ESP32 no sabe cuándo.
+					Recordar la sesión 4: con HTTP el ESP32 actúa como cliente, pregunta y
+					recibe la respuesta, pero no queda a la escucha de lo que otro quiera
+					enviarle.
 				</p>
 				<p>
-					Pregunta de predicción: el router del aula descarta lo que llega de
-					Internet sin que el ESP32 lo haya pedido (NAT, 4·07). ¿Puede el celular
-					enviar la orden directamente al ESP32?
+					Pregunta de predicción: un ESP32 está en una red doméstica detrás del NAT
+					del router; ¿puede una aplicación en Internet abrir una conexión hacia él?
 				</p>
 				<p>
-					Respuesta: no. La conexión tiene que abrirla el ESP32 desde dentro y
-					mantenerla abierta; el resumen de la lámina 17 responde la pregunta guía.
+					Respuesta: no. El router descarta lo que llega sin una conexión previa
+					abierta desde dentro. La arquitectura que se busca debe partir de
+					conexiones que abre el propio dispositivo; el cierre (lámina 21) responde
+					la pregunta guía.
 				</p>
 			</aside>
 
@@ -118,26 +115,22 @@
 				<div class="detalle__cuerpo">
 					<h4>Punto de partida</h4>
 					<p>
-						Esta sesión usa WiFi en modo estación, HTTP y HTTPS, el NAT del
-						router, la cuota de una API y la clave fuera del código (sesión 4,
-						láminas 02, 07, 11, 18 y 19), y <code>millis()</code> para tareas con
-						distinto período en un <code>loop()</code> (sesión 2).
+						Se apoya en la sesión 4 (WiFi en modo estación, HTTP y HTTPS, NAT del
+						router, cuota de una API, clave fuera del código), en la sesión 3
+						(serialización en JSON) y en la sesión 2 (tareas periódicas con
+						<code>millis()</code> en un <code>loop()</code> sin esperas).
 					</p>
-					<h4>Dónde aparece</h4>
+					<h4>Organización de la sesión</h4>
+					<ul>
+						<li>Fundamentos de IoT: láminas 02 a 05.</li>
+						<li>Protocolos de IoT: láminas 06 y 07.</li>
+						<li>Protocolo MQTT: láminas 08 a 12.</li>
+						<li>Plataformas de IoT: láminas 13 a 18 y 20; laboratorio con Blynk (ejemplo 19) en la 19.</li>
+					</ul>
+					<h4>Normas de referencia</h4>
 					<p>
-						Ejemplo 19 (panel IoT con Blynk): un interruptor del panel controla el
-						LED del GPIO 15 y la temperatura simulada se publica cada 30 s.
-					</p>
-					<h4>Monitor serie del ejemplo 19</h4>
-					<p>
-						<code>[2209] Connecting to blynk.cloud:443</code> ·
-						<code>[3412] Certificate OK</code> ·
-						<code>[3501] Ready (ping: 89ms).</code> ·
-						<code>Conectado a Blynk. Sincronizando V0...</code> ·
-						<code>Comando recibido de Blynk! Estado del LED: 1</code> ·
-						<code>Enviando Temperatura a Blynk: 23.40</code>. Las líneas con
-						<code>[ms]</code> las imprime la biblioteca; las otras, el programa. Los
-						milisegundos y el ping cambian en cada arranque.
+						ITU-T Y.2060 (definición y modelo de referencia de IoT), MQTT 3.1.1
+						(OASIS, ISO/IEC 20922) y RFC 7252 (CoAP).
 					</p>
 				</div>
 			</details>

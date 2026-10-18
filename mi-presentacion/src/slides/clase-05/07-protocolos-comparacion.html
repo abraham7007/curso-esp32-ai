@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Protocolos de aplicación · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Protocolos de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Protocolos de <em>aplicación</em> HTTP, MQTT, CoAP y WebSocket
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="-4 -4 1608 604" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, la ubicación en la pila; estos protocolos se ubican en la capa de red de la lámina 03: en la capa de aplicación, HTTP, MQTT y WebSocket sobre TCP, con conexión, y CoAP sobre UDP, sin ella; debajo, IP, y en la capa de enlace, WiFi, Ethernet o celular. A la derecha, la tabla comparativa. HTTP: sobre TCP, petición-respuesta, cabecera del orden de cien bytes en texto, para API web y consultas puntuales. MQTT: sobre TCP, publicación-suscripción, cabecera fija mínima de 2 bytes binaria, para telemetría y comandos. CoAP: sobre UDP, petición-respuesta más suscripción a un recurso, cabecera fija de 4 bytes binaria, para nodos con pocos recursos. WebSocket: sobre TCP, tras una negociación en HTTP, bidireccional, cabecera del orden de diez bytes por trama, para paneles en el navegador. En el segundo paso se resalta MQTT como opción adoptada, por la conexión persistente y la cabecera de 2 bytes. Al pie, las normas: RFC 9110 y 9112 para HTTP, MQTT 3.1.1 de OASIS, ISO/IEC 20922, RFC 7252 para CoAP y RFC 6455 para WebSocket.">
+					<!-- pila: aplicación sobre TCP o UDP sobre IP -->
+					<text class="sans b" x="0" y="16" font-size="26">Ubicación en la pila</text>
+					<text class="sans mut" x="0" y="98" font-size="22">aplicación</text>
+					<text class="sans mut" x="0" y="206" font-size="22">transporte</text>
+					<text class="sans mut" x="0" y="314" font-size="22">red</text>
+					<text class="sans mut" x="0" y="422" font-size="22">enlace</text>
+					<rect class="caja caja--acc" x="140" y="50" width="214" height="96" rx="10" />
+					<text class="b mid" x="247" y="82" font-size="22">HTTP · MQTT</text>
+					<text class="b mid" x="247" y="116" font-size="22">WebSocket</text>
+					<rect class="caja caja--acc" x="364" y="50" width="106" height="96" rx="10" />
+					<text class="b mid" x="417" y="98" font-size="22">CoAP</text>
+					<rect class="caja caja--navy" x="140" y="158" width="214" height="96" rx="10" />
+					<text class="b mid navy" x="247" y="190" font-size="24">TCP</text>
+					<text class="sans mid" x="247" y="224" font-size="20">con conexión</text>
+					<rect class="caja caja--navy" x="364" y="158" width="106" height="96" rx="10" />
+					<text class="b mid navy" x="417" y="190" font-size="24">UDP</text>
+					<text class="sans mid" x="417" y="224" font-size="20">sin ella</text>
+					<rect class="caja" x="140" y="266" width="330" height="96" rx="10" />
+					<text class="b mid" x="305" y="314" font-size="24">IP</text>
+					<rect class="caja" x="140" y="374" width="330" height="96" rx="10" />
+					<text class="sans b mid" x="305" y="422" font-size="22">WiFi · Ethernet · celular</text>
+					<text class="sans mut" x="0" y="506" font-size="21">se ubican en la capa de red</text>
+					<text class="sans mut" x="0" y="534" font-size="21">de la lámina 03</text>
+					<!-- tabla comparativa -->
+					<text class="sans mut" x="540" y="16" font-size="22">protocolo</text>
+					<text class="sans mut" x="720" y="16" font-size="22">transporte</text>
+					<text class="sans mut" x="900" y="16" font-size="22">modelo</text>
+					<text class="sans mut" x="1190" y="16" font-size="22">cabecera mínima</text>
+					<text class="sans mut" x="1390" y="16" font-size="22">uso típico</text>
+					<g data-paso="1">
+						<rect class="caja caja--acc" x="528" y="150" width="1072" height="104" rx="10" />
+					</g>
+					<text class="b" x="540" y="98" font-size="27">HTTP</text>
+					<text class="sans" x="720" y="98" font-size="23">TCP</text>
+					<text class="sans" x="900" y="98" font-size="23">petición-respuesta</text>
+					<text class="sans" x="1390" y="82" font-size="23">API web,</text>
+					<text class="sans" x="1390" y="114" font-size="23">consulta puntual</text>
+					<text class="b acc" x="1190" y="82" font-size="24">~10² B</text>
+					<text class="sans mut" x="1190" y="116" font-size="21">texto</text>
+					<path class="s5v5-reticula" d="M540 150 H1600" />
+					<text class="b" x="540" y="202" font-size="27">MQTT</text>
+					<text class="sans" x="720" y="202" font-size="23">TCP</text>
+					<text class="sans" x="900" y="186" font-size="23">publicación-</text>
+					<text class="sans" x="900" y="218" font-size="23">suscripción</text>
+					<text class="sans" x="1390" y="186" font-size="23">telemetría</text>
+					<text class="sans" x="1390" y="218" font-size="23">y comandos</text>
+					<text class="b acc" x="1190" y="186" font-size="24">2 B</text>
+					<text class="sans mut" x="1190" y="220" font-size="21">binaria</text>
+					<path class="s5v5-reticula" d="M540 254 H1600" />
+					<text class="b" x="540" y="306" font-size="27">CoAP</text>
+					<text class="sans" x="720" y="306" font-size="23">UDP</text>
+					<text class="sans" x="900" y="274" font-size="23">petición-respuesta</text>
+					<text class="sans" x="900" y="306" font-size="23">+ suscripción</text>
+					<text class="sans" x="900" y="338" font-size="23">a un recurso</text>
+					<text class="sans" x="1390" y="290" font-size="23">nodos con</text>
+					<text class="sans" x="1390" y="322" font-size="23">pocos recursos</text>
+					<text class="b acc" x="1190" y="290" font-size="24">4 B</text>
+					<text class="sans mut" x="1190" y="324" font-size="21">binaria</text>
+					<path class="s5v5-reticula" d="M540 358 H1600" />
+					<text class="b" x="540" y="410" font-size="27">WebSocket</text>
+					<text class="sans" x="720" y="394" font-size="23">TCP, tras</text>
+					<text class="sans" x="720" y="426" font-size="23">inicio en HTTP</text>
+					<text class="sans" x="900" y="410" font-size="23">bidireccional</text>
+					<text class="sans" x="1390" y="394" font-size="23">panel en el</text>
+					<text class="sans" x="1390" y="426" font-size="23">navegador</text>
+					<text class="b acc" x="1190" y="394" font-size="24">~10¹ B</text>
+					<text class="sans mut" x="1190" y="428" font-size="21">por trama</text>
+					<g data-paso="1">
+						<text class="sans b" x="540" y="514" font-size="24"><tspan class="acc">Opción adoptada: MQTT</tspan> · conexión persistente y cabecera de 2 B</text>
+					</g>
+					<!-- normas -->
+					<text class="sans mut" x="0" y="584" font-size="20">HTTP: RFC 9110 y 9112 · MQTT 3.1.1 (OASIS, ISO/IEC 20922) · CoAP: RFC 7252 · WebSocket: RFC 6455</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Empezar por la pila de la izquierda: los cuatro son protocolos de aplicación y
+					viajan sobre IP. Tres usan TCP, que garantiza orden y entrega sobre una
+					conexión; CoAP usa UDP, sin conexión, y asume él mismo las retransmisiones.
+				</p>
+				<p>
+					Pregunta de predicción: un sensor envía la temperatura, 10 bytes de JSON,
+					cada 10 s. ¿Qué pesa más en cada envío por HTTP, el dato o la cabecera?
+					Respuesta: la cabecera. Una petición HTTP mínima, con la línea de petición y
+					el campo Host, ya ocupa decenas de bytes, y la respuesta otros cientos; en MQTT,
+					sobre una conexión ya abierta, la cabecera fija ocupa 2 bytes más el nombre del
+					tema.
+				</p>
+				<p>
+					Recorrer la columna de uso típico. WebSocket aparece porque un panel web en el
+					navegador no habla TCP directamente: muchos brokers MQTT aceptan clientes por
+					WebSocket.
+				</p>
+				<p>
+					Paso 1: la opción adoptada para telemetría y comandos es MQTT, por la conexión
+					persistente que abre el dispositivo y la cabecera mínima. Es el tema del
+					bloque 03, desde la lámina 08.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						HTTP/1.1 (RFC 9112) es texto: línea de petición y campos de cabecera
+						terminados en CRLF, sobre TCP, puertos 80 y 443. MQTT 3.1.1: cabecera fija de
+						2 a 5 bytes (tipo y longitud restante); el PUBLISH añade el nombre del tema
+						y, con confirmación de entrega (lámina 10), un identificador de 2 bytes; TCP 1883, TLS 8883.
+						CoAP (RFC 7252): cabecera binaria fija de 4 bytes sobre UDP 5683, con
+						confirmación opcional; la suscripción a un recurso es la opción Observe
+						(RFC 7641). WebSocket
+						(RFC 6455): negociación inicial en HTTP con «Upgrade: websocket» y tramas
+						con 2 a 14 bytes de cabecera.
+					</p>
+					<h4>Formato de la carga útil</h4>
+					<p>
+						El protocolo transporta la carga útil sin interpretarla. La temperatura
+						23,4 en JSON, <code>{"t":23.4}</code>, ocupa 10 bytes legibles; en binario,
+						como entero de 16 bits en décimas (<code>00 EA</code>), 2 bytes. Es la
+						misma elección entre texto y binario de la sesión 3.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Comparar solo la cabecera sin contar la apertura de TCP y TLS en cada consulta HTTP.</li>
+						<li>Suponer entrega garantizada en CoAP, cuando sobre UDP solo se retransmiten los mensajes confirmables.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="06-modelos-comunicacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Modelos de comunicación</span>
+				</a>
+				<a class="slide-nav__link" href="08-mqtt-arquitectura.html">
+					<span>Arquitectura de MQTT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Cuota e intervalo · Sesión 5</title>
+		<title>Política de transmisión · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,30 +14,26 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body class="ponencia" data-deck-total="17">
+	<body class="ponencia" data-deck-total="21">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">04 · Operación</span>
+				<span class="badge">04 · Plataformas de IoT</span>
 
-				<h1 class="slide__title slide__title--sm"><em>Intervalo</em> de envío según la cuota mensual de Blynk</h1>
+				<h1 class="slide__title slide__title--sm"><em>Política de transmisión</em> bajo una cuota mensual</h1>
 
-				<div class="escenario">
-					<div class="escenario__texto franja-fila">
-						<div class="def">
-							<p>
-								Plan gratuito de Blynk: <b>100&nbsp;000 mensajes al mes</b>
-								(blynk.io/pricing, octubre de 2026). Cada envío de la temperatura a
-								V1 gasta uno.
-							</p>
-						</div>
-						<p class="franja-fila__ajusta">
-							<b>Intervalo mínimo:</b> 2&nbsp;592&nbsp;000&nbsp;s del mes ÷ 100&nbsp;000 ≈ 26&nbsp;s → 30&nbsp;s, con margen<br />
-							<b>Alternativa:</b> enviar por variación, solo cuando la temperatura cambia más de 0,3&nbsp;°C
-						</p>
+				<div class="escenario escenario--lado">
+					<div class="escenario__texto">
+						<ul class="puntos s5v5-politica">
+							<li><span><b>Periódico</b><br />un envío cada T</span></li>
+							<li><span><b>Por variación</b><br />solo si el cambio supera un umbral</span></li>
+							<li><span><b>Agregación</b><br />media de N lecturas por mensaje</span></li>
+							<li><span><b>Almacenar y reenviar</b><br />cola local sin conexión</span></li>
+						</ul>
 					</div>
 
 					<div class="escenario__visual">
 						<div class="mandos">
+							<span class="lectura"><small>cuota </small>100&nbsp;000<small> mensajes/mes · T ≥ segundos del mes (2&nbsp;592&nbsp;000) ÷ cuota ≈ </small>26&nbsp;s</span>
 							<label class="control">
 								<span>Intervalo T</span>
 								<input type="range" id="intervalo" min="0" max="12" step="1" value="3" />
@@ -51,28 +47,38 @@
 								aria-label="Mensajes acumulados a lo largo de un mes de 30 días frente a la línea de la cuota, 100 000. Con un envío cada 5 s, la recta cruza la cuota el día 5,8 y a partir de ahí no se aceptan más mensajes. Con un envío cada 30 s, como el ejemplo 19, el mes termina en 86 400, por debajo de la cuota. El intervalo elegido con el deslizador se dibuja con trazo grueso."
 							></canvas>
 						</div>
+						<p class="s5v5-nota"><b>Implementación:</b> el envío lo dispara un temporizador; el loop no espera porque atiende el <i>keepalive</i> (lámina 08).</p>
 					</div>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: el ESP32 envía la temperatura a V1 cada 5 s.
-					¿Alcanza la cuota del plan gratuito para el mes completo? Recoger respuestas
-					antes de mover el deslizador.
+					Pregunta de predicción: la placa envía la temperatura cada 5 s. ¿Alcanza la
+					cuota del plan gratuito, 100 000 mensajes al mes, para el mes completo?
+					Recoger respuestas antes de mover el deslizador.
 				</p>
 				<p>
 					Respuesta: no. 86 400 s al día ÷ 5 s = 17 280 mensajes al día; 518 400 al
 					mes. Los 100 000 se agotan el día 5,8. El mínimo continuo es 2 592 000 ÷
 					100 000 ≈ 26 s; el ejemplo 19 usa 30 s: 2 880 al día y 86 400 al mes (86 %),
-					con margen para las órdenes y la sincronización. Con un mes de 31 días, el
-					mínimo sube a 26,8 s y 30 s sigue cabiendo.
+					con margen para los comandos y la sincronización. Con 31 días, el mínimo
+					sube a 26,8 s y 30 s sigue cabiendo.
 				</p>
 				<p>
-					Es el mismo cálculo que el límite de uso de la API del clima (lámina 4·18),
-					con otra cifra. Analogía: el plan de datos del celular; quien lo gasta en la
-					primera semana pasa el resto del mes sin datos. El envío por variación ahorra
-					mensajes cuando la temperatura apenas cambia, que es lo habitual en un aula.
+					Columna izquierda, las cuatro políticas: periódico (simple, gasto fijo);
+					por variación (ahorra cuando la magnitud apenas cambia, con un envío forzado
+					cada cierto tiempo para que el panel sepa que la placa sigue viva);
+					agregación (un mensaje resume varias lecturas); almacenar y reenviar (sin
+					conexión, se guardan las lecturas con su marca de tiempo y se envían al
+					volver). Es el mismo cálculo que el límite de uso de la API del clima
+					(sesión 4, lámina 18).
+				</p>
+				<p>
+					Nota bajo la gráfica: el loop no espera, porque en cada vuelta la biblioteca atiende
+					la conexión y el ping. El envío lo dispara un temporizador, la misma
+					comparación de tiempos que millis() en la sesión 2. Una espera de 30 s en el
+					loop deja el ping sin respuesta y la conexión cae (lámina 20).
 				</p>
 			</aside>
 
@@ -81,31 +87,32 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						El intervalo se fija con una tarea del temporizador (BlynkTimer), nunca con
-						un envío suelto en el loop. Antes de elegirlo: contar las placas que
-						comparten la cuenta (la página de precios no aclara si la cuota es común a
-						los 5 dispositivos del plan), reservar margen y comprobar la cifra vigente.
+						Ejemplo 19: el loop tiene dos llamadas, Blynk.run() (conexión) y
+						timer.run() (tareas de BlynkTimer, registradas una vez con su intervalo de
+						30 s). Por variación: medir cada pocos segundos y enviar si la medida se
+						aparta 0,3 °C del último valor enviado o si pasaron 5 min. Almacenar y
+						reenviar: la API HTTP de Blynk admite lotes de datos con marca de tiempo.
 					</p>
 					<p>
-						Envío por variación: una tarea mide cada pocos segundos y envía solo si la
-						medida se aparta 0,3 °C del último valor enviado, o si pasaron 5 min sin
-						enviar.
+						Cuota: blynk.io/pricing, plan Free, 100 000 mensajes de dispositivo al mes
+						y 5 dispositivos (octubre de 2026). La documentación pide no enviar más de
+						10 valores por segundo.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
+						<li>Enviar en cada vuelta del loop, con miles de mensajes por segundo.</li>
 						<li>Copiar un ejemplo con envío cada 1 s y dejarlo encendido el mes entero.</li>
-						<li>Confundir la cuota mensual con el límite de inundación: más de 10 valores por segundo desconectan la placa.</li>
 					</ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="12-loop-sin-esperas.html">
+				<a class="slide-nav__link" href="17-pines-virtuales.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Loop sin esperas</span>
+					<span>Datastreams y pines virtuales</span>
 				</a>
-				<a class="slide-nav__link" href="14-sincronizacion-estado.html">
-					<span>Sincronización del estado</span>
+				<a class="slide-nav__link" href="19-codigo-19-blynk.html">
+					<span>Ejemplo 19 · Blynk</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
@@ -123,7 +130,7 @@
 			const miles = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 			const coma = (x, d) => x.toFixed(d).replace(".", ",");
 
-			// Blynk, plan Free (blynk.io/pricing, octubre de 2026).
+			// Blynk, plan Free (blynk.io/pricing, octubre de 2026): 100 000 mensajes al mes.
 			const CUOTA = 100000;
 			const DIAS = 30;
 			const SEG_DIA = 86400;

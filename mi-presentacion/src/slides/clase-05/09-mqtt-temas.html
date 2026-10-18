@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Temas y comodines · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">Árbol jerárquico de <em>temas</em> y filtros con comodines</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Tema</b> (<i>topic</i>): cadena de niveles separados por <code>/</code>,
+								sensible a mayúsculas. La suscripción indica un <b>filtro</b>:
+								<code>+</code> sustituye un nivel; <code>#</code>, el nivel anterior y todos
+								los inferiores, solo al final.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<b>Riesgo:</b> <code>#</code> recibe<br />
+							todo el tráfico del broker
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
+							<fieldset class="mandos__grupo s5v5c-filtros" aria-label="Filtro de suscripción">
+								<span class="s5c-rotulo">Filtro</span>
+								<button type="button" class="btn btn--secondary" data-filtro="casa/sala/temp" aria-pressed="false"><code>casa/sala/temp</code></button>
+								<button type="button" class="btn btn--primary" data-filtro="casa/sala/+" aria-pressed="true"><code>casa/sala/+</code></button>
+								<button type="button" class="btn btn--secondary" data-filtro="casa/+/temp" aria-pressed="false"><code>casa/+/temp</code></button>
+								<button type="button" class="btn btn--secondary" data-filtro="casa/+" aria-pressed="false"><code>casa/+</code></button>
+								<button type="button" class="btn btn--secondary" data-filtro="casa/#" aria-pressed="false"><code>casa/#</code></button>
+								<button type="button" class="btn btn--secondary" data-filtro="#" aria-pressed="false"><code>#</code></button>
+							</fieldset>
+							<span class="lectura lectura--fin"><small>coinciden </small><span id="l-coinciden" class="s5c-ancho s5c-ancho--corto">3</span><small> de 4 temas</small></span>
+						</div>
+
+						<svg id="arbol" class="s4a-svg crece" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Árbol de temas con raíz casa. En el nivel 2, sala y cocina. Bajo sala, en el nivel 3, temp, luz y estado: los temas casa/sala/temp (telemetría), casa/sala/luz (comando) y casa/sala/estado (estado de conexión). Bajo cocina, temp: el tema casa/cocina/temp (telemetría). Encima de cada nivel se escribe el filtro elegido, y los temas que coinciden con él se marcan en verde. Con casa/sala/+ coinciden los tres temas de la sala; con casa/+/temp, las dos temperaturas; con casa/+, ninguno, porque + ocupa un solo nivel; con casa/# y con #, los cuatro.">
+							<!-- cabecera: niveles y filtro alineado con ellos -->
+							<text class="mid sans mut" x="190" y="24" font-size="24">nivel 1</text>
+							<text class="mid sans mut" x="550" y="24" font-size="24">nivel 2</text>
+							<text class="mid sans mut" x="910" y="24" font-size="24">nivel 3</text>
+							<text class="mid sans mut" x="1340" y="24" font-size="24">tema completo</text>
+							<text id="f0" class="mid acc b" x="190" y="82" font-size="40">casa</text>
+							<text id="f-sep1" class="mid mut" x="370" y="82" font-size="40">/</text>
+							<text id="f1" class="mid acc b" x="550" y="82" font-size="40">sala</text>
+							<text id="f-sep2" class="mid mut" x="730" y="82" font-size="40">/</text>
+							<text id="f2" class="mid acc b" x="910" y="82" font-size="40">+</text>
+							<path class="ln ln--fina ln--mut" d="M20 128 H 1580" />
+
+							<!-- aristas del árbol -->
+							<path id="e-sala" class="ln ln--mut" d="M290 384 C 370 384, 370 280, 450 280" />
+							<path id="e-cocina" class="ln ln--mut" d="M290 384 C 370 384, 370 520, 450 520" />
+							<path id="e-0" class="ln ln--mut" d="M650 280 C 730 280, 730 180, 810 180" />
+							<path id="e-1" class="ln ln--mut" d="M650 280 H 810" />
+							<path id="e-2" class="ln ln--mut" d="M650 280 C 730 280, 730 380, 810 380" />
+							<path id="e-3" class="ln ln--mut" d="M650 520 H 810" />
+
+							<!-- nodos -->
+							<rect id="n-casa" class="caja" x="90" y="352" width="200" height="64" rx="12" />
+							<text class="mid b" x="190" y="384" font-size="30">casa</text>
+							<rect id="n-sala" class="caja" x="450" y="248" width="200" height="64" rx="12" />
+							<text class="mid b" x="550" y="280" font-size="30">sala</text>
+							<rect id="n-cocina" class="caja" x="450" y="488" width="200" height="64" rx="12" />
+							<text class="mid b" x="550" y="520" font-size="30">cocina</text>
+
+							<!-- hojas: los cuatro temas publicados -->
+							<g id="h-0">
+								<rect class="caja" x="810" y="148" width="200" height="64" rx="12" />
+								<text class="mid b" x="910" y="180" font-size="30">temp</text>
+								<text class="s5v5c-tema" x="1060" y="168" font-size="28">casa/sala/temp</text>
+								<text class="sans mut" x="1060" y="200" font-size="22">telemetría</text>
+								<text class="s5v5c-marca mid ok b" x="1560" y="180" font-size="36">✓</text>
+							</g>
+							<g id="h-1">
+								<rect class="caja" x="810" y="248" width="200" height="64" rx="12" />
+								<text class="mid b" x="910" y="280" font-size="30">luz</text>
+								<text class="s5v5c-tema" x="1060" y="268" font-size="28">casa/sala/luz</text>
+								<text class="sans mut" x="1060" y="300" font-size="22">comando</text>
+								<text class="s5v5c-marca mid ok b" x="1560" y="280" font-size="36">✓</text>
+							</g>
+							<g id="h-2">
+								<rect class="caja" x="810" y="348" width="200" height="64" rx="12" />
+								<text class="mid b" x="910" y="380" font-size="30">estado</text>
+								<text class="s5v5c-tema" x="1060" y="368" font-size="28">casa/sala/estado</text>
+								<text class="sans mut" x="1060" y="400" font-size="22">estado de conexión</text>
+								<text class="s5v5c-marca mid ok b" x="1560" y="380" font-size="36">✓</text>
+							</g>
+							<g id="h-3">
+								<rect class="caja" x="810" y="488" width="200" height="64" rx="12" />
+								<text class="mid b" x="910" y="520" font-size="30">temp</text>
+								<text class="s5v5c-tema" x="1060" y="508" font-size="28">casa/cocina/temp</text>
+								<text class="sans mut" x="1060" y="540" font-size="22">telemetría</text>
+								<text class="s5v5c-marca mid ok b" x="1560" y="520" font-size="36">✓</text>
+							</g>
+
+							<!-- regla que muestra el filtro elegido -->
+							<text id="nota" class="mid sans b" x="800" y="584" font-size="26">+ sustituye exactamente un nivel: los tres temas de la sala</text>
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer el árbol: cada nivel del tema es una columna, y el filtro elegido se
+					escribe encima, nivel a nivel. Los temas que coinciden se marcan en verde.
+					Empezar con <code>casa/sala/+</code>: los tres temas de la sala.
+				</p>
+				<p>
+					Pregunta de predicción: un suscriptor usa el filtro <code>casa/+</code>.
+					¿Recibe la temperatura de la sala (<code>casa/sala/temp</code>)?
+				</p>
+				<p>
+					Respuesta: no. <code>+</code> ocupa exactamente un nivel y
+					<code>casa/sala/temp</code> tiene tres; pulsar <code>casa/+</code>: no
+					coincide ningún tema. Para todo lo de la casa hace falta <code>casa/#</code>.
+					Mostrar después <code>casa/+/temp</code>: las temperaturas de todas las
+					estancias, sin la luz ni el estado.
+				</p>
+				<p>
+					Cerrar con <code>#</code>: un cliente así recibe todo el tráfico del broker.
+					En un broker compartido es un problema de carga y de confidencialidad
+					(lámina 12). El orden de los niveles (lugar antes que magnitud) decide qué
+					filtros se pueden escribir después.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Reglas de MQTT 3.1.1 (§4.7)</h4>
+					<ul>
+						<li>Al publicar no se admiten comodines; solo en el filtro de suscripción.</li>
+						<li><code>#</code> va solo o tras <code>/</code>, y siempre al final: <code>casa/#/temp</code> es un filtro inválido.</li>
+						<li><code>#</code> incluye el nivel anterior a él: <code>casa/sala/#</code> también recibe <code>casa/sala</code>.</li>
+						<li>Los temas que empiezan por <code>$</code> (<code>$SYS/…</code>, estadísticas del broker) no coinciden con filtros que empiezan por comodín.</li>
+					</ul>
+					<h4>Convenciones de nomenclatura</h4>
+					<p>
+						Minúsculas, sin espacios ni <code>/</code> inicial (<code>/casa</code> y
+						<code>casa</code> son temas distintos), de lo general a lo particular:
+						lugar, dispositivo, magnitud.
+					</p>
+					<h4>Fuentes</h4>
+					<p>OASIS, <i>MQTT Version 3.1.1</i> (2014), §4.7.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="08-mqtt-arquitectura.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Arquitectura de MQTT</span>
+				</a>
+				<a class="slide-nav__link" href="10-qos.html">
+					<span>Calidad de servicio (QoS)</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			// Los cuatro temas publicados: hojas del árbol.
+			const TEMAS = ["casa/sala/temp", "casa/sala/luz", "casa/sala/estado", "casa/cocina/temp"];
+			const NOTAS = {
+				"casa/sala/temp": "Sin comodines: coincidencia exacta, nivel a nivel",
+				"casa/sala/+": "+ sustituye exactamente un nivel: los tres temas de la sala",
+				"casa/+/temp": "+ en el nivel 2: la temperatura de cada estancia",
+				"casa/+": "Ningún tema tiene dos niveles: + no abarca varios",
+				"casa/#": "# abarca el nivel anterior y todos los inferiores",
+				"#": "Todo el tráfico del broker: carga y exposición",
+			};
+
+			// Regla de coincidencia de MQTT 3.1.1 (§4.7): '+' ocupa un nivel;
+			// '#' abarca el resto, incluido el nivel anterior, y va al final.
+			function coincide(filtro, tema) {
+				const f = filtro.split("/");
+				const t = tema.split("/");
+				for (let i = 0; i < f.length; i++) {
+					if (f[i] === "#") return true;
+					if (i >= t.length) return false;
+					if (f[i] !== "+" && f[i] !== t[i]) return false;
+				}
+				return f.length === t.length;
+			}
+
+			const $ = (id) => document.getElementById(id);
+			const botones = [...document.querySelectorAll("[data-filtro]")];
+			const campos = [$("f0"), $("f1"), $("f2")];
+
+			function tono(el, activo, si, no) {
+				el.classList.toggle(si, activo);
+				el.classList.toggle(no, !activo);
+			}
+
+			function aplicar(filtro) {
+				const niveles = filtro.split("/");
+				// Cabecera: el filtro escrito sobre los niveles; '#' cubre los siguientes.
+				let tras = false;
+				for (const [i, campo] of campos.entries()) {
+					const v = niveles[i];
+					if (tras) {
+						campo.textContent = "…";
+					} else {
+						campo.textContent = v ?? "";
+						if (v === "#") tras = true;
+					}
+					const comodin = v === "+" || v === "#" || tras;
+					tono(campo, comodin, "acc", "navy");
+				}
+				$("f-sep1").textContent = niveles.length >= 2 ? "/" : "";
+				$("f-sep2").textContent = niveles.length >= 3 ? "/" : "";
+
+				let n = 0;
+				const viaSala = [];
+				for (const [i, tema] of TEMAS.entries()) {
+					const si = coincide(filtro, tema);
+					if (si) n++;
+					if (i < 3) viaSala.push(si);
+					const hoja = $(`h-${i}`);
+					hoja.querySelector("rect").classList.toggle("caja--ok", si);
+					tono(hoja.querySelector(".s5v5c-tema"), si, "b", "mut");
+					hoja.querySelector(".s5v5c-marca").setAttribute("visibility", si ? "visible" : "hidden");
+					tono($(`e-${i}`), si, "ln--ok", "ln--mut");
+				}
+				const sala = viaSala.some(Boolean);
+				const cocina = coincide(filtro, TEMAS[3]);
+				tono($("e-sala"), sala, "ln--ok", "ln--mut");
+				tono($("e-cocina"), cocina, "ln--ok", "ln--mut");
+				$("n-sala").classList.toggle("caja--ok", sala);
+				$("n-cocina").classList.toggle("caja--ok", cocina);
+				$("n-casa").classList.toggle("caja--ok", n > 0);
+				$("nota").textContent = NOTAS[filtro];
+				$("l-coinciden").textContent = String(n);
+
+				for (const b of botones) {
+					const on = b.dataset.filtro === filtro;
+					b.setAttribute("aria-pressed", String(on));
+					b.classList.toggle("btn--primary", on);
+					b.classList.toggle("btn--secondary", !on);
+				}
+			}
+
+			for (const b of botones) b.addEventListener("click", () => aplicar(b.dataset.filtro));
+			aplicar("casa/sala/+");
+		</script>
+	</body>
+</html>

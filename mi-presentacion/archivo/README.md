@@ -19,3 +19,10 @@ Láminas retiradas de la sesión 5 al reordenarla con criterio pedagógico (2026
 `07-protocolo-blynk.html` (trama binaria del protocolo de Blynk, detalle excesivo para un curso
 básico) y `13-telemetria-comandos.html` (su contenido pasó a la lámina de arquitectura, a la de QoS
 y a «Para estudiar»).
+
+## slides/clase-05-v4-retiradas/
+
+Láminas de la versión 4 de la sesión 5 retiradas al reconstruirla con un bloque de fundamentos de IoT
+(2026-10-18): configuración del panel (pasa al laboratorio y a «Para estudiar» de la hora del
+código), loop sin esperas y sincronización (se integran en política de transmisión y pines
+virtuales) y token (pasa a seguridad de MQTT y al modelo de Blynk).

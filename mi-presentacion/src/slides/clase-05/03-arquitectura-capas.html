@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arquitectura de IoT en cuatro capas · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">Arquitectura de IoT en cuatro <em>capas</em> con flujos de telemetría y comando</h1>
+
+				<div class="def">
+					<p><b>Telemetría</b> (<i>telemetry</i>): dato que sube del dispositivo. <b>Comando</b> (<i>command</i>): orden que baja al dispositivo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 690" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arquitectura de IoT en cuatro capas, de arriba abajo. Aplicación: presentar y controlar; panel web y app móvil. Plataforma: recibir, almacenar y procesar; Blynk.Cloud; en ITU-T Y.2060 se llama capa de soporte de servicios. Red: transportar los mensajes; WiFi, router, IP. Percepción: medir y actuar; sensores, actuadores y el ESP32. A la derecha, dos flujos atraviesan las capas: la telemetría sube, es periódica y tolera pérdidas; el comando baja, es esporádico y debe ejecutarse.">
+						<!-- aplicación -->
+						<rect class="caja" x="0" y="0" width="1220" height="152" rx="14" />
+						<text class="sans b" x="32" y="76" font-size="38">Aplicación</text>
+						<text class="sans navy b" x="440" y="52" font-size="30">presentar y controlar</text>
+						<text class="sans" x="440" y="106" font-size="30">panel web · app móvil</text>
+
+						<!-- plataforma -->
+						<rect class="caja" x="0" y="166" width="1220" height="152" rx="14" />
+						<text class="sans b" x="32" y="218" font-size="38">Plataforma</text>
+						<text class="sans mut" x="32" y="272" font-size="24">Y.2060: soporte de servicios</text>
+						<text class="sans navy b" x="440" y="218" font-size="30">recibir, almacenar y procesar</text>
+						<text class="sans" x="440" y="272" font-size="30">Blynk.Cloud</text>
+
+						<!-- red -->
+						<rect class="caja" x="0" y="332" width="1220" height="152" rx="14" />
+						<text class="sans b" x="32" y="408" font-size="38">Red</text>
+						<text class="sans navy b" x="440" y="384" font-size="30">transportar los mensajes</text>
+						<text class="sans" x="440" y="438" font-size="30">WiFi · router · IP</text>
+
+						<!-- percepción -->
+						<rect class="caja caja--acc" x="0" y="498" width="1220" height="152" rx="14" />
+						<text class="sans b" x="32" y="574" font-size="38">Percepción</text>
+						<text class="sans navy b" x="440" y="550" font-size="30">medir y actuar</text>
+						<text class="sans" x="440" y="604" font-size="30">sensores · actuadores · <tspan class="acc b">ESP32</tspan></text>
+
+						<!-- telemetría: sube -->
+						<path class="ln ln--navy" d="M1256 646 V 30" />
+						<path class="rel-navy" d="M1256 6 L 1243 30 L 1269 30 Z" />
+						<text class="sans navy b" x="1330" y="40" font-size="36">Telemetría</text>
+						<text class="sans" x="1330" y="96" font-size="30">sube</text>
+						<text class="sans" x="1330" y="146" font-size="30">periódica</text>
+						<text class="sans navy b" x="1330" y="196" font-size="30">tolera pérdidas</text>
+
+						<!-- comando: baja -->
+						<g data-paso="1">
+							<path class="ln ln--acc" d="M1294 6 V 622" />
+							<path class="rel-acc" d="M1294 646 L 1281 622 L 1307 622 Z" />
+							<text class="sans acc b" x="1330" y="460" font-size="36">Comando</text>
+							<text class="sans" x="1330" y="516" font-size="30">baja</text>
+							<text class="sans" x="1330" y="566" font-size="30">esporádico</text>
+							<text class="sans acc b" x="1330" y="616" font-size="30">debe ejecutarse</text>
+						</g>
+
+						<text class="sans mut" x="0" y="678" font-size="22">Fuente: ITU-T Y.2060 (06/2012)</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer las capas de abajo arriba. Percepción: el ESP32 con sus
+					sensores y actuadores. Red: la radio y lo que hay hasta la plataforma.
+					Plataforma: recibe, almacena y gestiona. Aplicación: lo que ve y usa la
+					persona. Y.2060 llama a la tercera «soporte de servicios y
+					aplicaciones» y añade capacidades de gestión y de seguridad que cruzan
+					las cuatro capas.
+				</p>
+				<p>
+					Pregunta de predicción, antes de pulsar →: un sistema pierde una muestra
+					de temperatura y, otro día, la orden de encender una luz; ¿cuál de las
+					dos pérdidas nota el usuario?
+				</p>
+				<p>
+					Respuesta: la de la orden. La luz sigue apagada y nada lo indica; la
+					muestra perdida queda reemplazada por la siguiente. Pulsar → para
+					mostrar el comando: recorre las mismas capas en sentido inverso, con
+					requisitos distintos. La sesión decide cómo tratar cada flujo en la
+					calidad de servicio (lámina 10) y en la arquitectura completa (lámina 15).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Modelo de referencia ITU-T Y.2060</h4>
+					<p>
+						Cuatro capas: aplicación; soporte de servicios y de aplicaciones
+						(capacidades genéricas, como procesamiento y almacenamiento, y
+						específicas); red (control de conectividad y transporte); dispositivo
+						(capacidades de dispositivo y de pasarela). Las capacidades de gestión
+						y de seguridad se asocian a las cuatro. El modelo de percepción, red,
+						plataforma y aplicación es la forma habitual de la literatura técnica.
+					</p>
+					<h4>En la práctica</h4>
+					<p>
+						Ejemplo 19: la temperatura (simulada) sube cada 30 s como telemetría;
+						el interruptor del panel baja como comando con el estado deseado del
+						LED (1 o 0), de modo que recibirlo dos veces deja el LED igual.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Tratar el comando con la misma tolerancia a pérdidas que la telemetría.</li>
+						<li>Tomar el valor del interruptor del panel como estado real del actuador, sin confirmación del dispositivo.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-internet-de-las-cosas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Definición y componentes de IoT</span>
+				</a>
+				<a class="slide-nav__link" href="04-redes-iot.html">
+					<span>Redes de IoT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

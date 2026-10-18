@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Retenido y última voluntad · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">Mensaje <em>retenido</em> y mensaje de última voluntad</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Mensaje retenido</b> (<i>retained</i>): último mensaje de un tema, que el
+								broker guarda y entrega a cada nuevo suscriptor. <b>Última voluntad</b>
+								(<i>Last Will</i>): mensaje declarado al conectar; el broker lo publica si la
+								conexión cae sin cierre.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<b>Tema de estado</b><br />
+							<code>casa/sala/estado</code>
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<svg class="s4a-svg crece" viewBox="0 0 1600 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia con tres participantes: ESP32, broker y aplicación; el tiempo avanza hacia abajo. Primero, el ESP32 se conecta y declara como última voluntad el mensaje desconectado en casa/sala/estado; el broker la guarda. Después, el ESP32 publica conectado en casa/sala/estado como mensaje retenido, y el broker lo guarda. Más tarde, la aplicación se suscribe a casa/sala/estado y el broker le entrega conectado al instante, sin esperar otra publicación. Por último, el ESP32 pierde la alimentación sin cerrar la conexión; tras 1,5 veces el keepalive sin ping, el broker publica la última voluntad, desconectado, en casa/sala/estado, y la aplicación muestra desconectado. Fuente: MQTT 3.1.1, secciones 3.1.2.5 y 3.3.1.3.">
+							<!-- participantes -->
+							<rect class="caja caja--acc" x="80" y="6" width="240" height="64" rx="12" />
+							<text class="mid b" x="200" y="38" font-size="30">ESP32</text>
+							<rect class="caja caja--navy" x="680" y="6" width="240" height="64" rx="12" />
+							<text class="mid navy b" x="800" y="38" font-size="30">broker</text>
+							<rect class="caja" x="1280" y="6" width="240" height="64" rx="12" />
+							<text class="mid b" x="1400" y="38" font-size="30">Aplicación</text>
+							<path class="ln ln--vida" d="M200 70 V 646" />
+							<path class="ln ln--vida" d="M800 70 V 646" />
+							<path class="ln ln--vida" d="M1400 70 V 646" />
+
+							<!-- 1 · conexión con última voluntad -->
+							<text class="mid sans b" x="500" y="104" font-size="26">conectar + última voluntad</text>
+							<path class="ln" d="M200 134 H 782" />
+							<path class="rel" d="M794 134 L 776 124 L 776 144 Z" />
+							<text class="mid halo" x="500" y="168" font-size="24">casa/sala/estado = <tspan class="acc b">desconectado</tspan></text>
+							<rect class="caja caja--navy" x="826" y="108" width="380" height="54" rx="10" />
+							<text class="mid sans navy b" x="1016" y="135" font-size="24">guarda la última voluntad</text>
+
+							<!-- 2 · publicación retenida del estado -->
+							<text class="mid halo" x="500" y="222" font-size="24">casa/sala/estado = <tspan class="navy b">conectado</tspan></text>
+							<path class="ln ln--navy" d="M200 252 H 782" />
+							<path class="rel-navy" d="M794 252 L 776 242 L 776 262 Z" />
+							<text class="mid sans acc b halo" x="500" y="286" font-size="26">retenido</text>
+							<rect class="caja caja--navy" x="826" y="226" width="380" height="54" rx="10" />
+							<text class="mid sans navy b" x="1016" y="253" font-size="24">guarda «conectado»</text>
+
+							<!-- 3 · la aplicación se suscribe más tarde y recibe el retenido -->
+							<text class="mid halo" x="1100" y="334" font-size="24"><tspan class="sans b">suscribirse a</tspan> casa/sala/estado</text>
+							<path class="ln" d="M1400 364 H 818" />
+							<path class="rel" d="M806 364 L 824 354 L 824 374 Z" />
+							<text class="mid ok b halo" x="1100" y="414" font-size="28">conectado · al instante</text>
+							<path class="ln ln--ok" d="M800 444 H 1382" />
+							<path class="rel-ok" d="M1394 444 L 1376 434 L 1376 454 Z" />
+							<text class="mid sans mut halo" x="1100" y="478" font-size="22">valor retenido, sin esperar otra publicación</text>
+							<text class="sans ok b" x="1420" y="444" font-size="26">conectado</text>
+
+							<!-- 4 · corte sin cierre: el broker publica la última voluntad -->
+							<g data-paso="1">
+								<rect class="caja caja--dan" x="170" y="510" width="60" height="60" rx="12" />
+								<text class="mid dan b" x="200" y="541" font-size="34">✕</text>
+								<text class="sans acc b" x="248" y="526" font-size="26">pérdida de alimentación,</text>
+								<text class="sans acc b" x="248" y="560" font-size="26">sin cierre de conexión</text>
+								<text class="sans mut fin halo" x="780" y="600" font-size="24">sin ping durante</text>
+								<text class="sans mut fin halo" x="780" y="632" font-size="24">1,5 × keepalive</text>
+								<text class="mid acc b halo" x="1100" y="588" font-size="24">casa/sala/estado = desconectado</text>
+								<path class="ln ln--acc" d="M800 618 H 1382" />
+								<path class="rel-acc" d="M1394 618 L 1376 608 L 1376 628 Z" />
+								<text class="sans acc b" x="1420" y="618" font-size="26">desconectado</text>
+							</g>
+
+							<text class="sans mut fin" x="1600" y="670" font-size="22">MQTT 3.1.1 · §3.1.2.5 y §3.3.1.3</text>
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer la secuencia de arriba abajo. Al conectar, el ESP32 declara su última
+					voluntad: «desconectado» en <code>casa/sala/estado</code>, retenida. Después
+					publica «conectado» en el mismo tema, también retenido.
+				</p>
+				<p>
+					La aplicación se suscribe más tarde y recibe «conectado» al instante: sin el
+					retenido no sabría nada hasta la siguiente publicación. Ejemplo oral: el
+					mensaje fijado de un grupo, visible para quien entra después.
+				</p>
+				<p>
+					Pregunta de predicción: el ESP32 pierde la alimentación y no puede cerrar la
+					conexión. Sin última voluntad, ¿qué estado muestra la aplicación diez minutos
+					después?
+				</p>
+				<p>
+					Respuesta: «conectado», el último retenido, aunque la placa esté apagada.
+					Pulsar →: con última voluntad, el broker no recibe el ping durante 1,5 veces
+					el <i>keepalive</i>, cierra la conexión y publica «desconectado» en nombre del
+					ESP32. Los dos mecanismos juntos reflejan el estado real del dispositivo.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Mensaje retenido (§3.3.1.3)</h4>
+					<p>
+						Lo marca el publicador con la bandera <code>RETAIN</code>. El broker conserva
+						uno por tema: cada retenido nuevo sustituye al anterior, y uno de carga vacía
+						lo borra. Se entrega también a suscripciones con comodines.
+					</p>
+					<h4>Última voluntad (§3.1.2.5)</h4>
+					<p>
+						Se declara en el paquete <code>CONNECT</code>: tema, mensaje, QoS y bandera de
+						retenido. El broker la publica ante un fallo de red, el vencimiento del
+						<i>keepalive</i>, un cierre sin <code>DISCONNECT</code> o un error de
+						protocolo; con <code>DISCONNECT</code> la descarta.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Retener un comando: al reconectar, el dispositivo recibe de nuevo el último, quizá desfasado.</li>
+						<li>Esperar el aviso al instante; el broker lo publica al vencer 1,5 veces el <i>keepalive</i>.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="10-qos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Calidad de servicio (QoS)</span>
+				</a>
+				<a class="slide-nav__link" href="12-mqtt-seguridad.html">
+					<span>Seguridad en MQTT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

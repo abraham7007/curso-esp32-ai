@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calidad de servicio (QoS) · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">Niveles de <em>calidad de servicio</em> (QoS) en la entrega MQTT</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Calidad de servicio</b> (QoS, <i>quality of service</i>): garantía de
+								entrega de cada mensaje, elegida por el publicador al enviar y por cada
+								suscriptor al suscribirse.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<b>Comando idempotente</b>: repetido,<br />
+							deja el mismo estado
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<svg class="s4a-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres columnas, una por nivel de QoS, cada una con un diagrama de secuencia entre emisor y receptor. QoS 0, como máximo una vez: un solo mensaje por entrega, sin acuse; el mensaje puede perderse; uso: telemetría periódica. QoS 1, al menos una vez: dos mensajes por entrega, el mensaje y su acuse; si el acuse se pierde, el emisor repite y el mensaje puede duplicarse; uso: comando idempotente. QoS 2, exactamente una vez: cuatro mensajes por entrega, el mensaje, el acuse, la liberación y el cierre; ni pérdida ni duplicado; uso: orden no repetible. Abajo, el efecto de un duplicado en QoS 1: la orden encender recibida dos veces deja la luz encendida; la orden alternar recibida dos veces la deja apagada. Fuente: MQTT 3.1.1, sección 4.3.">
+							<!-- QoS 0 -->
+							<text class="mid b" x="250" y="30" font-size="42">QoS 0</text>
+							<text class="mid sans b" x="250" y="80" font-size="28">como máximo una vez</text>
+							<text class="mid sans mut" x="90" y="132" font-size="24">emisor</text>
+							<text class="mid sans mut" x="410" y="132" font-size="24">receptor</text>
+							<path class="ln ln--vida" d="M90 152 V 384 M410 152 V 384" />
+							<path class="ln ln--navy" d="M94 196 H 396" />
+							<path class="rel-navy" d="M408 196 L 390 186 L 390 206 Z" />
+							<text class="mid sans halo navy" x="250" y="174" font-size="24">1 · mensaje</text>
+							<text class="mid b" x="250" y="434" font-size="36">1 mensaje</text>
+							<text class="mid sans mut" x="250" y="474" font-size="24">por entrega</text>
+							<text class="mid sans dan b" x="250" y="530" font-size="28">puede perderse</text>
+							<rect class="caja caja--navy" x="20" y="566" width="460" height="64" rx="14" />
+							<text class="mid sans navy b" x="250" y="598" font-size="26"><tspan class="mut">uso · </tspan>telemetría periódica</text>
+							<path class="ln ln--fina ln--mut" d="M525 10 V 630" />
+							<!-- QoS 1 -->
+							<text class="mid b" x="800" y="30" font-size="42">QoS 1</text>
+							<text class="mid sans b" x="800" y="80" font-size="28">al menos una vez</text>
+							<text class="mid sans mut" x="640" y="132" font-size="24">emisor</text>
+							<text class="mid sans mut" x="960" y="132" font-size="24">receptor</text>
+							<path class="ln ln--vida" d="M640 152 V 384 M960 152 V 384" />
+							<path class="ln ln--navy" d="M644 196 H 946" />
+							<path class="rel-navy" d="M958 196 L 940 186 L 940 206 Z" />
+							<text class="mid sans halo navy" x="800" y="174" font-size="24">1 · mensaje</text>
+							<path class="ln ln--ok" d="M956 252 H 654" />
+							<path class="rel-ok" d="M642 252 L 660 242 L 660 262 Z" />
+							<text class="mid sans halo ok" x="800" y="230" font-size="24">2 · acuse</text>
+							<text class="mid b" x="800" y="434" font-size="36">2 mensajes</text>
+							<text class="mid sans mut" x="800" y="474" font-size="24">por entrega</text>
+							<text class="mid sans warn b" x="800" y="530" font-size="28">puede duplicarse</text>
+							<rect class="caja caja--navy" x="570" y="566" width="460" height="64" rx="14" />
+							<text class="mid sans navy b" x="800" y="598" font-size="26"><tspan class="mut">uso · </tspan>comando idempotente</text>
+							<path class="ln ln--fina ln--mut" d="M1075 10 V 630" />
+							<!-- QoS 2 -->
+							<text class="mid b" x="1350" y="30" font-size="42">QoS 2</text>
+							<text class="mid sans b" x="1350" y="80" font-size="28">exactamente una vez</text>
+							<text class="mid sans mut" x="1190" y="132" font-size="24">emisor</text>
+							<text class="mid sans mut" x="1510" y="132" font-size="24">receptor</text>
+							<path class="ln ln--vida" d="M1190 152 V 384 M1510 152 V 384" />
+							<path class="ln ln--navy" d="M1194 196 H 1496" />
+							<path class="rel-navy" d="M1508 196 L 1490 186 L 1490 206 Z" />
+							<text class="mid sans halo navy" x="1350" y="174" font-size="24">1 · mensaje</text>
+							<path class="ln ln--ok" d="M1506 252 H 1204" />
+							<path class="rel-ok" d="M1192 252 L 1210 242 L 1210 262 Z" />
+							<text class="mid sans halo ok" x="1350" y="230" font-size="24">2 · acuse</text>
+							<path class="ln ln--navy" d="M1194 308 H 1496" />
+							<path class="rel-navy" d="M1508 308 L 1490 298 L 1490 318 Z" />
+							<text class="mid sans halo navy" x="1350" y="286" font-size="24">3 · liberación</text>
+							<path class="ln ln--ok" d="M1506 364 H 1204" />
+							<path class="rel-ok" d="M1192 364 L 1210 354 L 1210 374 Z" />
+							<text class="mid sans halo ok" x="1350" y="342" font-size="24">4 · cierre</text>
+							<text class="mid b" x="1350" y="434" font-size="36">4 mensajes</text>
+							<text class="mid sans mut" x="1350" y="474" font-size="24">por entrega</text>
+							<text class="mid sans ok b" x="1350" y="530" font-size="28">ni pérdida ni duplicado</text>
+							<rect class="caja caja--navy" x="1120" y="566" width="460" height="64" rx="14" />
+							<text class="mid sans navy b" x="1350" y="598" font-size="26"><tspan class="mut">uso · </tspan>orden no repetible</text>
+
+							<!-- duplicado en QoS 1: solo es inofensivo si el comando es idempotente -->
+							<path class="ln ln--fina ln--mut" d="M0 650 H 1600" />
+							<g data-paso="1">
+								<text class="sans b" x="0" y="680" font-size="26">Duplicado en QoS 1:</text>
+								<text x="270" y="680" font-size="26">encender × 2 <tspan class="sans">→</tspan> <tspan class="ok">encendida ✓</tspan></text>
+								<text x="760" y="680" font-size="26">alternar × 2 <tspan class="sans">→</tspan> <tspan class="dan">apagada ✕</tspan></text>
+							</g>
+							<text class="sans mut fin" x="1600" y="680" font-size="22">MQTT 3.1.1 · §4.3</text>
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer las tres columnas: la garantía crece con el número de mensajes por
+					entrega (1, 2 y 4), y con él el tráfico y la latencia. La elección depende del
+					flujo: qué cuesta más, perder un mensaje o recibirlo dos veces.
+				</p>
+				<p>
+					Telemetría periódica (<code>casa/sala/temp</code>): QoS 0; la lectura
+					siguiente sustituye a la perdida. Comando (<code>casa/sala/luz</code>): QoS 1;
+					si el acuse se pierde, el emisor repite y el receptor recibe el comando dos
+					veces.
+				</p>
+				<p>
+					Pregunta de predicción: con la luz apagada, el comando «alternar» llega dos
+					veces por QoS 1; ¿cómo queda la luz?
+				</p>
+				<p>
+					Respuesta: apagada; la primera copia la enciende y la segunda la apaga. Pulsar
+					→: con «encender», el duplicado deja el mismo estado. Por eso el comando lleva
+					el estado deseado, 1 o 0.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Paquetes de cada nivel</h4>
+					<p>
+						QoS 0: <code>PUBLISH</code>. QoS 1: <code>PUBLISH</code> y
+						<code>PUBACK</code>; sin acuse, el emisor reenvía con la marca
+						<code>DUP</code>. QoS 2: <code>PUBLISH</code>, <code>PUBREC</code>,
+						<code>PUBREL</code> y <code>PUBCOMP</code>.
+					</p>
+					<h4>En la práctica</h4>
+					<p>
+						La QoS se aplica por tramo: del publicador al broker y del broker a cada
+						suscriptor. El broker entrega con la menor de las dos: la del mensaje
+						publicado y la concedida a la suscripción (§3.8.4). Un cliente desconectado solo recibe después los mensajes QoS 1 y
+						2 si mantiene una sesión persistente. La biblioteca PubSubClient publica
+						solo con QoS 0 y se suscribe con QoS 0 o 1.
+					</p>
+					<h4>Fuentes</h4>
+					<p>OASIS, <i>MQTT Version 3.1.1</i> (2014), §3.8.4 y §4.3; documentación de PubSubClient.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="09-mqtt-temas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Temas y comodines</span>
+				</a>
+				<a class="slide-nav__link" href="11-retenido-ultima-voluntad.html">
+					<span>Retenido y última voluntad</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

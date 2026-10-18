@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Redes de IoT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Alcance, tasa de datos y consumo de las <em>redes</em> de IoT
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="-4 -4 1608 688" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Gráfico en ejes logarítmicos del alcance típico por enlace, de 1 m a 10 km, frente a la tasa de datos, de 100 bit/s a 1 Gbit/s; el relleno indica el consumo. WiFi: de 10 a 200 m y de 1 Mbit/s a 1 Gbit/s, consumo alto. BLE: de 1 a 100 m y de 125 kbit/s a 2 Mbit/s, consumo bajo. Zigbee y Thread: de 10 a 100 m por salto, ampliable con la malla, y de 20 a 250 kbit/s, consumo bajo. LoRaWAN: de 1 a 15 km y de 300 bit/s a 50 kbit/s, consumo bajo. NB-IoT y LTE-M: kilómetros, con la celda del operador, y de decenas de kbit/s a 1 Mbit/s, consumo bajo. A la derecha, los criterios de selección: energía, alcance, volumen de datos e infraestructura. En el segundo paso, un contorno azul discontinuo y el rótulo ESP32 marcan WiFi y BLE como las radios integradas en el ESP32.">
+						<!-- eje y: título horizontal y marcas por década -->
+						<text class="sans mut" x="0" y="14" font-size="22">tasa de datos (bit/s)</text>
+						<g>
+							<text class="fin mut" x="134" y="560" font-size="21">100</text>
+							<text class="fin mut" x="134" y="487" font-size="21">1 k</text>
+							<text class="fin mut" x="134" y="414" font-size="21">10 k</text>
+							<text class="fin mut" x="134" y="341" font-size="21">100 k</text>
+							<text class="fin mut" x="134" y="269" font-size="21">1 M</text>
+							<text class="fin mut" x="134" y="196" font-size="21">10 M</text>
+							<text class="fin mut" x="134" y="123" font-size="21">100 M</text>
+							<text class="fin mut" x="134" y="50" font-size="21">1 G</text>
+						</g>
+						<path class="ln ln--mut ln--fina" d="M150 40 V560 H1000" />
+						<path class="s5v5-reticula" d="M150 487 H990 M150 414 H990 M150 341 H990 M150 269 H990 M150 196 H990 M150 123 H990 M150 50 H990 M345 560 V40 M541 560 V40 M736 560 V40 M931 560 V40" />
+
+						<!-- eje x -->
+						<g>
+							<text class="mid mut" x="150" y="588" font-size="21">1 m</text>
+							<text class="mid mut" x="345" y="588" font-size="21">10 m</text>
+							<text class="mid mut" x="541" y="588" font-size="21">100 m</text>
+							<text class="mid mut" x="736" y="588" font-size="21">1 km</text>
+							<text class="mid mut" x="931" y="588" font-size="21">10 km</text>
+						</g>
+						<text class="sans mut mid" x="570" y="624" font-size="22">alcance típico por enlace (m)</text>
+
+						<!-- regiones: relleno = consumo -->
+						<rect class="caja caja--dan s5v5-zona" x="345" y="50" width="254" height="219" rx="10" />
+						<text class="sans b mid" x="472" y="92" font-size="28">WiFi</text>
+
+						<rect class="caja caja--ok s5v5-zona" x="150" y="247" width="391" height="88" rx="10" />
+						<text class="sans b" x="168" y="291" font-size="28">BLE</text>
+
+						<rect class="caja caja--ok s5v5-zona" x="345" y="312" width="195" height="80" rx="10" />
+						<rect class="caja--zona" x="540" y="312" width="196" height="80" rx="10" />
+						<text class="sans b" x="356" y="366" font-size="23">Zigbee · Thread</text>
+						<text class="sans mut" x="568" y="334" font-size="21">malla →</text>
+
+						<rect class="caja caja--ok s5v5-zona" x="736" y="363" width="230" height="162" rx="10" />
+						<text class="sans b" x="752" y="498" font-size="27">LoRaWAN</text>
+
+						<rect class="caja caja--ok s5v5-zona" x="795" y="269" width="195" height="124" rx="10" />
+						<text class="sans b mid" x="892" y="300" font-size="24">NB-IoT</text>
+						<text class="sans b mid" x="892" y="332" font-size="24">LTE-M</text>
+
+						<!-- leyenda del consumo -->
+						<rect class="s5v5-fondo" x="636" y="52" width="340" height="104" rx="8" />
+						<rect class="caja caja--dan" x="650" y="66" width="30" height="30" rx="5" />
+						<text class="sans" x="694" y="81" font-size="22">consumo alto</text>
+						<rect class="caja caja--ok" x="650" y="112" width="30" height="30" rx="5" />
+						<text class="sans" x="694" y="127" font-size="22">bajo: años con pila</text>
+
+						<!-- criterios de selección -->
+						<text class="sans b" x="1060" y="20" font-size="28">Criterios de selección</text>
+						<path class="ln ln--mut ln--fina" d="M1060 48 H1600" />
+						<text class="sans navy b" x="1060" y="100" font-size="32">Energía</text>
+						<path class="ln ln--mut ln--fina" d="M1060 152 H1600" />
+						<text class="sans navy b" x="1060" y="204" font-size="32">Alcance</text>
+						<path class="ln ln--mut ln--fina" d="M1060 256 H1600" />
+						<text class="sans navy b" x="1060" y="308" font-size="32">Volumen de datos</text>
+						<path class="ln ln--mut ln--fina" d="M1060 360 H1600" />
+						<text class="sans navy b" x="1060" y="412" font-size="32">Infraestructura</text>
+						<path class="ln ln--mut ln--fina" d="M1060 464 H1600" />
+
+						<!-- paso 1: radios del ESP32 (contorno azul discontinuo; el rojo es solo consumo) -->
+						<g data-paso="1">
+							<rect class="s5v5-marca" x="341" y="46" width="262" height="227" rx="12" />
+							<rect class="s5v5-marca" x="146" y="243" width="399" height="96" rx="12" />
+							<text class="navy b mid" x="472" y="132" font-size="22">ESP32</text>
+							<text class="navy b" x="236" y="291" font-size="22">ESP32</text>
+							<rect class="s5v5-marca" x="1060" y="506" width="540" height="96" rx="12" />
+							<text class="sans b" x="1084" y="538" font-size="26"><tspan class="navy">ESP32:</tspan> WiFi y BLE integrados</text>
+							<text class="sans" x="1084" y="574" font-size="23">otras radios: módulo o pasarela</text>
+						</g>
+
+						<!-- fuente al pie -->
+						<text class="sans mut" x="1060" y="632" font-size="20">Órdenes de magnitud. Fuentes: Wi-Fi Alliance,</text>
+						<text class="sans mut" x="1060" y="660" font-size="20">Bluetooth SIG, CSA, LoRa Alliance, 3GPP</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer primero los ejes: los dos son logarítmicos y cada marca multiplica por
+					diez. Las regiones son órdenes de magnitud, no valores de catálogo; el alcance
+					real depende de la antena, la potencia y los obstáculos.
+				</p>
+				<p>
+					Pregunta de predicción: un sensor de humedad del suelo, con pila, a 5 km del
+					edificio más cercano, envía 20 bytes cada hora. ¿Qué red de la gráfica conviene?
+					Respuesta: LoRaWAN, o NB-IoT si hay cobertura del operador. Hacen falta
+					kilómetros, pocos bytes y años de pila; WiFi queda fuera por alcance y por
+					consumo.
+				</p>
+				<p>
+					Recorrer los cuatro criterios con el ejemplo anterior: energía (pila),
+					alcance (km), volumen (bytes por hora), infraestructura (una pasarela LoRaWAN
+					propia o la red del operador).
+				</p>
+				<p>
+					Paso 1: el ESP32 trae WiFi y BLE en el chip. Las demás radios exigen un módulo
+					externo (un transceptor LoRa por SPI, un módem celular por UART) o una
+					pasarela, que es el tema de la lámina 05.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						ESP32: WiFi 802.11 b/g/n a 2,4 GHz, hasta 150 Mbit/s, con 180–240 mA al
+						transmitir; Bluetooth 4.2 con BLE a 1 Mbit/s. BLE 5 añade 2 Mbit/s y el modo
+						codificado de 125–500 kbit/s, con el doble o el cuádruple de alcance.
+						Zigbee y Thread usan la radio IEEE 802.15.4 a 250 kbit/s y forman una malla;
+						Thread transporta IPv6. LoRaWAN: 0,3–50 kbit/s, hasta 15 km en zona rural y
+						más de 10 años con pila. NB-IoT: 30–60 kbit/s de pico y 164 dB de pérdida
+						máxima de acoplamiento; LTE-M, del orden de 1 Mbit/s; ambas con tarjeta SIM y
+						contrato con un operador.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Elegir WiFi para un nodo con pila a kilómetros del router.</li>
+						<li>Tomar como garantía cifras que son órdenes de magnitud en campo abierto.</li>
+						<li>Olvidar el costo de la pasarela propia o de la suscripción al operador.</li>
+					</ul>
+					<h4>Fuentes</h4>
+					<p>
+						Bluetooth SIG (Core Specification, «Understanding Bluetooth Range»);
+						Connectivity Standards Alliance (Zigbee) y Thread Group; LoRa Alliance; RFC
+						8376 (IETF, «LPWAN Overview»: LoRaWAN y NB-IoT, 3GPP Rel-13); Wi-Fi
+						Alliance; hoja de datos del ESP32 (Espressif).
+					</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-arquitectura-capas.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Arquitectura de IoT en cuatro capas</span>
+				</a>
+				<a class="slide-nav__link" href="05-despliegue.html">
+					<span>Modelos de despliegue</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

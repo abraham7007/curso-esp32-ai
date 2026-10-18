@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Modelos de despliegue · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>Despliegue</em> directo, con pasarela y en el borde
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="-4 -4 1608 660" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres modelos de despliegue en tres filas, de izquierda a derecha: dispositivo, intermediario y nube. Directo: el ESP32 tiene WiFi e IP; un router WiFi reenvía sus paquetes IP a la plataforma. Con pasarela: nodos BLE, Zigbee y LoRa, radios sin IP, llegan a una pasarela que traduce de la radio a IP y reenvía a la plataforma. En el borde: los sensores entregan datos crudos a un nodo de borde, que filtra, agrega e infiere, y a la nube sube solo eventos. Las tres filas llegan a una misma plataforma en la nube. En el segundo paso, cuándo conviene cada uno: directo, con WiFi disponible y alimentación de red; con pasarela, con pila, kilómetros o malla y muchos nodos; en el borde, por latencia y volumen de datos, con la IA en el borde de la sesión 6.">
+					<text class="sans mut" x="0" y="16" font-size="22">modelo</text>
+					<text class="sans mut" x="330" y="16" font-size="22">dispositivo</text>
+					<text class="sans mut" x="650" y="16" font-size="22">intermediario</text>
+					<text class="sans mut" x="1010" y="16" font-size="22">nube</text>
+					<text class="sans mut" x="1300" y="16" font-size="22" data-paso="1">cuándo conviene</text>
+					<path class="s5v5-reticula" d="M0 240 H1600" />
+					<path class="s5v5-reticula" d="M0 448 H1600" />
+					<!-- 1: dispositivo IP directo a la nube -->
+					<text class="sans navy b" x="0" y="120" font-size="29">Directo</text>
+					<text class="sans mut" x="0" y="160" font-size="23">dispositivo con IP</text>
+					<rect class="caja caja--navy" x="330" y="80" width="240" height="120" rx="12" />
+					<text class="sans b mid" x="450" y="123" font-size="27">ESP32</text>
+					<text class="sans mut mid" x="450" y="159" font-size="22">WiFi · IP</text>
+					<path class="ln" d="M570 140 L636 140" />
+					<path class="rel" d="M650 140 L632 130 L632 150 Z" />
+					<rect class="caja" x="650" y="80" width="270" height="120" rx="12" />
+					<text class="sans b mid" x="785" y="123" font-size="27">router WiFi</text>
+					<text class="sans mut mid" x="785" y="159" font-size="22">reenvía IP</text>
+					<path class="ln" d="M920 140 L996 140" />
+					<path class="rel" d="M1010 140 L992 130 L992 150 Z" />
+					<g data-paso="1">
+						<text class="sans b" x="1300" y="120" font-size="25">WiFi disponible</text>
+						<text class="sans" x="1300" y="158" font-size="23">alimentación de red</text>
+					</g>
+					<!-- 2: radios sin IP a través de una pasarela -->
+					<text class="sans navy b" x="0" y="328" font-size="29">Con pasarela</text>
+					<text class="sans mut" x="0" y="368" font-size="23">radios sin IP</text>
+					<rect class="caja caja--ok" x="330" y="264" width="240" height="50" rx="12" />
+					<text class="sans b mid" x="450" y="289" font-size="25">BLE</text>
+					<path class="ln ln--fina" d="M570 289 L636 348" />
+					<path class="rel" d="M650 348 L632 338 L632 358 Z" />
+					<rect class="caja caja--ok" x="330" y="322" width="240" height="50" rx="12" />
+					<text class="sans b mid" x="450" y="347" font-size="25">Zigbee</text>
+					<path class="ln ln--fina" d="M570 347 L636 348" />
+					<path class="rel" d="M650 348 L632 338 L632 358 Z" />
+					<rect class="caja caja--ok" x="330" y="380" width="240" height="50" rx="12" />
+					<text class="sans b mid" x="450" y="405" font-size="25">LoRa</text>
+					<path class="ln ln--fina" d="M570 405 L636 348" />
+					<path class="rel" d="M650 348 L632 338 L632 358 Z" />
+					<rect class="caja caja--navy" x="650" y="288" width="270" height="120" rx="12" />
+					<text class="sans b mid" x="785" y="331" font-size="27">pasarela</text>
+					<text class="sans navy mid" x="785" y="367" font-size="22">radio → IP</text>
+					<path class="ln" d="M920 348 L996 348" />
+					<path class="rel" d="M1010 348 L992 338 L992 358 Z" />
+					<g data-paso="1">
+						<text class="sans b" x="1300" y="328" font-size="25">pila, km o malla</text>
+						<text class="sans" x="1300" y="366" font-size="23">muchos nodos</text>
+					</g>
+					<!-- 3: procesamiento en el borde -->
+					<text class="sans navy b" x="0" y="536" font-size="29">En el borde</text>
+					<text class="sans mut" x="0" y="576" font-size="23">proceso local</text>
+					<rect class="caja" x="330" y="496" width="240" height="120" rx="12" />
+					<text class="sans b mid" x="450" y="539" font-size="27">sensores</text>
+					<text class="sans mut mid" x="450" y="575" font-size="22">datos crudos</text>
+					<path class="ln ln--acc s5v5-grueso" d="M570 556 L632 556" />
+					<path class="rel-acc" d="M650 556 L626 540 L626 572 Z" />
+					<rect class="caja caja--acc" x="650" y="496" width="270" height="120" rx="12" />
+					<text class="sans b mid" x="785" y="539" font-size="27">nodo de borde</text>
+					<text class="sans acc mid" x="785" y="575" font-size="22">filtra · agrega · infiere</text>
+					<path class="ln ln--fina" d="M920 556 L996 556" />
+					<path class="rel" d="M1010 556 L992 546 L992 566 Z" />
+					<text class="sans acc mid" x="965" y="526" font-size="20">eventos</text>
+					<g data-paso="1">
+						<text class="sans b" x="1300" y="536" font-size="25">latencia, volumen</text>
+						<text class="sans acc" x="1300" y="574" font-size="23">IA en el borde: sesión 6</text>
+					</g>
+					<!-- una sola plataforma recibe las tres filas -->
+					<rect class="caja" x="1010" y="80" width="240" height="536" rx="12" />
+					<text class="sans b mid" x="1130" y="331" font-size="27">plataforma</text>
+					<text class="sans mut mid" x="1130" y="367" font-size="22">en la nube</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer las tres filas de izquierda a derecha. La diferencia está en el
+					intermediario: un router que solo reenvía IP, una pasarela que traduce de una
+					radio sin IP a IP, o un nodo que además procesa.
+				</p>
+				<p>
+					Pregunta de predicción: cincuenta sensores Zigbee con pila reparten la
+					temperatura de un almacén. ¿Pueden publicar directamente en una plataforma de
+					Internet, sin ningún equipo intermedio? Respuesta: no. Zigbee no transporta IP;
+					hace falta una pasarela (un coordinador Zigbee con WiFi o Ethernet) que
+					traduzca y reenvíe.
+				</p>
+				<p>
+					Ejemplo oral: un ESP32 puede ser él mismo la pasarela; recibe por BLE las
+					lecturas de varios sensores y las reenvía por WiFi.
+				</p>
+				<p>
+					Paso 1: leer cuándo conviene cada modelo. El de la fila tres anticipa la
+					sesión 6, donde la inferencia se ejecuta en el propio microcontrolador.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Directo: el ESP32 con WiFi abre su propia conexión TCP/IP con el servidor;
+						es el modelo del ejemplo 19. Con pasarela: un coordinador Zigbee, un
+						enrutador de borde Thread o una pasarela LoRaWAN traducen la radio a IP. En
+						LoRaWAN, la pasarela reenvía los paquetes a un servidor de red, que los
+						entrega a la aplicación. Borde: una Raspberry Pi o un PC industrial junto a
+						los sensores filtra, agrega y decide localmente; a la nube suben eventos y
+						resúmenes.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Domótica con Zigbee o Thread (coordinador o enrutador de borde), medición
+						remota con LoRaWAN, líneas de producción con un servidor de borde por planta.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Suponer que un nodo BLE o Zigbee tiene dirección IP propia.</li>
+						<li>Enviar a la nube todas las muestras crudas cuando basta un evento o un promedio.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="04-redes-iot.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Redes de IoT</span>
+				</a>
+				<a class="slide-nav__link" href="06-modelos-comunicacion.html">
+					<span>Modelos de comunicación</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

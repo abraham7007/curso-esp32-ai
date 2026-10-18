@@ -345,3 +345,143 @@
 .ponencia--trabajo .s5b-blynk.s5v4-11 .code-hour__body--pair {
 	grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
 }
+
+/* v5 · lámina 04 */
+/* Regiones del gráfico de redes: translúcidas, para que los solapes de
+   alcance y tasa (BLE con Zigbee, LoRaWAN con NB-IoT) se lean. */
+.ponencia .s4a-svg .s5v5-zona {
+	fill-opacity: 0.55;
+}
+
+/* Paso 1: contorno azul discontinuo sobre las dos radios integradas en el
+   ESP32. El rojo queda reservado al consumo alto de la leyenda. */
+.ponencia .s4a-svg .s5v5-marca {
+	fill: none;
+	stroke: var(--color-navy);
+	stroke-width: 5;
+	stroke-dasharray: 14 9;
+}
+
+/* Retícula de décadas: fina y continua, por debajo de las regiones. */
+.ponencia .s4a-svg .s5v5-reticula {
+	fill: none;
+	stroke: var(--color-border);
+	stroke-width: 2;
+}
+
+/* Fondo opaco bajo una leyenda que cae sobre la retícula. */
+.ponencia .s4a-svg .s5v5-fondo {
+	fill: var(--color-bg);
+	stroke: var(--color-border);
+	stroke-width: 2;
+}
+
+/* v5 · lámina 09 */
+/* Botones de filtro: el código toma el color del botón (sin fondo propio),
+   también en el botón activo. */
+.ponencia .s5v5c-filtros .btn code {
+	background: none;
+	padding: 0;
+	color: inherit;
+}
+
+/* v5 · lámina 05 */
+/* Flecha gruesa: el volumen de datos crudos que entra al nodo de borde,
+   frente a la flecha fina de los eventos que salen hacia la nube. */
+.ponencia .s4a-svg .s5v5-grueso {
+	stroke-width: 14;
+	stroke-linecap: butt;
+}
+
+/* v5 · lámina 18 */
+/* Las cinco políticas reparten el alto de la columna junto al lienzo de la
+   cuota, a escala de lectura proyectada. */
+.ponencia .escenario--lado > .escenario__texto > .s5v5-politica {
+	flex: 1 1 auto;
+	justify-content: space-around;
+	font-size: var(--fs-lede);
+	line-height: 1.25;
+}
+
+/* v5 · lámina 06 */
+/* Dos columnas: los dos modelos y las limitaciones de HTTP a la izquierda;
+   el deslizador y la línea de tiempo del sondeo, con todo el alto, a la
+   derecha. */
+.ponencia .escenario.s5v5-modelos {
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+	grid-template-rows: minmax(0, 1fr);
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.ponencia .s5v5-modelos > .escenario__texto {
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	min-height: 0;
+}
+
+.ponencia .s5v5-modelos > .escenario__texto > svg {
+	flex: 1 1 0;
+	min-height: 0;
+	max-width: none;
+}
+
+/* v5 · lámina 18 · nota de implementación bajo la gráfica de la cuota */
+.ponencia .escenario__visual > .s5v5-nota {
+	margin: 0;
+	font-size: var(--fs-body);
+	color: var(--color-text);
+}
+
+/* v5 · lámina 19 */
+/* Recuadro de una línea con la configuración de la consola, previa al
+   firmware: sin datastreams el ejemplo no funciona. Va de borde a borde,
+   como la franja «Qué comprueba». */
+.ponencia--trabajo .s5v5-antes {
+	margin: 0;
+	padding: 0.3em 0.8em;
+	border-left: 4px solid var(--color-navy);
+	background: var(--color-navy-soft);
+	font-size: clamp(0.85rem, 0.92vw, 1.1rem);
+	color: var(--color-text);
+}
+
+.ponencia--trabajo .s5v5-antes b {
+	margin-right: 0.6em;
+	font-family: var(--font-mono);
+	font-size: 0.85em;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-navy);
+}
+
+/* v5 · lámina 15 */
+/* Tema o valor en mono dentro de un rótulo en sans del .s4a-svg. */
+.ponencia .s4a-svg .s5v5-mono {
+	font-family: var(--font-mono);
+}
+
+/* 19: el recuadro «Antes del firmware» suma una línea; el prompt (columna
+   dominante) la devuelve con un interlineado algo más cerrado. */
+.ponencia--trabajo .s5b-blynk.s5v4-11 .prompt-box {
+	line-height: 1.38;
+}
+
+/* 19 a 1080p: la columna dominante es la del monitor; su letra baja un
+   punto para que el recuadro quepa. */
+@media (min-width: 1700px) and (min-height: 1000px) {
+	.ponencia--trabajo
+		.s5b-blynk.s5v4-11.s4b-compacto
+		.code-hour__stack:first-child
+		.term {
+		font-size: 1.08rem;
+		line-height: 1.36;
+	}
+}
+
+/* v5 · lámina 19: el esquema de montaje se dibuja más pequeño que en la
+   sesión 3; el texto sube para quedar ≥ 16 px a 1440×900. */
+.ponencia--trabajo .s5b-blynk .s4b-esquema text {
+	font-size: 19.5px;
+}

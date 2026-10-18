@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Conexión persistente · Sesión 5</title>
+		<title>Modelos de comunicación · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,38 +14,81 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body class="ponencia" data-deck-total="17">
+	<body class="ponencia" data-deck-total="21">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">01 · Sistema IoT</span>
+				<span class="badge">02 · Protocolos de IoT</span>
 
-				<h1 class="slide__title slide__title--sm">Sondeo periódico y conexión <em>persistente</em> con el servidor</h1>
+				<h1 class="slide__title slide__title--sm">
+					Petición-respuesta y <em>publicación-suscripción</em> como modelos de comunicación
+				</h1>
 
-				<div class="escenario">
-					<div class="escenario__texto franja-fila">
-						<div class="def">
-							<p>
-								El router del aula descarta lo que llega de Internet sin pedirlo (NAT, 4·07):
-								la conexión la abre el ESP32. Con <b>sondeo</b> (<i>polling</i>) consulta cada
-								cierto tiempo; con una <b>conexión persistente</b> la abre una vez y recibe el
-								comando por ella.
-							</p>
-						</div>
-						<div class="mandos franja-fila__ajusta s5v4-mando">
+				<div class="def">
+					<p><b>Conexión persistente</b>: la abre el dispositivo una vez y queda abierta en ambos sentidos.</p>
+				</div>
+
+				<div class="escenario s5v5-modelos">
+					<div class="escenario__texto">
+						<svg class="s4a-svg" viewBox="-4 -4 628 724" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Arriba, petición-respuesta: el cliente envía una petición y el servidor devuelve una respuesta; el servidor solo responde, nunca inicia. En medio, publicación-suscripción: el publicador entrega el mensaje a un intermediario, que lo reenvía a dos suscriptores; emisor y receptores no se conocen. Abajo, las limitaciones de HTTP en IoT: sondeo periódico, una conexión por consulta, el NAT impide que el servidor inicie la conexión y la radio se enciende en cada consulta, lo que aumenta el consumo.">
+							<!-- petición-respuesta -->
+							<text class="sans navy b" x="0" y="16" font-size="27">Petición-respuesta</text>
+							<rect class="caja caja--navy" x="0" y="50" width="180" height="96" rx="12" />
+							<text class="sans b mid" x="90" y="98" font-size="25">cliente</text>
+							<rect class="caja" x="440" y="50" width="180" height="96" rx="12" />
+							<text class="sans b mid" x="530" y="98" font-size="25">servidor</text>
+							<path class="ln" d="M180 76 L422 76" />
+							<path class="rel" d="M440 76 L422 66 L422 86 Z" />
+							<text class="sans mid" x="310" y="56" font-size="22">petición</text>
+							<path class="ln ln--trazo" d="M440 122 L198 122" />
+							<path class="rel" d="M180 122 L198 112 L198 132 Z" />
+							<text class="sans mid" x="310" y="102" font-size="22">respuesta</text>
+							<text class="sans mut" x="0" y="176" font-size="22">el servidor solo responde</text>
+
+							<!-- publicación-suscripción -->
+							<text class="sans acc b" x="0" y="268" font-size="27">Publicación-suscripción</text>
+							<rect class="caja caja--navy" x="0" y="306" width="180" height="96" rx="12" />
+							<text class="sans b mid" x="90" y="354" font-size="23">publicador</text>
+							<rect class="caja caja--acc" x="226" y="306" width="168" height="96" rx="12" />
+							<text class="sans b mid" x="310" y="354" font-size="23">intermediario</text>
+							<rect class="caja caja--navy" x="440" y="296" width="180" height="50" rx="10" />
+							<text class="sans b mid" x="530" y="321" font-size="22">suscriptor</text>
+							<rect class="caja caja--navy" x="440" y="362" width="180" height="50" rx="10" />
+							<text class="sans b mid" x="530" y="387" font-size="22">suscriptor</text>
+							<path class="ln" d="M180 354 L210 354" />
+							<path class="rel" d="M226 354 L208 344 L208 364 Z" />
+							<path class="ln" d="M394 340 L424 326" />
+							<path class="rel" d="M440 321 L420 319 L427 337 Z" />
+							<path class="ln" d="M394 368 L424 382" />
+							<path class="rel" d="M440 387 L427 371 L420 389 Z" />
+							<text class="sans mut" x="0" y="434" font-size="22">emisor y receptor no se conocen</text>
+
+							<!-- limitaciones de HTTP en IoT -->
+							<path class="s5v5-reticula" d="M0 506 H620" />
+							<text class="sans b" x="0" y="538" font-size="24">Limitaciones de HTTP en IoT</text>
+							<text class="acc" x="0" y="576" font-size="22">01</text>
+							<text class="sans" x="40" y="576" font-size="22">sondeo periódico</text>
+							<text class="acc" x="0" y="618" font-size="22">02</text>
+							<text class="sans" x="40" y="618" font-size="22">una conexión por consulta</text>
+							<text class="acc" x="0" y="660" font-size="22">03</text>
+							<text class="sans" x="40" y="660" font-size="22">NAT: el servidor no puede iniciarla</text>
+							<text class="acc" x="0" y="702" font-size="22">04</text>
+							<text class="sans" x="40" y="702" font-size="22">radio encendida en cada consulta</text>
+						</svg>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="mandos">
 							<label class="control">
 								<span>Intervalo de sondeo</span>
 								<input type="range" id="intervalo" min="0" max="11" step="1" value="6" />
 								<output id="intervalo-out" for="intervalo" class="s5c-ancho s5c-ancho--corto">60 s</output>
 							</label>
 						</div>
-					</div>
-
-					<div class="escenario__visual">
 						<div class="lienzo-caja">
 							<canvas
 								id="escuchar"
 								role="img"
-								aria-label="Línea de tiempo de 0 a 300 s con tres comandos enviados desde el celular en instantes fijos. Arriba, con sondeo, el ESP32 consulta al servidor cada cierto intervalo; cada comando espera hasta la consulta siguiente y se rotula cuánto espera, entre 0 y el intervalo; cada consulta abre y cierra su propia conexión. Abajo, con la conexión persistente que abre el ESP32 al principio, cada comando llega en el mismo instante en que se envía. La conexión se mantiene con un aviso periódico (ping); sin avisos durante un plazo, el otro extremo la da por cortada."
+								aria-label="Línea de tiempo de 0 a 300 s con tres comandos enviados en instantes fijos. Arriba, con sondeo, el dispositivo consulta al servidor cada cierto intervalo; cada comando espera hasta la consulta siguiente y se rotula cuánto espera, entre 0 y el intervalo; cada consulta abre y cierra su propia conexión. Abajo, con la conexión persistente que abre el dispositivo al principio, cada comando llega en el mismo instante en que se envía; un aviso periódico (ping) mantiene la conexión abierta."
 							></canvas>
 						</div>
 					</div>
@@ -54,65 +97,62 @@
 
 			<aside class="notas">
 				<p>
-					Recordar la lámina 4·07: el router descarta lo que llega de Internet sin una
-					conexión saliente previa. El servidor no puede llamar al ESP32; el ESP32
-					tiene que abrir la conexión desde dentro.
+					Arriba a la izquierda, el modelo de la sesión 4: el cliente pregunta y el
+					servidor responde. El servidor nunca habla primero. Debajo, el modelo que
+					desarrolla el bloque 03: el emisor entrega el mensaje a un intermediario y este
+					lo reparte entre quienes se suscribieron.
 				</p>
 				<p>
-					Pregunta de predicción: el ESP32 consulta cada 60 s y el profesor pulsa el
-					interruptor en un instante cualquiera. ¿Cuánto tarda en encenderse el LED:
-					nada, unos segundos o hasta un minuto?
+					Recordar el NAT de la lámina 4·07: el router descarta lo que llega de Internet
+					sin una conexión saliente previa. El servidor no puede abrir una conexión hacia
+					el dispositivo; la abre siempre el dispositivo.
 				</p>
 				<p>
-					Respuesta: depende del instante; puede ser casi nada o casi un minuto. En
-					la figura, entre 2 y 49 s. Mover el deslizador: con consultas más seguidas
-					la espera se acorta, pero cada consulta abre y cierra una conexión. Abajo,
-					la conexión persistente: el comando llega en cuanto se envía. Leer la
-					línea del aviso periódico: sin ella, las desconexiones de las láminas 06, 14 y
-					16 no tendrían causa.
+					Pregunta de predicción: el dispositivo consulta cada 60 s y el comando se envía
+					en un instante cualquiera. ¿Cuánto tarda en llegar: nada, unos segundos o hasta
+					un minuto? Respuesta: depende del instante, entre 0 y 60 s, 30 s de media. En la
+					figura, entre 2 y 49 s.
 				</p>
 				<p>
-					Analogía para la explicación oral: preguntar cada minuto si hay mensajes
-					frente a recibir una notificación <i>push</i>.
+					Mover el deslizador: con consultas más seguidas la espera se acorta, pero cada
+					consulta abre una conexión y enciende la radio. Abajo, la conexión persistente:
+					el comando llega en cuanto se envía.
 				</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
-					<h4>Espera y coste del sondeo</h4>
+					<h4>Espera y costo del sondeo</h4>
 					<p>
-						Con una consulta cada T segundos, el comando llega en un instante
-						cualquiera entre dos consultas: espera de media T/2 y, en el peor caso,
-						T entero. Bajar T acorta la espera y multiplica las conexiones: 3600/T
-						por hora, 60 con T = 60 s y 720 con T = 5 s, cada una con su negociación
-						TCP y TLS (4·06). La conexión persistente es una sola y la espera se
-						reduce a una ida por la red, decenas de milisegundos.
+						Con una consulta cada T segundos, el comando espera de media T/2 y, en el
+						peor caso, T. Bajar T multiplica las consultas: 3600/T por hora, 60 con
+						T = 60 s y 720 con T = 5 s, cada una con su negociación TCP y TLS (sesión 4)
+						y su tiempo de radio encendida. Con la conexión persistente, la espera se
+						reduce a un trayecto por la red, decenas de milisegundos.
 					</p>
-					<h4>Mantener la conexión abierta</h4>
+					<h4>En la práctica</h4>
 					<p>
-						Para que el router y el servidor no la cierren por inactividad, la
-						biblioteca del ejemplo 19 envía un <i>ping</i> cuando pasan 40 s sin
-						tráfico (<i>heartbeat</i>, <code>BLYNK_HEARTBEAT</code>); MQTT hace lo
-						mismo con su <i>keepalive</i>. Lo atiende la llamada de cada vuelta del
-						<code>loop()</code> (lámina 12).
+						HTTP/1.1 admite conexiones persistentes (RFC 9112, §9.3), pero sigue siendo
+						petición-respuesta: el servidor no envía nada sin una petición. Los
+						protocolos de la lámina 07 resuelven el sentido inverso con una conexión que
+						abre el dispositivo y que queda abierta.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Bajar el intervalo de sondeo para reducir la espera hasta agotar la cuota.</li>
-						<li>Intentar abrir una conexión hacia el ESP32 desde Internet.</li>
-						<li>Bloquear el <code>loop()</code> y dejar sin respuesta el ping.</li>
+						<li>Bajar el intervalo de sondeo hasta agotar la batería o la cuota del servicio.</li>
+						<li>Intentar abrir una conexión hacia el dispositivo desde Internet.</li>
 					</ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="02-sistema-iot.html">
+				<a class="slide-nav__link" href="05-despliegue.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Sistema IoT</span>
+					<span>Modelos de despliegue</span>
 				</a>
-				<a class="slide-nav__link" href="04-publicar-suscribir.html">
-					<span>Publicación y suscripción</span>
+				<a class="slide-nav__link" href="07-protocolos-comparacion.html">
+					<span>Protocolos de aplicación</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
@@ -126,10 +166,11 @@
 			const MONO = "'IBM Plex Mono', monospace";
 			const SANS = "'IBM Plex Sans', sans-serif";
 			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
-			const MIN_FS = 20;
+			// 20 px a 1080 de alto, 16 px a 900: el mínimo proyectado de cada resolución.
+			const MIN_FS = Math.max(16, Math.min(20, window.innerHeight / 54));
 
 			const VENTANA = 300; // s de línea de tiempo
-			const ORDENES = [71, 118, 209]; // instantes fijos de las órdenes
+			const ORDENES = [71, 118, 209]; // instantes fijos de los comandos
 			const AVISO = 40; // intervalo del ping, solo para dibujar (sin cifra en pantalla)
 			const INTERVALOS = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300];
 
@@ -233,7 +274,7 @@
 				ctx.globalAlpha = 1;
 
 				// Fila de órdenes.
-				texto(ctx, "comandos del celular", m, yOrd, fs, c.acento, 700, "left", SANS, X(ORDENES[0]) - fs - m);
+				texto(ctx, "comandos", m, yOrd, fs, c.acento, 700, "left", SANS, X(ORDENES[0]) - fs - m);
 				for (const [i, o] of ORDENES.entries()) {
 					const x = X(o);
 					ctx.fillStyle = c.acento;
@@ -300,15 +341,18 @@
 				texto(ctx, "Sondeo", m, yA0 + fs * 1.5, fs * 1.05, c.heading, 700, "left", SANS, colRot - fs * 0.5);
 				texto(ctx, `consulta cada ${T} s`, m, yA0 + fs * 2.8, fs * 0.95, c.navy, 700, "left", SANS, colRot - fs * 0.5);
 				texto(ctx, `espera: de 0 a ${T} s`, m, yA0 + fs * 4.0, fs * 0.95, c.acento, 700, "left", SANS, colRot - fs * 0.5);
+				// Cada consulta abre y cierra su conexión: un bloque por consulta,
+				// recortado a la ventana para que el primero y el último no se monten.
 				const anchoBloque = Math.min(ancho * 0.8, fs * 7);
 				for (let k = 0; k <= nGets; k++) {
-					const xc = clamp(x0 + anchoBloque / 2, X(k * T), x1 - anchoBloque / 2);
+					const xi = Math.max(x0, X(k * T) - anchoBloque / 2);
+					const xd = Math.min(x1, X(k * T) + anchoBloque / 2);
 					ctx.fillStyle = c.navy;
 					ctx.beginPath();
-					ctx.roundRect(xc - anchoBloque / 2, yCon - fs * 0.6, anchoBloque, fs * 1.2, 4);
+					ctx.roundRect(xi, yCon - fs * 0.6, xd - xi, fs * 1.2, 4);
 					ctx.fill();
-					if (anchoBloque > fs * 6) texto(ctx, "abre y cierra", xc, yCon, fs * 0.8, token("--color-navy-contrast"), 700, "center", SANS, anchoBloque - 8);
 				}
+				texto(ctx, "conexión TCP:", m, yCon - fs * 1.15, fs * 0.95, c.navy, 700, "left", SANS, colRot - fs * 0.5);
 				texto(ctx, "una por consulta", m, yCon, fs * 0.95, c.navy, 700, "left", SANS, colRot - fs * 0.5);
 
 				// --- Carril B: conexión persistente ---
@@ -337,12 +381,12 @@
 					flecha(ctx, X(o), yB0 + fs * 0.4, X(o), yBanda - hBanda / 2 - 2, c.acento, 4, fs * 0.6);
 				}
 				texto(ctx, "Conexión persistente", m, yB0 + fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, colRot - fs * 0.5);
-				texto(ctx, "la abre el ESP32", m, yB0 + fs * 2.2, fs * 0.95, c.muted, 600, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, "la abre el dispositivo", m, yB0 + fs * 2.2, fs * 0.95, c.muted, 600, "left", SANS, colRot - fs * 0.5);
 				texto(ctx, "el comando llega", m, yB0 + fs * 3.4, fs * 0.95, c.ok, 700, "left", SANS, colRot - fs * 0.5);
 				texto(ctx, "en el acto", m, yB0 + fs * 4.4, fs * 0.95, c.ok, 700, "left", SANS, colRot - fs * 0.5);
 				texto(
 					ctx,
-					"la conexión se mantiene con un aviso periódico (ping); sin avisos durante un plazo, el otro extremo la da por cortada",
+					"abierta todo el tiempo; un aviso periódico (ping) la mantiene",
 					m,
 					yB0 + fs * 5.75,
 					fs * 0.95,

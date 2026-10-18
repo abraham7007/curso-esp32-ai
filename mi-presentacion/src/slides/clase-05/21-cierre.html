@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cierre · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<h1 class="slide__title slide__title--sm">Respuesta a la pregunta guía y resumen de la <em>sesión 5</em></h1>
+
+				<div class="def">
+					<p>
+						<b>Pregunta guía</b> · Publicación-suscripción con un <b>broker</b> como
+						intermediario: cada dispositivo y cada aplicación abre su propia conexión
+						con el broker y publica o se suscribe por tema; ninguno necesita la
+						dirección de los demás.
+					</p>
+				</div>
+
+				<div class="crece grid grid-cols-5 gap-12">
+					<svg class="s4a-svg col-span-2" viewBox="0 0 700 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Respuesta a la pregunta guía. En el centro, el broker, que filtra los mensajes por tema. A la izquierda, tres dispositivos ESP32; a la derecha, tres aplicaciones: panel web, app móvil y registro histórico. Cada uno abre una sola conexión, dirigida hacia el broker: seis conexiones en lugar de nueve enlaces directos, y ningún cliente conoce la dirección de los otros.">
+						<text class="sans mut" x="0" y="18" font-size="26">dispositivos</text>
+						<text class="sans mut fin" x="700" y="18" font-size="26">aplicaciones</text>
+
+						<!-- conexiones abiertas por cada cliente, hacia el broker -->
+						<path class="ln ln--navy" d="M190 100 L 258 211 M190 290 L 248 290 M190 480 L 258 369" />
+						<path class="ln ln--navy" d="M510 100 L 442 211 M510 290 L 452 290 M510 480 L 442 369" />
+						<path class="rel-navy" d="M270 230 L 248 218 L 269 205 Z" />
+						<path class="rel-navy" d="M270 290 L 248 302 L 248 278 Z" />
+						<path class="rel-navy" d="M270 350 L 269 375 L 248 362 Z" />
+						<path class="rel-navy" d="M430 230 L 431 205 L 452 218 Z" />
+						<path class="rel-navy" d="M430 290 L 452 278 L 452 302 Z" />
+						<path class="rel-navy" d="M430 350 L 452 362 L 431 375 Z" />
+
+						<!-- dispositivos -->
+						<rect class="caja caja--acc" x="0" y="54" width="190" height="92" rx="12" />
+						<text class="mid b" x="95" y="100" font-size="28">ESP32</text>
+						<rect class="caja caja--acc" x="0" y="244" width="190" height="92" rx="12" />
+						<text class="mid b" x="95" y="290" font-size="28">ESP32</text>
+						<rect class="caja caja--acc" x="0" y="434" width="190" height="92" rx="12" />
+						<text class="mid b" x="95" y="480" font-size="28">ESP32</text>
+
+						<!-- broker -->
+						<rect class="caja caja--acc" x="270" y="200" width="160" height="180" rx="14" />
+						<text class="mid acc b" x="350" y="268" font-size="30">broker</text>
+						<text class="mid sans" x="350" y="314" font-size="25">filtra</text>
+						<text class="mid sans" x="350" y="344" font-size="25">por tema</text>
+
+						<!-- aplicaciones -->
+						<rect class="caja caja--navy" x="510" y="54" width="190" height="92" rx="12" />
+						<text class="mid sans navy b" x="605" y="100" font-size="26">panel web</text>
+						<rect class="caja caja--navy" x="510" y="244" width="190" height="92" rx="12" />
+						<text class="mid sans navy b" x="605" y="290" font-size="26">app móvil</text>
+						<rect class="caja caja--navy" x="510" y="434" width="190" height="92" rx="12" />
+						<text class="mid sans navy b" x="605" y="480" font-size="26">registro</text>
+
+						<text class="mid sans" x="350" y="580" font-size="26">6 conexiones, todas abiertas por el cliente</text>
+					</svg>
+
+					<table class="s5v4-cierre col-span-3">
+						<thead>
+							<tr>
+								<th scope="col">Bloque</th>
+								<th scope="col">Idea central</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">01</span>Fundamentos de IoT</th>
+								<td>Cuatro capas; la telemetría sube y el comando baja, con requisitos distintos.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">02</span>Protocolos de IoT</th>
+								<td>HTTP consulta por petición; la publicación-suscripción desacopla emisor y receptor.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">03</span>Protocolo MQTT</th>
+								<td>Temas, QoS, retenido y última voluntad sobre una conexión que abre el cliente.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">04</span>Plataformas de IoT</th>
+								<td>Historial, paneles, alertas y gestión sobre el broker; en Blynk, token, datastream y pin virtual.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="def">
+					<p>
+						<b>Sesión 6</b> · TinyML: inferencia en el propio microcontrolador.
+						<b>Documentación</b> ·
+						<a href="https://www.itu.int/rec/T-REC-Y.2060-201206-I" target="_blank" rel="noopener">ITU-T Y.2060</a>
+						·
+						<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html" target="_blank" rel="noopener">MQTT 3.1.1 (OASIS)</a>
+						·
+						<a href="https://www.rfc-editor.org/rfc/rfc7252" target="_blank" rel="noopener">RFC 7252 (CoAP)</a>
+						·
+						<a href="https://docs.blynk.io/en/" target="_blank" rel="noopener">Blynk</a>
+					</p>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Volver a la pregunta guía de la portada: tres dispositivos y tres
+					aplicaciones necesitaban nueve enlaces directos y conocer direcciones
+					ajenas. Con el broker bastan seis conexiones, una por cliente, y cada una
+					la abre el cliente desde dentro de su red, de modo que el NAT del router
+					no la bloquea.
+				</p>
+				<p>
+					Recorrer los cuatro bloques y pedir para cada uno su prueba en el
+					ejemplo 19: la temperatura que sube cada 30 s y el interruptor que baja
+					al LED; la conexión persistente frente a la consulta de la sesión 4; el
+					estado Offline en la consola; V0 y V1 en el panel.
+				</p>
+				<p>
+					Pregunta de predicción: un cuarto ESP32 se suma y publica en
+					<code>casa/cocina/temp</code>; ¿qué hay que cambiar en los clientes que
+					ya funcionaban?
+				</p>
+				<p>
+					Respuesta: nada. El nuevo dispositivo abre su conexión con el broker; lo
+					reciben solo las aplicaciones suscritas a ese tema o a un comodín que lo
+					cubra, como <code>casa/+/temp</code>.
+				</p>
+				<p>
+					Presentar la sesión 6: un modelo entrenado se ejecuta en el propio
+					microcontrolador y decide qué conviene transmitir.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Glosario</h4>
+					<ul>
+						<li><b>Internet de las cosas</b> (<i>Internet of Things</i>, IoT): infraestructura global que interconecta cosas físicas y virtuales con tecnologías de información y comunicación interoperables (ITU-T Y.2060).</li>
+						<li><b>Telemetría</b> (<i>telemetry</i>): dato que el dispositivo envía. <b>Comando</b> (<i>command</i>): orden que el dispositivo recibe.</li>
+						<li><b>Pasarela</b> (<i>gateway</i>): equipo que traduce entre una radio sin IP (BLE, Zigbee, LoRa) e Internet.</li>
+						<li><b>Publicación-suscripción</b> (<i>publish-subscribe</i>): el emisor publica en un tema y el intermediario entrega a los suscritos, sin que emisor y receptor se conozcan.</li>
+						<li><b>Broker</b>: servidor MQTT que recibe los mensajes, los filtra por tema y los entrega a los clientes suscritos; no guarda historial.</li>
+						<li><b>Cliente</b> e <b>identificador de cliente</b> (<i>client ID</i>): extremo que abre la conexión con el broker, y nombre que lo distingue; si dos clientes usan el mismo, el broker desconecta al anterior.</li>
+						<li><b><i>Keepalive</i></b>: intervalo máximo sin tráfico; el cliente envía un ping, y si pasa 1,5 veces ese intervalo sin nada, el broker da la conexión por perdida.</li>
+						<li><b>Tema</b> (<i>topic</i>): nombre jerárquico de un flujo, como <code>casa/sala/temp</code>. Comodines: <code>+</code> un nivel, <code>#</code> varios niveles, al final.</li>
+						<li><b>QoS</b> (<i>quality of service</i>): 0, como máximo una vez; 1, al menos una vez; 2, exactamente una vez.</li>
+						<li><b>Mensaje retenido</b> (<i>retained</i>): último valor de un tema que el broker entrega a quien se suscribe después.</li>
+						<li><b>Mensaje de última voluntad</b> (<i>Last Will</i>): aviso que el broker publica si el cliente se desconecta de forma no controlada.</li>
+						<li><b>Plataforma de IoT</b>: añade al broker historial, paneles, alertas, gestión de dispositivos y control de acceso.</li>
+						<li><b>Token</b>: credencial que identifica a cada dispositivo ante la plataforma.</li>
+						<li><b>Datastream</b>, <b>pin virtual</b> y <b>widget</b>: canal de datos con tipo y rango, su número (V0, V1…) y el control del panel que lo muestra.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="20-diagnostico-fallos.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Diagnóstico de fallos</span>
+				</a>
+				<span></span>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

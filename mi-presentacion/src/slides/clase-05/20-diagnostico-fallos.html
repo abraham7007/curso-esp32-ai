@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Diagnóstico de fallos · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Plataformas de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>Diagnóstico</em> de fallos con el monitor serie y la consola
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 690" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de cuatro fallos con síntoma, causa y comprobación. 1, identificador o token duplicado: desconexiones cíclicas en las dos placas; el monitor repite Conectado a Blynk. Sincronizando V0... sin que la placa reinicie; causa, una identidad admite una sola conexión; comprobación, al apagar una placa la otra se estabiliza. 2, credencial inválida: Invalid auth token y [Blynk] Token inválido; causa, token mal copiado o la plantilla TU_TOKEN_AQUI; comprobación, cotejarlo con Device Info y secrets.h. 3, loop bloqueado: Heartbeat timeout y Ready otra vez, en ciclo, donde Ready significa conexión lista; causa, una espera en el loop deja el ping sin atender; comprobación, el loop solo atiende la conexión y el temporizador, lámina 18. 4, dato que no aparece: el monitor muestra Enviando Temperatura a Blynk: 23.40, pero el Gauge de V1 no cambia; causa, V1 sin datastream o de otro tipo, o cuota agotada; comprobación, en la consola, los datastreams y el consumo del mes. Criterio: los fallos de conexión dejan su línea en el monitor; los de datos se ven en la consola.">
+						<!-- cabecera -->
+						<text class="sans mut" x="16" y="20" font-size="24">fallo</text>
+						<text class="sans mut" x="290" y="20" font-size="24">síntoma</text>
+						<text class="sans mut" x="880" y="20" font-size="24">causa</text>
+						<text class="sans mut" x="1270" y="20" font-size="24">comprobación</text>
+						<path class="ln ln--fina" d="M0 44 H1600" />
+
+						<!-- 1 · identificador o token duplicado -->
+						<rect class="barra--warn" x="0" y="54" width="1600" height="140" rx="10" />
+						<text class="sans" x="16" y="92" font-size="28" font-weight="700"><tspan class="warn">1</tspan><tspan x="50">ID o token</tspan></text>
+						<text class="sans" x="50" y="130" font-size="28" font-weight="700">duplicado</text>
+						<text class="sans" x="290" y="88" font-size="25">desconexiones cíclicas en las dos placas</text>
+						<text class="navy" x="290" y="126" font-size="24">Conectado a Blynk. Sincronizando V0...</text>
+						<text class="sans mut" x="290" y="164" font-size="23">una y otra vez, sin reinicio</text>
+						<text class="sans" x="880" y="88" font-size="25">una identidad admite</text>
+						<text class="sans" x="880" y="126" font-size="25">una sola conexión</text>
+						<text class="sans" x="1270" y="88" font-size="25">apagar una placa:</text>
+						<text class="sans" x="1270" y="126" font-size="25">la otra se estabiliza</text>
+
+						<!-- 2 · credencial inválida -->
+						<text class="sans" x="16" y="238" font-size="28" font-weight="700"><tspan class="acc">2</tspan><tspan x="50">Credencial</tspan></text>
+						<text class="sans" x="50" y="276" font-size="28" font-weight="700">inválida</text>
+						<text class="acc" x="290" y="238" font-size="24">Invalid auth token</text>
+						<text class="navy" x="290" y="276" font-size="24">[Blynk] Token inválido: revisa …</text>
+						<text class="sans" x="880" y="238" font-size="25">token mal copiado o</text>
+						<text class="sans" x="880" y="276" font-size="25">plantilla TU_TOKEN_AQUI</text>
+						<text class="sans" x="1270" y="238" font-size="25">cotejar con «Device Info»</text>
+						<text class="sans" x="1270" y="276" font-size="25">y secrets.h</text>
+
+						<!-- 3 · loop bloqueado -->
+						<rect class="s4d-fila" x="0" y="314" width="1600" height="134" rx="8" />
+						<text class="sans" x="16" y="356" font-size="28" font-weight="700"><tspan class="acc">3</tspan><tspan x="50">Loop</tspan></text>
+						<text class="sans" x="50" y="394" font-size="28" font-weight="700">bloqueado</text>
+						<text class="acc" x="290" y="356" font-size="24">Heartbeat timeout</text>
+						<text class="sans" x="290" y="394" font-size="25">y «Ready» otra vez, en ciclo</text>
+						<text class="sans mut" x="290" y="428" font-size="23"><tspan class="s4d-mono">Ready</tspan> = conexión lista</text>
+						<text class="sans" x="880" y="356" font-size="25">una espera en el loop:</text>
+						<text class="sans" x="880" y="394" font-size="25">el ping queda sin atender</text>
+						<text class="sans" x="1270" y="356" font-size="25">loop solo con conexión</text>
+						<text class="sans" x="1270" y="394" font-size="25">y temporizador (lámina 18)</text>
+
+						<!-- 4 · dato que no aparece -->
+						<text class="sans" x="16" y="494" font-size="28" font-weight="700"><tspan class="acc">4</tspan><tspan x="50">Dato que</tspan></text>
+						<text class="sans" x="50" y="532" font-size="28" font-weight="700">no aparece</text>
+						<text class="navy" x="290" y="494" font-size="24">Enviando Temperatura a Blynk: 23.40</text>
+						<text class="sans acc" x="290" y="532" font-size="25">…pero el Gauge de V1 no cambia</text>
+						<text class="sans" x="880" y="494" font-size="25">V1 sin datastream o de</text>
+						<text class="sans" x="880" y="532" font-size="25">otro tipo; cuota agotada</text>
+						<text class="sans" x="1270" y="494" font-size="25">consola: datastreams</text>
+						<text class="sans" x="1270" y="532" font-size="25">y consumo del mes</text>
+						<path class="ln ln--fina ln--mut" d="M0 574 H1600" />
+
+						<!-- criterio -->
+						<g data-paso="1">
+							<text class="sans" x="0" y="630" font-size="30"><tspan class="acc" font-weight="700">Criterio:</tspan> los fallos de conexión dejan su línea en el monitor; los de datos se ven en la consola.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Pregunta de predicción: se graban dos placas con el mismo token y las dos
+					muestran «Ready»; ¿siguen conectadas las dos un rato después? Respuesta: no.
+					Se desconectan entre sí y cada monitor repite la línea de conexión sin que la
+					placa reinicie, porque la biblioteca reconecta sola. Es la pregunta de
+					diagnóstico del temario: provocar el fallo con dos placas y corregirlo
+					creando un segundo dispositivo desde la misma plantilla.
+				</p>
+				<p>
+					Fila 1, en MQTT: la norma obliga al broker a cerrar la sesión anterior
+					cuando se conecta otro cliente con el mismo identificador (MQTT 3.1.1,
+					§3.1.4); dos clientes con el mismo ID se expulsan mutuamente en ciclo.
+					La API MQTT de Blynk no admite dos conexiones simultáneas con el mismo
+					token. Para la biblioteca de Arduino, docs.blynk.io no describe el
+					mecanismo; la lámina muestra solo lo que se observa en el monitor.
+				</p>
+				<p>
+					Filas 2 a 4, en el orden del arranque: credencial, conexión sostenida y
+					dato. Las líneas en inglés las imprime la biblioteca; las que empiezan por
+					[Blynk] y «Enviando…», el ejemplo 19. «Heartbeat timeout»: el ping quedó sin
+					respuesta y la biblioteca dio la conexión por perdida. El token rechazado es
+					el único caso en que la biblioteca deja de reintentar.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Mensajes de la biblioteca (Blynk 1.3): «Connecting to blynk.cloud:443»,
+						«Certificate OK» o «Secure connection failed», «Ready (ping: …ms).»,
+						«Invalid auth token», «Redirecting to …» (cambio de servidor regional, no
+						es un fallo), «Heartbeat timeout». Servidor inalcanzable: «Secure
+						connection failed» y «[Blynk] Sin conexión con el servidor por ahora. Se
+						reintenta en segundo plano.». Sin WiFi: «[WiFi] Sin conexión tras 20 s…»
+						y reinicio (red de 5 GHz, SSID o contraseña).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Leer «Enviando…» como prueba de que el dato llegó.</li>
+						<li>Conectar en un solo paso (Blynk.begin), que espera sin límite si la red no responde.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="19-codigo-19-blynk.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Ejemplo 19 · Blynk</span>
+				</a>
+				<a class="slide-nav__link" href="21-cierre.html">
+					<span>Cierre</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

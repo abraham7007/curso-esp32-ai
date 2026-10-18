@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Definición y componentes de IoT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Fundamentos de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">Definición y componentes de un sistema de <em>Internet de las cosas</em></h1>
+
+				<div class="def">
+					<p><b>Internet de las cosas</b> (<i>Internet of Things</i>, IoT): infraestructura global que interconecta cosas físicas y virtuales mediante tecnologías de información y comunicación interoperables.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 580" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de bloques de un sistema IoT en cuatro componentes, de izquierda a derecha. Dispositivo: sensores, microcontrolador y actuadores. Conectividad: radio (WiFi, BLE, LoRaWAN), router e Internet. Plataforma: mensajería, almacenamiento, reglas y gestión. Aplicación: panel web, app móvil e integración por API. Los datos avanzan hacia la aplicación y las órdenes vuelven hacia el dispositivo. Debajo, la correspondencia en el ejemplo 19: ESP32 con temperatura simulada y LED en el GPIO 15; WiFi de 2,4 GHz y router; Blynk.Cloud; consola web y app Blynk IoT.">
+						<!-- cabeceras de los cuatro componentes -->
+						<text class="mid sans b" x="160" y="22" font-size="34">Dispositivo</text>
+						<text class="mid sans b" x="586.67" y="22" font-size="34">Conectividad</text>
+						<text class="mid sans b" x="1013.33" y="22" font-size="34">Plataforma</text>
+						<text class="mid sans b" x="1440" y="22" font-size="34">Aplicación</text>
+
+						<!-- dispositivo -->
+						<rect class="caja caja--acc" x="0" y="56" width="320" height="278" rx="16" />
+						<rect class="caja" x="20" y="78" width="280" height="70" rx="10" />
+						<text class="mid sans" x="160" y="113" font-size="28">sensores</text>
+						<rect class="caja caja--acc" x="20" y="160" width="280" height="70" rx="10" />
+						<text class="mid sans b" x="160" y="195" font-size="28">microcontrolador</text>
+						<rect class="caja" x="20" y="242" width="280" height="70" rx="10" />
+						<text class="mid sans" x="160" y="277" font-size="28">actuadores</text>
+
+						<!-- conectividad -->
+						<rect class="caja caja--navy" x="426.67" y="56" width="320" height="278" rx="16" />
+						<rect class="caja" x="446.67" y="78" width="280" height="70" rx="10" />
+						<text class="mid sans" x="586.67" y="113" font-size="25">WiFi · BLE · LoRaWAN</text>
+						<rect class="caja" x="446.67" y="160" width="280" height="70" rx="10" />
+						<text class="mid sans" x="586.67" y="195" font-size="28">router</text>
+						<rect class="caja" x="446.67" y="242" width="280" height="70" rx="10" />
+						<text class="mid sans" x="586.67" y="277" font-size="28">Internet (IP)</text>
+
+						<!-- plataforma -->
+						<rect class="caja caja--navy" x="853.33" y="56" width="320" height="278" rx="16" />
+						<rect class="caja" x="873.33" y="78" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1013.33" y="113" font-size="28">mensajería</text>
+						<rect class="caja" x="873.33" y="160" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1013.33" y="195" font-size="28">almacenamiento</text>
+						<rect class="caja" x="873.33" y="242" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1013.33" y="277" font-size="28">reglas y gestión</text>
+
+						<!-- aplicación -->
+						<rect class="caja caja--navy" x="1280" y="56" width="320" height="278" rx="16" />
+						<rect class="caja" x="1300" y="78" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1440" y="113" font-size="28">panel web</text>
+						<rect class="caja" x="1300" y="160" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1440" y="195" font-size="28">app móvil</text>
+						<rect class="caja" x="1300" y="242" width="280" height="70" rx="10" />
+						<text class="mid sans" x="1440" y="277" font-size="28">integración (API)</text>
+
+						<!-- datos hacia la aplicación, órdenes hacia el dispositivo -->
+						<path class="ln ln--navy" d="M320 180 H 408.67 M746.67 180 H 835.33 M1173.33 180 H 1262" />
+						<path class="rel-navy" d="M426.67 180 L 406.67 168 L 406.67 192 Z" />
+						<path class="rel-navy" d="M853.33 180 L 833.33 168 L 833.33 192 Z" />
+						<path class="rel-navy" d="M1280 180 L 1260 168 L 1260 192 Z" />
+						<path class="ln ln--acc" d="M426.67 290 H 338 M853.33 290 H 764.67 M1280 290 H 1191.33" />
+						<path class="rel-acc" d="M320 290 L 340 278 L 340 302 Z" />
+						<path class="rel-acc" d="M746.67 290 L 766.67 278 L 766.67 302 Z" />
+						<path class="rel-acc" d="M1173.33 290 L 1193.33 278 L 1193.33 302 Z" />
+						<text class="mid sans navy b" x="373.33" y="150" font-size="24">datos</text>
+						<text class="mid sans acc b" x="373.33" y="326" font-size="24">órdenes</text>
+
+						<!-- correspondencia en el laboratorio -->
+						<g data-paso="1">
+							<path class="ln ln--fina ln--mut ln--trazo" d="M0 382 H 1600" />
+							<text class="sans mut" x="0" y="418" font-size="26">ejemplo 19</text>
+							<text class="mid sans" x="160" y="470" font-size="27">ESP32 · temperatura</text>
+							<text class="mid sans" x="160" y="512" font-size="27">LED · GPIO 15</text>
+							<text class="mid sans" x="586.67" y="470" font-size="27">WiFi 2,4 GHz</text>
+							<text class="mid sans" x="586.67" y="512" font-size="27">router</text>
+							<text class="mid sans" x="1013.33" y="470" font-size="27">Blynk.Cloud</text>
+							<text class="mid sans" x="1440" y="470" font-size="27">consola web</text>
+							<text class="mid sans" x="1440" y="512" font-size="27">app Blynk IoT</text>
+						</g>
+
+						<text class="sans mut fin" x="1600" y="562" font-size="22">Fuente: ITU-T Y.2060 (06/2012)</text>
+					</svg>
+				</div>
+
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer la definición de la norma y aterrizarla en el diagrama: la «cosa»
+					es el dispositivo, con sensores y actuadores alrededor de un
+					microcontrolador; la conectividad lleva los datos hasta una plataforma;
+					la aplicación los presenta y devuelve órdenes por el mismo camino.
+				</p>
+				<p>
+					Ejemplo oral: un medidor de energía en un tablero eléctrico. El
+					dispositivo mide la corriente, la radio lo enlaza con un servidor, la
+					plataforma guarda el consumo del mes y la aplicación muestra la factura
+					estimada y permite cortar un circuito.
+				</p>
+				<p>
+					Pregunta de predicción: se quiere ver la curva de temperatura de ayer;
+					¿en qué componente se guarda ese historial?
+				</p>
+				<p>
+					Respuesta: en la plataforma. El dispositivo solo conserva la última
+					lectura y la aplicación consulta lo que la plataforma almacenó. Pulsar →
+					para mostrar la correspondencia con el ejemplo 19.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Definición completa</h4>
+					<p>
+						ITU-T Y.2060 (06/2012): «A global infrastructure for the information
+						society, enabling advanced services by interconnecting (physical and
+						virtual) things based on existing and evolving interoperable
+						information and communication technologies». La misma norma define
+						<i>cosa</i> como un objeto físico o virtual que puede identificarse e
+						integrarse en las redes de comunicación, y <i>dispositivo</i> como el
+						equipo con capacidad obligatoria de comunicación y capacidades
+						opcionales de medida, actuación, captura, almacenamiento y
+						procesamiento de datos.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Medición remota de energía y agua, monitoreo de cadena de frío,
+						agricultura de precisión, mantenimiento predictivo de máquinas y
+						domótica.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Reducir IoT al dispositivo conectado; el servicio requiere también plataforma y aplicación.</li>
+						<li>Confundir conectividad con Internet: muchas radios IoT (BLE, Zigbee, LoRa) no transportan IP y necesitan una pasarela (lámina 05).</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="01-portada.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Portada</span>
+				</a>
+				<a class="slide-nav__link" href="03-arquitectura-capas.html">
+					<span>Arquitectura de IoT en cuatro capas</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

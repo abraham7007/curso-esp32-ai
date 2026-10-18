@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Comparación de plataformas de IoT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Plataformas de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Criterios de comparación entre <em>plataformas</em> de IoT
+				</h1>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla comparativa de seis plataformas por alojamiento, protocolos, licencia, costo y dependencia del proveedor. Blynk: alojada; protocolo propio, MQTT y HTTP; propietaria; gratuita con límite; dependencia alta. ThingsBoard: alojada o autoalojada; MQTT, HTTP y CoAP; abierta con límite; gratuita con límite; dependencia media. Node-RED: autoalojada; MQTT, HTTP y TCP; abierta; gratuita; dependencia baja. Home Assistant: autoalojada; MQTT y protocolo propio; abierta; gratuita; dependencia baja. AWS IoT Core: alojada; MQTT y HTTP; propietaria; pago por uso; dependencia alta. Azure IoT Hub: alojada; MQTT y HTTP; propietaria; pago por capacidad; dependencia alta. Criterio de elección: quién mantiene el servidor y qué protocolo habla el dispositivo. Laboratorio: Blynk, alojada y con app móvil.">
+						<!-- cabecera -->
+						<text class="sans mut" x="14" y="22" font-size="25">plataforma</text>
+						<text class="sans mut" x="270" y="22" font-size="25">alojamiento</text>
+						<text class="sans mut" x="470" y="22" font-size="25">protocolos</text>
+						<text class="sans mut" x="820" y="22" font-size="25">licencia</text>
+						<text class="sans mut" x="1080" y="22" font-size="25">costo</text>
+						<text class="sans mut" x="1380" y="22" font-size="25">dependencia</text>
+						<path class="ln ln--fina" d="M0 48 H1600" />
+						<!-- Blynk -->
+						<rect class="s4d-fila" x="0" y="58" width="1600" height="84" rx="8" />
+						<text class="sans b" x="14" y="100" font-size="30">Blynk</text>
+						<text class="sans" x="270" y="100" font-size="28">alojada</text>
+						<text class="sans" x="470" y="100" font-size="28">propio · MQTT · HTTP</text>
+						<text class="sans" x="820" y="100" font-size="28">propietaria</text>
+						<text class="sans" x="1080" y="100" font-size="28">gratuita con límite</text>
+						<text class="sans dan b" x="1380" y="100" font-size="28">alta</text>
+						<!-- ThingsBoard -->
+						<text class="sans b" x="14" y="188" font-size="30">ThingsBoard</text>
+						<text class="sans" x="270" y="188" font-size="28">ambas</text>
+						<text class="sans" x="470" y="188" font-size="28">MQTT · HTTP · CoAP</text>
+						<text class="sans" x="820" y="188" font-size="28">abierta con límite</text>
+						<text class="sans" x="1080" y="188" font-size="28">gratuita con límite</text>
+						<text class="sans warn b" x="1380" y="188" font-size="28">media</text>
+						<!-- Node-RED -->
+						<rect class="s4d-fila" x="0" y="234" width="1600" height="84" rx="8" />
+						<text class="sans b" x="14" y="276" font-size="30">Node-RED</text>
+						<text class="sans" x="270" y="276" font-size="28">autoalojada</text>
+						<text class="sans" x="470" y="276" font-size="28">MQTT · HTTP · TCP</text>
+						<text class="sans" x="820" y="276" font-size="28">abierta</text>
+						<text class="sans" x="1080" y="276" font-size="28">gratuita</text>
+						<text class="sans ok b" x="1380" y="276" font-size="28">baja</text>
+						<!-- Home Assistant -->
+						<text class="sans b" x="14" y="364" font-size="30">Home Assistant</text>
+						<text class="sans" x="270" y="364" font-size="28">autoalojada</text>
+						<text class="sans" x="470" y="364" font-size="28">MQTT · propio</text>
+						<text class="sans" x="820" y="364" font-size="28">abierta</text>
+						<text class="sans" x="1080" y="364" font-size="28">gratuita</text>
+						<text class="sans ok b" x="1380" y="364" font-size="28">baja</text>
+						<!-- AWS IoT Core -->
+						<rect class="s4d-fila" x="0" y="410" width="1600" height="84" rx="8" />
+						<text class="sans b" x="14" y="452" font-size="30">AWS IoT Core</text>
+						<text class="sans" x="270" y="452" font-size="28">alojada</text>
+						<text class="sans" x="470" y="452" font-size="28">MQTT · HTTP</text>
+						<text class="sans" x="820" y="452" font-size="28">propietaria</text>
+						<text class="sans" x="1080" y="452" font-size="28">pago por uso</text>
+						<text class="sans dan b" x="1380" y="452" font-size="28">alta</text>
+						<!-- Azure IoT Hub -->
+						<text class="sans b" x="14" y="540" font-size="30">Azure IoT Hub</text>
+						<text class="sans" x="270" y="540" font-size="28">alojada</text>
+						<text class="sans" x="470" y="540" font-size="28">MQTT · HTTP</text>
+						<text class="sans" x="820" y="540" font-size="28">propietaria</text>
+						<text class="sans" x="1080" y="540" font-size="28">pago por capacidad</text>
+						<text class="sans dan b" x="1380" y="540" font-size="28">alta</text>
+						<path class="ln ln--fina ln--mut" d="M0 588 H1600" />
+						<!-- criterio -->
+						<g data-paso="1">
+							<rect class="caja caja--acc" x="2" y="604" width="1596" height="96" rx="12" />
+							<text class="sans acc b" x="28" y="636" font-size="28">Criterio</text>
+							<text class="sans" x="200" y="636" font-size="28">quién mantiene el servidor · qué protocolo habla el dispositivo</text>
+							<text class="sans acc b" x="28" y="676" font-size="28">Laboratorio</text>
+							<text class="sans" x="200" y="676" font-size="28">Blynk: alojada y con app móvil (ejemplo 19)</text>
+						</g>
+
+						<text class="sans mut" x="2" y="730" font-size="22">Fuentes: documentación oficial de cada plataforma, consultada en octubre de 2026</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer la tabla por columnas: cada columna es un criterio.
+					Alojamiento decide quién instala y mantiene el servidor; protocolos,
+					qué tiene que hablar el firmware; licencia, costo y dependencia, cuánto
+					cuesta cambiar de proveedor más adelante. «Propio» indica un protocolo
+					definido por el fabricante.
+				</p>
+				<p>
+					Tres grupos: Blynk, servicio alojado orientado a la app móvil;
+					ThingsBoard, Node-RED y Home Assistant, instalables en un equipo
+					propio, por ejemplo una Raspberry Pi; AWS IoT Core y Azure IoT Hub,
+					nubes industriales que solo existen como servicio gestionado.
+				</p>
+				<p>
+					Pregunta de predicción: un proyecto de domótica sin conexión a Internet
+					estable, ¿qué columnas descartan a Blynk y a las nubes industriales?
+					Respuesta: alojamiento y dependencia. Las tres exigen llegar a un
+					servidor del proveedor; Home Assistant o Node-RED funcionan en la red
+					local.
+				</p>
+				<p>
+					Paso 1: el criterio y la opción adoptada. Blynk se elige para el
+					laboratorio porque no requiere servidor propio y trae app móvil; la
+					contrapartida es la cuota y la dependencia del proveedor (lámina 18).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Datos verificados (octubre de 2026)</h4>
+					<ul>
+						<li>Blynk: protocolo propio en la biblioteca del firmware (licencia MIT); API HTTPS y API MQTT del dispositivo (blynk.cloud, 8883 con TLS). El servicio es propietario; la instalación en servidores propios solo existe en el plan empresarial (Enterprise), con precio a medida.</li>
+						<li>ThingsBoard: MQTT, MQTT Sparkplug B, HTTP, CoAP (RFC 7252), LwM2M (gestión de dispositivos sobre CoAP) y SNMP (gestión de equipos de red). Hasta la versión 4.3, Apache 2.0. Desde la 4.4, BUSL 1.1 (<i>Business Source License</i>): código público y uso comercial gratuito hasta 100 dispositivos en un servidor; cada versión pasa a Apache 2.0 a los cuatro años.</li>
+						<li>Node-RED: Apache 2.0 (OpenJS Foundation); nodos de red MQTT, HTTP, WebSocket, TCP y UDP.</li>
+						<li>Home Assistant: Apache 2.0; MQTT con un broker externo (Mosquitto) y la API nativa de ESPHome, un firmware abierto para ESP32 que habla con Home Assistant por TCP.</li>
+						<li>AWS IoT Core: MQTT 3.1.1 y 5 con QoS 0 y 1 (sin QoS 2), MQTT sobre WebSocket y HTTPS solo para publicar.</li>
+						<li>Azure IoT Hub: soporte parcial de MQTT; además AMQP (protocolo de mensajería de OASIS), ambos también sobre WebSocket, y HTTPS. Se paga por nivel y unidades de capacidad diaria; hay un nivel gratuito de prueba.</li>
+					</ul>
+					<p>En la tabla, «HTTP» incluye HTTPS y «abierta con límite» resume la BUSL 1.1 de ThingsBoard.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Elegir por la lista de funciones sin mirar alojamiento y licencia.</li>
+						<li>Suponer que una nube industrial con MQTT acepta todo el estándar: AWS no admite QoS 2.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-plataforma-funciones.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Funciones de una plataforma de IoT</span>
+				</a>
+				<a class="slide-nav__link" href="15-arquitectura-sistema.html">
+					<span>Arquitectura del sistema IoT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Seguridad en MQTT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					<em>Autenticación</em>, cifrado y autorización en un broker MQTT
+				</h1>
+
+				<div class="def">
+					<p><b>Autenticación</b>: quién se conecta. <b>Cifrado</b> del transporte: quién puede leer el trayecto. <b>Autorización</b>: qué temas publica o lee cada cliente.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, un cliente ESP32 conectado a un broker por dos vías. Por el puerto 1883, TCP sin cifrar, un tercero en la red lee el usuario, la contraseña, el tema y el dato, por ejemplo casa/sala/temp 23.4. Por el puerto 8883, con TLS, el contenido va cifrado y el tercero solo ve el destino y el tamaño. En el broker, dos controles: autenticación, con usuario y contraseña o con un certificado de cliente, y autorización por tema, que fija qué publica y qué lee cada cliente. Abajo, broker público frente a broker privado. Público, como test.mosquitto.org: acceso sin credenciales, temas visibles para cualquier cliente, uso solo para pruebas. Privado: credenciales por cliente y TLS, temas restringidos por cliente, uso en producción. Fuente: OASIS MQTT 3.1.1, ISO/IEC 20922, apartados 4.2 y 5.">
+						<!-- cliente -->
+						<rect class="caja caja--acc" x="2" y="40" width="216" height="250" rx="14" />
+						<text class="mid sans mut" x="110" y="120" font-size="26">cliente</text>
+						<text class="mid b" x="110" y="170" font-size="36">ESP32</text>
+
+						<!-- vía 1 · 1883 sin cifrar -->
+						<text class="sans dan b" x="250" y="62" font-size="28">1883 · TCP sin cifrar</text>
+						<path class="ln ln--dan" d="M218 100 H 978" />
+						<path class="rel-dan" d="M998 100 L 976 88 L 976 112 Z" />
+						<rect class="caja caja--dan" x="250" y="118" width="716" height="52" rx="8" />
+						<text x="270" y="144" font-size="25">usuario · contraseña · casa/sala/temp 23.4</text>
+
+						<!-- vía 2 · 8883 TLS -->
+						<g>
+							<text class="sans ok b" x="250" y="208" font-size="28">8883 · TLS</text>
+							<path class="ln ln--ok" d="M218 240 H 978" />
+							<path class="rel-ok" d="M998 240 L 976 228 L 976 252 Z" />
+							<rect class="caja caja--ok" x="250" y="256" width="716" height="52" rx="8" />
+							<text class="sans" x="270" y="282" font-size="25">cifrado: un tercero ve solo destino y tamaño</text>
+						</g>
+
+						<!-- broker: autenticación y autorización -->
+						<rect class="caja caja--navy" x="1000" y="20" width="598" height="290" rx="14" />
+						<text class="sans navy b" x="1030" y="58" font-size="30">Broker</text>
+						<text class="sans b" x="1030" y="110" font-size="27">Autenticación</text>
+						<text class="sans" x="1066" y="148" font-size="25">usuario y contraseña, o</text>
+						<text class="sans" x="1066" y="182" font-size="25">certificado de cliente</text>
+						<text class="sans b" x="1030" y="232" font-size="27">Autorización por tema</text>
+						<text class="sans" x="1066" y="270" font-size="25">qué publica y qué lee cada cliente</text>
+
+						<!-- público frente a privado -->
+						<g>
+							<rect class="caja caja--warn" x="2" y="350" width="780" height="290" rx="14" />
+							<text class="sans warn b" x="30" y="392" font-size="30">Broker público</text>
+							<text class="fin mut" x="756" y="392" font-size="24">test.mosquitto.org</text>
+							<text class="sans mut" x="30" y="456" font-size="24">acceso</text>
+							<text class="sans" x="180" y="456" font-size="27">sin credenciales</text>
+							<text class="sans mut" x="30" y="516" font-size="24">temas</text>
+							<text class="sans" x="180" y="516" font-size="27">visibles para cualquier cliente</text>
+							<text class="sans mut" x="30" y="576" font-size="24">uso</text>
+							<text class="sans warn b" x="180" y="576" font-size="27">pruebas, sin datos sensibles</text>
+
+							<rect class="caja caja--ok" x="818" y="350" width="780" height="290" rx="14" />
+							<text class="sans ok b" x="846" y="392" font-size="30">Broker privado</text>
+														<text class="sans mut" x="846" y="456" font-size="24">acceso</text>
+							<text class="sans" x="996" y="456" font-size="27">credenciales y TLS</text>
+							<text class="sans mut" x="846" y="516" font-size="24">temas</text>
+							<text class="sans" x="996" y="516" font-size="27">restringidos por cliente</text>
+							<text class="sans mut" x="846" y="576" font-size="24">uso</text>
+							<text class="sans ok b" x="996" y="576" font-size="27">producción</text>
+						</g>
+
+						<text class="sans mut" x="2" y="680" font-size="22">Fuente: OASIS MQTT 3.1.1 (ISO/IEC 20922), §4.2 y §5</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Separar las tres capas: la autenticación decide quién se conecta; el
+					cifrado, quién puede leer lo que viaja; la autorización, qué temas
+					publica o lee cada cliente ya conectado. Ninguna sustituye a las otras.
+				</p>
+				<p>
+					Vía 1883: los campos de usuario y contraseña del mensaje de conexión
+					viajan tal cual; cualquier equipo en el camino (la misma WiFi, el
+					proveedor) los lee junto con temas y datos. Vía 8883: TLS cifra
+					todo el intercambio y el cliente verifica el certificado del broker, como
+					en HTTPS (sesión 4).
+				</p>
+				<p>
+					Pregunta de predicción: con TLS en el puerto 8883, pero un broker que
+					no exige credenciales, ¿puede otro cliente leer casa/sala/temp?
+					Respuesta: sí. El cifrado protege el trayecto; sin autenticación ni autorización, cualquiera
+					que se conecte y se suscriba recibe el dato.
+				</p>
+				<p>
+					Abajo: un broker público sirve para probar en minutos, pero cualquier
+					cliente puede suscribirse a los mismos temas; un nombre de tema genérico
+					como casa/sala/luz recibe órdenes de desconocidos.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						MQTT 3.1.1 registra en la IANA el puerto 1883 para MQTT sin TLS y el 8883
+						para MQTT sobre TLS (§4.2). El mensaje de conexión lleva usuario y
+						contraseña opcionales (§3.1); la norma advierte que, sin cifrado, se
+						exponen a interceptación y reenvío (§5.4). El servidor puede autorizar
+						cada acción por tema según el usuario o el identificador de cliente
+						(§4.7.3, §5.4.2). El certificado de cliente sigue el formato X.509, el mismo de los certificados de servidor de HTTPS. En el ESP32, TLS exige el certificado raíz de la
+						autoridad en el firmware y la hora correcta para validar su vigencia.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						test.mosquitto.org publica sus puertos: 1883 sin cifrar ni credenciales,
+						8883 cifrado, 8884 con certificado de cliente, 8885 cifrado con
+						credenciales. Blynk acepta MQTT en blynk.cloud:8883 (TLS) y 1883 (sin
+						cifrar); el ejemplo 19 usa su protocolo propio por el puerto 443 con TLS.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Enviar credenciales por 1883 «solo durante las pruebas» y dejarlo así.</li>
+						<li>Cifrar sin verificar el certificado del broker: el canal va cifrado, pero con un servidor sin identificar.</li>
+						<li>Usar temas genéricos en un broker público.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="11-retenido-ultima-voluntad.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Retenido y última voluntad</span>
+				</a>
+				<a class="slide-nav__link" href="13-plataforma-funciones.html">
+					<span>Funciones de una plataforma de IoT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

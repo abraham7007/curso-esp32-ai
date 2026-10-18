@@ -14,7 +14,7 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body class="ponencia ponencia--trabajo" data-deck-total="17">
+	<body class="ponencia ponencia--trabajo" data-deck-total="21">
 		<main class="slide">
 			<div class="slide__content slide__content--flush">
 				<div class="code-hour s4b-compacto s5b-blynk s5v4-11">
@@ -52,6 +52,8 @@
 							</div>
 						</div>
 					</div>
+
+					<p class="s5v5-antes"><b>Antes del firmware</b> plantilla → datastreams V0 (entero 0–1) y V1 (decimal) → Switch y Gauge → dispositivo → credenciales en <span class="s3-archivo">secrets.h</span></p>
 
 					<div class="code-hour__body code-hour__body--pair">
 						<div class="code-hour__stack">
@@ -111,7 +113,7 @@ Enviando Temperatura a Blynk: 23.40</div>
 <b>3. Simulación.</b> Wokwi: LED rojo en GPIO 15 con 220 Ω a GND.
 <b>4. Diagramas.</b> Excalidraw: arquitectura (V0 baja, V1 sube) y flujo.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> Cada espera de red tiene un tope, para que un fallo no deje la placa detenida sin aviso. El loop sin esperas, el intervalo de 30 s y el token fuera de git se justifican en el bloque 4 (láminas 12, 13 y 15).
+									<b>Por qué se pide así.</b> Cada espera de red tiene un tope; el token, el intervalo y el loop, en las láminas 16 a 18.
 								</p>
 							</div>
 						</div>
@@ -150,26 +152,36 @@ Enviando Temperatura a Blynk: 23.40</div>
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
+					<h4>Guía de laboratorio: configuración del panel, antes del firmware</h4>
+					<ol>
+						<li>Plantilla: Developer Zone › My Templates › New Template; nombre «ESP32 PIT 2026», hardware ESP32, conexión WiFi (requiere Developer Mode).</li>
+						<li>Datastreams de tipo Virtual Pin: V0 «LED», Integer 0–1; V1 «Temperatura», Double 0–50, °C.</li>
+						<li>Panel: Web Dashboard › Edit; un Switch asociado a V0 y un Gauge asociado a V1.</li>
+						<li>Dispositivo: Devices › New Device › From template › ESP32 PIT 2026.</li>
+						<li>Credenciales: copiar <code>secrets.example.h</code> como <code>include/secrets.h</code> y pegar Template ID, Template name y Auth token de «Device Info».</li>
+					</ol>
 					<h4>En la práctica</h4>
-					<ul>
-						<li>src/main.cpp: el programa; recibe V0, envía V1 cada 30 s y deja el loop sin esperas.</li>
-						<li>include/secrets.h: plantilla, nombre y token del dispositivo; está en .gitignore.</li>
-						<li>include/secrets.example.h: plantilla versionada con «TU_TOKEN_AQUI»; se usa si falta secrets.h.</li>
-						<li>platformio.ini: placa esp32dev, monitor a 115 200 baudios y la biblioteca de Blynk 1.3.</li>
-						<li>diagram.json y wokwi.toml: la simulación.</li>
-					</ul>
+					<p>
+						<code>src/main.cpp</code> recibe V0, envía V1 cada 30 s y deja el loop sin
+						esperas; <code>platformio.ini</code> declara esp32dev, 115 200 baudios y la
+						biblioteca Blynk 1.3; <code>diagram.json</code> y <code>wokwi.toml</code>, la
+						simulación.
+					</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Token en main.cpp y subido a GitHub.</li><li>Variante de la biblioteca sin cifrado: puerto 80, token legible.</li><li>Una espera en el loop, que deja el dispositivo desconectado.</li><li>Gauge sin datastream asignado, que no muestra ningún valor.</li></ul>
+					<ul>
+						<li>Widget sin datastream asignado, o V1 creado como Integer, que descarta el decimal.</li>
+						<li>Token en <code>main.cpp</code> y subido a GitHub.</li>
+					</ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="10-configurar-panel.html">
+				<a class="slide-nav__link" href="18-politica-transmision.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Configuración del panel</span>
+					<span>Política de transmisión</span>
 				</a>
-				<a class="slide-nav__link" href="12-loop-sin-esperas.html">
-					<span>Loop sin esperas</span>
+				<a class="slide-nav__link" href="20-diagnostico-fallos.html">
+					<span>Diagnóstico de fallos</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

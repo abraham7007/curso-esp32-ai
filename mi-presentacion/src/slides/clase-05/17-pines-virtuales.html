@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Pines virtuales · Sesión 5</title>
+		<title>Datastreams y pines virtuales · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,10 +14,10 @@
 		/>
 		<link rel="stylesheet" href="../../css/base.css" />
 	</head>
-	<body class="ponencia" data-deck-total="17">
+	<body class="ponencia" data-deck-total="21">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">03 · Plataforma Blynk</span>
+				<span class="badge">04 · Plataformas de IoT</span>
 
 				<h1 class="slide__title slide__title--sm">Datastream, <em>pin virtual</em> y widget entre el panel y la placa</h1>
 
@@ -25,13 +25,13 @@
 					<div class="escenario__texto franja-fila">
 						<div class="def">
 							<p>
-								Un <b>datastream</b> es un dato de la plantilla (LED, Temperatura); su
-								<b>pin virtual</b> (V0, V1) es el número con que lo nombra el firmware;
-								el <b>widget</b> es el control del panel que lo muestra o lo cambia.
+								<b>Datastream</b>: canal de datos de la plantilla, con tipo y rango (LED, Temperatura).
+								<b>Pin virtual</b>: su identificador en el firmware (V0, V1), sin relación
+								con un GPIO. <b>Widget</b>: control del panel asociado a un datastream.
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							en MQTT · en Blynk<br /><code>aula/1/led</code> → V0<br /><code>aula/1/temp</code> → V1
+							<code>casa/sala/luz</code> ↔ V0<br /><code>casa/sala/temp</code> ↔ V1<br />sincronización al reconectar ≈ <b>retenido</b>
 						</p>
 					</div>
 
@@ -47,7 +47,7 @@
 							<canvas
 								id="pines"
 								role="img"
-								aria-label="Recorrido de los datos en cuatro columnas: widget, pin virtual, firmware y placa. Arriba, el comando: el widget Switch envía 1 al pin V0, que corresponde al datastream LED, entero de 0 a 1, y al tema aula/1/led de MQTT; la biblioteca ejecuta la función de V0, que pone el GPIO 15 a nivel alto y enciende el LED. Abajo, la telemetría en sentido inverso: cada 30 s el firmware obtiene una temperatura simulada y la envía al pin V1, que corresponde al datastream Temperatura, decimal, y al tema aula/1/temp; Blynk.Cloud la guarda y el widget Gauge muestra 23,4 °C."
+								aria-label="Recorrido de los datos en cuatro columnas: widget, pin virtual, firmware y placa. Arriba, el comando: el widget Switch envía 1 al pin V0, que corresponde al datastream LED, entero de 0 a 1, y al tema casa/sala/luz de MQTT; la biblioteca ejecuta la función de V0, que pone el GPIO 15 a nivel alto y enciende el LED. Abajo, la telemetría en sentido inverso: cada 30 s el firmware obtiene una temperatura simulada y la envía al pin V1, que corresponde al datastream Temperatura, decimal, y al tema casa/sala/temp; Blynk.Cloud la guarda y el widget Gauge muestra 23,4 °C. Al pie, la sincronización: al conectar, la placa pide el último valor de V0 y lo aplica, porque tras un reinicio el LED arranca apagado."
 							></canvas>
 						</div>
 					</div>
@@ -56,11 +56,10 @@
 
 			<aside class="notas">
 				<p>
-					Leer la definición con la columna de la derecha: lo que en MQTT es el tema
-					<code>aula/1/led</code>, en Blynk es el pin V0; <code>aula/1/temp</code> es
-					V1. El ESP32 recibe por V0 como si estuviera suscrito a
-					<code>aula/1/led</code> y envía por V1 como si publicara en
-					<code>aula/1/temp</code>.
+					Leer la definición con la columna de la derecha: en el árbol de temas del
+					bloque 3, el comando de la luz viaja por <code>casa/sala/luz</code>; en Blynk,
+					por el pin V0. La telemetría de <code>casa/sala/temp</code> es V1. La placa
+					recibe por V0 como un suscriptor y envía por V1 como un publicador.
 				</p>
 				<p>
 					Pregunta de predicción: el firmware no consulta en ningún momento el estado
@@ -76,9 +75,10 @@
 					(datastream Temperatura), que recorre el camino inverso hasta el Gauge.
 				</p>
 				<p>
-					El nombre V0 no tiene relación con el GPIO 15: el vínculo lo fija el
-					firmware dentro de la función. El mismo V0 podría mover un relé sin cambiar
-					nada en el panel.
+					Línea del pie, visible al entrar: tras un corte, la placa arranca con el LED
+					apagado aunque el Switch siga en ON. Al conectar, el firmware pide al
+					servidor el último V0 y lo aplica; es la función del mensaje retenido
+					(lámina 11), con una diferencia: aquí lo pide la placa.
 				</p>
 			</aside>
 
@@ -87,35 +87,34 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						En la biblioteca Blynk, cada pin virtual que recibe comandos tiene su
-						función <code>BLYNK_WRITE</code>; el valor llega como entero, decimal o
-						texto según el tipo del datastream. La telemetría sale con
-						<code>virtualWrite</code>, que recibe el pin y el valor. Tipos del
-						ejemplo 19: V0 Integer 0–1 y V1 Double 0–50 °C (lámina 10).
+						Cada pin virtual que recibe comandos tiene su función
+						<code>BLYNK_WRITE</code>; la telemetría sale con <code>virtualWrite</code>.
+						Sincronización: en <code>BLYNK_CONNECTED</code>, que se ejecuta en cada
+						conexión, <code>syncVirtual</code> pide el último valor del pin y lo
+						entrega a su <code>BLYNK_WRITE</code>. Tipos del ejemplo 19: V0 Integer
+						0–1 y V1 Double 0–50 °C.
 					</p>
 					<h4>Correspondencia con MQTT</h4>
 					<p>
-						Con la API MQTT de Blynk (lámina 07), el tema lleva el nombre del
-						datastream: la placa publica la temperatura en
-						<code>ds/Temperatura</code> y recibe el LED en
+						Con la API MQTT de Blynk (lámina 16), el tema lleva el nombre del
+						datastream: la placa publica en <code>ds/Temperatura</code> y recibe en
 						<code>downlink/ds/LED</code>.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Usar en el firmware un pin virtual que no existe como datastream: el valor se descarta.</li>
-						<li>Enviar la telemetría en cada vuelta del loop, que agota la cuota (lámina 13).</li>
 						<li>Suponer que V0 es el GPIO 0.</li>
 					</ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="08-componentes-blynk.html">
+				<a class="slide-nav__link" href="16-blynk-modelo.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Componentes de Blynk</span>
+					<span>Plantilla, dispositivo y token</span>
 				</a>
-				<a class="slide-nav__link" href="10-configurar-panel.html">
-					<span>Configuración del panel</span>
+				<a class="slide-nav__link" href="18-politica-transmision.html">
+					<span>Política de transmisión</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
@@ -134,13 +133,13 @@
 			// Nodos por fila y columna (0 = panel … 3 = placa).
 			const ORDEN = [
 				{ tipo: "switch" },
-				{ tipo: "pin", pin: "V0", dato: "LED · entero 0–1", tema: "aula/1/led" },
+				{ tipo: "pin", pin: "V0", dato: "LED · entero 0–1", tema: "casa/sala/luz" },
 				{ l1: "función de V0", l2: "escribe el LED", valor: "recibe 1", antes: "espera" },
 				{ tipo: "led" },
 			];
 			const DATO = [
 				{ tipo: "gauge" },
-				{ tipo: "pin", pin: "V1", dato: "Temperatura · decimal", tema: "aula/1/temp" },
+				{ tipo: "pin", pin: "V1", dato: "Temperatura · decimal", tema: "casa/sala/temp" },
 				{ l1: "cada 30 s", l2: "envía a V1", valor: "envía 23,4", antes: "espera" },
 				{ l1: "Temperatura", l2: "simulada", valor: "23,4 °C", antes: "23,4 °C" },
 			];
@@ -154,7 +153,7 @@
 				"El widget Gauge asociado a V1 muestra 23,4 °C.",
 			];
 			const TOTAL = PASOS.length;
-			const RESUMEN = "Comando: widget → pin virtual → firmware → placa · Telemetría: el camino inverso";
+			const RESUMEN = "Sincronización: al conectar, la placa pide el último valor de V0 y lo aplica (tras un reinicio el LED arranca apagado)";
 
 			let paso = TOTAL; // arranca con los dos recorridos completos
 			let avance = 1;
@@ -303,7 +302,7 @@
 				if (!recorrido) frase = RESUMEN;
 				else if (paso === 0) frase = "Primero el comando, después la telemetría.";
 				else frase = `${paso} · ${PASOS[paso - 1]}`;
-				const tono = !recorrido || paso === 0 ? c.heading : paso <= N - 1 ? c.acento : c.navy;
+				const tono = !recorrido ? c.navy : paso === 0 ? c.heading : paso <= N - 1 ? c.acento : c.navy;
 				caja(ctx, m, yCap - fs * 1.15, w - 2 * m, fs * 2.3, fs * 0.4, c.surface, c.borde, 1.5);
 				texto(ctx, frase, w / 2, yCap, fs * 1.05, tono, 700, "center", SANS, w - 2 * m - fs * 1.2);
 			}

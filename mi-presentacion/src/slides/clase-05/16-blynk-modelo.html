@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Plantilla, dispositivo y token · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Plataformas de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Plantilla, dispositivo y <em>token</em> en el modelo de Blynk
+				</h1>
+
+				<div class="def">
+					<p><b>Plantilla</b> (<i>template</i>): datos y panel comunes a un tipo de equipo. <b>Dispositivo</b>: instancia creada desde la plantilla. <b>Token</b> (<i>auth token</i>): identificador único que autentica a cada dispositivo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="-3 -3 1606 666" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, una plantilla y tres dispositivos. La plantilla ESP32 PIT 2026 define los datos, LED como comando y temperatura como telemetría, y el panel, un botón y un indicador. Desde ella se crean tres dispositivos, cada uno con su placa ESP32 y su propio token; el primero muestra TU_TOKEN_AQUI. Abajo: la biblioteca de Blynk no usa MQTT, usa un protocolo propio con las mismas ideas: conexión persistente iniciada por la placa, como el keepalive; último valor al reconectar, como el mensaje retenido; aviso Offline, como el mensaje de última voluntad; entrega solo con la conexión abierta, como QoS 0. Blynk también ofrece una API MQTT. Al pie, el token: fuera del repositorio, TLS, uno por placa y, si se filtra, se sustituye.">
+						<!-- columnas -->
+						<text class="sans mut" x="0" y="16" font-size="24">se define una vez</text>
+						<text class="sans mut" x="700" y="16" font-size="24">se crea uno por placa</text>
+
+						<!-- plantilla -->
+						<rect class="caja caja--navy" x="0" y="44" width="560" height="296" rx="16" />
+						<text class="sans navy b" x="30" y="88" font-size="34">Plantilla</text>
+						<text class="b" x="30" y="138" font-size="30">ESP32 PIT 2026</text>
+						<path class="ln ln--fina ln--navy" d="M30 170 H 530" />
+						<text class="sans mut" x="30" y="204" font-size="24">datos</text>
+						<text class="sans" x="120" y="204" font-size="28">LED · comando</text>
+						<text class="sans" x="120" y="246" font-size="28">temperatura · telemetría</text>
+						<text class="sans mut" x="30" y="300" font-size="24">panel</text>
+						<text class="sans" x="120" y="300" font-size="28">botón e indicador</text>
+
+						<!-- ramas: se crea desde la plantilla -->
+						<path class="ln ln--navy" d="M560 192 H 620 M620 88 V 296 M620 88 H 684 M620 192 H 684 M620 296 H 684" />
+						<path class="rel-navy" d="M696 88 L 680 79 L 680 97 Z" />
+						<path class="rel-navy" d="M696 192 L 680 183 L 680 201 Z" />
+						<path class="rel-navy" d="M696 296 L 680 287 L 680 305 Z" />
+
+						<!-- dispositivos -->
+						<rect class="caja caja--acc" x="700" y="44" width="900" height="88" rx="14" />
+						<text class="sans b" x="730" y="88" font-size="30">Dispositivo 1</text>
+						<rect class="caja" x="960" y="60" width="130" height="56" rx="8" />
+						<text class="mid" x="1025" y="88" font-size="24">ESP32</text>
+						<text class="sans mut" x="1130" y="88" font-size="24">token</text>
+						<text class="acc b" x="1210" y="88" font-size="30">TU_TOKEN_AQUI</text>
+
+						<rect class="caja" x="700" y="148" width="900" height="88" rx="14" />
+						<text class="sans b" x="730" y="192" font-size="30">Dispositivo 2</text>
+						<rect class="caja" x="960" y="164" width="130" height="56" rx="8" />
+						<text class="mid" x="1025" y="192" font-size="24">ESP32</text>
+						<text class="sans mut" x="1130" y="192" font-size="24">token</text>
+						<text class="b" x="1210" y="192" font-size="30">token 2</text>
+
+						<rect class="caja" x="700" y="252" width="900" height="88" rx="14" />
+						<text class="sans b" x="730" y="296" font-size="30">Dispositivo 3</text>
+						<rect class="caja" x="960" y="268" width="130" height="56" rx="8" />
+						<text class="mid" x="1025" y="296" font-size="24">ESP32</text>
+						<text class="sans mut" x="1130" y="296" font-size="24">token</text>
+						<text class="b" x="1210" y="296" font-size="30">token 3</text>
+
+						<!-- paso 1 · protocolo de la biblioteca -->
+						<g data-paso="1">
+							<rect class="caja caja--navy" x="0" y="376" width="1600" height="214" rx="16" />
+							<text class="sans navy b" x="30" y="414" font-size="28">Biblioteca de Blynk: protocolo propio, no MQTT</text>
+							<text class="sans mut fin" x="1570" y="414" font-size="24">Blynk también ofrece una API MQTT.</text>
+							<text class="sans mut" x="30" y="458" font-size="24">en Blynk</text>
+							<text class="sans mut" x="620" y="458" font-size="24">en MQTT</text>
+							<text class="sans mut" x="840" y="458" font-size="24">en Blynk</text>
+							<text class="sans mut" x="1300" y="458" font-size="24">en MQTT</text>
+							<path class="ln ln--fina ln--navy" d="M810 446 V 570" />
+							<text class="sans" x="30" y="502" font-size="26">conexión persistente iniciada por la placa</text>
+							<text class="navy b" x="620" y="502" font-size="26">keepalive</text>
+							<text class="sans" x="30" y="548" font-size="26">último valor al reconectar</text>
+							<text class="navy b" x="620" y="548" font-size="26">retenido</text>
+							<text class="sans" x="840" y="502" font-size="26">aviso «Offline»</text>
+							<text class="navy b" x="1300" y="502" font-size="26">última voluntad</text>
+							<text class="sans" x="840" y="548" font-size="26">entrega solo con conexión abierta</text>
+							<text class="navy b" x="1300" y="548" font-size="26">QoS 0</text>
+						</g>
+
+						<!-- paso 2 · protección del token, en una línea -->
+						<g data-paso="2">
+							<text class="sans" x="0" y="636" font-size="28"><tspan class="acc b">Token:</tspan> fuera del repositorio · TLS · uno por placa · si se filtra, se sustituye</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer de izquierda a derecha. La plantilla se define una vez: qué datos
+					intercambia el equipo y cómo se ven en el panel. Cada dispositivo es una
+					instancia de esa plantilla, con su placa y su token.
+				</p>
+				<p>
+					Pregunta de predicción: se añade a la plantilla un dato nuevo, la humedad.
+					¿Hay que repetir el cambio en los tres dispositivos? Respuesta: no. Los
+					tres heredan la plantilla y reciben el cambio a la vez; lo que sí hay que
+					actualizar es el firmware de cada placa para que envíe ese dato.
+				</p>
+				<p>
+					Paso 1: aclarar que la biblioteca de Blynk no habla MQTT. Usa un protocolo
+					propio sobre TCP con TLS, con las mismas ideas del bloque 3: la placa abre
+					y mantiene la conexión con un ping periódico; el servidor guarda el último
+					valor de cada dato y lo entrega al reconectar; si deja de recibir el ping,
+					marca el dispositivo «Offline». Un comando enviado con la placa desconectada
+					no se encola para entregarse después, como en QoS 0: solo queda el último
+					valor, que la placa recupera al sincronizar (lámina 17). Para equipos que ya
+					hablan MQTT, Blynk ofrece además un broker propio.
+				</p>
+				<p>
+					Paso 2: el token es la credencial del dispositivo; quien lo tiene lee sus
+					datos y le envía órdenes. Por eso no se proyecta el real
+					(<code>TU_TOKEN_AQUI</code>). El detalle está en «Para estudiar».
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Consola: Developer Zone › My Templates (plantilla) y Devices › New Device ›
+						From template (dispositivo). «Device Info» muestra Template ID, Template
+						name y Auth token. En el ejemplo 19 van en <code>include/secrets.h</code>,
+						listado en <code>.gitignore</code>; se versiona solo
+						<code>secrets.example.h</code> con <code>TU_TOKEN_AQUI</code>. La cabecera
+						<code>BlynkSimpleEsp32_SSL.h</code> conecta por el puerto 443 con TLS; la
+						variante sin SSL usa el 80 y envía el token legible. Un token subido a
+						un repositorio público queda en el historial de git: borrarlo del archivo
+						no basta; se borra el dispositivo y se crea otro desde la plantilla, que
+						recibe un token nuevo.
+					</p>
+					<p>
+						API MQTT de Blynk: broker <code>blynk.cloud</code>, puertos 1883 y 8883
+						(TLS), usuario <code>device</code> y contraseña igual al token; no admite
+						dos clientes simultáneos con el mismo token (docs.blynk.io › Device MQTT
+						API › Authentication).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Grabar dos placas con el mismo token, que se desconectan entre sí (lámina 20).</li>
+						<li>Añadir <code>secrets.h</code> al <code>.gitignore</code> después de subirlo, cuando git ya lo sigue.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="15-arquitectura-sistema.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Arquitectura del sistema IoT</span>
+				</a>
+				<a class="slide-nav__link" href="17-pines-virtuales.html">
+					<span>Datastreams y pines virtuales</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

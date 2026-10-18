@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Funciones de una plataforma de IoT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Plataformas de IoT</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Funciones de una <em>plataforma</em> frente a un broker MQTT
+				</h1>
+
+				<div class="def">
+					<p><b>Plataforma de IoT</b>: un broker más servicios sobre los datos y los dispositivos.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 630" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Pila de la plataforma de IoT. Abajo, el broker, que recibe y reparte los mensajes de casa/sala/temp y casa/sala/luz. Encima, cinco servicios con un ejemplo cada uno. Almacenamiento histórico, cada valor con su fecha y hora: casa/sala/temp de las últimas 24 horas. Paneles de visualización y mando: gráfica de la temperatura e interruptor de la luz. Alertas y automatizaciones, reglas sobre los datos: si la temperatura supera 30 °C, aviso. Gestión y control de acceso, altas, credenciales y usuarios: alta de una placa nueva y permisos por usuario. Actualizaciones remotas del firmware por la red, OTA: versión nueva en todas las placas. A la izquierda, una llave agrupa los cinco servicios y otra marca el broker: plataforma igual a broker más servicios.">
+						<!-- llaves: servicios + broker = plataforma -->
+						<path class="ln ln--navy" d="M210 6 H 230 V 502 H 210 M230 254 H 250" />
+						<text class="mid sans navy b" x="100" y="234" font-size="30">servicios</text>
+						<text class="mid sans mut" x="100" y="276" font-size="24">sobre los datos</text>
+						<path class="ln ln--acc" d="M210 532 H 230 V 624 H 210 M230 578 H 250" />
+						<text class="mid sans acc b" x="100" y="578" font-size="30">broker</text>
+
+						<rect class="caja caja--navy" x="270" y="2" width="1328" height="90" rx="12" />
+						<text class="sans navy b" x="298" y="34" font-size="29">Almacenamiento histórico</text>
+						<text class="sans mut" x="298" y="70" font-size="24">cada valor con su fecha y hora</text>
+						<text class="sans" x="900" y="48" font-size="27">casa/sala/temp de las últimas 24 h</text>
+
+						<rect class="caja caja--navy" x="270" y="106" width="1328" height="90" rx="12" />
+						<text class="sans navy b" x="298" y="138" font-size="29">Paneles</text>
+						<text class="sans mut" x="298" y="174" font-size="24">visualización y mando</text>
+						<text class="sans" x="900" y="152" font-size="27">gráfica de temp · interruptor de luz</text>
+
+						<rect class="caja caja--navy" x="270" y="210" width="1328" height="90" rx="12" />
+						<text class="sans navy b" x="298" y="242" font-size="29">Alertas y automatizaciones</text>
+						<text class="sans mut" x="298" y="278" font-size="24">reglas sobre los datos</text>
+						<text class="sans" x="900" y="256" font-size="27">temp &gt; 30 °C → aviso</text>
+
+						<rect class="caja caja--navy" x="270" y="314" width="1328" height="90" rx="12" />
+						<text class="sans navy b" x="298" y="346" font-size="29">Gestión y control de acceso</text>
+						<text class="sans mut" x="298" y="382" font-size="24">altas, credenciales, usuarios</text>
+						<text class="sans" x="900" y="360" font-size="27">placa nueva · permisos por usuario</text>
+
+						<rect class="caja caja--navy" x="270" y="418" width="1328" height="90" rx="12" />
+						<text class="sans navy b" x="298" y="450" font-size="29">Actualizaciones remotas</text>
+						<text class="sans mut" x="298" y="486" font-size="24">firmware por la red (OTA)</text>
+						<text class="sans" x="900" y="464" font-size="27">versión nueva en todas las placas</text>
+
+						<rect class="caja caja--acc" x="270" y="534" width="1328" height="90" rx="12" />
+						<text class="sans acc b" x="298" y="566" font-size="29">Broker</text>
+						<text class="sans mut" x="298" y="602" font-size="24">recibe y reparte los mensajes</text>
+						<text x="900" y="580" font-size="26">casa/sala/temp · casa/sala/luz</text>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer la pila de abajo arriba. El broker de la lámina 08 recibe y reparte;
+					su trabajo termina al entregar el mensaje. Cada servicio de encima
+					resuelve algo que el broker no hace.
+				</p>
+				<p>
+					Pregunta de predicción: el broker recibe casa/sala/temp cada 30 s desde
+					las 8:00; a las 18:00 se pide la gráfica del día. ¿Puede dársela el
+					broker? Respuesta: no. El broker entrega y, como mucho, conserva el
+					último mensaje retenido (lámina 11); la serie del día solo existe si un
+					servicio de almacenamiento la guarda.
+				</p>
+				<p>
+					Recorrer los cinco servicios con el ejemplo de la derecha. Gestión y
+					control de acceso enlaza con la lámina 12: la plataforma emite las
+					credenciales de cada placa y decide qué usuario ve o manda qué. La
+					actualización remota (OTA, <i>over-the-air</i>) cambia el firmware sin
+					cable USB.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Un sistema autoalojado reúne los mismos servicios con piezas separadas:
+						un broker MQTT (Mosquitto), una base de series temporales, un panel y un
+						motor de reglas (Node-RED). Una plataforma integrada (Blynk, ThingsBoard,
+						AWS IoT Core) los ofrece juntos. En Blynk, el papel del broker lo cumple
+						un servidor con protocolo propio, que acepta también MQTT (lámina 16).
+						Una base de series temporales guarda cada valor con su fecha y hora.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>
+						Ejemplo 19: el historial y el panel de Blynk muestran la temperatura
+						enviada cada 30 s; el interruptor del panel es el mando.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Llamar «plataforma» a un broker aislado, que no guarda historial.</li>
+						<li>Confundir el mensaje retenido (un valor por tema) con un historial.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="12-mqtt-seguridad.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Seguridad en MQTT</span>
+				</a>
+				<a class="slide-nav__link" href="14-plataformas-comparacion.html">
+					<span>Comparación de plataformas de IoT</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

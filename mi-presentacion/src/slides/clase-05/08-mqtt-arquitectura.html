@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arquitectura de MQTT · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="21">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">03 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">Clientes, <em>broker</em> y conexión persistente en MQTT</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								<b>Broker</b>: servidor intermedio por el que pasan todos los mensajes.
+								<b>Cliente</b>: publica, se suscribe o ambas cosas; abre y mantiene su
+								conexión TCP.
+							</p>
+						</div>
+						<p class="franja-fila__ajusta">
+							<b>Keepalive</b>: plazo máximo sin tráfico, cubierto con un ping<br />
+							<b>Identificador de cliente</b>: único en el broker
+						</p>
+					</div>
+
+					<div class="escenario__visual">
+						<svg class="s4a-svg crece" viewBox="0 0 1600 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arquitectura MQTT. A la izquierda, el cliente ESP32, con identificador esp32-sala: publica en casa/sala/temp y está suscrito a casa/sala/luz. En el centro, el broker: recibe, filtra por tema y entrega a cada suscrito; no guarda historial ni interpreta la carga útil; vigila el keepalive de cada conexión. A la derecha, dos clientes: la aplicación, con identificador app-movil, suscrita a casa/sala/temp y que publica en casa/sala/luz; y la base de datos, con identificador registro, suscrita a casa/sala/temp, que guarda el historial. Cada cliente abre su propia conexión TCP con el broker. La temperatura 23.4 sube del ESP32 al broker, que entrega una copia a la aplicación y otra a la base de datos. Por la conexión del ESP32 circula además el ping del keepalive. Después, la aplicación publica 1 en casa/sala/luz y el broker lo entrega al ESP32 por la conexión que el ESP32 abrió. Norma: MQTT 3.1.1, OASIS, e ISO/IEC 20922:2016.">
+							<!-- conexiones abiertas por cada cliente -->
+							<rect class="s5v4-tubo" x="360" y="170" width="260" height="310" rx="12" />
+							<rect class="s5v4-tubo" x="980" y="70" width="260" height="200" rx="12" />
+							<rect class="s5v4-tubo" x="980" y="390" width="260" height="150" rx="12" />
+
+							<!-- cliente ESP32 -->
+							<rect class="caja caja--acc" x="20" y="120" width="340" height="440" rx="16" />
+							<text class="mid b" x="190" y="170" font-size="38">ESP32</text>
+							<text class="mid mut" x="190" y="216" font-size="24">id esp32-sala</text>
+							<path class="ln ln--fina ln--mut" d="M44 250 H 336" />
+							<text class="mid sans mut" x="190" y="290" font-size="24">publica</text>
+							<text class="mid navy b" x="190" y="328" font-size="28">casa/sala/temp</text>
+							<text class="mid sans mut" x="190" y="382" font-size="24">suscrito a</text>
+							<text class="mid acc b" x="190" y="420" font-size="28">casa/sala/luz</text>
+							<circle class="s5v4-led" cx="74" cy="500" r="18" />
+							<text class="sans" x="104" y="500" font-size="24">luz</text>
+
+							<!-- broker -->
+							<rect class="caja caja--navy" x="620" y="20" width="360" height="600" rx="16" />
+							<text class="mid navy b" x="800" y="72" font-size="40">broker</text>
+							<text class="mid sans ok b" x="800" y="136" font-size="24">hace</text>
+							<text class="mid sans" x="800" y="178" font-size="26">recibir cada mensaje</text>
+							<text class="mid sans" x="800" y="220" font-size="26">filtrar por tema</text>
+							<text class="mid sans" x="800" y="262" font-size="26">entregar a cada suscrito</text>
+							<path class="ln ln--fina ln--mut" d="M652 306 H 948" />
+							<text class="mid sans dan b" x="800" y="348" font-size="24">no hace</text>
+							<text class="mid sans" x="800" y="390" font-size="26">guardar historial</text>
+							<text class="mid sans" x="800" y="432" font-size="26">interpretar la carga útil</text>
+							<path class="ln ln--fina ln--mut" d="M652 478 H 948" />
+							<text class="mid sans" x="800" y="524" font-size="26">vigila el keepalive</text>
+							<text class="mid sans" x="800" y="564" font-size="26">de cada conexión</text>
+
+							<!-- aplicación -->
+							<rect class="caja" x="1240" y="20" width="340" height="300" rx="16" />
+							<text class="mid b" x="1410" y="66" font-size="34">Aplicación</text>
+							<text class="mid mut" x="1410" y="108" font-size="24">id app-movil</text>
+							<text class="mid sans mut" x="1410" y="156" font-size="24">suscrita a</text>
+							<text class="mid navy b" x="1410" y="192" font-size="28">casa/sala/temp</text>
+							<text class="mid sans mut" x="1410" y="240" font-size="24">publica</text>
+							<text class="mid acc b" x="1410" y="278" font-size="28">casa/sala/luz</text>
+
+							<!-- base de datos -->
+							<rect class="caja" x="1240" y="350" width="340" height="270" rx="16" />
+							<text class="mid b" x="1410" y="396" font-size="34">Base de datos</text>
+							<text class="mid mut" x="1410" y="438" font-size="24">id registro</text>
+							<text class="mid sans mut" x="1410" y="486" font-size="24">suscrita a</text>
+							<text class="mid navy b" x="1410" y="522" font-size="28">casa/sala/temp</text>
+							<text class="mid sans ok b" x="1410" y="574" font-size="24">guarda el historial</text>
+
+							<!-- telemetría: sube del ESP32 y el broker entrega una copia a cada suscrito -->
+							<text class="mid navy b" x="490" y="206" font-size="28">23.4</text>
+							<path class="ln ln--navy" d="M368 240 H 600" />
+							<path class="rel-navy" d="M612 240 L 594 230 L 594 250 Z" />
+							<text class="mid navy b" x="1110" y="106" font-size="28">23.4</text>
+							<path class="ln ln--navy" d="M988 140 H 1220" />
+							<path class="rel-navy" d="M1232 140 L 1214 130 L 1214 150 Z" />
+							<text class="mid navy b" x="1110" y="430" font-size="28">23.4</text>
+							<path class="ln ln--navy" d="M988 466 H 1220" />
+							<path class="rel-navy" d="M1232 466 L 1214 456 L 1214 476 Z" />
+
+							<!-- keepalive en la conexión del ESP32 -->
+							<text class="mid sans mut" x="490" y="400" font-size="24">ping · keepalive</text>
+							<path class="ln ln--fina ln--mut ln--trazo" d="M380 436 H 600" />
+							<path class="rel-mut" d="M612 436 L 596 428 L 596 444 Z" />
+							<path class="rel-mut" d="M368 436 L 384 428 L 384 444 Z" />
+
+							<!-- quién abre la conexión -->
+							<text class="mid sans mut" x="490" y="526" font-size="24">conexión TCP</text>
+							<text class="mid sans mut" x="490" y="560" font-size="24">abierta por el cliente</text>
+
+							<!-- comando: baja de la aplicación y el broker lo entrega al ESP32 -->
+							<g data-paso="1">
+								<text class="mid acc b" x="1110" y="200" font-size="28">1</text>
+								<path class="ln ln--acc" d="M1232 236 H 1000" />
+								<path class="rel-acc" d="M988 236 L 1006 226 L 1006 246 Z" />
+								<text class="mid acc b" x="490" y="290" font-size="28">1</text>
+								<path class="ln ln--acc" d="M612 324 H 380" />
+								<path class="rel-acc" d="M368 324 L 386 314 L 386 334 Z" />
+								<circle class="s5v4-led s5v4-led--on" cx="74" cy="500" r="18" />
+								<text class="sans acc b" x="150" y="500" font-size="24">encendida</text>
+							</g>
+
+							<!-- norma -->
+							<text class="sans mut" x="20" y="660" font-size="22">MQTT 3.1.1 · OASIS (2014) · ISO/IEC 20922:2016</text>
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recorrer la figura de izquierda a derecha. El ESP32 publica la temperatura en
+					<code>casa/sala/temp</code>; el broker la entrega a los dos clientes suscritos,
+					una copia a cada uno. El historial lo guarda otro cliente suscrito, la base
+					de datos.
+				</p>
+				<p>
+					Pregunta de predicción: la aplicación publica <code>1</code> en
+					<code>casa/sala/luz</code>; ¿qué dirección de red necesita conocer: la del
+					ESP32 o la del broker?
+				</p>
+				<p>
+					Respuesta: solo la del broker. Pulsar →: el broker entrega el comando por la
+					conexión que el ESP32 abrió y mantiene, de modo que el NAT del router la deja
+					pasar. Ningún cliente conoce la dirección de otro.
+				</p>
+				<p>
+					Señalar el ping: sin tráfico durante el plazo <i>keepalive</i>, el cliente envía
+					un ping para que el broker sepa que sigue vivo. El identificador de cliente
+					distingue cada conexión; dos placas con el mismo se expulsan una a otra
+					(lámina 20).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						MQTT 3.1.1 exige un transporte ordenado y sin pérdidas, en la práctica TCP.
+						El cliente declara al conectar su identificador y su <i>keepalive</i> en
+						segundos; si el broker no recibe ningún paquete en 1,5 veces ese plazo,
+						cierra la conexión. La biblioteca PubSubClient usa 15 s por omisión.
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Repetir el identificador en dos placas: el broker desconecta la conexión anterior al llegar la nueva (§3.1.4).</li>
+						<li>Esperar del broker el historial: solo guarda, por tema, el último mensaje retenido (lámina 11) y la cola de las sesiones persistentes.</li>
+					</ul>
+					<h4>Fuentes</h4>
+					<p>OASIS, <i>MQTT Version 3.1.1</i> (2014), §3.1.2.10, §3.1.3.1 y §4.2; ISO/IEC 20922:2016.</p>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="07-protocolos-comparacion.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Protocolos de aplicación</span>
+				</a>
+				<a class="slide-nav__link" href="09-mqtt-temas.html">
+					<span>Temas y comodines</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>
