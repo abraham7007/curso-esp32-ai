@@ -24,7 +24,7 @@
 						<span class="code-hour__ref">Ejemplo 16</span>
 					</div>
 
-					<h2 class="code-hour__title">El precio del Bitcoin consultado por HTTPS cada minuto</h2>
+					<h2 class="code-hour__title">El precio del bitcoin consultado por HTTPS cada minuto</h2>
 
 					<div class="deliverables">
 						<div class="deliverable">
@@ -116,7 +116,7 @@ Conectando a WiFi ......
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> El código de estado lo envía el servidor; si la respuesta no llega (DNS, conexión, TLS o tiempo agotado), no hay código.</p>
+						<p><b>Qué comprueba.</b> El código de estado lo envía el servidor; si la respuesta no llega (DNS, conexión, TLS o tiempo de espera agotado), no hay código.</p>
 					</div>
 				</div>
 			</div>
@@ -131,14 +131,14 @@ Conectando a WiFi ......
 					<h4>En la práctica</h4>
 					<p>Secuencia de cada consulta: preparar la URL, enviar la petición, leer el cuerpo solo con 200 y cerrar la conexión siempre, también tras un error. Sin respuesta, HTTPClient da un número negativo con su texto: −1 «connection refused», −11 «read Timeout».</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Consultar cada segundo, con precio repetido y respuestas 429.</li><li>Leer el cuerpo sin comprobar el 200.</li><li>No cerrar la conexión; la memoria se agota en pocas consultas.</li><li>Esperar la red sin tope, con la placa imprimiendo puntos sin fin.</li></ul>
+					<ul><li>Consultar cada segundo, con precio repetido y respuestas 429.</li><li>Leer el cuerpo sin comprobar el 200.</li><li>No cerrar la conexión; la memoria se agota en pocas consultas.</li><li>Esperar la red indefinidamente, con la placa imprimiendo puntos sin fin.</li></ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="09-codigos-estado.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Códigos</span>
+					<span>Códigos de estado</span>
 				</a>
 				<a class="slide-nav__link" href="11-http-https.html">
 					<span>HTTPS</span>

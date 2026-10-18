@@ -68,7 +68,7 @@
 					Los casos cubren audio, movimiento e imagen. En las cinco aplicaciones, un modelo pequeño clasifica la señal junto a un sensor que mide de forma continua, y la radio, si la hay, transmite solo el resultado.
 				</p>
 				<p>
-					Pregunta de predicción, sobre TinyChirp: ejecutar una red neuronal gasta energía. ¿Cómo puede entonces alargar la batería durante semanas? Respuesta: la alternativa es grabar y guardar o enviar todo el audio; el modelo selecciona los fragmentos que se guardan. Es el mismo argumento de la lámina 03. El artículo no da una cifra única de autonomía (8 semanas en el resumen, 18 en la conclusión), por eso no se proyecta.
+					Pregunta de predicción, sobre TinyChirp: ejecutar una red neuronal gasta energía. ¿Cómo puede entonces prolongar la autonomía durante semanas? Respuesta: la alternativa es grabar y guardar o enviar todo el audio; el modelo selecciona los fragmentos que se guardan. Es el mismo argumento de la lámina 03. El artículo no da una cifra única de autonomía (8 semanas en el resumen, 18 en la conclusión), por eso no se proyecta.
 				</p>
 				<p>
 					TinyChirp prueba varias redes; las precisiones son del conjunto de prueba, no medidas en la placa. CNN-Mel, con espectrograma, llega a 0,98 y también cabe en el nRF52840, el chip de la placa de esta sesión. Los autores eligen Transformer-Time, sobre el audio crudo (0,90), porque gasta menos energía por inferencia (19,3 frente a 42,5 mJ) y no tiene que calcular el espectrograma, que tarda unos 2,4 s por cada 3 s de audio.
@@ -101,10 +101,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="03-por-que.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Radio y batería</span>
+					<span>Transmisión y autonomía</span>
 				</a>
 				<a class="slide-nav__link" href="05-flujo.html">
-					<span>Flujo</span>
+					<span>Flujo de trabajo</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

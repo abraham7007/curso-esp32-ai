@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Ventana IMU · Sesión 6</title>
+		<title>Ventana de muestras de la IMU · Sesión 6</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">02 · Redes y datos</span>
 
-				<h1 class="slide__title slide__title--sm">Ventana de 119 muestras de seis <em>ejes</em> del IMU</h1>
+				<h1 class="slide__title slide__title--sm"><em>Ventana</em> de 119 muestras de seis ejes de la IMU</h1>
 
 				<div class="def">
 					<p>La captura arranca cuando la suma de los tres ejes de aceleración llega a 2,5 g y guarda 119 muestras del acelerómetro y del giroscopio; la red recibe 714 números escalados entre 0 y 1.</p>
@@ -103,9 +103,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						La librería Arduino_BMI270_BMM150 entrega la aceleración en g y el giro en
-						°/s. Cada valor escalado ocupa la posición muestra · 6 + eje de la entrada.
-						La frecuencia real de muestreo se lee de la propia librería y se imprime
+						La IMU (unidad de medición inercial) BMI270 se lee con la biblioteca
+						Arduino_BMI270_BMM150, que entrega la aceleración en g y el giro en °/s. Cada valor escalado ocupa la posición muestra · 6 + eje de la entrada.
+						La frecuencia real de muestreo se lee de la propia biblioteca y se imprime
 						al arrancar.
 					</p>
 					<h4>Dónde aparece</h4>
@@ -121,10 +121,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="07-parametros-memoria.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Parámetros</span>
+					<span>Parámetros y memoria</span>
 				</a>
 				<a class="slide-nav__link" href="09-audio-espectrograma.html">
-					<span>Audio</span>
+					<span>Espectrograma</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

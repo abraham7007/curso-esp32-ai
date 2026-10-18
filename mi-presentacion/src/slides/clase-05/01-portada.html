@@ -24,11 +24,11 @@
 					</div>
 
 					<ol class="puntos agenda s4a-agenda s5a-agenda">
-						<li><div>Conexión persistente<span>sondeo frente a conexión abierta, broker y garantías</span></div></li>
-						<li><div>Plataforma Blynk<span>qué añade, sus piezas y su protocolo</span></div></li>
+						<li><div>Conexión persistente<span>sondeo, broker MQTT y niveles de QoS</span></div></li>
+						<li><div>Plataforma Blynk<span>funciones, componentes y protocolo</span></div></li>
 						<li><div>Pines virtuales<span>widget y función; configuración previa</span></div></li>
 						<li><div>Política de envío<span>espera bloqueante, cuota, telemetría y comandos</span></div></li>
-						<li><div>Seguridad y estado<span>token cifrado, estado real y fallos</span></div></li>
+						<li><div>Seguridad y estado<span>token cifrado, sincronización y diagnóstico de fallos</span></div></li>
 					</ol>
 
 					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
@@ -48,7 +48,7 @@
 						</div>
 					</div>
 
-					<figure class="s2-uml s4a-portada s5a-portada" aria-label="Monitor serie del ejemplo 19 conectado a Blynk: la librería se conecta a blynk.cloud por el puerto 443, valida el certificado y queda lista con un ping de 89 ms; el programa sincroniza V0, recibe la orden del interruptor del panel y enciende el LED (estado 1), y publica la temperatura 23.40 en V1.">
+					<figure class="s2-uml s4a-portada s5a-portada" aria-label="Monitor serie del ejemplo 19 conectado a Blynk: la biblioteca se conecta a blynk.cloud por el puerto 443, valida el certificado y queda lista con un ping de 89 ms; el programa sincroniza V0, recibe la orden del interruptor del panel y enciende el LED (estado 1), y publica la temperatura 23.40 en V1.">
 						<p class="s2-uml__nombre">Monitor serie</p>
 						<ul>
 							<li class="s4a-portada__cab">[2209] Connecting to blynk.cloud:443</li>
@@ -89,17 +89,17 @@
 					<p>
 						Se da por conocido: WiFi en modo estación, HTTP y HTTPS, la cuota de una
 						API y la clave fuera del código (sesión 4, láminas 02, 11, 18 y 19), y
-						<code>millis()</code> para varios ritmos en un <code>loop()</code>
+						<code>millis()</code> para tareas con distinto período en un <code>loop()</code>
 						(sesión 2).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						Ejemplo 19 (panel IoT con Blynk): interruptor en V0 que gobierna el LED
+						Ejemplo 19 (panel IoT con Blynk): interruptor en V0 que controla el LED
 						del GPIO 15 y temperatura simulada publicada en V1 cada 30 s.
 					</p>
 					<h4>La figura</h4>
 					<p>
-						Las líneas con <code>[ms]</code> las imprime la librería Blynk
+						Las líneas con <code>[ms]</code> las imprime la biblioteca Blynk
 						(<code>BLYNK_PRINT Serial</code>); las otras, el programa. Los
 						milisegundos y el ping cambian en cada arranque.
 					</p>

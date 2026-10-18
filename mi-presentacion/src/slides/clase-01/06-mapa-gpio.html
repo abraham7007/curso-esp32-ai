@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Mapa de terminales GPIO · Sesión 1</title>
+		<title>Restricciones de uso de los pines GPIO · Sesión 1</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,10 +17,10 @@
 	<body class="ponencia" data-deck-total="23">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">02 · Terminales de entrada y salida</span>
+				<span class="badge">02 · Pines de entrada y salida</span>
 
 				<h1 class="slide__title slide__title--sm">
-					Restricciones de los <em>terminales</em> GPIO
+					Restricciones de uso de los <em>pines</em> GPIO
 				</h1>
 
 				<div class="escenario">
@@ -36,7 +36,7 @@
 					</div>
 
 					<div class="escenario__visual">
-						<section class="crece flex gap-8 mapa-pines" aria-label="Terminales de la placa DevKit V1 con ESP32-WROOM-32">
+						<section class="crece flex gap-8 mapa-pines" aria-label="Pines de la placa DevKit V1 con ESP32-WROOM-32">
 							<div class="flex-1 flex flex-col gap-1 min-h-0" id="col-izq"></div>
 							<div class="hero-board hero-board--alta hero-board--bajo-titulo justify-center">
 								<span class="hero-board__part" aria-hidden="true">
@@ -76,12 +76,11 @@
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>
-							<i>Strapping pins</i> (0, 2, 5, 12, 15): su nivel se lee durante el
-							reinicio. GPIO 0 bajo entra en modo de grabación; GPIO 12 alto
+							Pines de arranque (<i>strapping pins</i>; GPIO 0, 2, 5, 12 y 15): su nivel se lee durante el reinicio. GPIO 0 en bajo entra en el modo de descarga; GPIO 12 alto
 							selecciona flash de 1,8 V y el arranque falla con errores de lectura de flash.
 						</li>
 						<li>Lecturas analógicas en el ADC2 con el WiFi activo; el ADC1 (32–39) sí funciona.</li>
-						<li>Pulsador en 34–39 sin resistencia externa; esos terminales no tienen pull-up interno.</li>
+						<li>Pulsador en 34–39 sin resistencia externa; esos pines no tienen pull-up interno.</li>
 					</ul>
 				</div>
 			</details>
@@ -116,7 +115,7 @@
 				}
 			});
 
-			// Cabeceras de la DevKit V1 (30 terminales), de la antena al USB.
+			// Cabeceras de la DevKit V1 (30 pines), de la antena al USB.
 			const IZQ = [
 				{ n: "EN", k: "pwr", l: "Reinicio", d: "Reinicia el chip; lo acciona el botón EN de la placa." },
 				{ n: "36", k: "warn", l: "VP", d: "Solo entrada (rotulado VP): sin salida ni resistencias internas." },
@@ -129,7 +128,7 @@
 				{ n: "26", k: "ok", l: "DAC2", d: "Libre. Segundo canal de salida analógica de 8 bits (DAC2)." },
 				{ n: "27", k: "ok", l: "ADC2", d: "Libre como digital. Analógico sujeto al ADC2: no disponible con WiFi." },
 				{ n: "14", k: "warn", l: "Pulso", d: "Emite un pulso al arrancar; no conviene para cargas como un relé." },
-				{ n: "12", k: "warn", l: "Inicio", d: "Strapping: alto al reiniciar fija la flash a 1,8 V; el arranque falla y la ROM muestra errores de lectura de flash." },
+				{ n: "12", k: "warn", l: "Inicio", d: "Pin de arranque: alto al reiniciar fija la flash a 1,8 V; el arranque falla y la ROM muestra errores de lectura de flash." },
 				{ n: "13", k: "ok", l: "ADC2", d: "Libre como digital. Analógico sujeto al ADC2: no disponible con WiFi." },
 				{ n: "GND", k: "pwr", l: "Masa", d: "Referencia de 0 V común a todo el circuito." },
 				{ n: "VIN", k: "pwr", l: "5 V", d: "Entrada de 5 V (la del USB); el regulador la baja a 3,3 V." },
@@ -142,12 +141,12 @@
 				{ n: "21", k: "ok", l: "SDA", d: "Libre. Por convención, datos del bus I²C." },
 				{ n: "19", k: "ok", l: "SPI", d: "Libre. Por convención, MISO del bus SPI." },
 				{ n: "18", k: "ok", l: "SPI", d: "Libre. Por convención, reloj del bus SPI." },
-				{ n: "5", k: "warn", l: "Inicio", d: "Strapping: debe estar alto al reiniciar (la placa lo garantiza) y emite un pulso breve al arrancar." },
+				{ n: "5", k: "warn", l: "Inicio", d: "Pin de arranque: debe estar alto al reiniciar (la placa lo garantiza) y emite un pulso breve al arrancar." },
 				{ n: "17", k: "ok", l: "TX2", d: "Libre. Habitual para TX de UART2. En módulos WROVER lo ocupa la PSRAM." },
 				{ n: "16", k: "ok", l: "RX2", d: "Libre. Habitual para RX de UART2. En módulos WROVER lo ocupa la PSRAM." },
 				{ n: "4", k: "ok", l: "ADC2", d: "Libre como digital. Su entrada analógica es del ADC2: deja de funcionar con el WiFi activo." },
-				{ n: "2", k: "warn", l: "Inicio", d: "Strapping: debe quedar bajo o libre al reiniciar. En esta placa lleva el LED integrado." },
-				{ n: "15", k: "warn", l: "Inicio", d: "Strapping: bajo al reiniciar silencia los mensajes del cargador de arranque." },
+				{ n: "2", k: "warn", l: "Inicio", d: "Pin de arranque: debe quedar bajo o libre al reiniciar. En esta placa lleva el LED integrado." },
+				{ n: "15", k: "warn", l: "Inicio", d: "Pin de arranque: bajo al reiniciar silencia los mensajes del cargador de arranque." },
 				{ n: "GND", k: "pwr", l: "Masa", d: "Referencia de 0 V común a todo el circuito." },
 				{ n: "3V3", k: "pwr", l: "3,3 V", d: "Salida del regulador: alimenta sensores de 3,3 V con poca corriente." },
 			];

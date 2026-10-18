@@ -22,13 +22,13 @@
 				<ol class="puntos crece justify-evenly s5d-cierre">
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Conexión abierta</p>
+							<p class="enunciado col-span-2">Conexión persistente</p>
 							<p class="slide__lede col-span-3">La orden llega sin espera; un ping tras 40 s sin tráfico evita el cierre por inactividad.</p>
 						</div>
 					</li>
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Plataforma</p>
+							<p class="enunciado col-span-2">Plataforma de IoT</p>
 							<p class="slide__lede col-span-3">El broker reparte por tema; la plataforma además guarda, muestra, avisa y administra.</p>
 						</div>
 					</li>
@@ -40,14 +40,14 @@
 					</li>
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Envío</p>
+							<p class="enunciado col-span-2">Política de envío</p>
 							<p class="slide__lede col-span-3">Loop sin esperas; la cuota mensual fija el intervalo, y la orden se confirma.</p>
 						</div>
 					</li>
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Estado</p>
-							<p class="slide__lede col-span-3">Token fuera del código y por el 443; la sincronización al conectar recupera el estado tras un corte.</p>
+							<p class="enunciado col-span-2">Seguridad y estado</p>
+							<p class="slide__lede col-span-3">Token fuera del código y por el 443; la sincronización al conectar recupera el estado tras una reconexión.</p>
 						</div>
 					</li>
 				</ol>
@@ -98,10 +98,10 @@
 				<div class="detalle__cuerpo">
 					<h4>Términos de la sesión</h4>
 					<ul>
-						<li><b>Publicar/suscribir</b> (<i>publish/subscribe</i>): el emisor publica en un tema; el broker lo entrega a quien se suscribió.</li>
+						<li><b>Publicación/suscripción</b> (<i>publish/subscribe</i>): el emisor publica en un tema; el broker lo entrega a quien se suscribió.</li>
 						<li><b>Broker</b>: servidor que recibe y reparte los mensajes por tema.</li>
 						<li><b>Mensaje retenido</b>: el broker guarda el último valor de un tema; en Blynk, la sincronización al conectar.</li>
-						<li><b>Last Will</b>: mensaje que el broker publica si el cliente se desconecta sin enviar el paquete DISCONNECT; en Blynk, el estado Offline.</li>
+						<li><b>Mensaje de última voluntad</b> (<i>Last Will</i>): mensaje que el broker publica si el cliente se desconecta sin enviar el paquete DISCONNECT; en Blynk, el estado Offline.</li>
 						<li><b>Plantilla</b> (<i>template</i>): define datastreams y panel para muchos dispositivos.</li>
 						<li><b>Datastream</b>: canal con nombre, pin virtual, tipo y rango.</li>
 						<li><b>Pin virtual</b>: V0…V255; une un widget con una función del firmware.</li>
@@ -115,7 +115,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="16-fallos-blynk.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Fallos</span>
+					<span>Diagnóstico de fallos</span>
 				</a>
 				<span></span>
 			</nav>

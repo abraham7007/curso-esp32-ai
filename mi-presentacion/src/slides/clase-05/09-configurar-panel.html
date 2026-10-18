@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Configurar el panel · Sesión 5</title>
+		<title>Configuración del panel · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,7 +27,7 @@
 					<h2 class="code-hour__title">Configuración del panel <em>antes</em> del firmware</h2>
 
 					<div class="code-hour__body s5b-consola">
-					<svg class="s3d-svg" viewBox="-3 -3 1606 766" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cinco pasos en Blynk.Console. 1, crear la plantilla: Developer Zone, My Templates, New Template, con nombre ESP32 PIT 2026, hardware ESP32 y conexión WiFi. 2, definir los datastreams de tipo Virtual Pin: V0, LED, Integer de 0 a 1, para el Switch; V1, Temperatura, Double de 0 a 50 grados Celsius, para el Gauge. 3, montar el panel web: en modo Edit se arrastran un Switch asociado a V0 y un Gauge asociado a V1 desde el Widget Box. 4, crear el dispositivo: Devices, New Device, From template, ESP32 PIT 2026; al crearlo la consola muestra las tres credenciales. 5, copiar las credenciales a include/secrets.h: Template ID, Template name y Auth token, con el token propio en lugar de TU_TOKEN_AQUI; el archivo queda en .gitignore y main.cpp lo lee antes que la librería Blynk.">
+					<svg class="s3d-svg" viewBox="-3 -3 1606 766" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cinco pasos en Blynk.Console. 1, crear la plantilla: Developer Zone, My Templates, New Template, con nombre ESP32 PIT 2026, hardware ESP32 y conexión WiFi. 2, definir los datastreams de tipo Virtual Pin: V0, LED, Integer de 0 a 1, para el Switch; V1, Temperatura, Double de 0 a 50 grados Celsius, para el Gauge. 3, montar el panel web: en modo Edit se arrastran un Switch asociado a V0 y un Gauge asociado a V1 desde el Widget Box. 4, crear el dispositivo: Devices, New Device, From template, ESP32 PIT 2026; al crearlo la consola muestra las tres credenciales. 5, copiar las credenciales a include/secrets.h: Template ID, Template name y Auth token, con el token propio en lugar de TU_TOKEN_AQUI; el archivo queda en .gitignore y main.cpp lo lee antes que la biblioteca Blynk.">
 						<!-- 1 · plantilla -->
 						<rect class="s5b-panel" x="0" y="0" width="500" height="350" rx="14" />
 						<circle class="caja caja--acc" cx="38" cy="38" r="24" />
@@ -113,7 +113,7 @@
 						<text class="sans mut" x="970" y="616" font-size="24">Auth token</text>
 						<text class="acc" x="1180" y="616" font-size="24">TU_TOKEN_AQUI</text>
 						<text class="sans" x="950" y="686" font-size="24">Excluir el archivo con <tspan class="acc">.gitignore</tspan>.</text>
-						<text class="sans mut" x="950" y="726" font-size="22">main.cpp lo lee antes que la librería Blynk.</text>
+						<text class="sans mut" x="950" y="726" font-size="22">main.cpp lo lee antes que la biblioteca Blynk.</text>
 					</svg>
 					</div>
 
@@ -172,7 +172,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="08-pines-virtuales.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Pines V</span>
+					<span>Pines virtuales</span>
 				</a>
 				<a class="slide-nav__link" href="10-codigo-19-blynk.html">
 					<span>Ejemplo 19 · Blynk</span>

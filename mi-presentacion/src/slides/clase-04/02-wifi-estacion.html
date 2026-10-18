@@ -19,14 +19,14 @@
 			<div class="slide__content">
 				<span class="badge">01 · Enlace WiFi</span>
 
-				<h1 class="slide__title slide__title--sm">El ESP32 en modo <em>estación</em></h1>
+				<h1 class="slide__title slide__title--sm">Conexión del ESP32 a una red WiFi en modo <em>estación</em></h1>
 
 				<div class="def">
 					<p>En modo <b>estación</b>, el ESP32 se une a la red del router, igual que un móvil, y sale a Internet a través de él.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres clientes de la misma red WiFi: un móvil, el ESP32 en modo estación (STA) y un portátil. Los tres se enlazan con el router, que es el punto de acceso de la red Wokwi-GUEST o la de casa. El ESP32 se enlaza por la banda de 2,4 GHz; la banda de 5 GHz no la ve. El router sale por cable o fibra a Internet, donde está el servidor api.coingecko.com. Arriba a la derecha, la secuencia de conexión: 1, elegir el modo estación; 2, unirse a la red con su nombre (SSID) y su contraseña; 3, esperar el estado conectado, con un tope de 20 segundos. En modo punto de acceso (AP), el ESP32 crea su propia red, sin salida a Internet.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres clientes de la misma red WiFi: un móvil, el ESP32 en modo estación (STA) y un portátil. Los tres se enlazan con el router, que es el punto de acceso de la red Wokwi-GUEST o la de casa. El ESP32 se enlaza por la banda de 2,4 GHz; la banda de 5 GHz no la ve. El router sale por cable o fibra a Internet, donde está el servidor api.coingecko.com. Arriba a la derecha, la secuencia de conexión: 1, elegir el modo estación; 2, unirse a la red con su nombre (SSID) y su contraseña; 3, esperar el estado conectado, con un tiempo de espera de 20 segundos. En modo punto de acceso (AP), el ESP32 crea su propia red, sin salida a Internet.">
 						<!-- clientes -->
 						<rect class="caja" x="60" y="20" width="320" height="110" rx="14" />
 						<text class="mid" x="220" y="58" font-size="32">móvil</text>
@@ -79,7 +79,7 @@
 						<text class="sans mut" x="1060" y="30" font-size="24">secuencia de conexión</text>
 						<text class="sans" x="1060" y="78" font-size="28"><tspan class="navy b">1</tspan>  modo estación</text>
 						<text class="sans" x="1060" y="122" font-size="28"><tspan class="navy b">2</tspan>  unirse con SSID y contraseña</text>
-						<text class="sans" x="1060" y="166" font-size="28"><tspan class="navy b">3</tspan>  esperar «conectado» · tope 20 s</text>
+						<text class="sans" x="1060" y="166" font-size="28"><tspan class="navy b">3</tspan>  esperar «conectado» (máx. 20 s)</text>
 
 						<!-- contraste con AP -->
 						<path class="ln ln--fina ln--mut" d="M470 560 H 1590" />
@@ -104,7 +104,7 @@
 					<h4>En la práctica</h4>
 					<p>
 						La orden de conexión no bloquea: el programa consulta el estado hasta
-						leer «conectado» y fija un tope (20 s en los ejemplos 16 a 18), tras el que
+						leer «conectado» y fija un tiempo de espera (<i>timeout</i>; 20 s en los ejemplos 16 a 18), tras el que
 						avisa y reinicia la placa. El modo mixto (AP y estación a la vez) comparte
 						una sola radio y, por tanto, un solo canal.
 					</p>
@@ -113,7 +113,7 @@
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Usar una red que emite solo en 5 GHz, a la que el ESP32 no llega a conectarse.</li>
-						<li>Esperar la conexión sin tope; con una contraseña errónea, el programa queda bloqueado.</li>
+						<li>Esperar la conexión indefinidamente; con una contraseña errónea, el programa queda bloqueado.</li>
 					</ul>
 				</div>
 			</details>

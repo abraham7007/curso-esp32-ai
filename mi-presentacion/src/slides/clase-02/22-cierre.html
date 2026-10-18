@@ -28,7 +28,7 @@
 					</li>
 					<li class="text-4xl" data-paso="1">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Sin bloqueo</p>
+							<p class="enunciado col-span-2">Temporización</p>
 							<p class="slide__lede col-span-3">Configurar una vez y, en cada vuelta, comparar el tiempo transcurrido sin detener el programa.</p>
 						</div>
 					</li>
@@ -41,7 +41,7 @@
 					<li class="text-4xl" data-paso="3">
 						<div class="grid grid-cols-5 items-center gap-12">
 							<p class="enunciado col-span-2">Integración</p>
-							<p class="slide__lede col-span-3">main.cpp coordina con una variable booleana de modo; el backtrace localiza los fallos.</p>
+							<p class="slide__lede col-span-3">main.cpp coordina con una variable booleana de modo; la traza de pila localiza los fallos.</p>
 						</div>
 					</li>
 				</ol>
@@ -77,13 +77,13 @@
 					<h4>Términos de la sesión</h4>
 					<ul>
 						<li><b>Declaración / definición</b>: el <code>.h</code> declara nombres y tipos; el <code>.cpp</code> los implementa.</li>
-						<li><b>Guarda de inclusión</b>: tres directivas del preprocesador que impiden copiar dos veces la misma cabecera.</li>
+						<li><b>Protección contra la inclusión múltiple</b> (<i>include guard</i>): tres directivas del preprocesador que impiden copiar dos veces la misma cabecera.</li>
 						<li><b>Encapsulamiento</b>: estado privado, accesible únicamente desde los métodos de la clase.</li>
 						<li><b>begin() / update()</b>: configurar una vez; avanzar un paso por vuelta sin esperar.</li>
 						<li><b>Antirrebote</b> (<i>debounce</i>): ignorar los cambios hasta 30 ms de señal estable.</li>
 						<li><b>Heap</b>: memoria que el programa reserva y libera de forma explícita.</li>
 						<li><b>Referencia</b>: otro nombre de un objeto existente, sin copia.</li>
-						<li><b>Backtrace</b>: pila de llamadas activa en el instante del pánico.</li>
+						<li><b>Traza de pila</b> (<i>backtrace</i>): pila de llamadas activa en el instante del pánico.</li>
 					</ul>
 				</div>
 			</details>
@@ -91,7 +91,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="21-errores-ejecucion.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Errores en ejecución</span>
+					<span>Errores en tiempo de ejecución</span>
 				</a>
 			</nav>
 		</main>

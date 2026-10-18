@@ -22,11 +22,11 @@
 				<h1 class="slide__title slide__title--sm">Efecto de una espera bloqueante sobre la <em>conexión</em></h1>
 
 				<div class="def">
-					<p>En cada vuelta del loop, la librería lee las órdenes y envía el <i>ping</i>. Una espera larga detiene esa atención: tras 58 s sin recibir nada, la conexión se da por perdida.</p>
+					<p>En cada vuelta del loop, la biblioteca lee las órdenes y envía el <i>ping</i>. Una espera larga detiene esa atención: tras 58 s sin recibir nada, la conexión se da por perdida.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, el pseudocódigo de dos bucles; a la derecha, su línea de tiempo de 0 a 180 segundos con el ejemplo 19, que pide V0 al conectar. Arriba, sin esperas: en cada vuelta se atiende la conexión y, si pasaron 30 s, se envía V1. La conexión se atiende miles de veces por segundo; V1 sale cada 30 s; la librería manda un ping a los 40 y a los 80 s; una orden a V0 a los 100 s enciende el LED al instante y, como cuenta como tráfico recibido, el siguiente ping sale a los 140. Abajo, con una espera de 30 s en cada vuelta: la conexión solo se atiende a los 0, 30, 60, 90, 120, 150 y 180 s. Lo último que se recibe es la respuesta de la sincronización, leída a los 30 s; a los 90 han pasado 60 sin recibir nada, más de 58, y la librería registra Heartbeat timeout y se desconecta. A los 120 reconecta y envía el inicio de sesión, cuya respuesta se lee a los 150: Ready, con un ping de unos 150000 ms. La orden de los 100 s queda guardada en el servidor y el LED la recibe a los 180, con la sincronización. Debajo, las cifras: ping tras 40 s sin tráfico, BLYNK_HEARTBEAT; conexión dada por perdida tras 40 más 3 por 6, 58 s sin recibir. Al final, la regla: el loop no espera; lo periódico lo programa un temporizador.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, el pseudocódigo de dos bucles; a la derecha, su línea de tiempo de 0 a 180 segundos con el ejemplo 19, que pide V0 al conectar. Arriba, sin esperas: en cada vuelta se atiende la conexión y, si pasaron 30 s, se envía V1. La conexión se atiende miles de veces por segundo; V1 sale cada 30 s; la biblioteca manda un ping a los 40 y a los 80 s; una orden a V0 a los 100 s enciende el LED al instante y, como cuenta como tráfico recibido, el siguiente ping sale a los 140. Abajo, con una espera de 30 s en cada vuelta: la conexión solo se atiende a los 0, 30, 60, 90, 120, 150 y 180 s. Lo último que se recibe es la respuesta de la sincronización, leída a los 30 s; a los 90 han pasado 60 sin recibir nada, más de 58, y la biblioteca registra Heartbeat timeout y se desconecta. A los 120 reconecta y envía el inicio de sesión, cuya respuesta se lee a los 150: Ready, con un ping de unos 150000 ms. La orden de los 100 s queda guardada en el servidor y el LED la recibe a los 180, con la sincronización. Debajo, las cifras: ping tras 40 s sin tráfico, BLYNK_HEARTBEAT; conexión dada por perdida tras 40 más 3 por 6, 58 s sin recibir. Al final, la regla: el loop no espera; lo periódico lo programa un temporizador.">
 						<!-- carril 1: pseudocódigo sin esperas -->
 						<text class="sans ok" x="0" y="24" font-size="32" font-weight="700">Sin esperas</text>
 						<rect class="s5v-pseudo" x="0" y="48" width="470" height="140" rx="10" />
@@ -119,7 +119,7 @@
 					Respuesta: no. Leer el carril de abajo con el comportamiento de la biblioteca
 					(Blynk 1.3.5, BlynkProtocol.h): el ping sale cuando pasan 40 s sin recibir o
 					40 s sin enviar, y la conexión se da por perdida tras 58 s (40 + 3 ×
-					BLYNK_TIMEOUT_MS) sin recibir nada; la librería comprueba este segundo plazo
+					BLYNK_TIMEOUT_MS) sin recibir nada; la biblioteca comprueba este segundo plazo
 					antes que el ping. Con la sincronización que el ejemplo pide al conectar, lo
 					último que entra es su respuesta, leída a los 30 s. A los 60 s ni la
 					recepción ni el envío llevan 40 s parados y no sale ningún ping; a los 90 s
@@ -161,7 +161,7 @@
 					<span>Ejemplo 19 · Blynk</span>
 				</a>
 				<a class="slide-nav__link" href="12-cuota-intervalo.html">
-					<span>Cuota</span>
+					<span>Cuota e intervalo</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

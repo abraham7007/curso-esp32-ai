@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Idas y vueltas · Sesión 4</title>
+		<title>Ida y vuelta (RTT) · Sesión 4</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,14 +19,14 @@
 			<div class="slide__content">
 				<span class="badge">02 · Red e Internet</span>
 
-				<h1 class="slide__title slide__title--sm">Idas y vueltas por la red en una <em>petición</em> HTTPS</h1>
+				<h1 class="slide__title slide__title--sm">Viajes de ida y vuelta (<em>RTT</em>) en una petición HTTPS</h1>
 
 				<div class="escenario">
 					<div class="escenario__texto franja-fila">
 						<div class="def">
 							<p>
 								Antes del GET, el ESP32 pide la IP (DNS), abre la conexión (TCP)
-								y, con HTTPS, negocia el cifrado (TLS). Cada mensaje con su respuesta es una <b>ida y vuelta</b> (<i>round trip</i>, RTT).
+								y, con HTTPS, negocia el cifrado (TLS). Cada mensaje con su respuesta es un <b>viaje de ida y vuelta</b> (RTT, <i>round-trip time</i>).
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
@@ -42,16 +42,16 @@
 							</fieldset>
 							<fieldset class="mandos__grupo" aria-label="Recorrido paso a paso">
 								<button type="button" class="btn btn--secondary" id="b-inicio">Desde el inicio</button>
-								<button type="button" class="btn btn--secondary" id="b-siguiente">Siguiente ida y vuelta</button>
+								<button type="button" class="btn btn--secondary" id="b-siguiente">Siguiente viaje (RTT)</button>
 							</fieldset>
-							<span class="lectura lectura--fin"><small>idas y vueltas </small><span id="l-rtt" class="s4c-ancho s4c-ancho--corto">5</span></span>
+							<span class="lectura lectura--fin"><small>viajes de ida y vuelta </small><span id="l-rtt" class="s4c-ancho s4c-ancho--corto">5</span></span>
 							<span class="lectura"><small>tiempo ≈ </small><span id="l-tiempo" class="s4c-ancho">250 ms</span></span>
 						</div>
 						<div class="lienzo-caja">
 							<canvas
 								id="viaje"
 								role="img"
-								aria-label="Diagrama de secuencia entre el ESP32, el servidor DNS y api.coingecko.com: consulta y respuesta DNS por UDP 53, el saludo TCP en tres paquetes, el saludo TLS si se usa HTTPS y el GET con su respuesta 200 y el JSON; cada ida y vuelta lleva un número."
+								aria-label="Diagrama de secuencia entre el ESP32, el servidor DNS y api.coingecko.com: consulta y respuesta DNS por UDP 53, la negociación TCP en tres paquetes (<i>handshake</i>), la negociación TLS si se usa HTTPS y el GET con su respuesta 200 y el JSON; cada viaje de ida y vuelta lleva un número."
 							></canvas>
 						</div>
 					</div>
@@ -60,22 +60,22 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: con HTTPS, ¿cuántas idas y vueltas por la red ocurren dentro de una sola petición antes de recibir el precio, 1, 3 o 5? Recoger respuestas antes de pulsar «Desde el inicio».
+					Pregunta de predicción: con HTTPS, ¿cuántos viajes de ida y vuelta por la red ocurren dentro de una sola petición antes de recibir el precio, 1, 3 o 5? Recoger respuestas antes de pulsar «Desde el inicio».
 				</p>
 				<p>
 					Respuesta: 5 con TLS 1.2 (DNS, TCP, dos de TLS y el GET). Cada pulsación
-					avanza una ida y vuelta. El ACK final de TCP viaja junto al primer
-					mensaje siguiente y no añade espera. Con 50 ms por ida y vuelta (cifra
+					avanza un viaje de ida y vuelta. El ACK final de TCP viaja junto al primer
+					mensaje siguiente y no añade espera. Con 50 ms por viaje de ida y vuelta (cifra
 					ilustrativa) son unos 250 ms, sin contar el cálculo criptográfico del
-					propio ESP32, que alarga el saludo TLS.
+					propio ESP32, que alarga la negociación TLS.
 				</p>
 				<p>
-					Modo HTTP: 3 idas y vueltas. api.coingecko.com no entrega el precio por HTTP; responde 301 con <code>Location: https://…</code>, y
+					Modo HTTP: 3 viajes de ida y vuelta. api.coingecko.com no entrega el precio por HTTP; responde 301 con <code>Location: https://…</code>, y
 					<code>HTTPClient</code> no sigue redirecciones por defecto
 					(<code>setFollowRedirects()</code>). El ESP32 recibe un 301 en lugar del precio.
 				</p>
 				<p>
-					En consultas frecuentes, el tiempo se va en los saludos más que en el tamaño del JSON. La respuesta DNS se guarda un tiempo en caché, y en consultas seguidas puede no repetirse. TLS 1.3 reduce su saludo a una ida y vuelta.
+					En consultas frecuentes, el tiempo se va en las negociaciones más que en el tamaño del JSON. La respuesta DNS se guarda un tiempo en caché, y en consultas seguidas puede no repetirse. TLS 1.3 reduce su negociación a un viaje de ida y vuelta.
 				</p>
 			</aside>
 
@@ -86,17 +86,17 @@
 					<p>
 						Preparar la petición solo guarda la URL; enviarla hace DNS, TCP, TLS
 						(si la URL es https), la petición y la espera de la respuesta, todo
-						seguido. Cerrar la conexión al terminar obliga a repetir los saludos
+						seguido. Cerrar la conexión al terminar obliga a repetir las negociaciones
 						en la consulta siguiente.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						Cuando falla un tramo previo al GET (DNS, conexión o tiempo agotado),
+						Cuando falla un tramo previo al GET (DNS, conexión o tiempo de espera agotado),
 						no llega código de estado (lámina 09).
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Atribuir al servidor una lentitud que se debe a los saludos.</li>
+						<li>Atribuir al servidor una lentitud que se debe a las negociaciones.</li>
 						<li>Suponer que la petición no bloquea, cuando el programa se detiene hasta la respuesta.</li>
 						<li>No cerrar la conexión tras cada consulta y agotar la memoria.</li>
 					</ul>
@@ -124,10 +124,10 @@
 			const SANS = "'IBM Plex Sans', sans-serif";
 			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
 			const MIN_FS = 20;
-			const RTT_MS = 50; // ida y vuelta ilustrativa
+			const RTT_MS = 50; // RTT ilustrativo
 
 			// Carriles: 0 = ESP32, 1 = DNS, 2 = servidor de la API.
-			// cierra: el mensaje completa una ida y vuelta.
+			// cierra: el mensaje completa un viaje de ida y vuelta.
 			function mensajes(tls) {
 				const m = [
 					{ fase: "DNS", de: 0, a: 1, t: "consulta api.coingecko.com · UDP 53", fam: SANS },
@@ -150,7 +150,7 @@
 						? { fase: "HTTP", de: 2, a: 0, t: '200 OK · {"bitcoin":{"usd":83257}}', fam: MONO, cierra: true }
 						: { fase: "HTTP", de: 2, a: 0, t: "301 Moved Permanently · Location: https://…", fam: MONO, cierra: true, mal: true },
 				);
-				// Grupo = una ida y vuelta: termina en el mensaje que la cierra (el ACK
+				// Grupo = un viaje de ida y vuelta: termina en el mensaje que la cierra (el ACK
 				// suelto viaja con el grupo siguiente).
 				let g = 0;
 				for (const x of m) {
@@ -173,7 +173,7 @@
 
 			let tls = true;
 			let lista = mensajes(tls);
-			let paso = grupos(lista); // idas y vueltas visibles; arranca con el viaje completo
+			let paso = grupos(lista); // viajes de ida y vuelta visibles; arranca con el viaje completo
 			let avance = 1; // 0…1: progreso del grupo más reciente
 			let animacion = 0;
 

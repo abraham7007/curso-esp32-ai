@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Proyecto PlatformIO · Sesión 1</title>
+		<title>Estructura de archivos de un proyecto PlatformIO · Sesión 1</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">03 · Entorno de desarrollo</span>
 
-				<h1 class="slide__title slide__title--sm">Estructura de un <em>proyecto</em> PlatformIO</h1>
+				<h1 class="slide__title slide__title--sm">Estructura de archivos de un <em>proyecto</em> PlatformIO</h1>
 
 				<div class="rd crece flex flex-col gap-6">
 					<div class="flex-1 min-h-0 grid grid-cols-12 gap-8">
@@ -65,7 +65,7 @@
 					<code>.pio/</code>, ¿qué falta para compilar? No falta ningún archivo;
 					PlatformIO lee <code>platformio.ini</code> y descarga la plataforma y el
 					<i>framework</i> que declara. Recorrer el árbol: se escriben a mano tres
-					archivos, y <code>.pio/</code> se regenera en cada construcción.
+					archivos, y <code>.pio/</code> se regenera en cada compilación.
 				</p>
 			</aside>
 
@@ -74,7 +74,7 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Las librerías externas se declaran con <code>lib_deps</code>, con
+						Las bibliotecas externas se declaran con <code>lib_deps</code>, con
 						versión acotada (<code>autor/nombre@^1.2.0</code>). Los módulos propios
 						van en <code>lib/</code>, las cabeceras compartidas en
 						<code>include/</code> y las pruebas en <code>test/</code>.
@@ -91,10 +91,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="19-cadena-construccion.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Cadena de construcción</span>
+					<span>Proceso de compilación</span>
 				</a>
 				<a class="slide-nav__link" href="21-grabacion-arranque.html">
-					<span>Grabación y arranque</span>
+					<span>Modo de descarga</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
@@ -119,7 +119,7 @@
 				src: "<b>src/</b>: se compila lo que contiene; el código fuera de ella no se compila.",
 				main: "<b>main.cpp</b>: setup() y loop(), el programa del ejemplo.",
 				ini: "<b>platformio.ini</b>: cinco líneas fijan chip, placa, <i>framework</i> y monitor.",
-				diagram: "<b>diagram.json</b>: piezas y conexiones para Wokwi; no se compila.",
+				diagram: "<b>diagram.json</b>: componentes y conexiones para Wokwi; no se compila.",
 				wokwi: "<b>wokwi.toml</b>: qué .elf y .bin de .pio/build/ carga Wokwi.",
 				pio: "<b>.pio/</b>: lo generado al compilar; se borra sin pérdida.",
 			};

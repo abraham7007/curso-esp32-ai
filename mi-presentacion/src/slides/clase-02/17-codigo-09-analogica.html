@@ -24,7 +24,7 @@
 						<span class="code-hour__ref">Ejemplo 09</span>
 					</div>
 
-					<h2 class="code-hour__title">Lectura de un potenciómetro filtrada con una media de 16 muestras</h2>
+					<h2 class="code-hour__title">Lectura de un potenciómetro filtrada con una media móvil de 16 muestras</h2>
 
 					<div class="deliverables">
 						<div class="deliverable">
@@ -108,9 +108,9 @@ Iniciando media movil de ADC (N=16, GPIO 32)
 
 <b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro: extremos a 3V3 y GND, cursor al GPIO 32.
 
-<b>4. Diagramas.</b> En Excalidraw: el flujo de update() con el índice circular y un cronograma de crudo y promedio ante un salto, con el retraso de 1,6 s.</div>
+<b>4. Diagramas.</b> En Excalidraw: el flujo de update() con el índice circular y un cronograma de crudo y promedio ante un salto, con el retardo de 1,6 s.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> Una muestra por llamada mantiene <code>update()</code> corta y deja el ritmo de muestreo a <code>loop()</code>. Dividir entre las muestras acumuladas evita una rampa falsa desde 0 al arrancar.
+									<b>Por qué se pide así.</b> Una muestra por llamada mantiene <code>update()</code> corta y deja la frecuencia de muestreo a cargo de <code>loop()</code>. Dividir entre las muestras acumuladas evita una rampa falsa desde 0 al arrancar.
 								</p>
 							</div>
 						</div>
@@ -118,7 +118,7 @@ Iniciando media movil de ADC (N=16, GPIO 32)
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> Promediar N muestras atenúa el ruido e introduce un retraso; con N = 16 a 10 Hz, la salida tarda 1,6 s en seguir un salto.</p>
+						<p><b>Qué comprueba.</b> Promediar N muestras atenúa el ruido e introduce un retardo; con N = 16 a 10 Hz, la salida tarda 1,6 s en seguir un salto.</p>
 					</div>
 				</div>
 			</div>
@@ -140,10 +140,10 @@ Iniciando media movil de ADC (N=16, GPIO 32)
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="16-pila-heap.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Pila y heap</span>
+					<span>Memoria estática, heap y pila</span>
 				</a>
 				<a class="slide-nav__link" href="18-referencias.html">
-					<span>Referencias</span>
+					<span>Paso por valor y por referencia</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

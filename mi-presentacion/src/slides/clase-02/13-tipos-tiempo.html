@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Tipos para guardar el tiempo · Sesión 2</title>
+		<title>Tipos de dato y desbordamiento de millis() · Sesión 2</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,9 +17,9 @@
 	<body class="ponencia" data-deck-total="22">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">03 · Tiempo sin bloqueo</span>
+				<span class="badge">03 · Temporización no bloqueante</span>
 
-				<h1 class="slide__title slide__title--sm">Tipos para guardar el tiempo y <em>desborde</em> de millis()</h1>
+				<h1 class="slide__title slide__title--sm">Tipos de dato para almacenar el tiempo y <em>desbordamiento</em> de millis()</h1>
 
 				<div class="escenario">
 					<div class="escenario__texto franja-fila s2c-cifras">
@@ -52,7 +52,7 @@
 							<canvas
 								id="desborde"
 								role="img"
-								aria-label="Reloj circular del contador de 32 bits, ampliado alrededor del desborde. El instante antes vale 4 294 967 000, 296 ms antes de volver a 0; ahora está 200 ms después. La diferencia ahora − antes da 200 ms, el tiempo real, antes y después del desborde. La comparación ahora ≥ antes + 500 es verdadera porque antes + 500 desbordó a 204, y se cumple 300 ms antes de tiempo."
+								aria-label="Reloj circular del contador de 32 bits, ampliado alrededor del desbordamiento. El instante antes vale 4 294 967 000, 296 ms antes de volver a 0; ahora está 200 ms después. La diferencia ahora − antes da 200 ms, el tiempo real, antes y después del desbordamiento. La comparación ahora ≥ antes + 500 es verdadera porque antes + 500 desbordó a 204, y se cumple 300 ms antes de tiempo."
 							></canvas>
 						</div>
 					</div>
@@ -61,15 +61,15 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: con el instante anterior guardado 296 ms antes
-					del desborde, 200 ms transcurridos y un período de 500 ms, ¿se cumple
+					Pregunta de predicción: con el instante anterior almacenado 296 ms antes
+					del desbordamiento, 200 ms transcurridos y un período de 500 ms, ¿se cumple
 					la condición «ahora ≥ antes + 500»?
 				</p>
 				<p>
 					Respuesta: sí, 300 ms antes de tiempo, porque antes + 500 desbordó y
 					vale 204. La resta sin signo es aritmética módulo 2<sup>32</sup> y da
 					200, el tiempo real: en el reloj es el arco verde. Mover el deslizador
-					más allá del desborde (296 ms): ahora pasa a valer casi cero y la
+					más allá del desbordamiento (296 ms): ahora pasa a valer casi cero y la
 					diferencia sigue dando el intervalo exacto. Con la resta,
 					<code>update()</code> da el mismo resultado el día 50 que el día 1; la
 					forma con suma falla una vez cada 49,7 días, un fallo difícil de
@@ -83,7 +83,7 @@
 					<h4>En la práctica</h4>
 					<p>
 						<code>millis()</code> devuelve <code>unsigned long</code>, de 32 bits en
-						el ESP32 (equivale a <code>uint32_t</code>). Guardar el instante previo
+						el ESP32 (equivale a <code>uint32_t</code>). Almacenar el instante previo
 						y los intervalos con ese mismo tipo, y comparar siempre la diferencia
 						contra el intervalo.
 					</p>
@@ -94,7 +94,7 @@
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Guardar <code>millis()</code> en <code>int</code>: con signo, pasa a negativo a los 24,9 días.</li>
+						<li>Almacenar <code>millis()</code> en <code>int</code>: con signo, pasa a negativo a los 24,9 días.</li>
 						<li>Comparar el instante actual con una suma, antes + intervalo.</li>
 						<li>Definir la ventana con <code>#define</code>, sin tipo: el tipo depende de cada expresión. Una constante del mismo tipo que <code>millis()</code> lo fija.</li>
 					</ul>

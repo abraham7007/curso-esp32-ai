@@ -103,13 +103,13 @@
 								</h4>
 								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, fijando platform = espressif32 @ 6.9.0 como en el Ejemplo 04.
 
-<b>2. Firmware.</b> Al arrancar imprime «Iniciando control de servo por PWM (potenciometro -> angulo)». Configura el LEDC sobre el GPIO 18 a 50 Hz y 16 bits. Cada 100 ms lee el GPIO 32, conviértelo con map() a ángulo 0–180, el ángulo a pulso de 1000–2000 µs y el pulso a duty = pulso * 65535 / 20000. Emite «[SERVO] adc=NNNN angulo=NNN  pulso=NNNN us  duty=NNNNN». Sin las librerías Servo ni ESP32Servo.
+<b>2. Firmware.</b> Al arrancar imprime «Iniciando control de servo por PWM (potenciometro -> angulo)». Configura el LEDC sobre el GPIO 18 a 50 Hz y 16 bits. Cada 100 ms lee el GPIO 32, conviértelo con map() a ángulo 0–180, el ángulo a pulso de 1000–2000 µs y el pulso a duty = pulso * 65535 / 20000. Emite «[SERVO] adc=NNNN angulo=NNN  pulso=NNNN us  duty=NNNNN». Sin las bibliotecas Servo ni ESP32Servo.
 
 <b>3. Simulación.</b> Añade la simulación de Wokwi con el potenciómetro en el GPIO 32 y un servo con la señal en el GPIO 18.
 
 <b>4. Diagramas.</b> En Excalidraw: el flujo de una vuelta, el circuito y un cronograma del pulso para 0°, 90° y 180° dentro del período de 20 ms.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> Sin librería de servo queda a la vista la cuenta ancho de pulso → duty. La plataforma fijada determina la API LEDC: en el núcleo 3.x <code>ledcSetup()</code> desaparece.
+									<b>Por qué se pide así.</b> Sin biblioteca de servo queda a la vista la cuenta ancho de pulso → duty. La plataforma fijada determina la API LEDC: en el núcleo 3.x <code>ledcSetup()</code> desaparece.
 								</p>
 							</div>
 						</div>
@@ -117,7 +117,7 @@
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> El mismo periférico PWM gobierna un servo, que responde al ancho del pulso y no al valor medio.</p>
+						<p><b>Qué comprueba.</b> El mismo periférico PWM controla un servo, que responde al ancho del pulso y no al valor medio.</p>
 					</div>
 				</div>
 			</div>
@@ -130,7 +130,7 @@
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>Las mismas funciones LEDC del Ejemplo 04, con <code>f = 50</code> y <code>bits = 16</code>. La librería ESP32Servo encapsula esta misma cuenta.</p>
+					<p>Las mismas funciones LEDC del Ejemplo 04, con <code>f = 50</code> y <code>bits = 16</code>. La biblioteca ESP32Servo encapsula esta misma cuenta.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>Alimentar el servo desde 3V3 en placa real provoca reinicios por caída de tensión.</li><li>Sin GND común entre servo y placa, el pulso no tiene referencia.</li><li>Pulsos fuera de 1000–2000 µs: el servo fuerza contra su tope mecánico.</li></ul>
 				</div>

@@ -79,7 +79,7 @@
 									Prompt para el asistente
 								</h4>
 								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps ArduinoJson @ ^6.21.5, Adafruit SSD1306 @ ^2.5.7 y Adafruit GFX Library @ ^1.11.5; clave en include/secrets.h (en .gitignore) y plantilla secrets.example.h.
-<b>2. Firmware.</b> secrets.h por __has_include, o la plantilla; WiFi con tope de 20 s y reinicio. Cada 60 s, GET https a api.openweathermap.org/data/2.5/weather con q=Lima,PE, units=metric y appid=OWM_API_KEY. Con 200: «\n--- REPORTE DEL CLIMA ---», «Ciudad: %s», «Temp: %.1f C», «Humedad: %d %%» y 25 guiones, también en la OLED; si no, un mensaje propio para 401, 404, 429, negativo y otros.
+<b>2. Firmware.</b> secrets.h por __has_include, o la plantilla; WiFi con timeout de 20 s y reinicio. Cada 60 s, GET https a api.openweathermap.org/data/2.5/weather con q=Lima,PE, units=metric y appid=OWM_API_KEY. Con 200: «\n--- REPORTE DEL CLIMA ---», «Ciudad: %s», «Temp: %.1f C», «Humedad: %d %%» y 25 guiones, también en la OLED; si no, un mensaje propio para 401, 404, 429, negativo y otros.
 <b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
 <b>4. Diagramas.</b> En Excalidraw: arquitectura y flujo de errores.</div>
 								<p class="prompt-note">
@@ -147,7 +147,7 @@ Humedad: 83 %
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="19-clave-api.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Clave</span>
+					<span>Clave de API</span>
 				</a>
 				<a class="slide-nav__link" href="21-cuatro-fallos.html">
 					<span>Diagnóstico por capas</span>

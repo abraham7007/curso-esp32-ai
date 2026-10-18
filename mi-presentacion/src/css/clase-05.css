@@ -166,6 +166,12 @@
 .ponencia .s5d-cierre > li {
 	align-items: center;
 }
+/* 17: los rótulos usan el nombre técnico de cada bloque («Conexión
+   persistente», «Seguridad y estado»), más largo que una palabra; a la
+   escala de enunciado partían en dos líneas y desbordaban a 1440×900. */
+.ponencia .s5d-cierre .enunciado {
+	font-size: calc(var(--fs-statement) * 0.8);
+}
 /* fin sesión 5 agente D */
 
 /* v3 sin código */

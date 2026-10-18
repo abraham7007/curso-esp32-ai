@@ -25,11 +25,11 @@
 
 					<ol class="puntos agenda s4a-agenda">
 						<li><div>Enlace WiFi<span>modo estación, señal y canales</span></div></li>
-						<li><div>Red e Internet<span>IP, DNS, idas y vueltas y NAT</span></div></li>
+						<li><div>Red e Internet<span>IP, DNS, viajes de ida y vuelta y NAT</span></div></li>
 						<li><div>HTTP<span>petición, códigos de estado y HTTPS</span></div></li>
-						<li><div>Datos en pantalla<span>campos útiles, dos ritmos y listas</span></div></li>
-						<li><div>APIs con clave<span>documentación, cuota y secretos</span></div></li>
-						<li><div>Robustez<span>diagnóstico por capas de «sin dato»</span></div></li>
+						<li><div>Visualización de datos<span>deserialización, frecuencias y arreglos JSON</span></div></li>
+						<li><div>APIs con clave<span>verificación previa, cuota y clave de API</span></div></li>
+						<li><div>Robustez<span>diagnóstico por capas de consultas fallidas</span></div></li>
 					</ol>
 
 					<div class="s4a-portada-grid__pie flex flex-col gap-6 portada-pie">
@@ -71,8 +71,8 @@
 					Presentar el recorrido en seis tramos: cómo entra el ESP32 en la red
 					WiFi; qué dirección recibe y cómo encuentra un servidor por su nombre;
 					qué viaja en una petición HTTP; cómo se pasa del JSON a la pantalla OLED;
-					qué cambia cuando la API pide clave; y por qué «sin dato» tiene varias
-					causas. Pregunta de predicción: el texto de la derecha llegó al ESP32 desde un servidor en otro continente; ¿cuántas idas y vueltas por la red hicieron falta antes de recibirlo? Fueron cinco, con HTTPS y TLS 1.2; el recuento está en la lámina 06.
+					qué cambia cuando la API pide clave; y por qué una consulta fallida tiene varias
+					causas. Pregunta de predicción: el texto de la derecha llegó al ESP32 desde un servidor en otro continente; ¿cuántos viajes de ida y vuelta por la red hicieron falta antes de recibirlo? Fueron cinco, con HTTPS y TLS 1.2; el recuento está en la lámina 06.
 				</p>
 			</aside>
 
@@ -81,7 +81,7 @@
 				<div class="detalle__cuerpo">
 					<h4>Punto de partida</h4>
 					<p>
-						Se da por conocido: <code>millis()</code> y dos ritmos en un mismo
+						Se da por conocido: <code>millis()</code> y dos tareas con frecuencias distintas en un mismo
 						<code>loop()</code> (sesión 2, lámina 09), JSON con ArduinoJson (sesión 3,
 						láminas 20 y 21), la OLED SSD1306 en 0x3C por I²C (sesión 3, lámina 09) y
 						los tiempos de espera (sesión 3, lámina 23).

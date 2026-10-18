@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Leer la API · Sesión 4</title>
+		<title>Verificación de la API · Sesión 4</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,14 +19,14 @@
 			<div class="slide__content">
 				<span class="badge">05 · APIs con clave</span>
 
-				<h1 class="slide__title slide__title--sm">Prueba de la <em>API</em> antes del firmware</h1>
+				<h1 class="slide__title slide__title--sm"><em>Verificación</em> previa de la API con curl y documentación</h1>
 
 				<div class="def">
 					<p><code>curl -i</code>, desde el computador, muestra el código, las cabeceras y el cuerpo. Un fallo en curl descarta al ESP32 como causa.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Terminal con tres órdenes curl reales. CoinGecko: HTTP 2 200, cache-control max-age 30 y s-maxage 60, cuerpo bitcoin usd 83257. open-notify: HTTP 1.1 200, 587 bytes, lista people y number 12. OpenWeatherMap con Lima, PE y una clave falsa: 401 Unauthorized, Invalid API key. Debajo, una tabla con lo que se lee en la documentación de cada API: endpoint, autenticación, límite de uso y formato.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Terminal con tres órdenes curl reales. CoinGecko: HTTP 2 200, cache-control max-age 30 y s-maxage 60, cuerpo bitcoin usd 83257. open-notify: HTTP 1.1 200, 587 bytes, arreglo people y number 12. OpenWeatherMap con Lima, PE y una clave falsa: 401 Unauthorized, Invalid API key. Debajo, una tabla con lo que se lee en la documentación de cada API: endpoint, autenticación, límite de uso y formato.">
 						<!-- terminal -->
 						<rect class="s4d-term" x="0" y="0" width="1600" height="392" rx="12" />
 						<text class="s4d-term-t" x="24" y="38" font-size="24"><tspan class="s4d-term-p">$</tspan> curl -i "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&amp;vs_currencies=usd"</text>

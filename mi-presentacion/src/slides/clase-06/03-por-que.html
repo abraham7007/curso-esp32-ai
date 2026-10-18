@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Por qué · Sesión 6</title>
+		<title>Transmisión por radio y autonomía · Sesión 6</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
 				<span class="badge">01 · Fundamentos de TinyML</span>
 
 				<h1 class="slide__title slide__title--sm">
-					Datos enviados por radio y duración de la <em>batería</em>
+					Transmisión por radio y <em>autonomía</em> de un nodo sensor
 				</h1>
 
 				<div class="escenario">
@@ -38,25 +38,25 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>duración (h) = 3 700 mWh ÷ P<sub>media</sub></code>
+							<code>autonomía (h) = 3 700 mWh ÷ P<sub>media</sub></code>
 						</p>
 					</div>
 
 					<div class="escenario__visual">
 						<div class="mandos">
 							<label class="control">
-								<span>Datos por radio</span>
+								<span>Datos transmitidos</span>
 								<input type="range" id="radio" min="0" max="11" step="1" value="6" />
 								<output id="radio-out" for="radio" class="s6c-ancho s6c-ancho--medio">1 %</output>
 							</label>
 							<span class="lectura lectura--fin"><small>P media </small><span id="l-pot" class="s6c-ancho">1,3 mW</span></span>
-							<span class="lectura"><small>batería </small><span id="l-dur" class="s6c-ancho s6c-ancho--largo s6c-bien">119 días</span></span>
+							<span class="lectura"><small>autonomía </small><span id="l-dur" class="s6c-ancho s6c-ancho--largo s6c-bien">119 días</span></span>
 						</div>
 						<div class="lienzo-caja">
 							<canvas
 								id="bateria"
 								role="img"
-								aria-label="Arriba, la potencia media en milivatios de dos casos, en barras apiladas: microcontrolador (1 mW) más radio (30 mW por la fracción del tiempo que transmite). Enviarlo todo por radio da 31 mW; con el 1 % de los datos, 1,3 mW. Abajo, cuánto dura una batería de 1000 mAh a 3,7 V en escala logarítmica de tiempo: 119 horas (5 días) enviándolo todo frente a 119 días con el 1 %. Una línea discontinua marca el techo de 154 días que impone el microcontrolador solo."
+								aria-label="Arriba, la potencia media en milivatios de dos casos, en barras apiladas: microcontrolador (1 mW) más radio (30 mW por la fracción del tiempo que transmite). Enviarlo todo por radio da 31 mW; con el 1 % de los datos, 1,3 mW. Abajo, la autonomía con una batería de 1000 mAh a 3,7 V en escala logarítmica de tiempo: 119 horas (5 días) enviándolo todo frente a 119 días con el 1 %. Una línea discontinua marca el límite superior de 154 días que impone el microcontrolador solo."
 							></canvas>
 						</div>
 					</div>
@@ -65,13 +65,13 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: un sensor con batería de 1000&nbsp;mAh envía por radio todo lo que mide. ¿Cuánto dura (horas, días o meses), y cuánto si clasifica en el chip y envía el 1&nbsp;% de los datos? Recoger respuestas antes de mover el deslizador.
+					Pregunta de predicción: un sensor con batería de 1000&nbsp;mAh envía por radio todo lo que mide. ¿Qué autonomía tiene (horas, días o meses), y cuál si clasifica en el chip y envía el 1&nbsp;% de los datos? Recoger respuestas antes de mover el deslizador.
 				</p>
 				<p>
-					Respuesta: 1000&nbsp;mAh × 3,7&nbsp;V = 3&nbsp;700&nbsp;mWh. Enviándolo todo, 1&nbsp;mW + 30&nbsp;mW = 31&nbsp;mW: 119&nbsp;horas, unos 5&nbsp;días. Con el 1&nbsp;%, 1&nbsp;mW + 0,3&nbsp;mW = 1,3&nbsp;mW: 119&nbsp;días. Las dos duraciones comparten la cifra 119, en horas y en días.
+					Respuesta: 1000&nbsp;mAh × 3,7&nbsp;V = 3&nbsp;700&nbsp;mWh. Enviándolo todo, 1&nbsp;mW + 30&nbsp;mW = 31&nbsp;mW: 119&nbsp;horas, unos 5&nbsp;días. Con el 1&nbsp;%, 1&nbsp;mW + 0,3&nbsp;mW = 1,3&nbsp;mW: 119&nbsp;días. Las dos autonomías comparten la cifra 119, en horas y en días.
 				</p>
 				<p>
-					Por debajo del 0,1&nbsp;% la duración crece poco, porque se acerca al techo de 154&nbsp;días que fija el microcontrolador por sí solo (línea discontinua). Superar ese techo exige dormir el microcontrolador entre medidas. Las cifras son órdenes de magnitud del artículo de Pete Warden; un montaje real suma sensor, regulador y autodescarga, y la radio BLE gasta también al anunciarse y al mantener la conexión.
+					Por debajo del 0,1&nbsp;% la autonomía crece poco, porque se acerca al límite superior de 154&nbsp;días que fija el microcontrolador por sí solo (línea discontinua). Superar ese límite exige dormir el microcontrolador entre medidas. Las cifras son órdenes de magnitud del artículo de Pete Warden; un montaje real suma sensor, regulador y autodescarga, y la radio BLE gasta también al anunciarse y al mantener la conexión.
 				</p>
 			</aside>
 
@@ -81,7 +81,7 @@
 					<h4>En la práctica</h4>
 					<p>
 						La potencia media es P<sub>MCU</sub> + fracción de tiempo con la radio
-						activa × P<sub>radio</sub>. Duración = energía de la batería (mAh ×
+						activa × P<sub>radio</sub>. Autonomía = energía de la batería (mAh ×
 						V) ÷ potencia media.
 					</p>
 					<h4>Dónde aparece</h4>
@@ -94,7 +94,7 @@
 					<ul>
 						<li>Sumar los mAh sin multiplicar por la tensión de la batería.</li>
 						<li>Medir solo el pico de la radio, sin la fracción del tiempo que está activa.</li>
-						<li>Olvidar que el microcontrolador fija un techo si nunca duerme.</li>
+						<li>Olvidar que el microcontrolador fija un límite superior si nunca duerme.</li>
 					</ul>
 				</div>
 			</details>
@@ -102,7 +102,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="02-nube-borde-extremo.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Nube, borde, extremo</span>
+					<span>Nube, borde y dispositivo</span>
 				</a>
 				<a class="slide-nav__link" href="04-aplicaciones.html">
 					<span>Aplicaciones</span>
@@ -239,9 +239,9 @@
 				ctx.lineTo(w - m, medio);
 				ctx.stroke();
 
-				// --- Panel 2: duración de la batería, escala logarítmica ---
+				// --- Panel 2: autonomía con la batería, escala logarítmica ---
 				const y2 = medio + fs * 1.0;
-				texto(ctx, "Duración de una batería de 1000 mAh a 3,7 V (escala logarítmica)", m, y2, fs * 1.05, c.heading, 700, "left", SANS, w - 2 * m);
+				texto(ctx, "Autonomía con una batería de 1000 mAh a 3,7 V (escala logarítmica)", m, y2, fs * 1.05, c.heading, 700, "left", SANS, w - 2 * m);
 				const H0 = Math.log10(24); // 1 día
 				const H1 = Math.log10(24 * 365); // 1 año
 				const XH = (hh) => x0 + ((Math.log10(hh) - H0) / (H1 - H0)) * (x1 - x0);

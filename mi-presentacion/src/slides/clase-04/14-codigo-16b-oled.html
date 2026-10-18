@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Ejemplo 16b · OLED cripto · Sesión 4</title>
+		<title>Ejemplo 16b · BTC y DOGE en la OLED · Sesión 4</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -103,7 +103,7 @@ Dogecoin (DOGE): $0.0838 USD
 									Prompt para el asistente
 								</h4>
 								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps ArduinoJson @ ^6.21.5, Adafruit SSD1306 @ ^2.5.7 y Adafruit GFX Library @ ^1.11.5.
-<b>2. Firmware.</b> OLED SSD1306 en 0x3C (si display.begin() falla, «Error iniciando OLED» y se detiene); WiFi a Wokwi-GUEST con tope de 20 s y ESP.restart(), con el estado en la OLED. Dos ritmos con millis(), sin delay(): cada 60 s, GET a https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,dogecoin&amp;vs_currencies=usd; con 200, «\n--- NUEVOS DATOS (CoinGecko) ---», «Bitcoin (BTC): $%.2f USD», «Dogecoin (DOGE): $%.4f USD» y 32 guiones; si no, «Error HTTP: %d» (y errorToString() si es negativo). Cada 5 s, la OLED alterna BTC y DOGE: «MERCADO CRIPTO», una línea, la moneda en tamaño 2 y el precio; tras cada consulta, repinta y reinicia ese reloj.
+<b>2. Firmware.</b> OLED SSD1306 en 0x3C (si display.begin() falla, «Error iniciando OLED» y se detiene); WiFi a Wokwi-GUEST con timeout de 20 s y ESP.restart(), con el estado en la OLED. Dos tareas periódicas con millis(), sin delay(): cada 60 s, GET a https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,dogecoin&amp;vs_currencies=usd; con 200, «\n--- NUEVOS DATOS (CoinGecko) ---», «Bitcoin (BTC): $%.2f USD», «Dogecoin (DOGE): $%.4f USD» y 32 guiones; si no, «Error HTTP: %d» (y errorToString() si es negativo). Cada 5 s, la OLED alterna BTC y DOGE: «MERCADO CRIPTO», una línea, la moneda en tamaño 2 y el precio; tras cada consulta, repinta y reinicia ese reloj.
 <b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
 <b>4. Diagramas.</b> En Excalidraw: arquitectura CoinGecko → WiFi → ESP32 → I²C → OLED y flujo de las dos tareas.</div>
 								<p class="prompt-note">
@@ -137,10 +137,10 @@ Dogecoin (DOGE): $0.0838 USD
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="13-dos-ritmos.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Dos ritmos</span>
+					<span>Frecuencias de consulta y refresco</span>
 				</a>
 				<a class="slide-nav__link" href="15-listas-json.html">
-					<span>Listas</span>
+					<span>Arreglos JSON</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

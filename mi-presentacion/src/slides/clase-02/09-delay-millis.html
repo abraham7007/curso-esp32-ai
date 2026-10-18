@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Temporización con millis() · Sesión 2</title>
+		<title>Temporización con delay() y millis() · Sesión 2</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,9 +17,9 @@
 	<body class="ponencia" data-deck-total="22">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">03 · Tiempo sin bloqueo</span>
+				<span class="badge">03 · Temporización no bloqueante</span>
 
-				<h1 class="slide__title slide__title--sm">Medición del tiempo con delay() y <em>millis()</em></h1>
+				<h1 class="slide__title slide__title--sm">Temporización con delay() y con <em>millis()</em></h1>
 
 				<div class="escenario">
 					<div class="escenario__texto franja-fila rd s2v">
@@ -61,7 +61,7 @@
 			<aside class="notas">
 				<p>
 					Pregunta de predicción: si al ejemplo 08 se le añade una espera de
-					500 ms al final de cada vuelta de <code>loop()</code>, ¿a qué ritmo
+					500 ms al final de cada vuelta de <code>loop()</code>, ¿con qué período
 					conmuta el LED-2, configurado a 800 ms? Recoger respuestas antes de
 					mostrar el cronograma.
 				</p>
@@ -97,7 +97,7 @@
 					<ul>
 						<li>Un <code>delay()</code> corto en <code>loop()</code> retrasa todos los objetos.</li>
 						<li>Una sola variable de tiempo previo compartida por los tres LED.</li>
-						<li>Guardar como último cambio el instante actual acumula el retraso de cada vuelta; sumarle el período conserva la cadencia media.</li>
+						<li>Guardar como último cambio el instante actual acumula el retraso de cada vuelta; sumarle el período conserva el período medio.</li>
 					</ul>
 				</div>
 			</details>
@@ -108,7 +108,7 @@
 					<span>Ejemplo 06 · Clase Led</span>
 				</a>
 				<a class="slide-nav__link" href="10-begin-update.html">
-					<span>begin/update</span>
+					<span>begin() y update()</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

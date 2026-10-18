@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Errores en ejecución · Sesión 2</title>
+		<title>Errores en tiempo de ejecución · Sesión 2</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">05 · Integración</span>
 
-				<h1 class="slide__title slide__title--sm">Errores en ejecución y lectura del <em>backtrace</em></h1>
+				<h1 class="slide__title slide__title--sm">Errores en tiempo de ejecución y <em>traza de pila</em></h1>
 
 				<div class="rd panico crece">
 					<div class="s2v s2v-ejecuta">
@@ -73,8 +73,8 @@
 					el main del ejemplo 10, entrada pasa a ser un puntero y setup() nunca
 					crea el objeto al que debería apuntar. Leer
 					la traza en tres puntos: la primera línea nombra la excepción; EXCVADDR es la dirección leída, y cero o casi cero indica
-					un puntero nulo; el backtrace da la pila de llamadas, la más interna
-					primero. Las líneas #0, #1, #2 las añade el filtro de PlatformIO al
+					un puntero nulo; la traza de pila (<i>backtrace</i>) enumera las llamadas activas, la
+					más interna primero. Las líneas #0, #1, #2 las añade el filtro de PlatformIO al
 					traducir cada dirección con el .elf. Otras causas frecuentes: un
 					índice fuera de rango o un doble delete[], que corrompen el heap y
 					fallan más tarde, en una línea distinta de la que los causa.
@@ -88,7 +88,7 @@
 					<p>
 						En <code>platformio.ini</code>: <code>monitor_filters = esp32_exception_decoder</code>
 						y, para líneas exactas, <code>build_type = debug</code>. El filtro
-						usa el <code>.elf</code> de la última construcción: si el código
+						usa el <code>.elf</code> de la última compilación: si el código
 						cambió sin recompilar, las líneas no corresponden.
 					</p>
 					<h4>Dónde aparece</h4>
@@ -108,7 +108,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="20-codigo-10-manual-automatico.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Ejemplo 10 · Orquestación</span>
+					<span>Ejemplo 10 · Modo manual y automático</span>
 				</a>
 				<a class="slide-nav__link" href="22-cierre.html">
 					<span>Cierre</span>

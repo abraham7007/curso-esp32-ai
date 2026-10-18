@@ -39,7 +39,7 @@
 							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-simulate" /></svg>
 							<div>
 								<span class="deliverable__name">Simulación</span>
-								<span class="deliverable__what">Dos ESP32 cruzados por UART2.</span>
+								<span class="deliverable__what">Dos ESP32 con conexión cruzada por UART2.</span>
 								<span class="deliverable__file">diagram.json · wokwi.toml</span>
 							</div>
 						</div>
@@ -81,7 +81,7 @@
 								<div class="prompt-box"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para esp32dev con Arduino, monitor_speed = 115200 y monitor_eol = LF. El mismo firmware se carga en las dos placas.
 <b>2. Firmware.</b> Serial a 115200 y Serial2.begin(115200, SERIAL_8N1, 16, 17) para el enlace. setup() imprime «\n--- ENLACE UART INICIADO ---» y «Escribe algo para enviarlo al otro ESP32...». En loop(), sin delay(): cada byte del monitor se repite en el monitor como eco y sale por Serial2; lo que llega por Serial2 se imprime, y cada línea nueva empieza con «\n[recibido] ».
 <b>3. Simulación.</b> Añade la simulación de Wokwi: dos ESP32 con el GPIO 17 de cada uno al GPIO 16 del otro y las masas unidas.
-<b>4. Diagramas.</b> En Excalidraw: el flujo de loop() con los dos sentidos sin bloqueo, y la conexión con el cruce y la masa común.</div>
+<b>4. Diagramas.</b> En Excalidraw: el flujo de loop() con los dos sentidos sin bloqueo, y la conexión cruzada y la masa común.</div>
 								<p class="prompt-note">
 									<b>Por qué se pide así.</b> Con el fin de línea LF en el monitor, Enter envía un único carácter, el que el receptor reconoce como fin de línea. Sin pausas en el bucle, los dos sentidos se atienden a la vez.
 								</p>
@@ -136,7 +136,7 @@ Escribe algo para enviarlo al otro ESP32...
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="07-puertos-uart.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>UART0–2</span>
+					<span>Puertos UART</span>
 				</a>
 				<a class="slide-nav__link" href="09-bus-i2c.html">
 					<span>Bus I²C</span>

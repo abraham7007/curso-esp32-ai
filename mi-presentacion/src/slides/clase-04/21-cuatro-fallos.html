@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">06 · Robustez</span>
 
-				<h1 class="slide__title slide__title--sm">Diagnóstico por <em>capas</em> de un «sin dato»</h1>
+				<h1 class="slide__title slide__title--sm">Diagnóstico por <em>capas</em> de una consulta HTTP fallida</h1>
 
 				<div class="def">
 					<p>La petición atraviesa cuatro capas en orden. En el aparato solo se ve la falta de dato; el monitor serie indica en qué capa falló, y cada una requiere una acción distinta.</p>
@@ -96,7 +96,7 @@
 					Recorrer las capas de arriba abajo: cada una solo se prueba si la anterior funciona. Ante un fallo de las capas 2 y 3, el 16 imprime solo el texto («[HTTP] Error de conexión:
 					connection refused»); el 16b y el 17, número y texto («Error HTTP: -1
 					(connection refused)»); el 18 tiene un mensaje propio para 401, 404 y 429 y,
-					en los fallos de conexión, imprime número y texto. Los negativos los genera HTTPClient: -1 cubre DNS, conexión que no se completa en 5 s y fallo del TLS, cuyo saludo tiene un tope de 120 s; -11 llega cuando la conexión se abrió y la respuesta no.
+					en los fallos de conexión, imprime número y texto. Los negativos los genera HTTPClient: -1 cubre DNS, conexión que no se completa en 5 s y fallo del TLS, cuya negociación (<i>handshake</i>) tiene un tiempo de espera de 120 s; -11 llega cuando la conexión se abrió y la respuesta no.
 					Resolver el nombre antes de la petición separa el fallo de DNS de los demás. Un código de estado indica que la red funciona y que el problema está en la petición o en el servicio. Pregunta de predicción (antes del paso): si el WiFi cae una hora, ¿qué debe mostrar la OLED del ejemplo 18? Lo correcto es el último valor válido junto con su edad, para no presentarlo como vigente. El ejemplo 18 tal como está muestra «ERROR DE CONEXION» hasta la consulta siguiente; guardar el último dato con su hora queda como mejora.
 				</p>
 			</aside>
@@ -106,9 +106,8 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Plazos por defecto de HTTPClient (núcleo 2.0.17): 5000 ms para abrir la
-						conexión y 5000 ms para esperar la respuesta, ajustables; con HTTPS, el
-						saludo TLS espera hasta 120 s. Una consulta DNS previa, por separado,
+						Tiempos de espera por defecto de HTTPClient (núcleo 2.0.17): 5000 ms para abrir la
+						conexión y 5000 ms para esperar la respuesta, ajustables; con HTTPS, la negociación TLS espera hasta 120 s. Una consulta DNS previa, por separado,
 						devuelve error si el nombre no se resuelve. El último dato válido se
 						guarda junto con el instante en que llegó.
 					</p>

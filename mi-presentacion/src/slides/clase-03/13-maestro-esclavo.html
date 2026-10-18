@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Maestro y esclavo · Sesión 3</title>
+		<title>Modo maestro y modo esclavo · Sesión 3</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">03 · Bus I²C</span>
 
-				<h1 class="slide__title slide__title--sm">Papeles de <em>maestro</em> y esclavo en I²C</h1>
+				<h1 class="slide__title slide__title--sm">Modo <em>maestro</em> y modo esclavo en el bus I²C</h1>
 
 				<div class="def">
 					<p>El mismo firmware en las dos placas: el puente de GPIO 4, leído al arrancar, fija qué placa inicia y cuál responde.</p>
@@ -93,7 +93,7 @@
 					driver llama a la rutina de recepción con 5 bytes, esta copia y levanta
 					una bandera, y el bucle principal imprime. Antes del paso, desconectar
 					B y pedir a la clase el resultado que obtiene A: es 2, NACK en la
-					dirección. El papel de cada placa lo fija el puente de GPIO 4 al
+					dirección. El modo de cada placa lo fija el puente de GPIO 4 al
 					arrancar.
 				</p>
 			</aside>
@@ -127,7 +127,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="12-codigo-12b-limite-i2c.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Ejemplo 12b · Una dirección</span>
+					<span>Ejemplo 12b · Conflicto de direcciones</span>
 				</a>
 				<a class="slide-nav__link" href="14-codigo-12c-enlace-i2c.html">
 					<span>Ejemplo 12c · Enlace I²C</span>

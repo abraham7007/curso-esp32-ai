@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Token · Sesión 5</title>
+		<title>Protección del token · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del ejemplo 19 con lo que contiene cada archivo y si se sube al repositorio: include/secrets.h, con el token real, no se sube; include/secrets.example.h, con TU_TOKEN_AQUI, se sube; src/main.cpp, que elige uno de los dos, se sube; .gitignore, que excluye secrets.h, se sube. A la derecha, el flujo al compilar: si secrets.h está presente, main.cpp usa el token real y el servidor responde Ready; si no, usa la plantilla con TU_TOKEN_AQUI y el servidor responde Invalid auth token. Las credenciales se leen antes que la librería Blynk. Abajo, el mensaje de entrada HW_LOGIN: por el puerto 80, con BlynkSimpleEsp32.h, la cabecera 1D 00 01 00 20 y el token legibles en la red; por el 443, con BlynkSimpleEsp32_SSL.h, todo cifrado con TLS y el certificado del servidor verificado, Certificate OK. Al pie: un token filtrado no se invalida al borrarlo del archivo; si no se puede regenerar, se borra el dispositivo y se crea otro.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del ejemplo 19 con lo que contiene cada archivo y si se sube al repositorio: include/secrets.h, con el token real, no se sube; include/secrets.example.h, con TU_TOKEN_AQUI, se sube; src/main.cpp, que elige uno de los dos, se sube; .gitignore, que excluye secrets.h, se sube. A la derecha, el flujo al compilar: si secrets.h está presente, main.cpp usa el token real y el servidor responde Ready; si no, usa la plantilla con TU_TOKEN_AQUI y el servidor responde Invalid auth token. Las credenciales se leen antes que la biblioteca Blynk. Abajo, el mensaje de entrada HW_LOGIN: por el puerto 80, con BlynkSimpleEsp32.h, la cabecera 1D 00 01 00 20 y el token legibles en la red; por el 443, con BlynkSimpleEsp32_SSL.h, todo cifrado con TLS y el certificado del servidor verificado, Certificate OK. Al pie: un token filtrado no se invalida al borrarlo del archivo; si no se puede regenerar, se borra el dispositivo y se crea otro.">
 						<!-- árbol del proyecto: qué contiene cada archivo y si se sube -->
 						<text class="sans mut" x="0" y="22" font-size="26">19-blynk-dashboard-iot/</text>
 						<text class="sans mut" x="380" y="22" font-size="22">contiene</text>
@@ -66,7 +66,7 @@
 						<rect class="caja caja--acc" x="1300" y="208" width="296" height="76" rx="12" />
 						<text class="mid" x="1448" y="232" font-size="22">TU_TOKEN_AQUI</text>
 						<text class="mid acc" x="1448" y="264" font-size="20">«Invalid auth token»</text>
-						<text class="sans mut" x="820" y="322" font-size="24">Las credenciales se leen antes que la librería Blynk.</text>
+						<text class="sans mut" x="820" y="322" font-size="24">Las credenciales se leen antes que la biblioteca Blynk.</text>
 
 						<!-- el mensaje de entrada en la red -->
 						<path class="ln ln--fina ln--mut" d="M0 358 H1600" />
@@ -137,10 +137,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="13-telemetria-comandos.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Dos sentidos</span>
+					<span>Telemetría y comandos</span>
 				</a>
 				<a class="slide-nav__link" href="15-estado-real.html">
-					<span>Estado</span>
+					<span>Sincronización del estado</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Plataforma · Sesión 5</title>
+		<title>Plataforma de IoT · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
 				<span class="badge">02 · Plataforma Blynk</span>
 
 				<h1 class="slide__title slide__title--sm">
-					Capas que una plataforma de <em>IoT</em> añade al broker
+					Funciones de una plataforma de <em>IoT</em> sobre el broker
 				</h1>
 
 				<div class="def">
@@ -28,13 +28,13 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Pila de cinco capas. Abajo, repartir, el broker: en Blynk, el servidor blynk.cloud; autoalojado, Mosquitto. Encima, las cuatro capas que añade la plataforma. Guardar: en Blynk, el historial de cada datastream, una semana en el plan gratuito; autoalojado, una base de series temporales como InfluxDB. Mostrar: en Blynk, el panel web y la app móvil; autoalojado, Node-RED Dashboard. Avisar: en Blynk, eventos y notificaciones, por ejemplo dispositivo offline; autoalojado, Home Assistant o Node-RED. Administrar: en Blynk, plantillas, dispositivos y tokens; autoalojado, cuentas y claves que se gestionan a mano.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cinco funciones apiladas. Abajo, repartir, el broker: en Blynk, el servidor blynk.cloud; autoalojado, Mosquitto. Encima, las cuatro funciones que añade la plataforma. Guardar: en Blynk, el historial de cada datastream, una semana en el plan gratuito; autoalojado, una base de series temporales como InfluxDB. Mostrar: en Blynk, el panel web y la app móvil; autoalojado, Node-RED Dashboard. Avisar: en Blynk, eventos y notificaciones, por ejemplo dispositivo offline; autoalojado, Home Assistant o Node-RED. Administrar: en Blynk, plantillas, dispositivos y tokens; autoalojado, cuentas y claves que se gestionan a mano.">
 						<!-- cabecera de columnas -->
-						<text class="sans mut" x="40" y="22" font-size="26">capa</text>
+						<text class="sans mut" x="40" y="22" font-size="26">función</text>
 						<text class="sans navy b" x="480" y="22" font-size="26">Blynk · incluido en el servicio</text>
 						<text class="sans mut" x="1080" y="22" font-size="26">autoalojado · instalación propia</text>
 
-						<!-- cuatro capas añadidas -->
+						<!-- cuatro funciones añadidas -->
 						<rect class="caja caja--navy" x="0" y="54" width="400" height="96" rx="12" />
 						<text class="navy b" x="40" y="102" font-size="36">Administrar</text>
 						<text class="sans" x="480" y="102" font-size="28">plantillas, dispositivos, tokens</text>
@@ -93,7 +93,7 @@
 					<h4>En la práctica</h4>
 					<p>
 						Blynk.Cloud: consola web en <code>blynk.cloud</code>, app Blynk IoT y
-						librería Blynk para el firmware. Plan gratuito actual: 5 dispositivos,
+						biblioteca Blynk para el firmware. Plan gratuito actual: 5 dispositivos,
 						100 000 mensajes al mes y una semana de historial; los límites han
 						cambiado antes.
 					</p>
@@ -111,10 +111,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="04-garantias.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Garantías</span>
+					<span>QoS, retenido y última voluntad</span>
 				</a>
 				<a class="slide-nav__link" href="06-piezas-blynk.html">
-					<span>Piezas</span>
+					<span>Componentes de Blynk</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

@@ -25,10 +25,10 @@
 						</div>
 
 						<ol class="puntos agenda">
-							<li><div>Enlace serie<span>acuerdos, trama, baudios y cruce TX/RX</span></div></li>
+							<li><div>Enlace serie<span>parámetros, trama, baudios y conexión cruzada</span></div></li>
 							<li><div>UART en el ESP32<span>tres puertos y el que queda libre</span></div></li>
-							<li><div>Buses I²C y SPI<span>direcciones, roles y criterios de elección</span></div></li>
-							<li><div>Formato de datos y robustez<span>tramas, suma de control, JSON y tiempos de espera</span></div></li>
+							<li><div>Buses I²C y SPI<span>direcciones, modo maestro/esclavo y elección de bus</span></div></li>
+							<li><div>Formato de datos y robustez<span>tramas, suma de verificación, JSON y tiempos de espera</span></div></li>
 						</ol>
 
 						<div class="flex flex-col gap-6 portada-pie">
@@ -49,7 +49,7 @@
 						</div>
 					</div>
 
-					<figure class="s2-uml s3a-trama" aria-label="Trama del ejemplo 13 byte a byte: cabecera AA, identificador 00, longitud 06, carga 48 6F 6C 61 20 30 que es el texto Hola 0, y suma de control DA">
+					<figure class="s2-uml s3a-trama" aria-label="Trama del ejemplo 13 byte a byte: cabecera AA, identificador 00, longitud 06, carga 48 6F 6C 61 20 30 que es el texto Hola 0, y suma de verificación DA">
 						<p class="s2-uml__nombre">Trama</p>
 						<ul>
 							<li><span class="s3a-trama__b s3a-trama__b--cab">AA</span><span>cabecera</span></li>
@@ -57,7 +57,7 @@
 							<li><span class="s3a-trama__b ">06</span><span>longitud</span></li>
 							<li><span class="s3a-trama__b s3a-trama__b--dato">48 6F 6C</span><span>carga «Hola 0»</span></li>
 							<li><span class="s3a-trama__b s3a-trama__b--dato">61 20 30</span><span></span></li>
-							<li><span class="s3a-trama__b s3a-trama__b--suma">DA</span><span>suma de control</span></li>
+							<li><span class="s3a-trama__b s3a-trama__b--suma">DA</span><span>suma de verificación</span></li>
 						</ul>
 						<figcaption>10 bytes por UART2 · ejemplo 13</figcaption>
 					</figure>
@@ -68,10 +68,10 @@
 				<p>
 					Presentar el recorrido en cuatro tramos: transmisión de bits por un enlace
 					serie; UART del ESP32 que queda libre; reparto de dos cables entre varios
-					dispositivos (I²C) y selección con un cable (SPI); empaquetado de los datos
+					dispositivos (I²C) y selección con un cable (SPI); formato de trama
 					para detectar errores. Pregunta de predicción: si la placa recibe los diez
 					bytes de la derecha, ¿cómo sabe dónde termina el mensaje y si llegó intacto?
-					Respuesta: por la longitud y la suma de control, que se tratan en las
+					Respuesta: por la longitud y la suma de verificación (<i>checksum</i>), que se tratan en las
 					láminas 17 y 18.
 				</p>
 			</aside>
@@ -81,14 +81,14 @@
 				<div class="detalle__cuerpo">
 					<h4>Punto de partida</h4>
 					<p>
-						Se da por conocido: niveles de 3,3 V y tope de 3,6 V en un terminal
+						Se da por conocido: niveles de 3,3 V y máximo de 3,6 V en un terminal
 						(sesión 1, lámina 07), resistencias de polarización (sesión 1, lámina
 						09), clases y <code>millis()</code> (sesión 2).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						Ejemplos 11 (enlace UART2), 12, 12b y 12c (bus I²C), 13 (trama con
-						suma de control) y 14 (JSON). Los ejemplos 11, 12c y 13 necesitan dos
+						suma de verificación) y 14 (JSON). Los ejemplos 11, 12c y 13 necesitan dos
 						placas.
 					</p>
 					<h4>La trama de la figura</h4>

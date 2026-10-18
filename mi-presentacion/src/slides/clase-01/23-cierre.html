@@ -34,7 +34,7 @@
 					</li>
 					<li class="text-4xl" data-paso="2">
 						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Construcción</p>
+							<p class="enunciado col-span-2">Compilación</p>
 							<p class="slide__lede col-span-3">Cinco programas encadenados; la primera línea del error identifica la etapa.</p>
 						</div>
 					</li>
@@ -78,12 +78,12 @@
 					<h4>Términos de la sesión</h4>
 					<ul>
 						<li><b>SoC</b> (<i>system on a chip</i>): CPU, memoria, periféricos y radio en un solo circuito integrado.</li>
-						<li><b>Strapping pin</b>: terminal leído al salir del reset que fija el modo de arranque (GPIO 0, 2, 12, 15).</li>
-						<li><b>Entrada flotante</b>: terminal sin nada que fije su potencial; su lectura no es reproducible.</li>
+						<li><b>Pin de arranque</b> (<i>strapping pin</i>): pin leído al salir del reset que fija el modo de arranque (GPIO 0, 2, 5, 12 y 15).</li>
+						<li><b>Entrada flotante</b>: pin sin nada que fije su potencial; su lectura no es reproducible.</li>
 						<li><b>Pull-up</b>: resistencia a 3,3 V que fija el reposo en 1 (~45 kΩ interna; no en GPIO 34–39).</li>
 						<li><b>Ciclo de trabajo</b> (<i>duty cycle</i>): fracción del período en alto de una señal PWM.</li>
 						<li><b>LEDC</b>: controlador PWM por hardware del ESP32.</li>
-						<li><b>Toolchain cruzada</b>: compilador, ensamblador y enlazador que generan código para otra arquitectura (Xtensa).</li>
+						<li><b>Cadena de herramientas cruzada</b> (<i>toolchain</i>): compilador, ensamblador y enlazador que generan código para otra arquitectura (Xtensa).</li>
 						<li><b>Tabla de particiones</b>: mapa de regiones de la Flash (aplicación, datos, sistema de archivos).</li>
 					</ul>
 				</div>
@@ -92,7 +92,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="22-codigo-05-memoria-wifi.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Ejemplo 05 · Costo del WiFi</span>
+					<span>Ejemplo 05 · Consumo de memoria del WiFi</span>
 				</a>
 			</nav>
 		</main>

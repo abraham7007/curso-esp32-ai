@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Datos en pantalla · Sesión 4</title>
+		<title>Deserialización JSON · Sesión 4</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,9 +17,9 @@
 	<body class="ponencia" data-deck-total="22">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">04 · Datos en pantalla</span>
+				<span class="badge">04 · Visualización de datos</span>
 
-				<h1 class="slide__title slide__title--sm">Extracción de <em>campos</em> de un JSON a variables</h1>
+				<h1 class="slide__title slide__title--sm"><em>Deserialización</em> del JSON y extracción de campos</h1>
 
 				<div class="def">
 					<p>Respuesta real de CoinGecko en el ejemplo 16b: ArduinoJson (sesión 3 · 20) convierte el texto en un árbol, recorre el camino de claves y copia el número en una variable.</p>
@@ -109,7 +109,7 @@
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Escribir mal una clave (<code>"USD"</code>), con lo que el precio sale 0.00 sin aviso.</li>
-						<li>Dibujar dentro de la función de red, con lo que la pantalla solo cambia al ritmo de la consulta.</li>
+						<li>Dibujar dentro de la función de red, con lo que la pantalla solo cambia con la frecuencia de consulta.</li>
 					</ul>
 				</div>
 			</details>
@@ -120,7 +120,7 @@
 					<span>HTTPS</span>
 				</a>
 				<a class="slide-nav__link" href="13-dos-ritmos.html">
-					<span>Dos ritmos</span>
+					<span>Frecuencias de consulta y refresco</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

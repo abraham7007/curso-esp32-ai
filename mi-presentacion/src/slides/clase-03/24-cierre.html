@@ -35,13 +35,13 @@
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
 							<p class="enunciado col-span-2">Trama</p>
-							<p class="slide__lede col-span-3">La cabecera marca el inicio, la longitud el tamaño y el checksum detecta alteraciones.</p>
+							<p class="slide__lede col-span-3">La cabecera marca el inicio, la longitud el tamaño y la suma de verificación detecta errores.</p>
 						</div>
 					</li>
 					<li class="text-4xl">
 						<div class="grid grid-cols-5 items-center gap-12">
 							<p class="enunciado col-span-2">Robustez</p>
-							<p class="slide__lede col-span-3">Adaptar las señales de 5 V y fijar un timeout en cada espera.</p>
+							<p class="slide__lede col-span-3">Adaptar las señales de 5 V y fijar un tiempo de espera en cada lectura.</p>
 						</div>
 					</li>
 				</ol>
@@ -80,15 +80,15 @@
 						<li><b>Baudio</b>: símbolos por segundo; en UART, bits por segundo (115 200).</li>
 						<li><b>8N1</b>: 8 bits de datos, sin paridad, 1 bit de parada; LSB primero.</li>
 						<li><b>Dúplex</b> (<i>full duplex</i>): los dos sentidos a la vez, cada uno por su hilo.</li>
-						<li><b>Maestro / esclavo</b>: quien inicia la transacción y genera el reloj / quien responde a su dirección.</li>
-						<li><b>ACK / NACK</b>: el receptor I²C baja SDA para confirmar un byte; si no la baja, NACK.</li>
+						<li><b>Modo maestro / modo esclavo</b>: el maestro inicia la transacción y genera el reloj; el esclavo responde a su dirección.</li>
+						<li><b>ACK / NACK</b> (reconocimiento / no reconocimiento): el receptor I²C baja SDA para confirmar un byte; si no la baja, NACK.</li>
 						<li><b>Drenador abierto</b>: salida que solo tira a 0; el 1 lo pone la pull-up.</li>
 						<li><b>CS</b> (<i>chip select</i>): línea SPI que, en 0, elige un dispositivo.</li>
-						<li><b>Trama</b> (<i>frame</i>): cabecera, identificador, longitud, carga y checksum.</li>
-						<li><b>Checksum</b>: suma de los bytes protegidos módulo 256 que el receptor recalcula.</li>
+						<li><b>Trama</b> (<i>frame</i>): cabecera, identificador, longitud, carga y suma de verificación.</li>
+						<li><b>Suma de verificación</b> (<i>checksum</i>): suma de los bytes protegidos módulo 256 que el receptor recalcula.</li>
 						<li><b>Serialización</b>: convertir datos en bytes para transmitirlos (JSON, binario).</li>
 						<li><b>Adaptador de nivel</b> (<i>level shifter</i>): traduce 5 V ↔ 3,3 V.</li>
-						<li><b>Timeout</b>: tiempo máximo de espera antes de dar la respuesta por perdida.</li>
+						<li><b>Tiempo de espera</b> (<i>timeout</i>): plazo máximo antes de dar la respuesta por perdida.</li>
 					</ul>
 				</div>
 			</details>
@@ -96,7 +96,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="23-timeouts.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Timeouts</span>
+					<span>Tiempo de espera</span>
 				</a>
 			</nav>
 		</main>

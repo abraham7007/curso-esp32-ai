@@ -24,7 +24,7 @@
 						<span class="code-hour__ref">Ejemplo 19</span>
 					</div>
 
-					<h2 class="code-hour__title">Un LED gobernado desde el panel de Blynk y una temperatura publicada en él</h2>
+					<h2 class="code-hour__title">Control de un LED y publicación de la temperatura en <em>Blynk</em></h2>
 
 					<div class="deliverables">
 						<div class="deliverable">
@@ -104,11 +104,11 @@ Enviando Temperatura a Blynk: 23.40</div>
 									Prompt para el asistente
 								</h4>
 								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps blynkkk/Blynk @ ^1.3.2; las tres macros BLYNK_* en include/secrets.h (en .gitignore) y una plantilla secrets.example.h con "TU_TOKEN_AQUI".
-<b>2. Firmware.</b> secrets.h por __has_include (o la plantilla, con #warning) antes de BlynkSimpleEsp32_SSL.h; BLYNK_PRINT Serial. WiFi a Wokwi-GUEST: «Conectando a WiFi», un punto cada 500 ms y «\nWiFi conectado!»; tope de 20 s y ESP.restart(). Blynk.config(token) y Blynk.connect(10000) con un aviso propio si isTokenInvalid(). BLYNK_WRITE(V0): digitalWrite(15) y «Comando recibido de Blynk! Estado del LED: %d». BLYNK_CONNECTED(): «Conectado a Blynk. Sincronizando V0...» y syncVirtual(V0). BlynkTimer de 30 s: random(180, 280) / 10.0 a V1 y «Enviando Temperatura a Blynk: » + valor. loop(): Blynk.run() y timer.run(), sin delay().
+<b>2. Firmware.</b> secrets.h por __has_include (o la plantilla, con #warning) antes de BlynkSimpleEsp32_SSL.h; BLYNK_PRINT Serial. WiFi a Wokwi-GUEST: «Conectando a WiFi», un punto cada 500 ms y «\nWiFi conectado!»; tiempo de espera de 20 s y ESP.restart(). Blynk.config(token) y Blynk.connect(10000) con un aviso propio si isTokenInvalid(). BLYNK_WRITE(V0): digitalWrite(15) y «Comando recibido de Blynk! Estado del LED: %d». BLYNK_CONNECTED(): «Conectado a Blynk. Sincronizando V0...» y syncVirtual(V0). BlynkTimer de 30 s: random(180, 280) / 10.0 a V1 y «Enviando Temperatura a Blynk: » + valor. loop(): Blynk.run() y timer.run(), sin delay().
 <b>3. Simulación.</b> Wokwi: LED rojo en GPIO 15 con 220 Ω a GND.
 <b>4. Diagramas.</b> Excalidraw: arquitectura (V0 baja, V1 sube, TLS 443) y flujo.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> Cada espera de red lleva tope: la conexión en un solo paso esperaría sin límite. El intervalo sale de la cuota: cada 5 s, los 100 000 mensajes gratuitos durarían 6 días. Sin esperas en el loop, el ping no se interrumpe.
+									<b>Por qué se pide así.</b> Cada operación de red lleva tiempo de espera (<i>timeout</i>): la conexión en un solo paso esperaría sin límite. El intervalo sale de la cuota: cada 5 s, los 100 000 mensajes gratuitos durarían 6 días. Sin esperas en el loop, el ping no se interrumpe.
 								</p>
 							</div>
 						</div>
@@ -116,7 +116,7 @@ Enviando Temperatura a Blynk: 23.40</div>
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> La conexión abierta funciona en los dos sentidos: la orden del Switch llega por V0 sin sondeo y la temperatura se publica en V1 cada 30 s.</p>
+						<p><b>Qué comprueba.</b> La conexión persistente es bidireccional: la orden del Switch llega por V0 sin sondeo y la temperatura se publica en V1 cada 30 s.</p>
 					</div>
 				</div>
 			</div>
@@ -145,7 +145,7 @@ Enviando Temperatura a Blynk: 23.40</div>
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>Archivos del proyecto: src/main.cpp con la función de V0 (recibe), la tarea periódica que envía V1 y un loop de dos líneas; include/secrets.h con las tres credenciales, cargado antes que la librería Blynk; secrets.example.h como plantilla versionada.</p>
+					<p>Archivos del proyecto: src/main.cpp con la función de V0 (recibe), la tarea periódica que envía V1 y un loop de dos líneas; include/secrets.h con las tres credenciales, cargado antes que la biblioteca Blynk; secrets.example.h como plantilla versionada.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>Token en main.cpp y subido a GitHub.</li><li>Cabecera sin SSL (BlynkSimpleEsp32.h): puerto 80, token legible.</li><li>Una espera en el loop, que deja el dispositivo desconectado.</li><li>Gauge sin datastream asignado, que no muestra ningún valor.</li></ul>
 				</div>
@@ -154,7 +154,7 @@ Enviando Temperatura a Blynk: 23.40</div>
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="09-configurar-panel.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Panel</span>
+					<span>Configuración del panel</span>
 				</a>
 				<a class="slide-nav__link" href="11-blynk-run.html">
 					<span>Espera bloqueante</span>

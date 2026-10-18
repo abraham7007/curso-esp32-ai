@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Grabación y arranque · Sesión 1</title>
+		<title>Modo de descarga · Sesión 1</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,6 +76,8 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
+						En el modo de descarga (<i>download mode</i>), la ROM espera el
+						firmware por el puerto serie e imprime «waiting for download».
 						<i>Upload</i> en PlatformIO llama a <code>esptool.py write_flash</code>
 						con las cuatro imágenes y sus direcciones. Tiempos típicos de esptool:
 						EN en bajo ~100 ms y GPIO 0 en bajo ~50 ms más. Antes de los datos,
@@ -96,7 +98,7 @@
 					<span>Proyecto PlatformIO</span>
 				</a>
 				<a class="slide-nav__link" href="22-codigo-05-memoria-wifi.html">
-					<span>Ejemplo 05 · Costo del WiFi</span>
+					<span>Ejemplo 05 · Consumo de memoria del WiFi</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

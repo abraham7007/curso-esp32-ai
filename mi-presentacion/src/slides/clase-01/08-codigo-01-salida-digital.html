@@ -104,7 +104,7 @@ t = 6 s   GPIO2 = BAJO</div>
 								</h4>
 								<div class="prompt-box prompt-box--amplio"><b>1. Proyecto.</b> Crea un proyecto nuevo de PlatformIO para la placa esp32dev con el framework Arduino y monitor_speed = 115200.
 
-<b>2. Firmware.</b> Configura el GPIO 2 como salida y conmútalo cada 2 s con delay(). Al arrancar imprime «Iniciando salida digital en GPIO 2»; en cada cambio, una línea con el formato exacto «t = N s   GPIO2 = ALTO» (o BAJO), con N en segundos. Usa solo setup() y loop(), sin librerías ni clases.
+<b>2. Firmware.</b> Configura el GPIO 2 como salida y conmútalo cada 2 s con delay(). Al arrancar imprime «Iniciando salida digital en GPIO 2»; en cada cambio, una línea con el formato exacto «t = N s   GPIO2 = ALTO» (o BAJO), con N en segundos. Usa solo setup() y loop(), sin bibliotecas ni clases.
 
 <b>3. Simulación.</b> Añade la simulación de Wokwi al mismo proyecto: LED con resistencia de 220 Ω entre el GPIO 2 y GND.
 
@@ -131,9 +131,9 @@ t = 6 s   GPIO2 = BAJO</div>
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>pinMode(2, OUTPUT)</code>, <code>digitalWrite(2, HIGH)</code> y <code>delay(ms)</code> pertenecen al núcleo de Arduino y no requieren librerías adicionales.</p>
+					<p><code>pinMode(2, OUTPUT)</code>, <code>digitalWrite(2, HIGH)</code> y <code>delay(ms)</code> pertenecen al núcleo de Arduino y no requieren bibliotecas adicionales.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Abrir el monitor a otra velocidad produce caracteres ilegibles.</li><li>Dos líneas seguidas con el mismo nivel indican que la escritura no ocurre donde parece.</li><li>Un LED sin resistencia lleva la corriente fuera del límite del terminal.</li></ul>
+					<ul><li>Abrir el monitor a otra velocidad produce caracteres ilegibles.</li><li>Dos líneas seguidas con el mismo nivel indican que la escritura no ocurre donde parece.</li><li>Un LED sin resistencia lleva la corriente fuera del límite del pin.</li></ul>
 				</div>
 			</details>
 

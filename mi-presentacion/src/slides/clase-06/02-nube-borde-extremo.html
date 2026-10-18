@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Nube, borde y extremo · Sesión 6</title>
+		<title>Nube, borde y dispositivo · Sesión 6</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,18 +19,18 @@
 			<div class="slide__content">
 				<span class="badge">01 · Fundamentos de TinyML</span>
 
-				<h1 class="slide__title slide__title--sm">Inferencia en la nube, en el borde y en el <em>extremo</em></h1>
+				<h1 class="slide__title slide__title--sm">Inferencia en la nube, en el borde y en el <em>dispositivo</em></h1>
 
 				<div class="def">
 					<p>
 						<b>Edge AI</b>: IA que corre en el dispositivo o cerca de él, sin la nube.
-						<b>TinyML</b> es su extremo más pequeño: microcontroladores con 65 000 veces menos
+						<b>TinyML</b> es su parte más pequeña: microcontroladores con 65 000 veces menos
 						memoria y 5 000 veces menos potencia que una GPU.
 					</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1800 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de tres niveles donde puede ejecutarse un modelo. Nube, un centro de datos, por ejemplo una GPU Nvidia V100: 16 GB de memoria, 250 W, unos 9 000 dólares; el modelo está al otro lado de Internet (el ping a blynk.cloud de la sesión 5 fue de 89 ms) y el sensor envía la señal cruda. Borde, un teléfono o una pasarela, por ejemplo un teléfono con Cortex-A78: 4 GB, unos 8 W, unos 750 dólares; red local o ninguna; la señal viaja a la red local. Extremo, un microcontrolador con TinyML, la Nano 33 BLE Sense: 256 KB, 0,05 W, unos 3 dólares el chip; sin red; del sensor sale solo el resultado. Memoria y potencia se dibujan en escala logarítmica, cada tramo multiplica por 10.">
+					<svg class="s4a-svg crece" viewBox="0 0 1800 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de tres niveles donde puede ejecutarse un modelo. Nube, un centro de datos, por ejemplo una GPU Nvidia V100: 16 GB de memoria, 250 W, unos 9 000 dólares; el modelo está al otro lado de Internet (el ping a blynk.cloud de la sesión 5 fue de 89 ms) y el sensor envía la señal cruda. Borde, un teléfono o una pasarela, por ejemplo un teléfono con Cortex-A78: 4 GB, unos 8 W, unos 750 dólares; red local o ninguna; la señal viaja a la red local. Dispositivo, un microcontrolador con TinyML, la Nano 33 BLE Sense: 256 KB, 0,05 W, unos 3 dólares el chip; sin red; del sensor sale solo el resultado. Memoria y potencia se dibujan en escala logarítmica, cada tramo multiplica por 10.">
 						<rect class="caja caja--acc" x="1328" y="2" width="470" height="696" rx="14" />
 						<rect class="s6a-fila" x="0" y="215" width="1316" height="90" rx="8" />
 						<rect class="s6a-fila" x="0" y="425" width="1316" height="90" rx="8" />
@@ -42,7 +42,7 @@
 						<text class="sans b" x="910" y="40" font-size="40">Borde</text>
 						<text class="sans mut" x="910" y="88" font-size="26">teléfono o pasarela</text>
 						<use class="s6a-icono s6a-icono--acc" href="/course-icons.svg#i-chip" x="1340" y="18" width="64" height="64" />
-						<text class="sans b acc" x="1420" y="40" font-size="40">Extremo</text>
+						<text class="sans b acc" x="1420" y="40" font-size="40">Dispositivo</text>
 						<text class="sans mut" x="1420" y="88" font-size="26">microcontrolador · TinyML</text>
 						<path class="ln ln--fina ln--mut" d="M0 130 H1316" />
 						<text class="sans b" x="16" y="170" font-size="28">Ejemplo</text>
@@ -98,7 +98,7 @@
 					Pregunta de predicción: ¿cuántas veces más memoria tiene una GPU de centro de datos que esta placa: cien, diez mil o más? Recoger respuestas antes de leer la tabla. Respuesta: 16 GB / 256 KB = 65 536. En potencia, 250 W / 0,05 W = 5 000.
 				</p>
 				<p>
-					En la nube se entrena, porque hace falta memoria y cálculo; en el borde (un teléfono, una pasarela, una Raspberry Pi) se ejecutan modelos medianos; en el extremo, el microcontrolador que lee el sensor ejecuta un modelo de pocos kilobytes. Según la entradilla, <i>Edge AI</i> abarca todo lo que corre en el dispositivo o cerca de él, y TinyML es su parte más pequeña, la de los microcontroladores.
+					En la nube se entrena, porque hace falta memoria y cálculo; en el borde (un teléfono, una pasarela, una Raspberry Pi) se ejecutan modelos medianos; en el dispositivo, el microcontrolador que lee el sensor ejecuta un modelo de pocos kilobytes. Según la entradilla, <i>Edge AI</i> abarca todo lo que corre en el dispositivo o cerca de él, y TinyML es su parte más pequeña, la de los microcontroladores.
 				</p>
 				<p>
 					Las barras van en escala logarítmica: cada tramo multiplica por diez. En escala lineal la barra de la placa no se vería. La fila de la red explica la latencia: en la nube cada resultado espera una ida y vuelta por Internet (en la sesión 5, 89 ms hasta blynk.cloud), y sin conexión el dispositivo no obtiene ninguno. En el chip el resultado no depende de la red; la lámina 16 mide cuánto tarda.
@@ -121,7 +121,7 @@
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Llamar TinyML a cualquier IA «en el dispositivo»; un teléfono pertenece al nivel de borde.</li>
+						<li>Llamar TinyML a cualquier IA que corre fuera de la nube; un teléfono pertenece al nivel de borde.</li>
 						<li>Suponer que el chip entrena, cuando ejecuta un modelo entrenado fuera de él.</li>
 						<li>Comparar en escala lineal memorias que difieren en cinco órdenes de magnitud.</li>
 					</ul>
@@ -134,7 +134,7 @@
 					<span>Portada</span>
 				</a>
 				<a class="slide-nav__link" href="03-por-que.html">
-					<span>Radio y batería</span>
+					<span>Transmisión y autonomía</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

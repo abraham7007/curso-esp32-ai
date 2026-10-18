@@ -132,7 +132,7 @@ Iniciando control de LED mediante Clase Encapsulada
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>El constructor se declara <code>explicit</code> para que un número suelto no se convierta en un <code>Led</code> sin querer; el método de consulta se declara <code>const</code> porque no modifica el objeto. PlatformIO compila cada carpeta de <code>lib/</code> como una librería y añade su ruta de inclusión.</p>
+					<p>El constructor se declara <code>explicit</code> para que un número suelto no se convierta en un <code>Led</code> sin querer; el método de consulta se declara <code>const</code> porque no modifica el objeto. PlatformIO compila cada carpeta de <code>lib/</code> como una biblioteca y añade su ruta de inclusión.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>Llamar a <code>pinMode</code> en el constructor, que en un objeto global se ejecuta antes de <code>setup()</code>.</li><li>Olvidar <code>led.begin()</code>: el pin no queda como salida.</li><li>Leer el estado privado del objeto desde <code>main.cpp</code>: no compila.</li></ul>
 				</div>
@@ -144,7 +144,7 @@ Iniciando control de LED mediante Clase Encapsulada
 					<span>Encapsulamiento</span>
 				</a>
 				<a class="slide-nav__link" href="09-delay-millis.html">
-					<span>millis()</span>
+					<span>delay() y millis()</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

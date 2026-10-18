@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Guardas de inclusión · Sesión 2</title>
+		<title>Protección contra la inclusión múltiple · Sesión 2</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
 			<div class="slide__content">
 				<span class="badge">01 · Módulos y archivos</span>
 
-				<h1 class="slide__title slide__title--sm"><em>Guardas</em> de inclusión contra la doble definición</h1>
+				<h1 class="slide__title slide__title--sm">Protección contra la <em>inclusión múltiple</em> de una cabecera</h1>
 
 				<div class="rd s2v s2v-guarda crece">
 					<section class="s2v-col" aria-label="Inclusiones de main.cpp">
@@ -39,8 +39,8 @@
 						<p class="s2v-col__nota">La 2.ª puede llegar a través de otra cabecera.</p>
 					</section>
 
-					<section class="s2v-col" aria-label="Guarda de inclusión en pseudocódigo">
-						<p class="s2v-col__titulo">Guarda de Led.h <span class="s2v-pastilla s2v-pastilla--mal s2v-p2" data-paso="2">sin guarda</span></p>
+					<section class="s2v-col" aria-label="Protección contra la inclusión múltiple en pseudocódigo">
+						<p class="s2v-col__titulo">Protección de Led.h <span class="s2v-pastilla s2v-pastilla--mal s2v-p2" data-paso="2">sin protección</span></p>
 						<ul class="s2v-pseudo s2v-pseudo--guarda">
 							<li>si <b>LED_H</b> no existe →</li>
 							<li class="s2v-in">definir <b>LED_H</b></li>
@@ -69,17 +69,17 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: si la cabecera no tiene guarda y llega dos
-					veces, ¿qué etapa da el error y en qué archivo? Respuesta: el
+					Pregunta de predicción: si la cabecera no tiene protección contra la
+					inclusión múltiple (<i>include guard</i>) y llega dos veces, ¿qué etapa da el error y en qué archivo? Respuesta: el
 					compilador, en <code>lib/Led/Led.h</code>, línea 4. Inicio: el
 					preprocesador copia el texto de cada inclusión; en la primera,
 					<code>LED_H</code> no existe, la define y copia la clase. Paso 1: en la
 					segunda, <code>LED_H</code> ya existe y salta hasta el final; la clase
-					llega una sola vez. Paso 2: sin guarda, la definición llega dos veces
+					llega una sola vez. Paso 2: sin protección, la definición llega dos veces
 					y el compilador la rechaza, antes del enlace. Una declaración puede
 					repetirse; la definición, una sola vez por unidad de traducción. En el
 					ejemplo 06 el caso real es <code>Arduino.h</code>: lo incluyen
-					<code>main.cpp</code> y <code>Led.h</code>, y su propia guarda evita la
+					<code>main.cpp</code> y <code>Led.h</code>, y su propia protección evita la
 					doble definición.
 				</p>
 			</aside>
@@ -89,8 +89,8 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						La guarda son tres directivas del preprocesador que rodean la
-						cabecera: <code>#ifndef</code>, <code>#define</code> y
+						La protección contra la inclusión múltiple (<i>include guard</i>) consiste en
+						tres directivas del preprocesador que rodean la cabecera: <code>#ifndef</code>, <code>#define</code> y
 						<code>#endif</code>. Cada cabecera de los ejemplos lleva la suya:
 						<code>LED_H</code>, <code>BOTON_H</code>,
 						<code>ENTRADAANALOGICA_H</code>. El nombre debe ser único en todo el
@@ -113,7 +113,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="03-declaracion-definicion.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>.h y .cpp</span>
+					<span>Declaración y definición</span>
 				</a>
 				<a class="slide-nav__link" href="05-lib-src.html">
 					<span>lib/ y src/</span>

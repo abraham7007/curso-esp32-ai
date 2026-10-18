@@ -26,7 +26,7 @@
 						<div class="def">
 							<p>
 								Un <b>pin virtual</b> (V0, V1) es el nombre con el que un
-								<i>datastream</i> llega al firmware, ajeno a los GPIO. La librería
+								<i>datastream</i> llega al firmware, ajeno a los GPIO. La biblioteca
 								entrega cada orden a una función BLYNK_WRITE; cada dato sale con
 								virtualWrite.
 							</p>
@@ -46,7 +46,7 @@
 							<canvas
 								id="pines"
 								role="img"
-								aria-label="Flujo de datos en cinco columnas: widget, datastream, pin virtual en la trama, función del firmware y placa. Arriba, la orden: el widget Switch escribe 1 en el datastream V0; la trama lleva el pin V0 y el valor 1; la librería entrega el valor a la función BLYNK_WRITE de V0, que pone el GPIO 15 a nivel alto y enciende el LED. Abajo, el dato en sentido inverso: cada 30 s el ESP32 obtiene una temperatura simulada; la función virtualWrite la envía al pin V1; la trama lleva el pin V1 y el valor 23.400; la nube la guarda en el datastream V1 y el widget Gauge muestra 23.4 °C."
+								aria-label="Flujo de datos en cinco columnas: widget, datastream, pin virtual en la trama, función del firmware y placa. Arriba, la orden: el widget Switch escribe 1 en el datastream V0; la trama lleva el pin V0 y el valor 1; la biblioteca entrega el valor a la función BLYNK_WRITE de V0, que pone el GPIO 15 a nivel alto y enciende el LED. Abajo, el dato en sentido inverso: cada 30 s el ESP32 obtiene una temperatura simulada; la función virtualWrite la envía al pin V1; la trama lleva el pin V1 y el valor 23.400; la nube la guarda en el datastream V1 y el widget Gauge muestra 23.4 °C."
 							></canvas>
 						</div>
 					</div>
@@ -60,8 +60,8 @@
 					respuestas antes de pulsar «Desde el inicio».
 				</p>
 				<p>
-					Respuesta: la librería, dentro de Blynk.run, cuando llega por la conexión
-					abierta una trama para V0. Recorrer los 8 pasos. Arriba (pasos 1 a 4):
+					Respuesta: la biblioteca, dentro de Blynk.run, cuando llega por la conexión
+					persistente una trama para V0. Recorrer los 8 pasos. Arriba (pasos 1 a 4):
 					widget → datastream V0 → trama HARDWARE con «vw 0 1» → función BLYNK_WRITE
 					de V0 → GPIO 15 → LED. Abajo (5 a 8): una tarea del temporizador obtiene la
 					temperatura cada 30 s y virtualWrite la envía a V1, que recorre el camino
@@ -100,10 +100,10 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="07-protocolo-blynk.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Protocolo</span>
+					<span>Protocolo de Blynk</span>
 				</a>
 				<a class="slide-nav__link" href="09-configurar-panel.html">
-					<span>Panel</span>
+					<span>Configuración del panel</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
@@ -137,7 +137,7 @@
 			const PASOS = [
 				"El usuario pulsa el Switch: el panel escribe 1 en el datastream V0.",
 				"Blynk.Cloud reenvía el valor por la conexión del ESP32: trama «vw 0 1».",
-				"La librería entrega el valor 1 a la función BLYNK_WRITE de V0.",
+				"La biblioteca entrega el valor 1 a la función BLYNK_WRITE de V0.",
 				"La función pone el GPIO 15 a 3,3 V: el LED rojo se enciende.",
 				"Cada 30 s, una tarea del temporizador entrega 23.4 a virtualWrite.",
 				"virtualWrite envía la trama «vw 1 23.400» hacia la nube.",

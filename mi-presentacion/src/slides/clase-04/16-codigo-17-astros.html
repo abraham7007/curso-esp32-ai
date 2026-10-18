@@ -110,11 +110,11 @@ Total: 12
 									Prompt para el asistente
 								</h4>
 								<div class="prompt-box"><b>1. Proyecto.</b> Proyecto nuevo de PlatformIO (esp32dev, Arduino, monitor_speed = 115200) con lib_deps ArduinoJson @ ^6.21.5, Adafruit SSD1306 @ ^2.5.7 y Adafruit GFX Library @ ^1.11.5.
-<b>2. Firmware.</b> OLED en 0x3C con setTextWrap(false); WiFi a Wokwi-GUEST con tope de 20 s y ESP.restart(). Cada 60 s, GET a http://api.open-notify.org/astros.json; con 200 (DynamicJsonDocument(2048)), number y hasta 15 nombres de people en un String[15]: «\n--- ASTRONAUTAS EN EL ESPACIO ---», «Total: %d», «%d. %s» y 33 guiones. Si falla, «Error HTTP: %d» (más errorToString() si es negativo) y, sin lista, el código en la OLED. Cada 4 s, páginas de 5: « EN EL ESPACIO: %d», línea y «%d.%s».
+<b>2. Firmware.</b> OLED en 0x3C con setTextWrap(false); WiFi a Wokwi-GUEST con timeout de 20 s y ESP.restart(). Cada 60 s, GET a http://api.open-notify.org/astros.json; con 200 (DynamicJsonDocument(2048)), number y hasta 15 nombres de people en un String[15]: «\n--- ASTRONAUTAS EN EL ESPACIO ---», «Total: %d», «%d. %s» y 33 guiones. Si falla, «Error HTTP: %d» (más errorToString() si es negativo) y, sin lista, el código en la OLED. Cada 4 s, páginas de 5: « EN EL ESPACIO: %d», línea y «%d.%s».
 <b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
-<b>4. Diagrama.</b> En Excalidraw: flujo de descarga, tope y páginas.</div>
+<b>4. Diagrama.</b> En Excalidraw: flujo de descarga, límite y páginas.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> El tope de 15 protege el arreglo; sin ajuste de línea, el nombre se recorta.
+									<b>Por qué se pide así.</b> El límite de 15 protege el arreglo; sin ajuste de línea, el nombre se recorta.
 								</p>
 							</div>
 							<div class="s4b-oled-aviso">
@@ -130,7 +130,7 @@ Total: 12
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> El firmware recorre la lista del JSON con un tope propio y la pagina; el servidor envía doce nombres y la pantalla admite cinco.</p>
+						<p><b>Qué comprueba.</b> El firmware recorre el arreglo JSON con un límite propio y la pagina; el servidor envía doce nombres y la pantalla admite cinco.</p>
 					</div>
 				</div>
 			</div>
@@ -143,19 +143,19 @@ Total: 12
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>El firmware toma el campo name de cada objeto de la lista people. El documento JSON reserva 2048 bytes en el montón: la respuesta mide 587 bytes y el árbol ocupa más. Páginas: (total + 4) / 5, división redondeada hacia arriba.</p>
+					<p>El firmware toma el campo name de cada objeto del arreglo people. El documento JSON reserva 2048 bytes en el montón: la respuesta mide 587 bytes y el árbol ocupa más. Páginas: (total + 4) / 5, división redondeada hacia arriba.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Recorrer hasta el valor de number sin tope y escribir fuera del arreglo.</li><li>Dar por vigente un 200.</li><li>Dejar activo el ajuste de línea, con lo que el nombre largo invade la fila de abajo.</li></ul>
+					<ul><li>Recorrer hasta el valor de number sin límite y escribir fuera del arreglo.</li><li>Dar por vigente un 200.</li><li>Dejar activo el ajuste de línea, con lo que el nombre largo invade la fila de abajo.</li></ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="15-listas-json.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Listas</span>
+					<span>Arreglos JSON</span>
 				</a>
 				<a class="slide-nav__link" href="17-leer-api.html">
-					<span>Documentación</span>
+					<span>Verificación de la API</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Cadena de construcción · Sesión 1</title>
+		<title>Proceso de compilación · Sesión 1</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
 				<span class="badge">03 · Entorno de desarrollo</span>
 
 				<h1 class="slide__title slide__title--sm">
-					Etapas de la <em>cadena de construcción</em> y sus errores
+					Etapas del <em>proceso de compilación</em> y sus errores
 				</h1>
 
 				<div class="rd crece flex flex-col gap-6">
@@ -106,7 +106,7 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Las cuatro primeras etapas son la <i>toolchain</i> cruzada
+						Las cuatro primeras etapas forman la cadena de herramientas cruzada (<i>toolchain</i>)
 						<code>xtensa-esp32-elf-</code> (GCC); la quinta,
 						<code>esptool.py elf2image</code>. <code>pio run -v</code> muestra
 						cada orden que se ejecuta.
@@ -121,7 +121,7 @@
 					<p>
 						Corregir una línea que no contiene el error. Un
 						<code>undefined reference</code> indica que falta un archivo o una
-						librería.
+						biblioteca.
 					</p>
 				</div>
 			</details>
@@ -144,7 +144,7 @@
 			const etapas = [
 				{
 					error: "src/main.cpp:2:10: fatal error: DHT.h: No such file or directory",
-					desc: "Inserta las cabeceras y expande las macros. Falla si un #include no aparece: librería sin declarar o nombre mal escrito.",
+					desc: "Inserta las cabeceras y expande las macros. Falla si un #include no aparece: biblioteca sin declarar o nombre mal escrito.",
 				},
 				{
 					error: "src/main.cpp:12:3: error: 'ledPin' was not declared in this scope",
@@ -156,7 +156,7 @@
 				},
 				{
 					error: "main.cpp:(.text.loop+0x4): undefined reference to `leerSensor()'",
-					desc: "Une los objetos y las librerías y asigna direcciones. Falla si algo declarado no está definido en ningún archivo.",
+					desc: "Une los objetos y las bibliotecas y asigna direcciones. Falla si algo declarado no está definido en ningún archivo.",
 				},
 				{
 					error: "— rara vez falla —",

@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Listas JSON · Sesión 4</title>
+		<title>Arreglos JSON · Sesión 4</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,16 +17,16 @@
 	<body class="ponencia" data-deck-total="22">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<span class="badge">04 · Datos en pantalla</span>
+				<span class="badge">04 · Visualización de datos</span>
 
-				<h1 class="slide__title slide__title--sm">Recorrido de una lista JSON con <em>tope</em></h1>
+				<h1 class="slide__title slide__title--sm">Recorrido de un arreglo JSON con <em>límite</em> de elementos</h1>
 
 				<div class="def">
 					<p>La respuesta real de open-notify contiene 12 nombres; la OLED muestra 5 por página y el recorrido nunca pasa del tamaño del arreglo.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la respuesta de open-notify: una lista people de 12 objetos con craft y name, number 12 y message success, 587 bytes. En el centro, tres pantallas OLED de 128 por 64 píxeles a escala: página 1 con los nombres 1 a 5, página 2 con los nombres 6 a 10 y página 3 con los nombres 11 y 12. El nombre 3, Tracy Caldwell Dyson, ocupa 22 caracteres y la pantalla admite 21: sin ajuste de línea, la n final queda fuera del borde. Debajo, el pseudocódigo: el tope es el menor entre el total recibido y 15, la capacidad del arreglo; se guarda cada nombre hasta el tope; cada 4 segundos se muestra la página siguiente de 5.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la respuesta de open-notify: un arreglo people de 12 objetos con craft y name, number 12 y message success, 587 bytes. En el centro, tres pantallas OLED de 128 por 64 píxeles a escala: página 1 con los nombres 1 a 5, página 2 con los nombres 6 a 10 y página 3 con los nombres 11 y 12. El nombre 3, Tracy Caldwell Dyson, ocupa 22 caracteres y la pantalla admite 21: sin ajuste de línea, la n final queda fuera del borde. Debajo, el pseudocódigo: el límite es el menor entre el total recibido y 15, la capacidad del arreglo; se guarda cada nombre hasta el límite; cada 4 segundos se muestra la página siguiente de 5.">
 						<!-- la respuesta -->
 						<text class="sans mut" x="0" y="24" font-size="26">GET http://api.open-notify.org/astros.json · 200 · 587 bytes</text>
 						<text x="0" y="70" font-size="28">"people": [ <tspan class="acc">{"craft": "ISS", "name": "Oleg Kononenko"}</tspan>, … <tspan class="acc">12 objetos</tspan> ],</text>
@@ -64,10 +64,10 @@
 						<text class="sans" x="1152" y="434" font-size="26">página 3 · nombres 11 y 12</text>
 						<text class="sans acc" x="0" y="512" font-size="26">22 caracteres en 21 columnas: sin ajuste de línea, la «n» queda fuera</text>
 
-						<!-- el recorrido con su tope, en pseudocódigo -->
+						<!-- el recorrido con su límite, en pseudocódigo -->
 						<path class="ln ln--fina ln--mut" d="M0 546 H1600" />
-						<text class="sans" x="0" y="584" font-size="30"><tspan class="acc" font-weight="700">tope</tspan> = el menor entre el total recibido y <tspan class="acc" font-weight="700">15</tspan>, la capacidad del arreglo</text>
-						<text class="sans" x="0" y="628" font-size="30">para cada nombre hasta el tope → guardarlo en el arreglo</text>
+						<text class="sans" x="0" y="584" font-size="30"><tspan class="acc" font-weight="700">límite</tspan> = el menor entre el total recibido y <tspan class="acc" font-weight="700">15</tspan>, la capacidad del arreglo</text>
+						<text class="sans" x="0" y="628" font-size="30">para cada nombre hasta el límite → guardarlo en el arreglo</text>
 						<text class="sans" x="0" y="672" font-size="30">cada 4 s → mostrar la página siguiente de 5 nombres</text>
 
 						<!-- paso 1: 200 no es dato vigente -->
@@ -81,9 +81,9 @@
 
 			<aside class="notas">
 				<p>
-					Leer la respuesta: una lista de objetos y, aparte, el total. El firmware copia
+					Leer la respuesta: un arreglo de objetos y, aparte, el total. El firmware copia
 					los nombres a un arreglo de C++ de tamaño fijo; si la API devolviera 20
-					personas, sin el tope se escribiría fuera del arreglo y el programa se
+					personas, sin el límite se escribiría fuera del arreglo y el programa se
 					reiniciaría. El bucle llega como máximo a 15. Luego la
 					pantalla: 128 px de ancho son 21 caracteres de 6 px; el nombre 3 tiene 22. Con
 					el ajuste de línea desactivado, la letra sobrante se recorta en el borde; activado, saltaría de renglón y se superpondría al nombre siguiente. Pregunta de predicción (antes del paso): ¿corresponde la lista a la tripulación actual de la estación? No corresponde: es de mediados de 2024, y el servidor responde 200 igualmente.
@@ -95,7 +95,7 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						La lista people se recorre por posición y de cada objeto se toma el
+						El arreglo people se recorre por posición y de cada objeto se toma el
 						campo name. La página n, contada desde 0, empieza en la posición 5 × n y
 						se corta al llegar al total; páginas = (total + 4) / 5 = 3. Texto de tamaño 1:
 						6 × 8 px por carácter.
@@ -104,7 +104,7 @@
 					<p>Ejemplo 17 (astronautas en la OLED).</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Usar <code>"number"</code> como tope, aunque el arreglo local puede ser menor.</li>
+						<li>Usar <code>"number"</code> como límite, aunque el arreglo local puede ser menor.</li>
 						<li>Tomar un 200 por dato actual sin comprobar la fecha o la fuente.</li>
 					</ul>
 				</div>
@@ -113,7 +113,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="14-codigo-16b-oled.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Ejemplo 16b · OLED cripto</span>
+					<span>Ejemplo 16b · BTC y DOGE en la OLED</span>
 				</a>
 				<a class="slide-nav__link" href="16-codigo-17-astros.html">
 					<span>Ejemplo 17 · Astronautas</span>

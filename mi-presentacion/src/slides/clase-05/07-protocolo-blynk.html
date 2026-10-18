@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Protocolo · Sesión 5</title>
+		<title>Protocolo de Blynk · Sesión 5</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,11 +20,11 @@
 				<span class="badge">02 · Plataforma Blynk</span>
 
 				<h1 class="slide__title slide__title--sm">
-					Trama del <em>protocolo</em> propio de la librería Blynk
+					Trama del <em>protocolo</em> propio de la biblioteca Blynk
 				</h1>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Trama real que envía la librería Blynk 1.3.5 en el primer envío de la temperatura a V1 (virtualWrite) tras conectar, con temperatura de tipo float igual a 23.4: 16 bytes. Cabecera de 5 bytes: tipo 0x14, que es 20, HARDWARE; identificador de mensaje 0x0004, porque el inicio de sesión usó el 1, la información del dispositivo el 2 y syncVirtual el 3; longitud del cuerpo 0x000B, 11 bytes. Cuerpo de 11 bytes en texto separado por ceros: v, w, cero, 1, cero, y 23.400 (hex 76 77 00 31 00 32 33 2E 34 30 30). Se transmite por TCP a blynk.cloud:443 dentro de TLS y es incompatible con un broker MQTT. Alternativa que el ejemplo no usa: Blynk.Cloud también es broker MQTT en blynk.cloud:8883, usuario device y contraseña el token; se publica en el tema ds/Temperatura el texto 23.4, un PUBLISH de 22 bytes con QoS 0.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Trama real que envía la biblioteca Blynk 1.3.5 en el primer envío de la temperatura a V1 (virtualWrite) tras conectar, con temperatura de tipo float igual a 23.4: 16 bytes. Cabecera de 5 bytes: tipo 0x14, que es 20, HARDWARE; identificador de mensaje 0x0004, porque el inicio de sesión usó el 1, la información del dispositivo el 2 y syncVirtual el 3; longitud del cuerpo 0x000B, 11 bytes. Cuerpo de 11 bytes en texto separado por ceros: v, w, cero, 1, cero, y 23.400 (hex 76 77 00 31 00 32 33 2E 34 30 30). Se transmite por TCP a blynk.cloud:443 dentro de TLS y es incompatible con un broker MQTT. Alternativa que el ejemplo no usa: Blynk.Cloud también es broker MQTT en blynk.cloud:8883, usuario device y contraseña el token; se publica en el tema ds/Temperatura el texto 23.4, un PUBLISH de 22 bytes con QoS 0.">
 						<!-- la llamada -->
 						<text class="sans" x="0" y="26" font-size="32"><tspan class="b">Envío de la temperatura a V1</tspan><tspan class="mut"> · virtualWrite con un float de valor 23.4</tspan></text>
 
@@ -98,8 +98,8 @@
 
 						<path class="ln ln--fina ln--mut" d="M0 440 H 1600" />
 
-						<!-- la librería -->
-						<text class="sans b" x="0" y="490" font-size="30">Librería Blynk · ejemplo 19</text>
+						<!-- la biblioteca -->
+						<text class="sans b" x="0" y="490" font-size="30">Biblioteca Blynk · ejemplo 19</text>
 						<text class="sans" x="0" y="550" font-size="28"><tspan class="b">16 bytes</tspan> por envío</text>
 						<text class="sans" x="0" y="600" font-size="28">TCP a <tspan class="b">blynk.cloud:443</tspan>, dentro de TLS</text>
 						<text class="sans" x="0" y="650" font-size="28">formato propio, incompatible</text>
@@ -124,7 +124,7 @@
 					19?
 				</p>
 				<p>
-					Respuesta: no. Ese puerto atiende el protocolo de la librería, que no es
+					Respuesta: no. Ese puerto atiende el protocolo de la biblioteca, que no es
 					MQTT. La trama ocupa 16 bytes: una cabecera binaria de 5 (tipo, número de
 					mensaje y longitud) y un cuerpo de texto con tres campos separados por
 					ceros.
@@ -132,7 +132,7 @@
 				<p>
 					A la derecha, la alternativa: la nube de Blynk acepta también MQTT en el
 					8883 con el token como contraseña, y el mismo dato se publica en un tema
-					<code>ds/…</code>, como en las láminas 03 y 04. El ejemplo usa la librería
+					<code>ds/…</code>, como en las láminas 03 y 04. El ejemplo usa la biblioteca
 					porque incluye la reconexión, los pines virtuales y
 					<code>BLYNK_WRITE</code>.
 				</p>
@@ -159,17 +159,17 @@
 						<code>downlink/ds/#</code>.
 					</p>
 					<h4>Errores frecuentes</h4>
-					<p>Buscar los datos del ejemplo 19 con un cliente MQTT; la librería no publica en ningún tema.</p>
+					<p>Buscar los datos del ejemplo 19 con un cliente MQTT; la biblioteca no publica en ningún tema.</p>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="06-piezas-blynk.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Piezas</span>
+					<span>Componentes de Blynk</span>
 				</a>
 				<a class="slide-nav__link" href="08-pines-virtuales.html">
-					<span>Pines V</span>
+					<span>Pines virtuales</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>
