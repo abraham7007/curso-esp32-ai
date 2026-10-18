@@ -61,9 +61,9 @@
 									Qué debe hacer
 								</h4>
 								<ol class="s6n-pasos">
-									<li><b>Capturar.</b> <code>pio run -e captura -t upload</code> → un CSV por color</li>
-									<li><b>Entrenar.</b> Colab: subir los CSV, «Ejecutar todas» → <code>include/model.h</code></li>
-									<li><b>Inferir.</b> <code>pio run -e inferencia -t upload</code> → LED del color</li>
+									<li><b>Capturar.</b> <code>src/captura/</code> imprime r, g y b → un CSV por color</li>
+									<li><b>Entrenar.</b> Colab: subir los CSV, «Ejecutar todas» → <code>model.h</code></li>
+									<li><b>Inferir.</b> <code>src/inferencia/</code> clasifica cada objeto → LED del color</li>
 								</ol>
 							</div>
 							<div class="code-hour__section s6n-montaje">
@@ -88,7 +88,7 @@
 ⋮</div>
 									</figure>
 									<p class="s3-remedio s4b-aviso s6n-aviso">
-										<b>int8.</b> La entrada se cuantiza con <code>q = round(x / scale) + zero_point</code>, de −128 a 127. Como en el 20: primera compilación de 10&nbsp;min o más y un <code>model.h</code> de datos <b>sintéticos</b> que hay que reemplazar.
+										<b>int8.</b> Cada entrada se divide por scale, se redondea y se le suma zero_point: queda entre −128 y 127. Como en el 20: primera compilación de 10&nbsp;min o más y un model.h de datos <b>sintéticos</b> que hay que reemplazar.
 									</p>
 								</div>
 							</section>
@@ -138,9 +138,9 @@
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>tflite::GetModel(model)</code>, <code>MicroInterpreter(modelo, resolver, arena, TAM_ARENA)</code>, <code>AllocateTensors()</code>, <code>input(0)-&gt;params.scale</code> y <code>Invoke()</code>. En el cuaderno: <code>optimizations = [tf.lite.Optimize.DEFAULT]</code>, <code>representative_dataset</code> e <code>inference_input_type = tf.int8</code>. Compilado: 129 696 bytes de flash.</p>
+					<p>Sin ArduTFLite, el programa usa el intérprete de TensorFlow Lite Micro en cinco pasos: cargar el modelo, crear el intérprete con su arena, reservar los tensores, leer el scale y el zero_point de la entrada y ejecutar la red. En el cuaderno, la conversión a int8 se activa con la optimización por defecto, un conjunto representativo y entrada y salida de tipo int8. Compilado: 129 696 bytes de flash.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Copiar el float al tensor int8 sin cuantizar: la red recibe ceros.</li><li>Copiar el <code>model.h</code> float del 20: el sketch se detiene con «El modelo no es int8».</li><li>Otro orden en <code>CLASSES</code> y <code>CLASES</code>.</li></ul>
+					<ul><li>Copiar el float al tensor int8 sin cuantizar: la red recibe ceros.</li><li>Copiar el model.h float del 20: el programa se detiene con «El modelo no es int8».</li><li>Otro orden de clases en el cuaderno y en el programa de la placa.</li></ul>
 				</div>
 			</details>
 

@@ -130,7 +130,7 @@ Total: 12
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> El firmware recorre un <code>JsonArray</code> con tope propio y lo pagina; el servidor envía doce nombres y la pantalla admite cinco.</p>
+						<p><b>Qué comprueba.</b> El firmware recorre la lista del JSON con un tope propio y la pagina; el servidor envía doce nombres y la pantalla admite cinco.</p>
 					</div>
 				</div>
 			</div>
@@ -143,9 +143,9 @@ Total: 12
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>JsonArray people = doc["people"];</code> y <code>people[i]["name"].as&lt;String&gt;()</code>. <code>DynamicJsonDocument doc(2048)</code> reserva en el montón: la respuesta mide 587 bytes y el árbol ocupa más. Páginas: <code>(total + 4) / 5</code>, división redondeada hacia arriba.</p>
+					<p>El firmware toma el campo name de cada objeto de la lista people. El documento JSON reserva 2048 bytes en el montón: la respuesta mide 587 bytes y el árbol ocupa más. Páginas: (total + 4) / 5, división redondeada hacia arriba.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Recorrer hasta <code>number</code> sin tope y escribir fuera del arreglo.</li><li>Dar por vigente un 200.</li><li>Dejar <code>setTextWrap(true)</code>, con lo que el nombre largo invade la fila de abajo.</li></ul>
+					<ul><li>Recorrer hasta el valor de number sin tope y escribir fuera del arreglo.</li><li>Dar por vigente un 200.</li><li>Dejar activo el ajuste de línea, con lo que el nombre largo invade la fila de abajo.</li></ul>
 				</div>
 			</details>
 

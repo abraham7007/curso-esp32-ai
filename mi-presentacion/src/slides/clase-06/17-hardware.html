@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1900 808" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de chips y placas. nRF52840, de la Nano 33 BLE Sense de esta sesión: Cortex-M4F a 64 MHz, 256 KB de RAM, instrucciones DSP que aprovecha CMSIS-NN. ESP32-S3: dos Xtensa LX7 a 240 MHz, 512 KB más PSRAM, instrucciones vectoriales que aprovecha ESP-NN. RP2040: dos Cortex-M0+ a 200 MHz, 264 KB, sin acelerador ni FPU. STM32N6: Cortex-M55 a 800 MHz, 4,2 MB de RAM y la NPU Neural-ART. Nicla Voice: nRF52832 con 64 KB de RAM y el procesador neuronal Syntiant NDP120. Nicla Vision: STM32H747 a 480 MHz, 1 MB de RAM, instrucciones DSP y cámara de 2 megapíxeles. ESP32 de las sesiones 1 a 5: dos Xtensa LX6 a 240 MHz, 520 KB, ESP-NN sin instrucciones vectoriales. A la derecha, la detección de personas de esp-tflite-micro, la misma red, invoke a 240 MHz: en el ESP32, 4084 ms sin ESP-NN y 380 ms con ESP-NN, 10,7 veces menos; en el ESP32-S3, 2300 ms y 54 ms, 42,6 veces menos. El flujo de la sesión pasa al ESP32 con esp-tflite-micro.">
+					<svg class="s3d-svg crece" viewBox="0 0 1900 808" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de chips y placas. nRF52840, de la Nano 33 BLE Sense de esta sesión: Cortex-M4F a 64 MHz, 256 KB de RAM, instrucciones DSP que aprovecha CMSIS-NN. ESP32-S3: dos Xtensa LX7 a 240 MHz, 512 KB más PSRAM, instrucciones vectoriales que aprovecha ESP-NN. RP2040: dos Cortex-M0+ a 200 MHz, 264 KB, sin acelerador ni FPU. STM32N6: Cortex-M55 a 800 MHz, 4,2 MB de RAM y la NPU Neural-ART. Nicla Voice: nRF52832 con 64 KB de RAM y el procesador neuronal Syntiant NDP120. Nicla Vision: STM32H747 a 480 MHz, 1 MB de RAM, instrucciones DSP y cámara de 2 megapíxeles. ESP32 de las sesiones 1 a 5: dos Xtensa LX6 a 240 MHz, 520 KB, ESP-NN sin instrucciones vectoriales. A la derecha, la detección de personas de esp-tflite-micro, la misma red, una inferencia a 240 MHz: en el ESP32, 4084 ms sin ESP-NN y 380 ms con ESP-NN, 10,7 veces menos; en el ESP32-S3, 2300 ms y 54 ms, 42,6 veces menos. El flujo de la sesión pasa al ESP32 con esp-tflite-micro.">
 						<!-- tabla -->
 						<text class="sans mut" x="0" y="20" font-size="26">chip o placa</text>
 						<text class="sans mut" x="320" y="20" font-size="26">núcleo · reloj</text>
@@ -72,7 +72,7 @@
 						
 						<!-- gráfico: la misma red, sin y con ESP-NN (esp-tflite-micro) -->
 						<text class="sans" x="1340" y="20" font-size="28" font-weight="700">detección de personas</text>
-						<text class="sans mut" x="1340" y="60" font-size="25">la misma red · invoke() a 240 MHz</text>
+						<text class="sans mut" x="1340" y="60" font-size="25">la misma red · una inferencia a 240 MHz</text>
 						<text class="sans" x="1340" y="130" font-size="30" font-weight="700">ESP32</text>
 						<rect class="barra--dan" x="1340" y="160" width="520" height="60" rx="6" />
 						<text class="dan fin" x="1844" y="190" font-size="29" font-weight="700">4 084 ms</text>
@@ -109,10 +109,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						ESP32 y ESP32-S3: <code>idf.py add-dependency "espressif/esp-tflite-micro"</code>
-						(ESP-IDF) trae TFLM con ESP-NN. RP2040: <code>pico-tflmicro</code>; 200 MHz con
-						<code>SYS_CLK_MHZ=200</code> (Pico SDK 2.1.1). STM32: ST Edge AI Core y
-						NanoEdge AI Studio.
+						ESP32 y ESP32-S3: el componente esp-tflite-micro de ESP-IDF trae TFLM con
+						ESP-NN. RP2040: el port pico-tflmicro; los 200 MHz se fijan con la definición
+						SYS_CLK_MHZ del Pico SDK 2.1.1. STM32: ST Edge AI Core y NanoEdge AI Studio.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplos 20 y 21 en la nRF52840; el ESP32 de las sesiones 1 a 5 ejecuta el mismo tipo de modelo con esp-tflite-micro.</p>

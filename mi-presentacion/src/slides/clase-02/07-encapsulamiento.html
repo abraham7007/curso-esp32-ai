@@ -21,84 +21,55 @@
 
 				<h1 class="slide__title slide__title--sm"><em>Encapsulamiento</em> con private y public</h1>
 
-				<div class="rd s2 s2-encap crece">
-					<section class="codepanel s2-codigo" aria-label="Led.h: miembros privados y públicos">
-						<div class="codepanel__header">
-							<span class="codepanel__path">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-								<span>lib/Led/Led.h</span>
-							</span>
+				<div class="rd s2v s2v-encap crece">
+					<div class="s2v-caja s2v-caja--main s2v-encap__otro">
+						<p class="s2v-caja__nombre">main.cpp</p>
+						<p>u otro módulo</p>
+					</div>
+
+					<div class="s2v-acceso s2v-acceso--bien">
+						<p>pide «alternar»</p>
+						<span class="s2v-acceso__flecha" aria-hidden="true"></span>
+						<span class="s2v-pastilla s2v-pastilla--bien">✓ compila</span>
+					</div>
+					<div class="s2v-acceso s2v-acceso--mal" data-paso="1">
+						<p>cambia el pin a 4 directamente</p>
+						<span class="s2v-acceso__flecha" aria-hidden="true"></span>
+						<span class="s2v-pastilla s2v-pastilla--mal s2v-encap__veredicto" data-paso="2">✗ no compila</span>
+					</div>
+
+					<section class="s2v-objeto" aria-label="Objeto led: interfaz pública y estado privado">
+						<p class="s2v-objeto__nombre">objeto led</p>
+						<div class="s2v-objeto__pub">
+							<p class="s2v-objeto__rotulo">interfaz pública</p>
+							<ul class="s2v-metodos">
+								<li>configurar</li>
+								<li>encender</li>
+								<li>apagar</li>
+								<li class="is-usado">alternar</li>
+								<li>consultar</li>
+							</ul>
 						</div>
-						<div class="s2-lineas">
-							<span class="s2-l">class Led {</span>
-							<div class="s2-zona s2-zona--priv">
-								<span class="s2-zona__rotulo">acceso: métodos de Led</span>
-								<span class="s2-l">private:</span>
-								<span class="s2-l">    uint8_t _pin;</span>
-								<span class="s2-l">    bool _state;</span>
-							</div>
-							<div class="s2-zona s2-zona--pub">
-								<span class="s2-zona__rotulo">acceso: cualquier archivo</span>
-								<span class="s2-l">public:</span>
-								<span class="s2-l">    explicit Led(uint8_t pin);</span>
-								<span class="s2-l">    void begin();</span>
-								<span class="s2-l">    void on();</span>
-								<span class="s2-l">    void off();</span>
-								<span class="s2-l">    bool toggle();</span>
-								<span class="s2-l">    bool isOn() const;</span>
-							</div>
-							<span class="s2-l">};</span>
+						<div class="s2v-objeto__priv">
+							<p class="s2v-objeto__rotulo">estado privado · solo los métodos</p>
+							<p class="s2v-campos"><span>pin <b>2</b></span><span>estado <b>encendido</b></span></p>
 						</div>
 					</section>
 
-					<div class="s2-encap__der">
-						<section class="codepanel s2-codigo" aria-label="loop() de main.cpp">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>src/main.cpp</span>
-								</span>
-							</div>
-							<div class="s2-lineas">
-								<span class="s2-l">void loop() {</span>
-								<span class="s2-l s2-l--cpp">    bool estado = led.toggle();<span class="s2-chip s2-chip--bien">público ✓</span></span>
-								<span class="s2-l s2-l--mal" data-paso="1">    led._pin = 4;<span class="s2-chip s2-chip--mal">privado ✗</span></span>
-								<span class="s2-l s2-c">    …</span>
-								<span class="s2-l">}</span>
-							</div>
-						</section>
-
-						<section class="codepanel s2-codigo" aria-label="Salida de pio run">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-									<span>terminal · pio run</span>
-								</span>
-								<span class="s2-simbolo s2-simbolo--mal s2-sin" data-paso="2">compilador</span>
-							</div>
-							<pre class="s2-term"><span class="s2-solo-bien"><span class="s2-c">$ pio run</span>
-Compiling .pio/build/esp32dev/src/main.cpp.o
-Linking .pio/build/esp32dev/firmware.elf
-<b class="s2-okt">[SUCCESS]</b></span><span class="s2-solo-mal"><span class="s2-c">src/main.cpp: In function 'void loop()':</span>
-src/main.cpp:21:9: <b class="s2-err">error: 'uint8_t Led::_pin' is private within this context</b>
-     led._pin = 4;
-<span class="s2-c">In file included from src/main.cpp:2:</span>
-lib/Led/Led.h:8:13: note: declared private here</span></pre>
-						</section>
-					</div>
+					<span class="s2v-msg s2v-encap__msg" data-paso="2">src/main.cpp:21:9: <b>error: 'uint8_t Led::_pin' is private within this context</b></span>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: si <code>main.cpp</code> pudiera escribir
-					<code>led._pin = 4</code> después de <code>begin()</code>, ¿qué pin
-					conmutaría el objeto? Respuesta: el GPIO 4, que nunca se configuró como
-					salida, sin ningún aviso. Paso 1: se añade esa línea. Paso 2: el
-					compilador la rechaza y señala archivo, línea y columna, con una nota
+					Pregunta de predicción: si <code>main.cpp</code> pudiera cambiar el pin
+					del objeto a 4 después de configurarlo, ¿qué pin conmutaría el objeto?
+					Respuesta: el GPIO 4, que nunca se configuró como salida, sin ningún
+					aviso. Paso 1: aparece ese acceso directo al dato privado. Paso 2: el
+					compilador lo rechaza y señala archivo, línea y columna, con una nota
 					que apunta a la declaración en <code>Led.h</code>. El error aparece en
 					la compilación, antes de grabar la placa. Para leer el estado existe
-					<code>isOn()</code>, que lo devuelve sin permitir cambiarlo.
+					el método de consulta, que lo devuelve sin permitir cambiarlo.
 				</p>
 			</aside>
 
@@ -107,10 +78,10 @@ lib/Led/Led.h:8:13: note: declared private here</span></pre>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>private:</code> limita el acceso a los métodos de la propia clase;
-						<code>public:</code> es la interfaz. <code>isOn() const</code> declara que
-						no modifica el objeto. <code>explicit</code> impide la conversión
-						implícita de un número en <code>Led</code>.
+						Las secciones <code>private</code> y <code>public</code> de la clase
+						separan el estado de la interfaz. El método de consulta,
+						<code>isOn()</code>, se declara <code>const</code>: promete no
+						modificar el objeto.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

@@ -78,8 +78,8 @@
 					<h4>En la práctica</h4>
 					<p>
 						Ejemplo 11: D17 (TX2) de cada placa al D16 (RX2) de la otra y GND con
-						GND. <code>Serial2.begin(115200, SERIAL_8N1, 16, 17)</code>: el
-						tercer argumento es RX y el cuarto TX.
+						GND. Al arrancar el puerto (<code>Serial2.begin()</code>) se indica
+						primero el pin RX y después el TX.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -90,7 +90,7 @@
 					<ul>
 						<li>TX con TX: dos salidas enfrentadas; si una baja mientras la otra sube, circula corriente entre ellas.</li>
 						<li>Olvidar GND con fuentes separadas: funciona en la mesa (mismo PC) y falla en el montaje final.</li>
-						<li>Invertir RX y TX en <code>Serial2.begin()</code>.</li>
+						<li>Invertir el orden de RX y TX al arrancar el puerto.</li>
 					</ul>
 				</div>
 			</details>
@@ -123,7 +123,7 @@
 			// Los alterados se muestran en hexadecimal (0xE8, 0xFC).
 			const SIN_MASA = ["E8", "o", "FC", "a", null];
 			const enMonitor = (ch) => (ch.length === 2 ? `<${ch}>` : ch);
-			const verComo = (ch) => (ch === "\n" ? "\\n" : ch);
+			const verComo = (ch) => (ch === "\n" ? "LF" : ch);
 
 						const T0 = 0.6;
 			const ENTRE = 0.55;

@@ -120,7 +120,7 @@ Iniciando escaneo del bus I2C (SDA=21, SCL=22)
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>El TCA9548A, en 0x70 por defecto, abre uno de ocho sub-buses cada vez. El ESP32 tiene dos controladores I²C: <code>Wire1.begin(sda, scl)</code> crea un segundo bus en otros pines. El BMP280 elige 0x76 o 0x77 con su pin SDO.</p>
+					<p>El TCA9548A, en 0x70 por defecto, abre uno de ocho sub-buses cada vez. El ESP32 tiene dos controladores I²C: el segundo, <code>Wire1</code>, forma otro bus en otros pines. El BMP280 elige 0x76 o 0x77 con su pin SDO.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>Creer que el escáner falla: cuenta direcciones, no módulos.</li><li>Cambiar el orden del cableado esperando otra dirección: la fija el chip.</li><li>Añadir pull-ups externas sobre las de los módulos: la resistencia equivalente baja aún más.</li></ul>
 				</div>

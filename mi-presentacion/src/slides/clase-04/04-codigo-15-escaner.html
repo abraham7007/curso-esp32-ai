@@ -106,7 +106,7 @@ Iniciando escaneo...</div>
 <b>3. Simulación.</b> Añade la simulación de Wokwi con un ESP32 solo.
 <b>4. Diagrama.</b> En Excalidraw: el flujo de loop() con las tres ramas de n (error, ninguna red, lista).</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> Un <code>n</code> negativo es un código de error (−2 = <code>WIFI_SCAN_FAILED</code>); sin esa rama, el bucle no imprime nada y el fallo no se detecta. El escaneo funciona en modo estación sin conectarse a ninguna red.
+									<b>Por qué se pide así.</b> El barrido puede devolver un código de error en lugar de una cantidad de redes; sin esa rama, el bucle no imprime nada y el fallo pasa inadvertido. El escaneo funciona en modo estación sin conectarse a ninguna red.
 								</p>
 							</div>
 						</div>
@@ -127,9 +127,9 @@ Iniciando escaneo...</div>
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>WiFi.scanNetworks()</code> devuelve la cantidad de redes o un negativo. Después, por índice: <code>WiFi.SSID(i)</code>, <code>WiFi.RSSI(i)</code> (dBm), <code>WiFi.channel(i)</code> y <code>WiFi.encryptionType(i)</code>, que vale <code>WIFI_AUTH_OPEN</code> en una red abierta.</p>
+					<p>El barrido devuelve la cantidad de redes o un número negativo si falla (−2). Cada red encontrada se consulta por su posición en la lista: nombre, potencia en dBm, canal y tipo de cifrado, que distingue la red abierta de la cifrada.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Buscar la red de 5 GHz del router, que el ESP32 no detecta.</li><li>Tratar un −2 como cantidad de redes.</li><li>Escanear en modo AP sin <code>WIFI_STA</code>.</li><li>Leer el RSSI como valor positivo; −48 dBm es más potencia que −81 dBm.</li></ul>
+					<ul><li>Buscar la red de 5 GHz del router, que el ESP32 no detecta.</li><li>Tratar un −2 como cantidad de redes.</li><li>Escanear en modo AP sin activar el modo estación.</li><li>Leer el RSSI como valor positivo; −48 dBm es más potencia que −81 dBm.</li></ul>
 				</div>
 			</details>
 

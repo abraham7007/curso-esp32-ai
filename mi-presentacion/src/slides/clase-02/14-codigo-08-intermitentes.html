@@ -141,9 +141,9 @@ t=1600 ms [LED-1] gpio=2 nivel=1</div>
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>El valor por defecto <code>nombre = "LED"</code> va solo en la declaración del <code>.h</code>. <code>_nombre</code> guarda un puntero a la cadena literal, que existe durante toda la ejecución.</p>
+					<p>El valor por defecto del nombre va solo en la declaración del <code>.h</code>. El objeto guarda un puntero a la cadena literal, que existe durante toda la ejecución.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Comparar <code>millis() &gt;= siguiente</code> en vez de restar: falla al desbordar, a los 49,7 días.</li><li>Un <code>delay()</code> en cualquier <code>update()</code> retrasa los tres LED.</li><li>Repetir el valor por defecto en el <code>.cpp</code>: error de compilación.</li></ul>
+					<ul><li>Comparar el instante actual con una suma en lugar de restar: falla al desbordar, a los 49,7 días.</li><li>Un <code>delay()</code> en cualquier <code>update()</code> retrasa los tres LED.</li><li>Repetir el valor por defecto en el <code>.cpp</code>: error de compilación.</li></ul>
 				</div>
 			</details>
 

@@ -30,8 +30,8 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta s4c-codigo">
-							<code>WiFiClientSecure cliente;</code>
-							<code>cliente.setCACert(raiz);</code>
+							<span>verificar exige:</span>
+							<b>certificado raíz en el firmware</b>
 						</p>
 					</div>
 
@@ -74,11 +74,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>WiFiClientSecure cliente; cliente.setCACert(raiz);
-						http.begin(cliente, url);</code> verifica el servidor.
-						<code>http.begin(url)</code> con <code>https://</code> y sin
-						certificado cifra el canal, pero llama a <code>setInsecure()</code> y no verifica al servidor. La verificación necesita la hora correcta (NTP) para
-						comprobar la vigencia del certificado.
+						Para verificar, el firmware lleva el certificado de la autoridad raíz y
+						lo asocia a la conexión segura. Una URL https sin certificado cifra el
+						canal, pero acepta cualquier servidor. La verificación necesita además
+						la hora correcta (NTP) para comprobar la vigencia del certificado.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplos 16 y 16b (cifrado sin verificar) y 18 (clave en HTTPS).</p>

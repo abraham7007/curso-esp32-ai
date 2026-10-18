@@ -22,7 +22,7 @@
 				<h1 class="slide__title slide__title--sm">Flujo de trabajo de TinyML entre Colab y la <em>placa</em></h1>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="-16 0 1832 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis etapas en fila, agrupadas por dónde ocurren. En la placa: 1, capturar ejemplos etiquetados de cada clase con el monitor serie a un archivo CSV. En Google Colab: 2, entrenar, ajustar los pesos de la red con TensorFlow y Keras, produce un modelo float32; 3, evaluar con los datos de prueba, exactitud y matriz de confusión, con model.evaluate; 4, convertir a .tflite con TFLiteConverter y, si se le dan entre 100 y 500 muestras, cuantizar a int8 en el mismo paso, opcional, lo usa el ejemplo 21; 5, exportar a C, el .tflite como arreglo de bytes con un script de Python o xxd -i, produce model.h. En el PC y la placa: 6, desplegar, compilar con PlatformIO, grabar y ejecutar en la placa con TensorFlow Lite Micro, produce el gesto o el color. Una flecha vuelve de la etapa 6 a la 1: si falla con datos nuevos, más ejemplos y volver a entrenar.">
+					<svg class="s4a-svg crece" viewBox="-16 0 1832 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Seis etapas en fila, agrupadas por dónde ocurren. En la placa: 1, capturar ejemplos etiquetados de cada clase con el monitor serie a un archivo CSV. En Google Colab: 2, entrenar, ajustar los pesos de la red con TensorFlow y Keras, produce un modelo float32; 3, evaluar con datos de prueba apartados, exactitud y matriz de confusión; 4, convertir a .tflite con TFLiteConverter y, si se le dan entre 100 y 500 muestras, cuantizar a int8 en el mismo paso, opcional, lo usa el ejemplo 21; 5, exportar a C, el .tflite como arreglo de bytes con un script de Python, produce model.h. En el PC y la placa: 6, desplegar, compilar con PlatformIO, grabar y ejecutar en la placa con TensorFlow Lite Micro, produce el gesto o el color. Una flecha vuelve de la etapa 6 a la 1: si falla con datos nuevos, más ejemplos y volver a entrenar.">
 						<rect class="caja caja--zona" x="-10" y="56" width="295" height="616" rx="16" />
 						<text class="sans b acc" x="-4" y="26" font-size="30">en la placa</text>
 						<rect class="caja caja--zona" x="295" y="56" width="1210" height="616" rx="16" />
@@ -53,7 +53,7 @@
 						<text class="sans" x="325" y="306" font-size="27">los datos</text>
 						<path class="ln ln--fina ln--mut" d="M325 386 H560" />
 						<text class="navy" x="323" y="436" font-size="25">TensorFlow</text>
-						<text class="navy" x="323" y="480" font-size="25">Keras: fit()</text>
+						<text class="navy" x="323" y="480" font-size="25">y Keras</text>
 						<path class="ln ln--fina" d="M442.5 546 V584" />
 						<rect class="s6a-pista" x="317" y="586" width="251" height="62" rx="8" />
 						<text class="mid b" x="442.5" y="618" font-size="27">modelo float32</text>
@@ -67,8 +67,8 @@
 						<text class="sans" x="630" y="262" font-size="27">matriz de</text>
 						<text class="sans" x="630" y="306" font-size="27">confusión</text>
 						<path class="ln ln--fina ln--mut" d="M630 386 H865" />
-						<text class="navy" x="628" y="436" font-size="25">model.evaluate</text>
-						<text class="navy" x="628" y="480" font-size="25">con la prueba</text>
+						<text class="navy" x="628" y="436" font-size="25">datos de prueba</text>
+						<text class="navy" x="628" y="480" font-size="25">apartados</text>
 						<path class="ln ln--fina" d="M747.5 546 V584" />
 						<rect class="s6a-pista" x="622" y="586" width="251" height="62" rx="8" />
 						<text class="mid b" x="747.5" y="618" font-size="27">métricas</text>
@@ -98,7 +98,7 @@
 						<text class="sans" x="1240" y="306" font-size="27">de bytes</text>
 						<path class="ln ln--fina ln--mut" d="M1240 386 H1475" />
 						<text class="navy" x="1238" y="436" font-size="25">script Python</text>
-						<text class="navy" x="1238" y="480" font-size="25">(o xxd -i)</text>
+						<text class="navy" x="1238" y="480" font-size="25">en el cuaderno</text>
 						<path class="ln ln--fina" d="M1357.5 546 V584" />
 						<rect class="s6a-pista" x="1232" y="586" width="251" height="62" rx="8" />
 						<text class="mid b" x="1357.5" y="618" font-size="27">model.h</text>
@@ -132,7 +132,7 @@
 					Recorrido: la placa captura y envía cada muestra por el puerto serie; se guarda como CSV y se sube a Colab. Allí Keras ajusta los pesos. Antes de convertir se evalúa con datos de prueba que no se usaron al entrenar: exactitud y matriz de confusión (lámina 11). Si las métricas no son suficientes, se vuelve a entrenar sin tocar la placa.
 				</p>
 				<p>
-					<code>TFLiteConverter</code> hace dos cosas en el mismo paso: convierte a <code>.tflite</code> y, si se le dan entre 100 y 500 muestras representativas, cuantiza a int8 (lámina 10). Después el cuaderno escribe el <code>.tflite</code> como arreglo de bytes en C, el <code>model.h</code> (lo que hace <code>xxd -i</code>), que se compila con el programa. En la placa, TensorFlow Lite Micro carga el modelo y ejecuta la red: con ArduTFLite en el ejemplo 20 y llamando al intérprete directamente en el 21.
+					TFLiteConverter hace dos cosas en el mismo paso: convierte a .tflite y, si se le dan entre 100 y 500 muestras representativas, cuantiza a int8 (lámina 10). Después el cuaderno escribe el .tflite como arreglo de bytes en C, el model.h (lo mismo que hace la utilidad xxd), que se compila con el programa. En la placa, TensorFlow Lite Micro carga el modelo y ejecuta la red: con ArduTFLite en el ejemplo 20 y llamando al intérprete directamente en el 21.
 				</p>
 				<p>
 					La flecha de vuelta indica qué hacer cuando la placa falla con gestos de otra persona: capturar más ejemplos y entrenar otra vez, sin cambiar el código.
@@ -144,10 +144,11 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Colab: <code>converter = tf.lite.TFLiteConverter.from_keras_model(model)</code>;
-						para int8, <code>converter.representative_dataset</code>. En la placa, con ArduTFLite (ejemplo 20):
-						<code>modelInit(model, arena, tamaño)</code>, <code>modelSetInput(valor, i)</code>,
-						<code>modelRunInference()</code> y <code>modelGetOutput(i)</code>.
+						Cada etapa deja un archivo que la siguiente consume: CSV → modelo de Keras →
+						.tflite → model.h → firmware. En Colab, TFLiteConverter parte del modelo de Keras;
+						para int8 necesita además un conjunto representativo. En la placa, ArduTFLite
+						(ejemplo 20) reduce la inferencia a cuatro pasos: iniciar, cargar la entrada,
+						ejecutar y leer la salida.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 20 (gestos, convertido en float) y ejemplo 21 (colores, convertido a int8).</p>

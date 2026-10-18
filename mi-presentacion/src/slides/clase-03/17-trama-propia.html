@@ -103,11 +103,11 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Emisor: <code>Serial2.write(0xAA)</code>, id, longitud, la carga y
-						<code>calcularChecksum(id, longitud, carga)</code>, que suma en un
-						<code>uint8_t</code> (el desbordamiento hace el módulo 256).
-						Receptor: una máquina de estados
-						<code>ESPERANDO_CABECERA → LEYENDO_ID → LEYENDO_LONGITUD → LEYENDO_CARGA → LEYENDO_CHECKSUM</code>.
+						Emisor: escribe 0xAA, el identificador, la longitud, la carga y el
+						checksum, sumado en una variable de un byte (el desbordamiento hace el
+						módulo 256). Receptor: una máquina de estados, esperando cabecera →
+						leyendo identificador → leyendo longitud → leyendo carga → leyendo
+						checksum.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -116,7 +116,7 @@
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Usar <code>'\n'</code> como fin de trama binaria: 0x0A puede ser un dato.</li>
+						<li>Usar el fin de línea como fin de trama binaria: 0x0A puede ser un dato.</li>
 						<li>Sin longitud, el receptor no sabe dónde acaba la carga.</li>
 					</ul>
 				</div>

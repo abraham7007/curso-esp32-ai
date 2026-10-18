@@ -60,14 +60,14 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
 									Qué debe hacer
 								</h4>
-								<p>Pedir cada 60 s el precio a CoinGecko, extraer <code>bitcoin.usd</code> del JSON e imprimirlo; cada error se imprime con su código.</p>
+								<p>Pedir cada 60 s el precio a CoinGecko, extraer el valor en USD e imprimirlo; cada error se imprime con su causa.</p>
 							</div>
 							<div class="code-hour__section">
 								<h4>
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
 									Montaje
 								</h4>
-								<p>Una sola placa. En Wokwi, la red <code>Wokwi-GUEST</code>, sin contraseña, da salida a Internet. IP y precio son ilustrativos.</p>
+								<p>Una sola placa. En Wokwi, la red Wokwi-GUEST, sin contraseña, da salida a Internet. IP y precio son ilustrativos.</p>
 								<div class="hw-set mt-3" aria-hidden="true">
 									<span class="hw-set__item hw-set__board">
 										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
@@ -116,7 +116,7 @@ Conectando a WiFi ......
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> Un código positivo lo envía el servidor; uno negativo lo genera HTTPClient cuando la respuesta no llegó (DNS, conexión, TLS o tiempo agotado).</p>
+						<p><b>Qué comprueba.</b> El código de estado lo envía el servidor; si la respuesta no llega (DNS, conexión, TLS o tiempo agotado), no hay código.</p>
 					</div>
 				</div>
 			</div>
@@ -129,9 +129,9 @@ Conectando a WiFi ......
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>HTTPClient http; http.begin(url); int c = http.GET();</code> → <code>http.getString()</code> con 200 y <code>http.end()</code> siempre. <code>HTTPClient::errorToString(c)</code> traduce los negativos: −1 «connection refused», −11 «read Timeout».</p>
+					<p>Secuencia de cada consulta: preparar la URL, enviar la petición, leer el cuerpo solo con 200 y cerrar la conexión siempre, también tras un error. Sin respuesta, HTTPClient da un número negativo con su texto: −1 «connection refused», −11 «read Timeout».</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Consultar cada segundo, con precio repetido y respuestas 429.</li><li>Leer <code>getString()</code> sin comprobar el 200.</li><li>Olvidar <code>http.end()</code>; la memoria se agota en pocas vueltas del <code>loop()</code>.</li><li>Esperar la red sin tope, con la placa imprimiendo puntos sin fin.</li></ul>
+					<ul><li>Consultar cada segundo, con precio repetido y respuestas 429.</li><li>Leer el cuerpo sin comprobar el 200.</li><li>No cerrar la conexión; la memoria se agota en pocas consultas.</li><li>Esperar la red sin tope, con la placa imprimiendo puntos sin fin.</li></ul>
 				</div>
 			</details>
 

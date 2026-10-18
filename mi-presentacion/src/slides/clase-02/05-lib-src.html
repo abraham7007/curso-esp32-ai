@@ -43,7 +43,7 @@
 												</ul>
 											</li>
 											<li>
-												<div class="arbol__fila"><span class="arbol__nombre">Led/</span><span class="s2-origen s2-origen--cambia" data-paso="2">del 06 + LEDC en begin() y escribirPWM()</span></div>
+												<div class="arbol__fila"><span class="arbol__nombre">Led/</span><span class="s2-origen s2-origen--cambia" data-paso="2">del 06 + salida PWM</span></div>
 												<ul>
 													<li><div class="arbol__fila"><span class="arbol__nombre">Led.h · Led.cpp</span></div></li>
 												</ul>
@@ -62,30 +62,25 @@
 						</ul>
 					</section>
 
-					<div class="s2-lib__der">
-						<section class="codepanel s2-codigo" aria-label="Comienzo de src/main.cpp del ejemplo 10">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>src/main.cpp · ejemplo 10</span>
-								</span>
-							</div>
-							<div class="s2-lineas">
-								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
-								<span class="s2-l s2-l--h">#include "Led.h"</span>
-								<span class="s2-l s2-l--h">#include "Boton.h"</span>
-								<span class="s2-l s2-l--h">#include "EntradaAnalogica.h"</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">Led led(2);</span>
-								<span class="s2-l">Boton boton(4);</span>
-								<span class="s2-l">EntradaAnalogica entrada(32, 16);</span>
-								<span class="s2-l">bool automatico = false;</span>
-								<span class="s2-l">uint8_t dutyPrevio = 0;</span>
-							</div>
+					<div class="s2-lib__der s2v">
+						<section class="s2v-criterio s2v-criterio--lib" aria-label="Criterio para lib/">
+							<p class="s2v-criterio__dir">lib/ <span>se reutiliza</span></p>
+							<ul>
+								<li>Otro proyecto lo usaría sin cambios.</li>
+								<li>Guarda su propio estado.</li>
+								<li>Recibe el pin al crearse.</li>
+							</ul>
+						</section>
+						<section class="s2v-criterio s2v-criterio--src" aria-label="Criterio para src/">
+							<p class="s2v-criterio__dir">src/ <span>propio del proyecto</span></p>
+							<ul>
+								<li>Contiene los pines y los modos.</li>
+								<li>Coordina los módulos.</li>
+							</ul>
 						</section>
 						<p class="s2-lib__pie">
-							PlatformIO encuentra cada <code>#include</code> en <code>lib/</code> y
-							compila esa carpeta como una librería más.
+							PlatformIO compila cada carpeta de <code>lib/</code> que se incluye
+							desde <code>src/</code>.
 						</p>
 					</div>
 				</div>
@@ -94,13 +89,13 @@
 			<aside class="notas">
 				<p>
 					Pregunta de predicción: para usar el botón del ejemplo 07 en el 10,
-					¿qué hay que cambiar en <code>Boton.cpp</code>? Respuesta: ninguna
-					línea. Paso 1: <code>Boton</code> y <code>EntradaAnalogica</code> son
-					copias exactas de las carpetas del 07 y del 09. Paso 2:
-					<code>Led</code> cambia; añade <code>escribirPWM(uint8_t)</code>, y
-					<code>begin()</code> conecta el pin al LEDC (5 kHz, 8 bits) con código
-					que compila en el núcleo Arduino 2.x y 3.x. Lo que no se reutiliza (el
-					modo, los pines concretos) queda en <code>src/main.cpp</code>.
+					¿qué hay que cambiar en el módulo <code>Boton</code>? Respuesta: nada.
+					Paso 1: <code>Boton</code> y <code>EntradaAnalogica</code> son copias
+					exactas de las carpetas del 07 y del 09. Paso 2: <code>Led</code>
+					cambia; añade un método de salida PWM y su configuración conecta el
+					pin al LEDC (5 kHz, 8 bits) en los núcleos Arduino 2.x y 3.x. Lo que
+					no se reutiliza (el modo, los pines concretos) queda en
+					<code>src/main.cpp</code>: es el criterio de la derecha.
 				</p>
 			</aside>
 
@@ -117,11 +112,11 @@
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						En el 10, <code>Led::begin()</code> conecta el pin al LEDC con
-						<code>ledcAttach()</code> (núcleo 3.x) o con <code>ledcSetup()</code> +
-						<code>ledcAttachPin()</code> (2.x), según
-						<code>#if ESP_ARDUINO_VERSION_MAJOR &gt;= 3</code>, y
-						<code>escribirPWM()</code> llama a <code>ledcWrite()</code>.
+						En el 10, <code>begin()</code> de <code>Led</code> conecta el pin al
+						LEDC con <code>ledcAttach()</code> en el núcleo 3.x o con
+						<code>ledcSetup()</code> y <code>ledcAttachPin()</code> en el 2.x, según la
+						versión instalada, y el nuevo <code>escribirPWM()</code> fija el ciclo
+						de trabajo.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<p>

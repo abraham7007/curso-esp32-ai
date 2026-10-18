@@ -60,7 +60,7 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
 									Qué debe hacer
 								</h4>
-								<p>Lo escrito en el monitor de una placa aparece en la otra con el prefijo <code>[recibido]</code>, en ambos sentidos.</p>
+								<p>Lo escrito en el monitor de una placa aparece en la otra con el prefijo «[recibido]», en ambos sentidos y sin pausas.</p>
 							</div>
 							<div class="code-hour__section">
 								<h4>
@@ -83,7 +83,7 @@
 <b>3. Simulación.</b> Añade la simulación de Wokwi: dos ESP32 con el GPIO 17 de cada uno al GPIO 16 del otro y las masas unidas.
 <b>4. Diagramas.</b> En Excalidraw: el flujo de loop() con los dos sentidos sin bloqueo, y la conexión con el cruce y la masa común.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> <code>monitor_eol = LF</code>: Enter envía solo <code>\n</code>, el fin de línea del receptor. Sin <code>delay()</code>, <code>loop()</code> atiende los dos sentidos sin pausas.
+									<b>Por qué se pide así.</b> Con el fin de línea LF en el monitor, Enter envía un único carácter, el que el receptor reconoce como fin de línea. Sin pausas en el bucle, los dos sentidos se atienden a la vez.
 								</p>
 							</div>
 						</div>
@@ -127,7 +127,7 @@ Escribe algo para enviarlo al otro ESP32...
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>Serial2.begin(baudios, SERIAL_8N1, rx, tx)</code>: el pin de recepción va antes que el de transmisión. UART0 (GPIO 1 y 3) queda para el USB y el monitor; el enlace usa UART2.</p>
+					<p>Al arrancar UART2 (<code>Serial2.begin()</code>) el pin de recepción va antes que el de transmisión. UART0 (GPIO 1 y 3) queda para el USB y el monitor; el enlace usa UART2.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>TX con TX: las dos salidas se enfrentan y no llega nada.</li><li>Sin GND común: bytes erráticos o ninguno.</li><li>Baudios distintos en cada extremo: caracteres ilegibles.</li><li>Monitor en CRLF: aparecen prefijos «[recibido]» sin texto.</li></ul>
 				</div>

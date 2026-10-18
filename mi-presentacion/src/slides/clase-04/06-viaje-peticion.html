@@ -30,7 +30,7 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>int codigo = http.GET();</code>
+							una petición = <b>DNS + TCP + TLS + GET</b>
 						</p>
 					</div>
 
@@ -60,7 +60,7 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: con HTTPS, ¿cuántas idas y vueltas por la red ocurren dentro de la línea <code>http.GET()</code> antes de recibir el precio, 1, 3 o 5? Recoger respuestas antes de pulsar «Desde el inicio».
+					Pregunta de predicción: con HTTPS, ¿cuántas idas y vueltas por la red ocurren dentro de una sola petición antes de recibir el precio, 1, 3 o 5? Recoger respuestas antes de pulsar «Desde el inicio».
 				</p>
 				<p>
 					Respuesta: 5 con TLS 1.2 (DNS, TCP, dos de TLS y el GET). Cada pulsación
@@ -84,22 +84,21 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>http.begin(url)</code> solo guarda la URL;
-						<code>http.GET()</code> hace DNS, TCP, TLS (si es
-						<code>https://</code>), envía la petición y espera la respuesta.
-						<code>http.end()</code> cierra la conexión: la siguiente consulta
-						repite el saludo.
+						Preparar la petición solo guarda la URL; enviarla hace DNS, TCP, TLS
+						(si la URL es https), la petición y la espera de la respuesta, todo
+						seguido. Cerrar la conexión al terminar obliga a repetir los saludos
+						en la consulta siguiente.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						Un código negativo de <code>GET()</code> indica en qué tramo falló:
-						sin DNS, sin conexión o tiempo agotado (lámina 9).
+						Cuando falla un tramo previo al GET (DNS, conexión o tiempo agotado),
+						no llega código de estado (lámina 09).
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Atribuir al servidor una lentitud que se debe a los saludos.</li>
-						<li>Suponer que <code>GET()</code> no bloquea, cuando el <code>loop()</code> se detiene hasta la respuesta.</li>
-						<li>Olvidar <code>http.end()</code> y agotar la memoria tras varias consultas.</li>
+						<li>Suponer que la petición no bloquea, cuando el programa se detiene hasta la respuesta.</li>
+						<li>No cerrar la conexión tras cada consulta y agotar la memoria.</li>
 					</ul>
 				</div>
 			</details>

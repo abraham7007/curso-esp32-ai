@@ -26,14 +26,14 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Línea temporal de 0 a 2000 milisegundos. Sin límite: el loop gira hasta los 300 ms, pide un dato y queda esperando para siempre; el LED y el botón dejan de atenderse. Con timeout de 200 ms: la lectura espera de 300 a 500 ms, vuelve con 0 bytes, reintenta de 800 a 1000 ms, vuelve otra vez con 0 y el programa pasa al estado sin enlace mientras el loop sigue girando. Debajo, las funciones: Serial2.setTimeout, por defecto 1000 ms; Wire.setTimeOut, por defecto 50 ms, con endTransmission igual a 5 al agotarse; y endTransmission distinto de 0, con 2 para NACK.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Línea temporal de 0 a 2000 milisegundos con dos formas de esperar un dato. Sin límite: el bucle gira hasta los 300 ms, pide un dato y espera hasta que llegue un byte; si no llega, espera para siempre y el LED y el botón dejan de atenderse. Con timeout: espera 6 bytes como mucho 200 ms, de 300 a 500 ms; vuelven 0 bytes y reintenta de 800 a 1000 ms; vuelven 0 otra vez y el programa pasa al estado sin enlace mientras el bucle sigue girando. Debajo, los plazos por defecto: lectura por UART, 1000 ms; transacción I2C, 50 ms, con resultado 5 al agotarse; I2C sin dispositivo, NACK con resultado 2 sin esperar el plazo.">
 						<!-- carril 1: sin límite -->
 						<text class="sans dan" x="20" y="36" font-size="32">Sin límite</text>
-						<text x="320" y="36" font-size="26">while (Serial2.available() == 0) { }</text>
-						<text class="fin mut" x="280" y="110" font-size="24">loop()</text>
+						<text class="sans" x="320" y="36" font-size="26">esperar hasta que llegue un byte · sin plazo</text>
+						<text class="sans fin mut" x="280" y="110" font-size="24">bucle</text>
 						<path class="ln ln--fina" d="M300 92 V128 M363 92 V128 M426 92 V128 M489 92 V128" />
 						<rect class="barra--dan" x="489" y="70" width="1071" height="80" rx="8" />
-						<text class="dan" x="512" y="110" font-size="26">LED y botón congelados</text>
+						<text class="sans dan" x="512" y="110" font-size="26">LED y botón congelados</text>
 						<text class="mid dan" x="1520" y="110" font-size="44">∞</text>
 
 						<!-- eje y suceso -->
@@ -44,31 +44,31 @@
 						<text class="mid mut" x="930" y="414" font-size="24">1000</text>
 						<text class="mid mut" x="1245" y="414" font-size="24">1500</text>
 						<text class="mid mut" x="1530" y="414" font-size="24">2000 ms</text>
-						<text class="mid acc" x="489" y="446" font-size="26">pide un dato</text>
-						<text class="fin mut" x="1580" y="456" font-size="22">Wire: núcleo Arduino-ESP32 2.x</text>
+						<text class="sans mid acc" x="489" y="446" font-size="26">pide un dato</text>
+						<text class="sans fin mut" x="1580" y="456" font-size="22">I²C: núcleo Arduino-ESP32 2.x</text>
 
 						<!-- carril 2: con timeout -->
 						<text class="sans ok" x="20" y="206" font-size="32">Con timeout</text>
-						<text x="320" y="206" font-size="26">Serial2.setTimeout(200);  Serial2.readBytes(buf, 6);</text>
-						<text class="fin mut" x="280" y="280" font-size="24">loop()</text>
+						<text class="sans" x="320" y="206" font-size="26">esperar 6 bytes, como mucho 200 ms</text>
+						<text class="sans fin mut" x="280" y="280" font-size="24">bucle</text>
 							<path class="ln ln--fina" d="M300 262 V298 M363 262 V298 M426 262 V298 M489 262 V298 M615 262 V298 M678 262 V298 M741 262 V298 M804 262 V298 M930 262 V298 M993 262 V298 M1056 262 V298 M1119 262 V298 M1182 262 V298 M1245 262 V298 M1308 262 V298 M1371 262 V298 M1434 262 V298 M1497 262 V298 M1560 262 V298" />
 							<rect class="barra--warn" x="489" y="240" width="126" height="80" rx="8" />
 							<rect class="barra--warn" x="804" y="240" width="126" height="80" rx="8" />
 							<text class="mid warn" x="552" y="280" font-size="24">200 ms</text>
 							<text class="mid warn" x="867" y="280" font-size="24">200 ms</text>
 							<g data-paso="1">
-							<text x="622" y="346" font-size="24">0 bytes → reintenta</text>
-							<text x="937" y="346" font-size="24">0 otra vez → «sin enlace»</text>
+							<text class="sans" x="622" y="346" font-size="24">0 bytes → reintentar</text>
+							<text class="sans" x="937" y="346" font-size="24">0 otra vez → estado «sin enlace»</text>
 						</g>
 
-						<!-- las funciones -->
+						<!-- plazos por defecto -->
 						<path class="ln ln--fina ln--mut" d="M20 478 H1580" />
-						<text class="navy" x="20" y="524" font-size="28">Serial2.setTimeout(200)</text>
-						<text class="mut" x="20" y="580" font-size="26">200 ms (por defecto, 1000)</text>
-						<text class="navy" x="560" y="524" font-size="28">Wire.setTimeOut(20)</text>
-						<text class="mut" x="560" y="580" font-size="26">20 ms (por defecto, 50) → 5</text>
-						<text class="navy" x="1100" y="524" font-size="28">endTransmission() != 0</text>
-						<text class="mut" x="1100" y="580" font-size="26">2 = NACK: nadie contesta</text>
+						<text class="sans navy" x="20" y="524" font-size="30">Lectura por UART</text>
+						<text class="sans mut" x="20" y="580" font-size="26">plazo por defecto 1000 ms; aquí, 200</text>
+						<text class="sans navy" x="560" y="524" font-size="30">Transacción I²C</text>
+						<text class="sans mut" x="560" y="580" font-size="26">plazo por defecto 50 ms → resultado 5</text>
+						<text class="sans navy" x="1100" y="524" font-size="30">I²C sin dispositivo</text>
+						<text class="sans mut" x="1100" y="580" font-size="26">NACK → resultado 2, sin esperar</text>
 					</svg>
 				</div>
 			</div>
@@ -77,13 +77,12 @@
 				<p>
 					Pregunta de predicción, antes de comentar el segundo carril: si se
 					desconecta el cable a mitad de una petición, ¿qué hace el LED que parpadea
-					con <code>millis()</code>? Respuesta: con el <code>while</code> sin
-					límite, el LED se queda en el estado en que estaba porque
-					<code>loop()</code> no vuelve. Con <code>setTimeout(200)</code>,
-					<code>readBytes()</code> espera como mucho 200 ms y devuelve 0; el
+					con <code>millis()</code>? Respuesta: con la espera sin plazo, el LED se
+					queda en el estado en que estaba porque el bucle no vuelve. Con un plazo
+					de 200 ms, la lectura espera como mucho 200 ms y devuelve 0 bytes; el
 					programa reintenta una vez y pasa a un estado de error explícito. En I²C
 					la espera tiene un límite de 50 ms, útil solo si el programa comprueba el
-					valor de <code>endTransmission()</code>.
+					resultado de la transmisión.
 				</p>
 			</aside>
 
@@ -92,29 +91,29 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>Serial2.setTimeout(ms)</code> limita <code>readBytes()</code>,
-						<code>readStringUntil()</code> y <code>parseInt()</code>; las tres
-						devuelven lo que llegó, que puede ser nada. <code>Wire.setTimeOut(ms)</code>
-						(con O mayúscula) limita cada transacción I²C;
-						<code>endTransmission()</code>: 0 bien, 2 cualquier NACK, 4 otro error, 5
-						tiempo agotado. Con <code>Wire.setTimeOut(20)</code>, un bus bloqueado
-						devuelve 5 tras 20 ms en vez de 50.
+						<code>Serial2.setTimeout()</code> fija el plazo de las lecturas que
+						esperan (<code>readBytes()</code>, <code>readStringUntil()</code>,
+						<code>parseInt()</code>); las tres devuelven lo que llegó, que puede
+						ser nada. <code>Wire.setTimeOut()</code>, con O mayúscula, limita cada
+						transacción I²C. Resultado de la transmisión: 0 bien, 2 cualquier
+						NACK, 4 otro error, 5 tiempo agotado. Con un plazo de 20 ms, un bus
+						bloqueado devuelve 5 tras 20 ms en vez de 50.
 					</p>
 					<h4>Versión</h4>
 					<p>
-						Los códigos de <code>endTransmission()</code> y <code>Wire.setTimeOut()</code>
-						corresponden al núcleo Arduino-ESP32 2.x, el que instala PlatformIO con
+						Los códigos de resultado y el plazo de I²C corresponden al núcleo
+						Arduino-ESP32 2.x, el que instala PlatformIO con
 						<code>platform = espressif32</code>.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						Ejemplo 12c: <code>textoErrorI2C()</code> traduce el código y el
-						programa sigue. Ejemplo 13: el receptor nunca espera; solo lee lo que
-						<code>available()</code> anuncia.
+						Ejemplo 12c: el código de resultado se traduce a un texto y el programa
+						sigue. Ejemplo 13: el receptor nunca espera; lee los bytes que ya
+						están en el búfer.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Timeout más corto que la respuesta real del dispositivo.</li>
+						<li>Plazo más corto que la respuesta real del dispositivo.</li>
 						<li>Reintentar sin límite de intentos: el programa queda igual de bloqueado.</li>
 					</ul>
 				</div>

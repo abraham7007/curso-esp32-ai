@@ -27,7 +27,7 @@
 							<p>
 								<b>Media móvil</b> (<i>moving average</i>): promedio de las
 								últimas N muestras. El búfer circular sobrescribe la más antigua
-								en cada <code>update()</code>.
+								con cada muestra nueva.
 							</p>
 						</div>
 						<div class="def">
@@ -79,10 +79,11 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						En <code>EntradaAnalogica::update()</code>:
-						<code>_suma -= _buffer[_indice]; _buffer[_indice] = muestra; _suma += muestra;</code>
-						y <code>_indice = (_indice + 1) % _n</code>. Mantener la suma corriente
-						evita recorrer el búfer en cada vuelta.
+						En cada <code>update()</code> de <code>EntradaAnalogica</code>: restar
+						de la suma la muestra más antigua, escribir la nueva en su celda,
+						sumarla y avanzar el índice de forma circular (al llegar a N vuelve a
+						0). Mantener la suma corriente evita recorrer el búfer en cada
+						vuelta.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -91,8 +92,8 @@
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Una suma de 16 bits: 16 × 4095 = 65 520 cabe en 16 bits y con N = 32 desborda. Por eso <code>_suma</code> es <code>uint32_t</code>.</li>
-						<li>Dividir por N antes de llenar el búfer: el ejemplo 09 divide por <code>_cuenta</code>.</li>
+						<li>Una suma de 16 bits: 16 × 4095 = 65 520 cabe en 16 bits y con N = 32 desborda. Por eso la suma se guarda en 32 bits.</li>
+						<li>Dividir por N antes de llenar el búfer: el ejemplo 09 divide por el número de muestras acumuladas.</li>
 					</ul>
 				</div>
 			</details>
@@ -179,9 +180,9 @@
 				const ch = fs * 2.3;
 				const sepF = fs * 1.2;
 				const yF = (f) => cy + f * (ch + sepF);
-				texto(ctx, "_buffer", pad, cy + fs * 0.7, fs, c.heading, 700);
+				texto(ctx, "búfer", pad, cy + fs * 0.7, fs, c.heading, 700, "left", SANS);
 				texto(ctx, `N = ${N}`, pad, cy + fs * 1.9, fs, c.muted, 500, "left", SANS);
-				texto(ctx, "▲ _indice", pad, cy + fs * 3.1, fs, c.heading, 700);
+				texto(ctx, "▲ siguiente", pad, cy + fs * 3.1, fs, c.heading, 700, "left", SANS);
 				const escrita = ((k % N) + N) % N; // celda que recibió la última muestra
 				const sig = (escrita + 1) % N; // _indice: la próxima a sobrescribir
 				let suma = 0;

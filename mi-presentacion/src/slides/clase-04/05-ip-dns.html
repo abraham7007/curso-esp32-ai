@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia con cuatro participantes: ESP32, router con DHCP, servidor DNS y api.coingecko.com. Paso 1, dirección: el ESP32 solicita una dirección y el router le asigna 10.13.37.2, que se lee con WiFi.localIP(). Paso 2, nombre: el ESP32 consulta api.coingecko.com y el DNS responde 104.20.41.132, lo que hace WiFi.hostByName(). Paso 3, puerto: el ESP32 abre conexión con 104.20.41.132 en el puerto 443, el de HTTPS; HTTP usa el 80.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia con cuatro participantes: ESP32, router con DHCP, servidor DNS y api.coingecko.com. Paso 1, dirección: el ESP32 solicita una dirección y el router le asigna 10.13.37.2, una IP privada, válida solo en la red local. Paso 2, nombre: el ESP32 consulta api.coingecko.com y el DNS responde 104.20.41.132, la IP pública del servidor. Paso 3, puerto: el ESP32 abre conexión con 104.20.41.132 en el puerto 443, el de HTTPS; HTTP usa el 80.">
 						<!-- participantes -->
 						<rect class="caja caja--acc" x="220" y="10" width="240" height="90" rx="14" />
 						<text class="mid b" x="340" y="55" font-size="36">ESP32</text>
@@ -59,7 +59,7 @@
 						<text class="mid acc b" x="550" y="226" font-size="34">10.13.37.2</text>
 						<path class="ln ln--acc" d="M754 260 H 352" />
 						<path class="rel-acc" d="M346 260 L 362 251 L 362 269 Z" />
-						<text class="navy" x="790" y="260" font-size="26">WiFi.localIP()</text>
+						<text class="sans mut" x="790" y="260" font-size="24">válida en la red local</text>
 						<text class="sans mut" x="790" y="218" font-size="24">IP privada</text>
 
 						<!-- 2 · DNS -->
@@ -69,7 +69,7 @@
 						<text class="mid acc b" x="550" y="410" font-size="34">104.20.41.132</text>
 						<path class="ln ln--acc" d="M1124 444 H 352" />
 						<path class="rel-acc" d="M346 444 L 362 435 L 362 453 Z" />
-						<text class="navy" x="1160" y="444" font-size="26">WiFi.hostByName()</text>
+						<text class="sans mut" x="1160" y="444" font-size="24">IP pública del servidor</text>
 
 						<!-- 3 · puerto -->
 						<text class="mid b" x="550" y="534" font-size="32">104.20.41.132 : <tspan class="acc">443</tspan></text>
@@ -99,11 +99,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>WiFi.localIP()</code>, <code>WiFi.gatewayIP()</code> y
-						<code>WiFi.dnsIP()</code> muestran lo que entregó el DHCP.
-						<code>WiFi.hostByName("api.coingecko.com", ip)</code> devuelve 1 si el
-						DNS respondió. <code>HTTPClient</code> hace la consulta DNS por su cuenta
-						dentro de <code>http.GET()</code>.
+						El DHCP entrega tres datos al conectarse: la IP propia, la pasarela
+						(el router) y el servidor DNS. La consulta DNS ocurre dentro de cada
+						petición HTTP, antes de abrir la conexión; resolver el nombre por
+						separado solo sirve para diagnosticar un fallo (lámina 21).
 					</p>
 					<h4>Las cifras</h4>
 					<p>

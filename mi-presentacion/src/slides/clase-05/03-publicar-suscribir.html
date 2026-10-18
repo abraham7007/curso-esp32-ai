@@ -87,9 +87,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Con la librería PubSubClient: <code>client.publish("aula/1/temp", "23.4")</code>
-						y <code>client.subscribe("aula/+/temp")</code>; lo recibido llega a la
-						función registrada con <code>setCallback()</code>. Blynk.Cloud ofrece
+						Con la librería PubSubClient: publish recibe el tema y el valor
+						(<code>aula/1/temp</code>, <code>23.4</code>), subscribe recibe un patrón
+						(<code>aula/+/temp</code>) y lo recibido llega a una función registrada
+						como callback. Blynk.Cloud ofrece
 						también un broker MQTT (temas <code>ds/…</code>), aunque la librería
 						Blynk usa su propio protocolo.
 					</p>

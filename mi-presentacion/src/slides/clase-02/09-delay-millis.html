@@ -22,30 +22,27 @@
 				<h1 class="slide__title slide__title--sm">Medición del tiempo con delay() y <em>millis()</em></h1>
 
 				<div class="escenario">
-					<div class="escenario__texto franja-fila">
-						<div class="def">
-							<p>
-								<b>Bloqueante</b>: con <code>delay(500)</code> en
-								<code>loop()</code>, cada <code>update()</code> se ejecuta cada
-								500 ms.
-							</p>
-						</div>
-						<div class="def">
-							<p>
-								<b>No bloqueante</b>: <code>update()</code> compara
-								<code>millis()</code> y retorna sin esperar.
-							</p>
-						</div>
+					<div class="escenario__texto franja-fila rd s2v">
+						<ul class="s2v-pseudo s2v-pseudo--franja s2v-pseudo--mal" aria-label="Bloqueante, en pseudocódigo">
+							<li><b>Bloqueante</b> · en cada vuelta →</li>
+							<li class="s2v-in">revisar los tres LED</li>
+							<li class="s2v-in">esperar 500 ms sin hacer nada</li>
+						</ul>
+						<ul class="s2v-pseudo s2v-pseudo--franja s2v-pseudo--bien" aria-label="No bloqueante, en pseudocódigo">
+							<li><b>No bloqueante</b> · para cada LED →</li>
+							<li class="s2v-in">si ahora − último cambio ≥ período →</li>
+							<li class="s2v-in2">conmutar y anotar el instante</li>
+						</ul>
 					</div>
 
 					<div class="escenario__visual">
 						<div class="mandos">
-							<fieldset class="mandos__grupo" aria-label="Forma de esperar en loop()">
+							<fieldset class="mandos__grupo" aria-label="Forma de medir el tiempo">
 								<button type="button" class="btn btn--primary" data-modo="delay" aria-pressed="true">
-									Con delay(500)
+									Bloqueante
 								</button>
 								<button type="button" class="btn btn--secondary" data-modo="millis" aria-pressed="false">
-									Con millis()
+									No bloqueante
 								</button>
 							</fieldset>
 							<span class="lectura lectura--fin"><small>vuelta de loop() </small><span id="l-vuelta" class="s2c-ancho">500 ms</span></span>
@@ -54,7 +51,7 @@
 							<canvas
 								id="tres-led"
 								role="img"
-								aria-label="Cronograma de los tres LED del ejemplo 08 durante 6 s. Con delay(500) en loop(), el LED-1 conserva sus 500 ms, pero el LED-2 conmuta cada 1000 ms en lugar de 800 y el LED-3 cada 1500 ms en lugar de 1300, con un retraso que se acumula. Con millis() los tres conmutan con su período."
+								aria-label="Cronograma de los tres LED del ejemplo 08 durante 6 s. Con una espera de 500 ms en cada vuelta, el LED-1 conserva sus 500 ms, pero el LED-2 conmuta cada 1000 ms en lugar de 800 y el LED-3 cada 1500 ms en lugar de 1300, con un retraso que se acumula. Sin espera, comparando el tiempo transcurrido, los tres conmutan con su período."
 							></canvas>
 						</div>
 					</div>
@@ -63,8 +60,8 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: si al ejemplo 08 se le añade un
-					<code>delay(500)</code> al final de <code>loop()</code>, ¿a qué ritmo
+					Pregunta de predicción: si al ejemplo 08 se le añade una espera de
+					500 ms al final de cada vuelta de <code>loop()</code>, ¿a qué ritmo
 					conmuta el LED-2, configurado a 800 ms? Recoger respuestas antes de
 					mostrar el cronograma.
 				</p>
@@ -73,10 +70,11 @@
 					1000, 1500…; a los 500 ms no han pasado 800 ms y a los 1000 ms el
 					instante de conmutar ya quedó atrás. El LED-3 (1300 ms) queda en 1500.
 					El LED-1 mantiene su período porque coincide con la espera. Las franjas
-					ámbar son el retraso, que crece en cada conmutación. Pulsar «Con
-					millis()»: los tres conmutan con su período y <code>loop()</code> no se
-					detiene. Recordar 1·04: <code>delay()</code>
-					bloquea la tarea <code>loop()</code>, no el chip.
+					ámbar son el retraso, que crece en cada conmutación. Pulsar «No
+					bloqueante»: cada LED compara con <code>millis()</code> el tiempo
+					desde su último cambio, los tres conmutan con su período y
+					<code>loop()</code> no se detiene. Recordar 1·04: <code>delay()</code>
+					bloquea la tarea <code>loop()</code>; el chip sigue atendiendo sus otras tareas.
 				</p>
 			</aside>
 
@@ -85,10 +83,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>unsigned long now = millis();</code><br />
-						<code>if (now - _lastToggleTime &gt;= _periodo) { _lastToggleTime = now; … }</code><br />
-						Una lectura de <code>millis()</code> por llamada; el tiempo previo es
-						miembro del objeto, uno por LED.
+						En <code>update()</code>: una lectura de <code>millis()</code> por
+							llamada, una resta contra el instante del último cambio y, si llega al
+							período, conmutar y guardar el instante nuevo. Ese instante es un dato
+							del objeto, uno por LED.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -99,7 +97,7 @@
 					<ul>
 						<li>Un <code>delay()</code> corto en <code>loop()</code> retrasa todos los objetos.</li>
 						<li>Una sola variable de tiempo previo compartida por los tres LED.</li>
-						<li><code>_lastToggleTime = now</code> acumula el retraso de cada vuelta; <code>+= _periodo</code> conserva la cadencia media.</li>
+						<li>Guardar como último cambio el instante actual acumula el retraso de cada vuelta; sumarle el período conserva la cadencia media.</li>
 					</ul>
 				</div>
 			</details>
@@ -299,8 +297,8 @@
 				// Lo que hace loop(), en la columna de los LED: el carril queda limpio.
 				const lx3 = w - R + fs * 0.8;
 				const col3 = conDelay ? c.warn : c.ok;
-				texto(ctx, conDelay ? "en delay()" : "sin pausa", lx3, y3 + cH / 2 - fs * 0.6, fs * 1.05, col3, 700);
-				texto(ctx, conDelay ? "update() cada 500 ms" : "update() siempre", lx3, y3 + cH / 2 + fs * 0.65, fs, c.muted, 500, "left", SANS);
+				texto(ctx, conDelay ? "esperando" : "sin pausa", lx3, y3 + cH / 2 - fs * 0.6, fs * 1.05, col3, 700);
+				texto(ctx, conDelay ? "revisa cada 500 ms" : "revisa en cada vuelta", lx3, y3 + cH / 2 + fs * 0.65, fs, c.muted, 500, "left", SANS);
 
 				// Eje de tiempo.
 				const ejeY = y3 + cH + fs * 0.4;

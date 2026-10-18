@@ -70,20 +70,19 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>http.begin(url)</code> separa host y ruta;
-						<code>http.GET()</code> envía la petición y devuelve el código;
-						<code>http.getString()</code> entrega el cuerpo. Para leer una cabecera:
-						<code>http.collectHeaders(nombres, n)</code> antes de
-						<code>GET()</code> y <code>http.header("Cache-Control")</code> después.
+						HTTPClient compone la línea inicial y las cabeceras a partir de la URL,
+						envía la petición y entrega por separado el código y el cuerpo. Las
+						cabeceras de la respuesta se descartan, salvo las que se piden por su
+						nombre antes de enviar la petición.
 					</p>
 					<h4>Detalle técnico</h4>
 					<p>
 						En el cable, la línea inicial de la petición es una sola; aquí se parte (↩) para que quepa. <code>Transfer-Encoding: chunked</code>: el cuerpo llega en bloques
-						precedidos de su longitud; <code>getString()</code> los une. Cada línea
+						precedidos de su longitud, y HTTPClient los une. Cada línea
 						termina en <code>\r\n</code>. La cabecera completa es <code>Cache-Control: max-age=30, public, must-revalidate, s-maxage=60</code>.
 					</p>
 					<h4>Errores frecuentes</h4>
-					<p>Olvidar <code>http.end()</code>, con lo que la conexión queda abierta y la memoria se agota tras varias consultas.</p>
+					<p>No cerrar la conexión tras cada consulta, con lo que queda abierta y la memoria se agota tras varias consultas.</p>
 				</div>
 			</details>
 
@@ -104,11 +103,11 @@
 		<script type="module">
 			const textos = {
 				inicio:
-					"<b>Línea inicial</b>: método y ruta en la petición (<code>GET</code> + ruta), código de estado en la respuesta (<code>200</code>). <code>http.GET()</code> devuelve ese código.",
+					"<b>Línea inicial</b>: método y ruta en la petición (<code>GET</code> + ruta), código de estado en la respuesta (<code>200</code>). El firmware recibe ese código como resultado de la petición.",
 				cab: "<b>Cabeceras</b>: «nombre: valor», una por línea. Con <code>s-maxage=60</code> y <code>HIT</code>, Cloudflare entrega la misma copia durante 60 s como máximo.",
 				vacia: "<b>Línea vacía</b>: separa cabeceras y cuerpo. Sin ella, el receptor no puede delimitar dónde empieza el cuerpo.",
 				cuerpo:
-					"<b>Cuerpo</b>: 25 bytes de JSON. Llega en bloques (<code>chunked</code>); <code>http.getString()</code> los une. Un <code>GET</code> no lleva cuerpo.",
+					"<b>Cuerpo</b>: 25 bytes de JSON. Llega en bloques (<code>chunked</code>) y HTTPClient los une. Un <code>GET</code> no lleva cuerpo.",
 			};
 			const botones = document.querySelectorAll("button[data-parte]");
 			const lineas = document.querySelectorAll(".s4a-ln");

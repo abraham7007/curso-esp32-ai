@@ -91,10 +91,10 @@
 					Pregunta de predicción, antes de mostrar la cuenta: ¿cuántos números recibe la red por cada gesto? Respuesta: 714, de 119 muestras × 6 ejes.
 				</p>
 				<p>
-					El ejemplo 20 espera hasta que |aX| + |aY| + |aZ| llega a 2,5 g. En reposo la aceleración mide 1 g, la gravedad; con la placa plana, aZ ≈ 1 g y la suma vale 1 g, e inclinada llega como mucho a 1,73 g, por debajo del disparo en ambos casos. Entonces lee 119 muestras de los seis ejes del BMI270, a unos 100 Hz. Las curvas son el gesto 12 de <code>flex.csv</code>: la muñeca gira en X (gX cerca de 600 °/s) y aZ pasa de +1 g a −1 g, porque la placa acaba boca abajo.
+					El ejemplo 20 espera hasta que |aX| + |aY| + |aZ| llega a 2,5 g. En reposo la aceleración mide 1 g, la gravedad; con la placa plana, aZ ≈ 1 g y la suma vale 1 g, e inclinada llega como mucho a 1,73 g, por debajo del disparo en ambos casos. Entonces lee 119 muestras de los seis ejes del BMI270, a unos 100 Hz. Las curvas son el gesto 12 de flex.csv: la muñeca gira en X (gX cerca de 600 °/s) y aZ pasa de +1 g a −1 g, porque la placa acaba boca abajo.
 				</p>
 				<p>
-					El CSV que trae el ejemplo es sintético (<code>simular_datos.py</code>); con gestos propios cambia la forma de las curvas, pero no el número de entradas. La entrada de la red son 714 números en un orden fijo, muestra a muestra y eje a eje. El escalado y el orden deben ser idénticos en Colab y en la placa. Los rangos ±4 g y ±2000 °/s son los del sensor; un golpe más fuerte que 4 g queda recortado.
+					El CSV que trae el ejemplo es sintético (simular_datos.py); con gestos propios cambia la forma de las curvas, pero no el número de entradas. La entrada de la red son 714 números en un orden fijo, muestra a muestra y eje a eje. El escalado y el orden deben ser idénticos en Colab y en la placa. Los rangos ±4 g y ±2000 °/s son los del sensor; un golpe más fuerte que 4 g queda recortado.
 				</p>
 			</aside>
 
@@ -103,11 +103,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>IMU.readAcceleration(aX, aY, aZ)</code> en g y
-						<code>IMU.readGyroscope(gX, gY, gZ)</code> en °/s
-						(<code>Arduino_BMI270_BMM150</code>); cada valor escalado entra con
-						<code>modelSetInput(valor, muestra * 6 + eje)</code> (ArduTFLite).
-						<code>IMU.accelerationSampleRate()</code> imprime la frecuencia real.
+						La librería Arduino_BMI270_BMM150 entrega la aceleración en g y el giro en
+						°/s. Cada valor escalado ocupa la posición muestra · 6 + eje de la entrada.
+						La frecuencia real de muestreo se lee de la propia librería y se imprime
+						al arrancar.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 20: el mismo bucle sirve para capturar el CSV y para inferir.</p>

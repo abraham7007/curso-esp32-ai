@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Jerarquía en la consola de Blynk. La plantilla ESP32 PIT 2026, con identificador TMPLxxxxxxxx, contiene dos datastreams: V0, LED, entero de 0 a 1, ligado a un widget Switch; y V1, Temperatura, double de 0 a 50 grados Celsius, ligado a un Gauge. Desde la plantilla se crean dispositivos: el dispositivo 1 recibe el token TU_TOKEN_AQUI; un segundo dispositivo recibiría otro token. Las tres líneas de Device Info se copian a include/secrets.h: BLYNK_TEMPLATE_ID, BLYNK_TEMPLATE_NAME y BLYNK_AUTH_TOKEN, cuyo valor es el token del dispositivo 1. Cada token corresponde a un solo dispositivo.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Jerarquía en la consola de Blynk. La plantilla ESP32 PIT 2026, con identificador TMPLxxxxxxxx, contiene dos datastreams: V0, LED, entero de 0 a 1, ligado a un widget Switch; y V1, Temperatura, double de 0 a 50 grados Celsius, ligado a un Gauge. Desde la plantilla se crean dispositivos: el dispositivo 1 recibe el token TU_TOKEN_AQUI; un segundo dispositivo recibiría otro token. Los tres valores de Device Info se copian a include/secrets.h: Template ID, Template name y Auth token, que es el token del dispositivo 1. Cada token corresponde a un solo dispositivo.">
 						<!-- columnas -->
 						<text class="sans mut" x="0" y="22" font-size="26">1 · plantilla</text>
 						<text class="sans mut" x="540" y="22" font-size="26">2 · datastreams</text>
@@ -75,12 +75,15 @@
 						<path class="ln ln--fina ln--mut" d="M0 392 H 1600" />
 						<text class="sans b" x="0" y="440" font-size="28">include/secrets.h</text>
 						<text class="sans mut" x="290" y="440" font-size="24">en .gitignore</text>
-						<text class="s5a-pre" x="0" y="500" font-size="28"><tspan class="navy">#define</tspan> BLYNK_TEMPLATE_ID   <tspan class="b">"TMPLxxxxxxxx"</tspan></text>
-						<text class="s5a-pre" x="0" y="550" font-size="28"><tspan class="navy">#define</tspan> BLYNK_TEMPLATE_NAME <tspan class="b">"ESP32 PIT 2026"</tspan></text>
-						<text class="s5a-pre" x="0" y="600" font-size="28"><tspan class="navy">#define</tspan> BLYNK_AUTH_TOKEN    <tspan class="acc b">"TU_TOKEN_AQUI"</tspan></text>
+						<text class="sans navy" x="0" y="500" font-size="28">Template ID</text>
+						<text class="b" x="300" y="500" font-size="28">TMPLxxxxxxxx</text>
+						<text class="sans navy" x="0" y="550" font-size="28">Template name</text>
+						<text class="b" x="300" y="550" font-size="28">ESP32 PIT 2026</text>
+						<text class="sans navy" x="0" y="600" font-size="28">Auth token</text>
+						<text class="acc b" x="300" y="600" font-size="28">TU_TOKEN_AQUI</text>
 
-						<path class="ln ln--acc" d="M1520 250 V 600 H 790" />
-						<path class="rel-acc" d="M780 600 L 798 590 L 798 610 Z" />
+						<path class="ln ln--acc" d="M1520 250 V 600 H 600" />
+						<path class="rel-acc" d="M590 600 L 608 590 L 608 610 Z" />
 						<text class="mid sans b" x="1150" y="570" font-size="26">Device Info › copiar</text>
 						<text class="mid sans acc b" x="1150" y="636" font-size="28">token exclusivo del dispositivo</text>
 					</svg>
@@ -111,11 +114,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Las tres macros deben definirse antes de
-						<code>#include &lt;BlynkSimpleEsp32_SSL.h&gt;</code>; el ejemplo 19 las
-						lee de <code>include/secrets.h</code> y, si falta, de
-						<code>secrets.example.h</code>. <code>Blynk.config(BLYNK_AUTH_TOKEN)</code>
-						usa el token para el inicio de sesión.
+						Los tres valores deben estar disponibles antes de cargar la cabecera de
+						Blynk (BlynkSimpleEsp32_SSL.h); el ejemplo 19 los lee de
+						include/secrets.h y, si falta, de secrets.example.h. El token es la
+						credencial del inicio de sesión (lámina 14).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

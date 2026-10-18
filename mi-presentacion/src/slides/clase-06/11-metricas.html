@@ -37,7 +37,7 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>salida &gt; umbral → gesto</code>
+							<code>si salida &gt; umbral → gesto</code>
 						</p>
 					</div>
 
@@ -85,9 +85,8 @@
 					<h4>En la práctica</h4>
 					<p>
 						Exactitud = (VP + VN) ÷ total; precisión = VP ÷ (VP + FP);
-						exhaustividad = VP ÷ (VP + FN). En scikit-learn:
-						<code>confusion_matrix(y, y_pred)</code> y
-						<code>classification_report(y, y_pred)</code>.
+						exhaustividad = VP ÷ (VP + FN). En scikit-learn, confusion_matrix
+						construye la matriz y classification_report da las métricas por clase.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

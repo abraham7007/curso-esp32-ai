@@ -26,8 +26,8 @@
 						<div class="def">
 							<p>
 								<b>Cuantización</b> (<i>quantization</i>): cada real se guarda como un
-								entero de 8 bits. Cada tensor lleva su <code>scale</code> y su
-								<code>zero_point</code>.
+								entero de 8 bits. Cada tensor lleva su <i>scale</i> y su
+								<i>zero_point</i>.
 							</p>
 						</div>
 						<div class="def">
@@ -88,14 +88,14 @@
 					<p>
 						Especificación de LiteRT: pesos int8 <b>simétricos</b> en [−127, 127] con
 						zero_point = 0; activaciones <b>asimétricas</b> en [−128, 127]; sesgos en
-						int32. Conversión:
-						<code>converter.optimizations = [tf.lite.Optimize.DEFAULT]</code> y
-						<code>converter.representative_dataset</code>.
+						int32. En la conversión, la optimización por defecto cuantiza los pesos a
+						int8; para que también las activaciones sean int8 hace falta el conjunto
+						representativo, que fija el rango de cada una.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						Ejemplo 21: modelo de colores cuantizado a int8 frente al float32 del
-						ejemplo 20; la diferencia se ve en el tamaño de <code>model.h</code>.
+						ejemplo 20; la diferencia se ve en el tamaño de model.h.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>

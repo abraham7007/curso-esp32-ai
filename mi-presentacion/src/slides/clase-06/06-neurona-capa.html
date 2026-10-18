@@ -38,7 +38,7 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>a = ReLU(w₁x₁ + w₂x₂ + b)</code>
+							<code>a = ReLU(w₁·x₁ + w₂·x₂ + b)</code>
 						</p>
 					</div>
 
@@ -88,9 +88,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						En Keras: <code>Dense(50, activation="relu")</code> es una capa de 50
-						neuronas como la de la figura; <code>Dense(2, activation="softmax")</code>,
-						la salida. Cada neurona guarda un peso por entrada y un sesgo.
+						En Keras, una capa densa (Dense) de 50 neuronas con activación ReLU es
+						una capa como la de la figura; la salida es una capa densa de 2 neuronas
+						con softmax. Cada neurona guarda un peso por entrada y un sesgo.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

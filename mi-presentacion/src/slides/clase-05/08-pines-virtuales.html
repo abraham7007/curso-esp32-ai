@@ -25,14 +25,13 @@
 					<div class="escenario__texto franja-fila">
 						<div class="def">
 							<p>
-								V0 y V1 son canales con nombre (<i>datastreams</i>) entre panel y
-								firmware, ajenos a los GPIO. La librería entrega cada orden a una
-								función; cada dato sale con una llamada.
+								Un <b>pin virtual</b> (V0, V1) es el nombre con el que un
+								<i>datastream</i> llega al firmware, ajeno a los GPIO. La librería
+								entrega cada orden a una función BLYNK_WRITE; cada dato sale con
+								virtualWrite.
 							</p>
 						</div>
-						<p class="franja-fila__ajusta">
-							<code>BLYNK_WRITE(V0)</code> · <code>Blynk.virtualWrite(V1, t)</code>
-						</p>
+						<p class="franja-fila__ajusta">V0: panel → placa<br />V1: placa → panel</p>
 					</div>
 
 					<div class="escenario__visual">
@@ -41,13 +40,13 @@
 								<button type="button" class="btn btn--secondary" id="b-inicio">Desde el inicio</button>
 								<button type="button" class="btn btn--primary" id="b-siguiente">Siguiente paso</button>
 							</fieldset>
-							<span class="lectura lectura--fin"><small>paso </small><span id="l-paso" class="s5c-ancho s5c-ancho--corto">10</span><small> de 10</small></span>
+							<span class="lectura lectura--fin"><small>paso </small><span id="l-paso" class="s5c-ancho s5c-ancho--corto">8</span><small> de 8</small></span>
 						</div>
 						<div class="lienzo-caja">
 							<canvas
 								id="pines"
 								role="img"
-								aria-label="Dos recorridos en cinco zonas: panel, Blynk.Cloud, Internet, firmware del ESP32 (dos columnas) y placa. Arriba, la orden: el widget Switch escribe 1 en el datastream V0, la nube envía una trama HARDWARE con vw 0 1, la librería llama a BLYNK_WRITE(V0), que ejecuta digitalWrite(15, 1) y enciende el LED. Abajo, el dato: BlynkTimer llama cada 30 s a sendSensorData(), que ejecuta Blynk.virtualWrite(V1, 23.4); sale una trama HARDWARE con vw 1 23.400, la nube la guarda en el datastream V1 y el widget Gauge muestra 23.4 °C."
+								aria-label="Flujo de datos en cinco columnas: widget, datastream, pin virtual en la trama, función del firmware y placa. Arriba, la orden: el widget Switch escribe 1 en el datastream V0; la trama lleva el pin V0 y el valor 1; la librería entrega el valor a la función BLYNK_WRITE de V0, que pone el GPIO 15 a nivel alto y enciende el LED. Abajo, el dato en sentido inverso: cada 30 s el ESP32 obtiene una temperatura simulada; la función virtualWrite la envía al pin V1; la trama lleva el pin V1 y el valor 23.400; la nube la guarda en el datastream V1 y el widget Gauge muestra 23.4 °C."
 							></canvas>
 						</div>
 					</div>
@@ -56,18 +55,17 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: en el firmware no hay ningún <code>if</code> que
-					consulte el estado del Switch. ¿Quién llama a <code>BLYNK_WRITE(V0)</code>,
-					y cuándo? Recoger respuestas antes de pulsar «Desde el inicio».
+					Pregunta de predicción: el firmware no consulta en ningún momento el estado
+					del Switch. ¿Quién ejecuta la función asociada a V0, y cuándo? Recoger
+					respuestas antes de pulsar «Desde el inicio».
 				</p>
 				<p>
-					Respuesta: la librería, dentro de <code>Blynk.run()</code>, cuando llega por
-					la conexión abierta una trama para V0. Recorrer los 10 pasos. Arriba (pasos
-					1 a 5): Switch → datastream V0 → trama HARDWARE con <code>vw 0 1</code> →
-					<code>BLYNK_WRITE(V0)</code> → <code>digitalWrite(15, 1)</code> → LED. Abajo
-					(6 a 10): el temporizador llama a <code>sendSensorData()</code> cada 30 s y
-					<code>virtualWrite(V1, 23.4)</code> recorre el camino inverso hasta el
-					Gauge.
+					Respuesta: la librería, dentro de Blynk.run, cuando llega por la conexión
+					abierta una trama para V0. Recorrer los 8 pasos. Arriba (pasos 1 a 4):
+					widget → datastream V0 → trama HARDWARE con «vw 0 1» → función BLYNK_WRITE
+					de V0 → GPIO 15 → LED. Abajo (5 a 8): una tarea del temporizador obtiene la
+					temperatura cada 30 s y virtualWrite la envía a V1, que recorre el camino
+					inverso hasta el Gauge.
 				</p>
 				<p>
 					El nombre V0 no tiene relación con el GPIO 15: el vínculo lo escribe el
@@ -82,17 +80,18 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>BLYNK_WRITE(V0) { int v = param.asInt(); … }</code> recibe;
-						<code>param.asFloat()</code> y <code>param.asStr()</code> leen otros
-						tipos. <code>Blynk.virtualWrite(V1, valor)</code> envía. El datastream
-						fija tipo y rango (V0 entero 0–1, V1 <i>double</i> 0–50 °C, lámina 9).
+						Una función BLYNK_WRITE por cada pin virtual que recibe órdenes; el valor
+						llega como parámetro y se lee como entero, decimal o texto según el tipo
+						del datastream. virtualWrite recibe el pin y el valor que se envía. El
+						datastream fija tipo y rango (V0 entero 0–1, V1 <i>double</i> 0–50 °C,
+						lámina 9).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 19: V0 enciende el LED del GPIO 15; V1 recibe la temperatura cada 30 s.</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Escribir <code>BLYNK_WRITE</code> dentro de <code>loop()</code>, cuando se define fuera, como función independiente.</li>
-						<li>Llamar a <code>virtualWrite</code> en cada vuelta del <code>loop()</code> (inundación).</li>
+						<li>Escribir BLYNK_WRITE dentro del loop, cuando se define fuera, como función independiente.</li>
+						<li>Enviar con virtualWrite en cada vuelta del loop (inundación).</li>
 						<li>Usar en el código un pin virtual que no existe como datastream.</li>
 					</ul>
 				</div>
@@ -124,33 +123,29 @@
 			const ORDEN = [
 				{ tipo: "switch" },
 				{ l1: "Datastream V0", l2: "entero 0–1", fam: SANS, valor: "valor = 1", antes: "valor = 0" },
-				{ l1: "HARDWARE (20)", celdas: ["vw", "0", "1"] },
-				{ l1: "BLYNK_WRITE(V0)", l2: "param.asInt() = 1", l2antes: "param.asInt()", fam2: MONO },
-				{ l1: "digitalWrite", l2: "(15, 1)", l2antes: "(15, valor)", fam2: MONO },
+				{ l1: "pin V0", celdas: ["vw", "0", "1"] },
+				{ l1: "BLYNK_WRITE", l2: "función de V0", valor: "recibe 1", antes: "espera", fam2: SANS, sansValor: true },
 				{ tipo: "led" },
 			];
 			const DATO = [
 				{ tipo: "gauge" },
 				{ l1: "Datastream V1", l2: "double 0–50 °C", fam: SANS, valor: "valor = 23.4", antes: "valor = —" },
-				{ l1: "HARDWARE (20)", celdas: ["vw", "1", "23.400"] },
-				{ l1: "Blynk.virtualWrite", l2: "(V1, 23.4)", l2antes: "(V1, t)", fam2: MONO },
-				{ l1: "sendSensorData()", l2: "t = 23.4", l2antes: "t = …", fam2: MONO },
-				{ l1: "BlynkTimer", l2: "cada 30 s", fam: MONO, fam2: SANS },
+				{ l1: "pin V1", celdas: ["vw", "1", "23.400"] },
+				{ l1: "virtualWrite", l2: "función hacia V1", valor: "envía 23.4", antes: "espera", fam2: SANS, sansValor: true },
+				{ l1: "Temperatura", l2: "simulada", fam: SANS, valor: "cada 30 s", antes: "cada 30 s", fam2: SANS, sansValor: true },
 			];
 			const PASOS = [
 				"El usuario pulsa el Switch: el panel escribe 1 en el datastream V0.",
-				"Blynk.Cloud guarda el valor y lo envía por la conexión que abrió el ESP32.",
-				"Llega una trama HARDWARE con «vw 0 1»; Blynk.run() la procesa.",
-				"La librería llama a BLYNK_WRITE(V0): param.asInt() vale 1.",
-				"digitalWrite(15, 1) pone el GPIO 15 a 3,3 V: el LED rojo se enciende.",
-				"BlynkTimer llama a sendSensorData() cada 30 s.",
-				"sendSensorData() calcula 23.4 y llama a Blynk.virtualWrite(V1, 23.4).",
-				"Sale una trama HARDWARE con «vw 1 23.400» hacia la nube.",
+				"Blynk.Cloud reenvía el valor por la conexión del ESP32: trama «vw 0 1».",
+				"La librería entrega el valor 1 a la función BLYNK_WRITE de V0.",
+				"La función pone el GPIO 15 a 3,3 V: el LED rojo se enciende.",
+				"Cada 30 s, una tarea del temporizador entrega 23.4 a virtualWrite.",
+				"virtualWrite envía la trama «vw 1 23.400» hacia la nube.",
 				"Blynk.Cloud guarda 23.4 en el datastream V1 (historial).",
 				"El widget Gauge enlazado a V1 muestra 23.4 °C.",
 			];
 			const TOTAL = PASOS.length;
-			const RESUMEN = "V0: Switch → BLYNK_WRITE(V0) → LED · V1: virtualWrite → datastream → Gauge";
+			const RESUMEN = "Orden: widget → datastream → pin virtual → función · Dato: el camino inverso";
 
 			let paso = TOTAL; // arranca con los dos recorridos completos
 			let avance = 1;
@@ -232,19 +227,19 @@
 				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0135), 27);
 				const m = fs * 0.9;
 				const gap = clamp(fs * 1.3, w * 0.02, fs * 2.4);
-				// El firmware lleva los nombres más largos: sus columnas son más anchas.
-				const PESOS = [0.9, 1, 1, 1.25, 1.1, 0.75];
-				const unidad = (w - 2 * m - 5 * gap) / PESOS.reduce((a, b) => a + b, 0);
+				// Cinco columnas: widget, datastream, pin virtual, función y placa.
+				const PESOS = [0.95, 1, 1.05, 1.05, 0.85];
+				const unidad = (w - 2 * m - 4 * gap) / PESOS.reduce((a, b) => a + b, 0);
 				const anchoCol = (i) => PESOS[i] * unidad;
 				const X = (i) => m + PESOS.slice(0, i).reduce((a, b) => a + b, 0) * unidad + i * gap;
 
 				// Cabeceras de grupo de columnas.
 				const grupos = [
-					[0, 0, "Panel (web o app)"],
-					[1, 1, "Blynk.Cloud"],
-					[2, 2, "Internet · TLS 443"],
-					[3, 4, "Firmware del ESP32"],
-					[5, 5, "Placa"],
+					[0, 0, "Widget · panel"],
+					[1, 1, "Datastream · nube"],
+					[2, 2, "Pin virtual · trama"],
+					[3, 3, "Función · firmware"],
+					[4, 4, "Placa"],
 				];
 				const yCab = fs * 1.0;
 				for (const [a, b, rot] of grupos) {
@@ -265,23 +260,23 @@
 				const hNodo = (yCap - fs * 1.6 - top - 2 * hRot - fs * 0.6) / 2;
 				const filas = [
 					{ nodos: ORDEN, y: top + hRot, rot: "Orden: del Switch al LED →", base: 0, tono: c.acento },
-					{ nodos: DATO, y: top + hRot * 2 + hNodo + fs * 0.6, rot: "← Dato: del sensor al Gauge", base: 5, tono: c.navy },
+					{ nodos: DATO, y: top + hRot * 2 + hNodo + fs * 0.6, rot: "← Dato: de la placa al Gauge", base: 4, tono: c.navy },
 				];
 
 				for (const [fi, f] of filas.entries()) {
 					const derecha = fi === 0;
-					texto(ctx, f.rot, derecha ? X(0) : X(5) + anchoCol(5), f.y - hRot * 0.5, fs, f.tono, 700, derecha ? "left" : "right", SANS);
+					texto(ctx, f.rot, derecha ? X(0) : X(4) + anchoCol(4), f.y - hRot * 0.5, fs, f.tono, 700, derecha ? "left" : "right", SANS);
 					for (const [i, nodo] of f.nodos.entries()) {
-						// Orden de visita: fila 0 de 0 a 5; fila 1 de 5 a 0.
-						const orden = derecha ? i : 5 - i;
+						// Orden de visita: fila 0 de 0 a 4; fila 1 de 4 a 0.
+						const orden = derecha ? i : 4 - i;
 						const activo = orden === 0 ? paso > f.base : estadoFlecha(f.base + orden - 1) >= 1;
 						dibujarNodo(ctx, nodo, X(i), f.y, anchoCol(i), hNodo, fs, c, activo, f.tono);
 					}
 					// Flechas entre nodos.
-					for (let k = 0; k < 5; k++) {
+					for (let k = 0; k < 4; k++) {
 						const p = estadoFlecha(f.base + k);
-						const i0 = derecha ? k : 5 - k;
-						const i1 = derecha ? k + 1 : 4 - k;
+						const i0 = derecha ? k : 4 - k;
+						const i1 = derecha ? k + 1 : 3 - k;
 						const xa = derecha ? X(i0) + anchoCol(i0) + 4 : X(i0) - 4;
 						const xb = derecha ? X(i1) - 4 : X(i1) + anchoCol(i1) + 4;
 						const y = f.y + hNodo / 2;
@@ -300,7 +295,7 @@
 				if (!recorrido) frase = RESUMEN;
 				else if (paso === 0) frase = "Pulsar «Siguiente paso»: primero la orden, después el dato.";
 				else frase = `${paso} · ${PASOS[paso - 1]}`;
-				const tono = !recorrido || paso === 0 ? c.heading : paso <= 5 ? c.acento : c.navy;
+				const tono = !recorrido || paso === 0 ? c.heading : paso <= 4 ? c.acento : c.navy;
 				caja(ctx, m, yCap - fs * 1.15, w - 2 * m, fs * 2.3, fs * 0.4, c.surface, c.borde, 1.5);
 				texto(ctx, frase, w / 2, yCap, fs * 1.05, tono, 700, "center", SANS, w - 2 * m - fs * 1.2);
 			}
@@ -381,7 +376,7 @@
 				const conValor = Boolean(nodo.valor);
 				texto(ctx, nodo.l1, xm, y + ch * (conValor ? 0.26 : 0.36), fs * 1.02, tinta, 700, "center", fam1, cw - fs * 0.8);
 				texto(ctx, activo ? nodo.l2 : (nodo.l2antes ?? nodo.l2), xm, y + ch * (conValor ? 0.5 : 0.64), fs, activo ? tono : c.muted, 700, "center", nodo.fam2 ?? SANS, cw - fs * 0.8);
-				if (conValor) texto(ctx, activo ? nodo.valor : nodo.antes, xm, y + ch * 0.76, fs, activo ? c.heading : c.muted, 600, "center", MONO, cw - fs * 0.8);
+				if (conValor) texto(ctx, activo ? nodo.valor : nodo.antes, xm, y + ch * 0.76, fs, activo ? c.heading : c.muted, 600, "center", nodo.sansValor ? SANS : MONO, cw - fs * 0.8);
 			}
 
 			const lienzo = lienzoAdaptable(document.getElementById("pines"), dibujar);

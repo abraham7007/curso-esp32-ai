@@ -19,45 +19,45 @@
 			<div class="slide__content">
 				<span class="badge">05 · Integración</span>
 
-				<h1 class="slide__title slide__title--sm"><em>Estado</em> del programa en una variable bool</h1>
+				<h1 class="slide__title slide__title--sm"><em>Estado</em> del programa en una variable booleana</h1>
 
 				<div class="rd estados crece">
-					<p class="estados__inicio">
-						<code>bool automatico = false;</code>
-						<span>setup() imprime <code>[MODO] MANUAL</code></span>
+					<p class="estados__inicio s2v-inicio">
+						<span class="s2v-inicio__punto" aria-hidden="true"></span>
+						<span>arranque → <b>Manual</b>; la traza empieza con <span class="s2v-traza">[MODO] MANUAL</span></span>
 					</p>
 
 					<section class="estado is-activo" data-estado="manual" aria-label="Estado manual">
 						<p class="estado__nombre">Manual</p>
-						<code class="estado__var">automatico == false</code>
+						<p class="s2v-var">variable de modo: <b>falso</b></p>
 						<ul class="estado__hace">
-							<li>no llama a escribirPWM() y el LED conserva su último brillo</li>
+							<li>el LED conserva su último brillo</li>
 							<li>no imprime nada</li>
 						</ul>
 					</section>
 
 					<div class="transiciones">
 						<p class="transicion transicion--ida" data-tr="ida">
-							<code>boton.fuePulsado()</code>
-							<span>imprime <code>[MODO] AUTOMATICO</code></span>
+							<b class="s2v-evento">pulsación válida</b>
+							<span class="s2v-traza">[MODO] AUTOMATICO</span>
 						</p>
 						<div class="transiciones__centro">
-							<code class="transiciones__linea">automatico = !automatico;</code>
+							<p class="s2v-invierte">cada pulsación invierte la variable</p>
 							<button class="btn btn--primary" type="button" data-pulsar>Pulsar el botón (GPIO 4)</button>
 						</div>
 						<p class="transicion transicion--vuelta" data-tr="vuelta">
-							<code>boton.fuePulsado()</code>
-							<span>imprime <code>[MODO] MANUAL</code></span>
+							<b class="s2v-evento">pulsación válida</b>
+							<span class="s2v-traza">[MODO] MANUAL</span>
 						</p>
 					</div>
 
 					<section class="estado" data-estado="auto" aria-label="Estado automático">
 						<p class="estado__nombre">Automático</p>
-						<code class="estado__var">automatico == true</code>
+						<p class="s2v-var">variable de modo: <b>verdadero</b></p>
 						<ul class="estado__hace">
-							<li>duty = voltios / 3,3 × 255</li>
-							<li>led.escribirPWM(duty)</li>
-							<li>imprime <code>[AUTO]</code> cuando el <i>duty</i> cambia</li>
+							<li>PWM = V / 3,3 × 255</li>
+							<li>aplicado al LED</li>
+							<li>imprime <span class="s2v-traza">[AUTO]</span> si cambia</li>
 						</ul>
 					</section>
 				</div>
@@ -66,8 +66,8 @@
 			<aside class="notas">
 				<p>
 					El programa del ejemplo 10 tiene dos comportamientos, que dependen del
-					valor de <code>automatico</code>. La línea
-					<code>automatico = !automatico;</code> hace las dos transiciones.
+					valor de la variable de modo, <code>automatico</code>. Una sola
+					instrucción, que invierte esa variable, hace las dos transiciones.
 					Pulsar el botón de la lámina para recorrerlas. Pregunta de predicción:
 					¿qué hace el LED al volver a MANUAL? Respuesta: mantiene el último
 					ciclo de trabajo, porque loop() deja de escribirlo. Con tres o más
@@ -80,22 +80,22 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>if (boton.fuePulsado()) automatico = !automatico;</code> y luego
-						<code>if (automatico) { … }</code>. <code>fuePulsado()</code> devuelve
-						<code>true</code> una sola vez por pulsación, así que cada pulsación
-						cambia el modo exactamente una vez.
+						En cada vuelta, si <code>fuePulsado()</code> entrega una pulsación, se
+						invierte la variable de modo; después, solo en automático, se lee el
+						potenciómetro y se escribe el LED. <code>fuePulsado()</code> entrega
+						cada pulsación una sola vez, así que cada pulsación cambia el modo
+						exactamente una vez.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						<code>src/main.cpp</code> del ejemplo 10. <code>dutyPrevio</code> es
 						estado auxiliar que evita repetir la línea <code>[AUTO]</code>.
-						<code>(uint8_t)(v / 3.3 * 255)</code> trunca: 1,65 V da 127.
+						La conversión a entero de 8 bits trunca: 1,65 V da 127.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<p>
-						Leer el pin crudo con <code>digitalRead()</code> en vez de
-						<code>fuePulsado()</code>: mientras se mantiene pulsado, el modo
-						cambia en cada vuelta.
+						Leer el nivel crudo del pin en vez de la pulsación filtrada: mientras
+						se mantiene pulsado, el modo cambia en cada vuelta.
 					</p>
 				</div>
 			</details>

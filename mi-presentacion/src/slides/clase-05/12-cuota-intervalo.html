@@ -26,17 +26,13 @@
 						<div class="def">
 							<p>
 								Plan gratuito actual de Blynk: <b>100&nbsp;000 mensajes al mes</b>
-								(blynk.io/pricing, octubre de 2026). Cada envío consume cuota.
-							</p>
-						</div>
-						<div class="def">
-							<p>
-								Más de 10&nbsp;valores por segundo: <b>inundación</b> (<i>flood</i>) y
-								desconexión (docs.blynk.io).
+								(blynk.io/pricing, octubre de 2026). Más de 10&nbsp;valores por
+								segundo: <b>inundación</b> (<i>flood</i>) y desconexión.
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>al mes = 2 592 000 s / T</code>
+							<b>Criterio:</b> intervalo ≥ segundos del mes ÷ cuota<br />
+							2&nbsp;592&nbsp;000&nbsp;s ÷ 100&nbsp;000 ≈ 26&nbsp;s → 30&nbsp;s con margen
 						</p>
 					</div>
 
@@ -82,12 +78,11 @@
 					30 s (172 800) la superan. Comprobarlo en el consumo de la consola.
 				</p>
 				<p>
-					La franja roja de la izquierda es otro límite: con <code>virtualWrite</code>
-					en cada vuelta del <code>loop()</code> se superan 10 valores por segundo y
-					el servidor desconecta la placa. La librería espacia los envíos a 15 por
-					segundo como máximo (<code>BLYNK_MSG_LIMIT</code> en BlynkConfig.h, con una
-					espera dentro de <code>virtualWrite</code>), cifra que sigue por encima del
-					límite de 10.
+					La franja roja de la izquierda es otro límite: con un envío en cada vuelta
+					del loop se superan 10 valores por segundo y el servidor desconecta la
+					placa. La librería espacia los envíos a 15 por segundo como máximo
+					(BLYNK_MSG_LIMIT en BlynkConfig.h, con una espera dentro de virtualWrite),
+					cifra que sigue por encima del límite de 10.
 				</p>
 			</aside>
 
@@ -96,14 +91,15 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>timer.setInterval(30000L, sendSensorData)</code> con
-						<code>BlynkTimer</code>; nunca <code>virtualWrite</code> suelto en el
-						<code>loop()</code>. Cifras de blynk.io/pricing (plan Free, octubre de
-						2026); el límite ha cambiado en otras ocasiones y debe comprobarse.
+						El intervalo se fija con una tarea del temporizador (BlynkTimer), nunca
+						con un envío suelto en el loop. Antes de elegirlo: contar las placas que
+						comparten la cuenta, reservar margen para órdenes y sincronización y
+						comprobar la cifra vigente (blynk.io/pricing, plan Free, octubre de 2026;
+						el límite ha cambiado en otras ocasiones).
 					</p>
 					<p>
-						<code>BLYNK_MSG_LIMIT</code> (15 por defecto) espacia los envíos dentro de la
-						librería; no sustituye a un intervalo razonable.
+						BLYNK_MSG_LIMIT (15 por defecto) espacia los envíos dentro de la librería;
+						no sustituye a un intervalo razonable.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -122,7 +118,7 @@
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="11-blynk-run.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-					<span>Blynk.run</span>
+					<span>Espera bloqueante</span>
 				</a>
 				<a class="slide-nav__link" href="13-telemetria-comandos.html">
 					<span>Dos sentidos</span>

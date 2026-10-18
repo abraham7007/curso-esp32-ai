@@ -21,123 +21,66 @@
 
 				<h1 class="slide__title slide__title--sm"><em>Guardas</em> de inclusión contra la doble definición</h1>
 
-				<div class="rd s2 s2-guarda crece">
-					<div class="s2-pila">
-						<section class="codepanel s2-codigo" aria-label="main.cpp incluye Led.h dos veces">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>src/main.cpp</span>
-								</span>
-							</div>
-							<div class="s2-lineas">
-								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
-								<span class="s2-l s2-l--h">#include "Led.h"<span class="s2-chip s2-chip--h">1.ª vez</span></span>
-								<span class="s2-l s2-l--h">#include "Led.h"<span class="s2-chip s2-chip--h">2.ª vez</span></span>
-								<span class="s2-l s2-c">// o la trae otra cabecera</span>
-							</div>
-						</section>
+				<div class="rd s2v s2v-guarda crece">
+					<section class="s2v-col" aria-label="Inclusiones de main.cpp">
+						<p class="s2v-col__titulo">Inclusiones</p>
+						<div class="arbol s2-arbol s2v-arbol-incl">
+							<ul>
+								<li>
+									<div class="arbol__fila"><span class="arbol__nombre">main.cpp</span></div>
+									<ul>
+										<li><div class="arbol__fila"><span class="arbol__nombre">Arduino.h</span></div></li>
+										<li><div class="arbol__fila"><span class="arbol__nombre">Led.h</span><span class="arbol__nota">1.ª</span></div></li>
+										<li><div class="arbol__fila"><span class="arbol__nombre">Led.h</span><span class="arbol__nota">2.ª</span></div></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<p class="s2v-col__nota">La 2.ª puede llegar a través de otra cabecera.</p>
+					</section>
 
-						<section class="codepanel s2-codigo" aria-label="Led.h con su guarda de inclusión">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>lib/Led/Led.h</span>
-								</span>
-								<span class="s2-simbolo s2-simbolo--mal s2-sin" data-paso="2">sin guarda</span>
-							</div>
-							<div class="s2-lineas">
-								<span class="s2-l s2-l--cpp s2-se-quita">#ifndef LED_H<span class="s2-chip s2-chip--cpp">comprueba LED_H</span></span>
-								<span class="s2-l s2-l--cpp s2-se-quita">#define LED_H<span class="s2-chip s2-chip--cpp">define LED_H</span></span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">class Led {</span>
-								<span class="s2-l s2-c">    …</span>
-								<span class="s2-l">};</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l s2-l--cpp s2-se-quita">#endif // LED_H</span>
-							</div>
-						</section>
-					</div>
+					<section class="s2v-col" aria-label="Guarda de inclusión en pseudocódigo">
+						<p class="s2v-col__titulo">Guarda de Led.h <span class="s2v-pastilla s2v-pastilla--mal s2v-p2" data-paso="2">sin guarda</span></p>
+						<ul class="s2v-pseudo s2v-pseudo--guarda">
+							<li>si <b>LED_H</b> no existe →</li>
+							<li class="s2v-in">definir <b>LED_H</b></li>
+							<li class="s2v-in">copiar el contenido</li>
+							<li>si <b>LED_H</b> ya existe →</li>
+							<li class="s2v-in">saltar hasta el final</li>
+						</ul>
+						<p class="s2v-col__nota">El preprocesador la evalúa antes de compilar.</p>
+					</section>
 
-					<div class="s2-guarda__der">
-						<section class="codepanel s2-codigo" aria-label="Recorrido del preprocesador en las dos inclusiones">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
-									<span>recorrido del preprocesador</span>
-								</span>
-							</div>
-							<div class="s2-lineas">
-								<div class="s2-solo-bien">
-								<div class="s2-bloque">
-									<span class="s2-bloque__titulo">1.ª inclusión de Led.h</span>
-									<span class="s2-l s2-l--cpp">#ifndef LED_H<span class="s2-chip s2-chip--cpp">sin definir → entra</span></span>
-									<span class="s2-l">#define LED_H</span>
-									<span class="s2-l">class Led { … };<span class="s2-chip s2-chip--h">se define</span></span>
-									<span class="s2-l">#endif</span>
-								</div>
-								<div class="s2-bloque">
-									<span class="s2-bloque__titulo">2.ª inclusión de Led.h</span>
-									<span class="s2-l s2-marca s2-l--mal">#ifndef LED_H<span class="s2-chip s2-chip--mal" data-paso="1">definida → salta</span></span>
-									<span class="s2-l s2-tachable">#define LED_H</span>
-									<span class="s2-l s2-tachable">class Led { … };</span>
-									<span class="s2-l">#endif</span>
-								</div>
-								</div>
-								<div class="s2-solo-mal">
-									<div class="s2-bloque">
-										<span class="s2-bloque__titulo">1.ª inclusión de Led.h, sin guarda</span>
-										<span class="s2-l">class Led {<span class="s2-chip s2-chip--h">se define</span></span>
-										<span class="s2-l">    uint8_t _pin;</span>
-										<span class="s2-l s2-c">    …</span>
-										<span class="s2-l">};</span>
-									</div>
-									<div class="s2-bloque">
-										<span class="s2-bloque__titulo">2.ª inclusión de Led.h, sin guarda</span>
-										<span class="s2-l s2-l--mal">class Led {<span class="s2-chip s2-chip--mal">segunda definición → error</span></span>
-										<span class="s2-l">    uint8_t _pin;</span>
-										<span class="s2-l s2-c">    …</span>
-										<span class="s2-l">};</span>
-									</div>
-								</div>
-							</div>
-						</section>
-
-						<section class="codepanel s2-codigo" aria-label="Salida de pio run">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-									<span>terminal · pio run</span>
-								</span>
-							</div>
-							<pre class="s2-term"><span class="s2-solo-bien"><span class="s2-c">$ pio run</span>
-Compiling .pio/build/esp32dev/src/main.cpp.o
-Linking .pio/build/esp32dev/firmware.elf
-<b class="s2-okt">[SUCCESS]</b></span><span class="s2-solo-mal"><span class="s2-c">In file included from src/main.cpp:3:</span>
-lib/Led/Led.h:4:7: <b class="s2-err">error: redefinition of 'class Led'</b>
-<span class="s2-c">In file included from src/main.cpp:2:</span>
-lib/Led/Led.h:4:7: note: previous definition of 'class Led'</span></pre>
-						</section>
-					</div>
+					<section class="s2v-col" aria-label="Unidad de traducción: texto que recibe el compilador">
+						<p class="s2v-col__titulo">Unidad de traducción</p>
+						<ol class="s2v-unidad">
+							<li class="s2v-bloque"><span>Arduino.h</span></li>
+							<li class="s2v-bloque s2v-bloque--led"><span>clase Led · 1.ª copia</span><span class="s2v-pastilla s2v-pastilla--bien">se define</span></li>
+							<li class="s2v-bloque s2v-bloque--led s2v-copia2">
+								<span>clase Led · 2.ª copia</span>
+								<span class="s2v-pastilla s2v-pastilla--aviso s2v-p1" data-paso="1">omitida</span>
+								<span class="s2v-pastilla s2v-pastilla--mal s2v-p2b" data-paso="2">definición repetida</span>
+							</li>
+						</ol>
+						<span class="s2v-msg s2v-guarda__msg" data-paso="2">lib/Led/Led.h:4:7: <b>error: redefinition of 'class Led'</b></span>
+					</section>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: si se borran las tres líneas de la guarda,
-					¿qué etapa da el error y en qué línea? Respuesta: el compilador, en
-					<code>lib/Led/Led.h:4</code>. Inicio: el preprocesador copia el texto
-					de cada <code>#include</code>; en la primera copia <code>LED_H</code>
-					no existe, entra y la define. Paso 1: en la segunda,
-					<code>LED_H</code> ya existe y salta hasta <code>#endif</code>. Paso 2:
-					sin guarda, la definición de la clase llega dos veces y la rechaza el
-					compilador, antes del enlace. La declaración <code>class Led;</code>
-					puede repetirse; la definición, una sola vez por unidad de
-					traducción. En el ejemplo 06 el caso real es <code>Arduino.h</code>:
-					lo incluyen <code>main.cpp</code> y <code>Led.h</code>, y su propia
-					guarda (<code>Arduino_h</code>) evita la doble definición.
+					Pregunta de predicción: si la cabecera no tiene guarda y llega dos
+					veces, ¿qué etapa da el error y en qué archivo? Respuesta: el
+					compilador, en <code>lib/Led/Led.h</code>, línea 4. Inicio: el
+					preprocesador copia el texto de cada inclusión; en la primera,
+					<code>LED_H</code> no existe, la define y copia la clase. Paso 1: en la
+					segunda, <code>LED_H</code> ya existe y salta hasta el final; la clase
+					llega una sola vez. Paso 2: sin guarda, la definición llega dos veces
+					y el compilador la rechaza, antes del enlace. Una declaración puede
+					repetirse; la definición, una sola vez por unidad de traducción. En el
+					ejemplo 06 el caso real es <code>Arduino.h</code>: lo incluyen
+					<code>main.cpp</code> y <code>Led.h</code>, y su propia guarda evita la
+					doble definición.
 				</p>
 			</aside>
 
@@ -146,7 +89,9 @@ lib/Led/Led.h:4:7: note: previous definition of 'class Led'</span></pre>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Cada cabecera de los ejemplos lleva su guarda:
+						La guarda son tres directivas del preprocesador que rodean la
+						cabecera: <code>#ifndef</code>, <code>#define</code> y
+						<code>#endif</code>. Cada cabecera de los ejemplos lleva la suya:
 						<code>LED_H</code>, <code>BOTON_H</code>,
 						<code>ENTRADAANALOGICA_H</code>. El nombre debe ser único en todo el
 						proyecto. <code>#pragma once</code> logra lo mismo en GCC, pero no es
@@ -160,7 +105,7 @@ lib/Led/Led.h:4:7: note: previous definition of 'class Led'</span></pre>
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Copiar <code>Led.h</code> como plantilla de <code>Boton.h</code> y dejar <code>LED_H</code>: el preprocesador omite la segunda cabecera completa.</li>
-						<li>Sin <code>#endif</code>, el mensaje de error apunta al final del archivo, varias líneas después de la causa.</li>
+						<li>Sin <code>#endif</code>, el preprocesador informa «unterminated #ifndef» y señala la línea del propio <code>#ifndef</code>, al principio del archivo.</li>
 					</ul>
 				</div>
 			</details>

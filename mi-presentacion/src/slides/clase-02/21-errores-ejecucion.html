@@ -22,15 +22,14 @@
 				<h1 class="slide__title slide__title--sm">Errores en ejecución y lectura del <em>backtrace</em></h1>
 
 				<div class="rd panico crece">
-					<div class="codepanel causa">
-						<div class="codepanel__header">
-							<span class="codepanel__path">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-								<span>src/main.cpp · falta el new en setup()</span>
-							</span>
-						</div>
-						<pre class="causa__texto"><span class="causa__n"> 8</span>EntradaAnalogica* entrada = nullptr;
-<span class="causa__n">21</span>    entrada-&gt;update();</pre>
+					<div class="s2v s2v-ejecuta">
+						<ol class="s2v-cadena" aria-label="Etapas que el programa supera antes del fallo">
+							<li class="s2v-cadena__ok">Compila <span>✓</span></li>
+							<li class="s2v-cadena__ok">Enlaza <span>✓</span></li>
+							<li class="s2v-cadena__ok">Se graba <span>✓</span></li>
+							<li class="s2v-cadena__mal">Se ejecuta <span>✗ pánico</span></li>
+						</ol>
+						<p class="s2v-ejecuta__causa"><b>Causa</b>: el objeto se usa a través de un puntero que nunca recibió una dirección (puntero nulo).</p>
 					</div>
 
 					<div class="codepanel traza">
@@ -64,11 +63,15 @@
 
 			<aside class="notas">
 				<p>
+					Las direcciones de memoria de la traza son ilustrativas; los archivos y
+					las líneas corresponden al ejemplo 10.
+				</p>
+				<p>
 					Pregunta de predicción: si <code>entrada</code> es un puntero nulo,
 					¿falla la compilación, el enlace o la ejecución? Respuesta: la
 					ejecución; el programa compiló, enlazó y se grabó. Arriba, la causa: en
-					el main del ejemplo 10, entrada pasa a ser un puntero y falta
-					<code>entrada = new EntradaAnalogica(32, 16);</code> en setup(). Leer
+					el main del ejemplo 10, entrada pasa a ser un puntero y setup() nunca
+					crea el objeto al que debería apuntar. Leer
 					la traza en tres puntos: la primera línea nombra la excepción; EXCVADDR es la dirección leída, y cero o casi cero indica
 					un puntero nulo; el backtrace da la pila de llamadas, la más interna
 					primero. Las líneas #0, #1, #2 las añade el filtro de PlatformIO al
@@ -91,8 +94,8 @@
 					<h4>Dónde aparece</h4>
 					<ul>
 						<li><code>LoadProhibited</code> / <code>StoreProhibited</code>: leer o escribir por un puntero inválido.</li>
-						<li><code>IntegerDivideByZero</code>: <code>EntradaAnalogica entrada(32, 0)</code> hace <code>% _n</code> con <code>_n = 0</code>.</li>
-						<li><code>CORRUPT HEAP</code> y <code>abort()</code>: doble <code>delete[]</code> o un índice fuera de rango (<code>_buffer[16]</code>) que escribe fuera del bloque; el fallo aparece después.</li>
+						<li><code>IntegerDivideByZero</code>: una media móvil creada con N = 0 calcula el índice circular dividiendo entre cero.</li>
+						<li><code>CORRUPT HEAP</code> y <code>abort()</code>: liberar dos veces el mismo búfer o escribir en la posición 16 de un búfer de 16; el fallo aparece después.</li>
 					</ul>
 					<h4>Errores frecuentes</h4>
 					<p>

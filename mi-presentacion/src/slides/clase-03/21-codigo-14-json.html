@@ -67,7 +67,7 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-plug" /></svg>
 									Montaje
 								</h4>
-								<p>Una sola placa y ninguna conexión: las medidas se simulan con <code>random()</code> y la línea sale por el USB (UART0).</p>
+								<p>Una sola placa y ninguna conexión: las medidas son valores al azar y la línea sale por el USB (UART0).</p>
 								<div class="hw-set mt-3" aria-hidden="true">
 									<span class="hw-set__item hw-set__board">
 										<wokwi-esp32-devkit-v1></wokwi-esp32-devkit-v1>
@@ -125,9 +125,9 @@ Generando JSON: {"temp":25,"hum":48,"presion":1014.900024,"tiempo_ms":6012}</div
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>serializeJson(doc, Serial)</code> escribe directamente en el puerto, sin cadena intermedia; <code>measureJson(doc)</code> devuelve los bytes que ocupará. <code>StaticJsonDocument&lt;200&gt;</code> reserva 200 bytes en la pila para el árbol del documento.</p>
+					<p><code>serializeJson()</code> escribe directamente en el puerto, sin cadena intermedia; <code>measureJson()</code> devuelve los bytes que ocupará. Un documento estático de 200 bytes reserva ese espacio en la pila para el árbol del documento.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Capacidad insuficiente: las claves sobrantes se pierden sin aviso; <code>doc.overflowed()</code> lo detecta.</li><li>Instalar ArduinoJson 7 sin fijar versión: avisos de obsolescencia.</li><li>Comparar el JSON con el binario sin contar las claves.</li></ul>
+					<ul><li>Capacidad insuficiente: las claves sobrantes se pierden sin aviso; <code>overflowed()</code> lo detecta.</li><li>Instalar ArduinoJson 7 sin fijar versión: avisos de obsolescencia.</li><li>Comparar el JSON con el binario sin contar las claves.</li></ul>
 				</div>
 			</details>
 

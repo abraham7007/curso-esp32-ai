@@ -24,7 +24,7 @@
 				</h1>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres garantías de MQTT y su equivalente en Blynk. Calidad de servicio, que el cliente elige en cada publicación o suscripción: QoS 0 envía el mensaje una vez, sin acuse, y puede perderse; QoS 1 repite hasta recibir el acuse PUBACK, no se pierde pero puede llegar dos veces. En Blynk, TCP reenvía mientras la conexión está abierta; sin conexión, virtualWrite se descarta. Mensaje retenido: el broker guarda el último valor del tema y lo entrega a quien se suscribe después. En Blynk, el servidor guarda el último valor de cada datastream y Blynk.syncVirtual(V0) lo pide al reconectar. Last Will: si la conexión se corta sin DISCONNECT, el broker publica en nombre del cliente el mensaje desconectado. En Blynk, el ESP32 envía un ping tras 40 s sin tráfico; si el ping no llega, la consola marca el dispositivo Offline. Criterio: coste de perder un mensaje frente a recibirlo dos veces.">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres garantías de MQTT y su equivalente en Blynk. Calidad de servicio, que el cliente elige en cada publicación o suscripción: QoS 0 envía el mensaje una vez, sin acuse, y puede perderse; QoS 1 repite hasta recibir el acuse PUBACK, no se pierde pero puede llegar dos veces. En Blynk, TCP reenvía mientras la conexión está abierta; sin conexión, cada envío se descarta. Mensaje retenido: el broker guarda el último valor del tema y lo entrega a quien se suscribe después. En Blynk, el servidor guarda el último valor de cada datastream y el ESP32 lo pide al conectar (syncVirtual). Last Will: si la conexión se corta sin DISCONNECT, el broker publica en nombre del cliente el mensaje desconectado. En Blynk, el ESP32 envía un ping tras 40 s sin tráfico; si el ping no llega, la consola marca el dispositivo Offline. Criterio: coste de perder un mensaje frente a recibirlo dos veces.">
 						<!-- cabecera -->
 						<text class="sans mut" x="30" y="24" font-size="26">mecanismo MQTT</text>
 						<text class="sans mut" x="380" y="24" font-size="26">qué garantiza</text>
@@ -50,7 +50,7 @@
 
 						<text class="sans" x="1050" y="112" font-size="28">TCP reenvía mientras la</text>
 						<text class="sans" x="1050" y="152" font-size="28">conexión está abierta; sin ella,</text>
-						<text class="navy" x="1050" y="194" font-size="28">virtualWrite() <tspan class="sans acc b">se descarta</tspan></text>
+						<text class="sans" x="1050" y="194" font-size="28">cada envío <tspan class="acc b">se descarta</tspan></text>
 						<path class="ln ln--fina ln--mut" d="M30 290 H 1600" />
 
 						<!-- 2 · retenido -->
@@ -62,7 +62,7 @@
 
 						<text class="sans" x="1050" y="344" font-size="28">el servidor guarda el último</text>
 						<text class="sans" x="1050" y="384" font-size="28">valor de cada datastream;</text>
-						<text class="navy b" x="1050" y="424" font-size="28">Blynk.syncVirtual(V0)</text>
+						<text class="sans navy b" x="1050" y="424" font-size="28">el ESP32 lo pide al conectar</text>
 						<path class="ln ln--fina ln--mut" d="M30 470 H 1600" />
 
 						<!-- 3 · Last Will -->
@@ -114,13 +114,12 @@
 						MQTT: la QoS la elige el cliente en cada <code>PUBLISH</code> o <code>SUBSCRIBE</code>, igual que la marca de retenido;
 						el Last Will se declara en el <code>CONNECT</code> junto con el
 						<i>keepalive</i>. QoS 2 (exactamente una vez) existe, pero cuesta cuatro
-						mensajes por envío. Blynk: <code>Blynk.syncVirtual(V0)</code> dentro de
-						<code>BLYNK_CONNECTED()</code> pide el último valor guardado, que llega
-						por <code>BLYNK_WRITE(V0)</code>.
+						mensajes por envío. Blynk: al conectar (BLYNK_CONNECTED), syncVirtual pide
+						el último valor guardado, que llega a la función del pin como una orden.
 					</p>
 					<h4>Detalle técnico</h4>
 					<p>
-						En Blynk 1.3.5, <code>sendCmd()</code> descarta el envío si no hay
+						En Blynk 1.3.5, la función interna de envío (sendCmd) descarta el envío si no hay
 						conexión («Cmd skipped» con <code>BLYNK_DEBUG_ALL</code>). Tras 40 s sin tráfico
 						(<code>BLYNK_HEARTBEAT</code>) la librería envía un ping.
 					</p>

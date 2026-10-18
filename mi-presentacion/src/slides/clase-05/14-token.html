@@ -28,48 +28,60 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del ejemplo 19: include/secrets.h, que no se sube; include/secrets.example.h, src/main.cpp y .gitignore, que sí se suben; el .gitignore lista include/secrets.h. A la derecha, secrets.h define BLYNK_AUTH_TOKEN con el token real de 32 caracteres; secrets.example.h, con TU_TOKEN_AQUI, al que el servidor responde Invalid auth token. En el centro, main.cpp incluye secrets.h si existe y, si no, la plantilla, antes de la cabecera BlynkSimpleEsp32_SSL.h. Abajo, el mensaje de entrada HW_LOGIN: por el puerto 80, con BlynkSimpleEsp32.h, la cabecera 1D 00 01 00 20 y el token legibles en la red; por el 443, con BlynkSimpleEsp32_SSL.h, todo cifrado con TLS y el certificado del servidor verificado, Certificate OK.">
-						<!-- árbol del proyecto -->
-						<text class="sans mut" x="0" y="20" font-size="26">19-blynk-dashboard-iot/</text>
-						<text x="0" y="66" font-size="28">include/</text>
-						<text class="acc" x="40" y="108" font-size="28">secrets.h</text>
-						<text class="sans acc" x="560" y="108" font-size="26" text-anchor="end">✗ no se sube</text>
-						<text x="40" y="150" font-size="28">secrets.example.h</text>
-						<text class="sans ok" x="560" y="150" font-size="26" text-anchor="end">✓ se sube</text>
-						<text x="0" y="192" font-size="28">src/main.cpp</text>
-						<text class="sans ok" x="560" y="192" font-size="26" text-anchor="end">✓ se sube</text>
-						<text x="0" y="234" font-size="28">.gitignore</text>
-						<text class="sans ok" x="560" y="234" font-size="26" text-anchor="end">✓ se sube</text>
-						<text class="mut" x="40" y="272" font-size="24">↳ contiene: include/secrets.h</text>
-						<path class="ln ln--fina ln--mut" d="M14 84 V150 H34 M14 108 H34" />
+					<svg class="s3d-svg crece" viewBox="0 0 1600 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del ejemplo 19 con lo que contiene cada archivo y si se sube al repositorio: include/secrets.h, con el token real, no se sube; include/secrets.example.h, con TU_TOKEN_AQUI, se sube; src/main.cpp, que elige uno de los dos, se sube; .gitignore, que excluye secrets.h, se sube. A la derecha, el flujo al compilar: si secrets.h está presente, main.cpp usa el token real y el servidor responde Ready; si no, usa la plantilla con TU_TOKEN_AQUI y el servidor responde Invalid auth token. Las credenciales se leen antes que la librería Blynk. Abajo, el mensaje de entrada HW_LOGIN: por el puerto 80, con BlynkSimpleEsp32.h, la cabecera 1D 00 01 00 20 y el token legibles en la red; por el 443, con BlynkSimpleEsp32_SSL.h, todo cifrado con TLS y el certificado del servidor verificado, Certificate OK. Al pie: un token filtrado no se invalida al borrarlo del archivo; si no se puede regenerar, se borra el dispositivo y se crea otro.">
+						<!-- árbol del proyecto: qué contiene cada archivo y si se sube -->
+						<text class="sans mut" x="0" y="22" font-size="26">19-blynk-dashboard-iot/</text>
+						<text class="sans mut" x="380" y="22" font-size="22">contiene</text>
+						<text class="sans mut fin" x="760" y="22" font-size="22">git</text>
+						<text x="0" y="74" font-size="28">include/</text>
+						<path class="ln ln--fina ln--mut" d="M14 94 V178 H34 M14 126 H34" />
+						<text class="acc" x="40" y="126" font-size="28">secrets.h</text>
+						<text class="sans acc" x="380" y="126" font-size="24">token real</text>
+						<text class="sans acc fin" x="760" y="126" font-size="26">✗ no se sube</text>
+						<text x="40" y="178" font-size="28">secrets.example.h</text>
+						<text x="380" y="178" font-size="22">TU_TOKEN_AQUI</text>
+						<text class="sans ok fin" x="760" y="178" font-size="26">✓ se sube</text>
+						<text x="0" y="230" font-size="28">src/main.cpp</text>
+						<text class="sans" x="380" y="230" font-size="24">elige uno de los dos</text>
+						<text class="sans ok fin" x="760" y="230" font-size="26">✓ se sube</text>
+						<text x="0" y="282" font-size="28">.gitignore</text>
+						<text class="sans" x="380" y="282" font-size="24">excluye secrets.h</text>
+						<text class="sans ok fin" x="760" y="282" font-size="26">✓ se sube</text>
 
-						<!-- los dos archivos del token -->
-						<rect class="caja caja--acc" x="620" y="0" width="980" height="126" rx="12" />
-						<text class="sans acc" x="644" y="36" font-size="26">include/secrets.h · las 3 líneas de «Device Info»</text>
-						<text x="644" y="86" font-size="28">#define BLYNK_AUTH_TOKEN "<tspan class="acc">token de 32 caracteres</tspan>"</text>
-						<rect class="caja" x="620" y="152" width="980" height="126" rx="12" />
-						<text class="sans mut" x="644" y="188" font-size="26">include/secrets.example.h · plantilla versionada → «Invalid auth token»</text>
-						<text x="644" y="238" font-size="28">#define BLYNK_AUTH_TOKEN "TU_TOKEN_AQUI"</text>
-
-						<!-- main.cpp -->
-						<rect class="caja" x="0" y="320" width="1600" height="150" rx="12" />
-						<text class="sans mut" x="24" y="352" font-size="26">src/main.cpp · las credenciales van antes de la cabecera de Blynk</text>
-						<text x="24" y="396" font-size="27">#if __has_include("secrets.h")  #include "secrets.h"  #else  #include "secrets.example.h"</text>
-						<text x="24" y="440" font-size="27">#include &lt;<tspan class="ok">BlynkSimpleEsp32_SSL.h</tspan>&gt;<tspan class="mut">   // blynk.cloud:443</tspan></text>
+						<!-- flujo al compilar -->
+						<text class="sans mut" x="820" y="22" font-size="26">Al compilar, main.cpp elige el archivo</text>
+						<rect class="caja" x="820" y="130" width="190" height="72" rx="12" />
+						<text class="mid" x="915" y="166" font-size="26">main.cpp</text>
+						<path class="ln" d="M1010 166 H1032 M1018 156 L1032 166 L1018 176" />
+						<path class="caja" d="M1034 166 L1140 98 L1246 166 L1140 234 Z" />
+						<text class="mid sans" x="1140" y="154" font-size="21">¿existe</text>
+						<text class="mid" x="1140" y="180" font-size="21">secrets.h?</text>
+						<path class="ln ln--ok" d="M1246 166 H1260 V88 H1296 M1282 78 L1296 88 L1282 98" />
+						<path class="ln ln--acc" d="M1260 166 V246 H1296 M1282 236 L1296 246 L1282 256" />
+						<text class="sans ok" x="1268" y="126" font-size="22">sí</text>
+						<text class="sans acc" x="1268" y="210" font-size="22">no</text>
+						<rect class="barra--ok" x="1300" y="50" width="296" height="76" rx="12" />
+						<text class="mid sans" x="1448" y="74" font-size="26">token real</text>
+						<text class="mid ok" x="1448" y="106" font-size="22">«Ready»</text>
+						<rect class="caja caja--acc" x="1300" y="208" width="296" height="76" rx="12" />
+						<text class="mid" x="1448" y="232" font-size="22">TU_TOKEN_AQUI</text>
+						<text class="mid acc" x="1448" y="264" font-size="20">«Invalid auth token»</text>
+						<text class="sans mut" x="820" y="322" font-size="24">Las credenciales se leen antes que la librería Blynk.</text>
 
 						<!-- el mensaje de entrada en la red -->
-						<text class="sans mut" x="0" y="512" font-size="26">El primer mensaje: HW_LOGIN (29 = 0x1D), id 1, longitud 32, y el token.</text>
-						<text class="sans dan" x="0" y="566" font-size="30" font-weight="700">puerto 80</text>
-						<text class="mut" x="0" y="600" font-size="22">BlynkSimpleEsp32.h</text>
-						<rect class="barra--dan" x="330" y="546" width="1270" height="60" rx="8" />
-						<text class="dan" x="352" y="576" font-size="26">1D 00 01 00 20  ‹token de 32 caracteres›  ← legible en la red</text>
-						<text class="sans ok" x="0" y="652" font-size="30" font-weight="700">puerto 443</text>
-						<text class="mut" x="0" y="686" font-size="22">BlynkSimpleEsp32_SSL.h</text>
-						<rect class="barra--ok" x="330" y="632" width="1270" height="60" rx="8" />
-						<text class="ok" x="352" y="662" font-size="26">▮▮▮▮ TLS: login, datos y órdenes cifrados · «Certificate OK»</text>
+						<path class="ln ln--fina ln--mut" d="M0 358 H1600" />
+						<text class="sans mut" x="0" y="398" font-size="26">El primer mensaje: HW_LOGIN (29 = 0x1D), id 1, longitud 32, y el token.</text>
+						<text class="sans dan" x="0" y="458" font-size="30" font-weight="700">puerto 80</text>
+						<text class="mut" x="0" y="492" font-size="22">BlynkSimpleEsp32.h</text>
+						<rect class="barra--dan" x="330" y="438" width="1266" height="60" rx="8" />
+						<text class="dan" x="352" y="468" font-size="26">1D 00 01 00 20  ‹token de 32 caracteres›  ← legible en la red</text>
+						<text class="sans ok" x="0" y="550" font-size="30" font-weight="700">puerto 443</text>
+						<text class="mut" x="0" y="584" font-size="22">BlynkSimpleEsp32_SSL.h</text>
+						<rect class="barra--ok" x="330" y="530" width="1266" height="60" rx="8" />
+						<text class="ok" x="352" y="560" font-size="26">▮▮▮▮ TLS: login, datos y órdenes cifrados · «Certificate OK»</text>
 
 						<!-- qué hacer si se filtró -->
-							<text class="sans" x="0" y="738" font-size="28">Token filtrado: borrarlo del archivo no lo invalida; <tspan class="acc">si no se puede regenerar, borrar el dispositivo y crear otro</tspan>.</text>
+						<text class="sans" x="0" y="652" font-size="28">Token filtrado: borrarlo del archivo no lo invalida; <tspan class="acc">si no se puede regenerar, borrar el dispositivo y crear otro</tspan>.</text>
 					</svg>
 				</div>
 			</div>
@@ -86,17 +98,17 @@
 				</p>
 				<p>
 					Es el mismo esquema que la clave de OpenWeatherMap (sesión 4 · 19):
-					secrets.h fuera de git, plantilla versionada y un <code>__has_include</code>
-					para que el proyecto recién clonado compile y el servidor responda «Invalid
-					auth token». Lo propio de Blynk: las macros deben existir antes de incluir
-					su cabecera (la biblioteca lee <code>BLYNK_TEMPLATE_ID</code> con un
-					<code>#ifdef</code>), por eso el bloque va primero.
+					secrets.h fuera de git, plantilla versionada y una comprobación de
+					presencia del archivo (__has_include) para que el proyecto recién clonado
+					compile y el servidor responda «Invalid auth token». Lo propio de Blynk:
+					las credenciales deben existir antes de cargar su cabecera, porque la
+					biblioteca comprueba en ese momento si BLYNK_TEMPLATE_ID está definido.
 				</p>
 				<p>
 					Abajo, el motivo del puerto 443: el primer mensaje lleva el token completo,
-					y con <code>BlynkSimpleEsp32.h</code> se transmite en claro por el puerto
+					y con BlynkSimpleEsp32.h se transmite en claro por el puerto
 					80, al alcance de cualquier equipo de la misma red. La versión SSL carga el
-					certificado raíz incluido en la biblioteca (<code>setCACert</code>) y lo
+					certificado raíz incluido en la biblioteca (setCACert) y lo
 					comprueba; a diferencia de 4 · 11, un servidor suplantado tampoco obtiene el
 					token.
 				</p>
@@ -107,16 +119,16 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>cp include/secrets.example.h include/secrets.h</code> y pegar
-						<code>BLYNK_TEMPLATE_ID</code>, <code>BLYNK_TEMPLATE_NAME</code> y
-						<code>BLYNK_AUTH_TOKEN</code> de la pestaña «Device Info». Cabecera
-						del mensaje: tipo 1 B, id 2 B, longitud 2 B (lámina 07).
+						Copiar include/secrets.example.h como include/secrets.h y pegar en él los
+						tres valores de la pestaña «Device Info»: Template ID, Template name y
+						Auth token. Cabecera del mensaje: tipo 1 B, id 2 B, longitud 2 B
+						(lámina 07).
 					</p>
 					<h4>Dónde aparece</h4>
-					<p>Ejemplo 19: <code>.gitignore</code> con <code>include/secrets.h</code> y <code>BlynkSimpleEsp32_SSL.h</code>.</p>
+					<p>Ejemplo 19: .gitignore con include/secrets.h y la cabecera BlynkSimpleEsp32_SSL.h.</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Incluir la cabecera de Blynk antes que <code>secrets.h</code>: compila, pero <code>BLYNK_TEMPLATE_ID</code> ya no se envía al servidor.</li>
+						<li>Cargar la cabecera de Blynk antes que secrets.h: compila, pero el Template ID ya no se envía al servidor.</li>
 						<li>Compartir una captura de «Device Info» con el token visible.</li>
 					</ul>
 				</div>

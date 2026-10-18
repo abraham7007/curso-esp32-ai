@@ -42,7 +42,7 @@
 								<button type="button" class="btn btn--secondary" data-car="111" aria-pressed="false">o</button>
 								<button type="button" class="btn btn--secondary" data-car="108" aria-pressed="false">l</button>
 								<button type="button" class="btn btn--secondary" data-car="97" aria-pressed="false">a</button>
-								<button type="button" class="btn btn--secondary" data-car="10" aria-pressed="false">\n</button>
+								<button type="button" class="btn btn--secondary" data-car="10" aria-pressed="false" aria-label="Fin de línea (LF)">LF</button>
 							</fieldset>
 							<span class="lectura"><span id="l-byte" class="s3c-ancho">0x68 · 0110 1000</span></span>
 							<span class="lectura lectura--fin"><small>trama </small><span id="l-trama" class="s3c-ancho s3c-ancho--corto">86,8 µs</span></span>
@@ -79,9 +79,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>Serial2.begin(115200, SERIAL_8N1, 16, 17);</code> fija velocidad,
-						formato y pines (RX, TX). Otros formatos: <code>SERIAL_8E1</code>
-						(paridad par), <code>SERIAL_8N2</code> (dos bits de parada).
+						El arranque del puerto (<code>Serial2.begin()</code>) fija velocidad,
+						formato y pines (RX, TX). Otros formatos: 8E1 (paridad par) y 8N2 (dos
+						bits de parada).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

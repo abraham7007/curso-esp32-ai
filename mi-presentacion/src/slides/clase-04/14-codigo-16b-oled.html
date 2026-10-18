@@ -60,7 +60,7 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
 									Qué debe hacer
 								</h4>
-								<p>Pedir BTC y DOGE en una sola consulta cada 60 s y alternar la moneda en la OLED cada 5 s, sin <code>delay()</code>.</p>
+								<p>Pedir BTC y DOGE en una sola consulta cada 60 s y alternar la moneda en la OLED cada 5 s, sin esperas bloqueantes.</p>
 							</div>
 							<div class="code-hour__section">
 								<h4>
@@ -107,7 +107,7 @@ Dogecoin (DOGE): $0.0838 USD
 <b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
 <b>4. Diagramas.</b> En Excalidraw: arquitectura CoinGecko → WiFi → ESP32 → I²C → OLED y flujo de las dos tareas.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> 60 s sigue la caché de la CDN de CoinGecko (s-maxage=60) y 5 s alterna la vista, con dos temporizadores <code>millis()</code> (sesión 2 · 09). %.4f porque DOGE cotiza en centavos.
+									<b>Por qué se pide así.</b> 60 s sigue la caché de la CDN de CoinGecko (s-maxage=60) y 5 s alterna la vista, con dos temporizadores (sesión 2 · 09). Cuatro decimales: DOGE cotiza en centavos.
 								</p>
 							</div>
 						</div>
@@ -115,22 +115,22 @@ Dogecoin (DOGE): $0.0838 USD
 
 					<div class="code-hour__why">
 						<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-bulb" /></svg>
-						<p><b>Qué comprueba.</b> Cada tarea lleva su propio temporizador; con un <code>delay(60000)</code>, la OLED mostraría la misma moneda durante un minuto.</p>
+						<p><b>Qué comprueba.</b> Cada tarea lleva su propio temporizador; con una sola espera de 60 s, la OLED mostraría la misma moneda un minuto.</p>
 					</div>
 				</div>
 			</div>
 
 			<aside class="notas">
-				<p>Pregunta de predicción: si INTERVALO_FETCH baja a 20 s, ¿cambia el precio más a menudo? No cambia, porque la CDN de CoinGecko sirve la misma respuesta hasta 60 s (s-maxage=60); aumentan las peticiones y el riesgo de 429. Los precios son ilustrativos. La primera consulta ocurre en la primera vuelta de loop() porque ultimoFetch vale 0. Al reiniciar el temporizador de pantalla tras la consulta, BTC se muestra los 5 s completos. La OLED usa la fuente de 6 × 8 px: «$ 83257.00 USD» ocupa 84 de los 128 px.</p>
+				<p>Pregunta de predicción: si el intervalo de consulta baja a 20 s, ¿cambia el precio más a menudo? No cambia, porque la CDN de CoinGecko sirve la misma respuesta hasta 60 s (s-maxage=60); aumentan las peticiones y el riesgo de 429. Los precios son ilustrativos. La primera consulta ocurre en la primera vuelta de loop() porque ultimoFetch vale 0. Al reiniciar el temporizador de pantalla tras la consulta, BTC se muestra los 5 s completos. La OLED usa la fuente de 6 × 8 px: «$ 83257.00 USD» ocupa 84 de los 128 px.</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>if (millis() - ultimo &gt;= INTERVALO)</code> una vez por tarea. <code>display.setTextSize(2)</code> dobla la fuente de 6 × 8 px; <code>display.printf()</code> admite <code>%.2f</code>; nada aparece hasta <code>display.display()</code>.</p>
+					<p>Cada tarea compara el tiempo transcurrido desde su último instante con su intervalo. La OLED se dibuja en memoria (texto de tamaño 2, el doble de la fuente de 6 × 8 px) y nada aparece hasta que se envía la imagen completa a la pantalla.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Un solo <code>delay()</code> para las dos tareas.</li><li>Olvidar <code>display.display()</code>, con la pantalla sin cambios.</li><li>Dibujar antes de la primera respuesta, que muestra 0.00 (lo evita <code>datosObtenidos</code>).</li><li>Usar %.2f para DOGE.</li></ul>
+					<ul><li>Una sola espera para las dos tareas.</li><li>Dibujar sin enviar la imagen a la pantalla, que queda sin cambios.</li><li>Dibujar antes de la primera respuesta, que muestra 0.00; se evita con una marca de «datos obtenidos».</li><li>Mostrar DOGE con dos decimales.</li></ul>
 				</div>
 			</details>
 

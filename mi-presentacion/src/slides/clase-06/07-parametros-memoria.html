@@ -86,7 +86,7 @@
 					Pregunta de predicción, antes de mostrar la cuenta: ¿qué capa ocupa más memoria? Respuesta: la primera. Cada neurona de la primera capa recibe las 714 entradas, así que la capa tiene 714 × 50 pesos más 50 sesgos: 35 750 parámetros, casi el 98 % del total. Las otras dos capas suman 797.
 				</p>
 				<p>
-					Los parámetros se guardan como un arreglo <code>const</code> en <code>model.h</code> y quedan en la flash; en float32 son 36 547 × 4 B, unos 146 KB, a los que el archivo .tflite añade una cabecera pequeña. Con int8 cada peso ocupa un byte: unos 37 KB (lámina 10); el .tflite int8 real del ejemplo 20 ocupa 40 872 B, porque los sesgos quedan en int32 y el archivo guarda escalas (lámina 16).
+					Los parámetros se guardan como un arreglo constante en model.h y quedan en la flash; en float32 son 36 547 × 4 B, unos 146 KB, a los que el archivo .tflite añade una cabecera pequeña. Con int8 cada peso ocupa un byte: unos 37 KB (lámina 10); el .tflite int8 real del ejemplo 20 ocupa 40 872 B, porque los sesgos quedan en int32 y el archivo guarda escalas (lámina 16).
 				</p>
 				<p>
 					En la RAM, la red solo necesita la tensor arena, donde el intérprete pone la entrada (714 floats, 2,9 KB), las salidas de cada capa y sus propias estructuras: 8 KB en el ejemplo 20. El resto de la RAM es del sistema: la captura del 20, sin modelo, usa 44 504 B, y la inferencia, 58 536 B. La mayor reducción del modelo se obtiene al acortar la entrada o la primera capa.
@@ -99,16 +99,16 @@
 					<h4>En la práctica</h4>
 					<p>
 						Capa densa con <i>n</i> entradas y <i>m</i> neuronas: <i>n</i>·<i>m</i> + <i>m</i>
-						parámetros. En Colab, <code>model.summary()</code> imprime la cuenta por capa.
-						En el firmware: <code>alignas(16) byte tensorArena[8 * 1024];</code> y
-						<code>modelInit(model, tensorArena, tensorArenaSize)</code> (ArduTFLite).
+						parámetros. En Colab, el resumen del modelo (summary) imprime la cuenta por
+						capa. En el firmware, la tensor arena es un bloque fijo de RAM de 8 KB,
+						alineado a 16 bytes, que se entrega al intérprete al iniciar el modelo.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 20 (red 714→50→15→2 en float32) y ejemplo 21 (red pequeña en int8).</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Confundir el tamaño de <code>model.h</code> (texto con «0x..,») con los bytes que ocupa en la flash: el texto es unas seis veces mayor.</li>
-						<li>Reservar una tensor arena demasiado pequeña, con lo que <code>modelInit</code> falla al asignar los tensores.</li>
+						<li>Confundir el tamaño de model.h, un texto con cada byte escrito en hexadecimal, con los bytes que ocupa en la flash: el texto es unas seis veces mayor.</li>
+						<li>Reservar una tensor arena demasiado pequeña, con lo que el modelo no se inicia: no caben los tensores.</li>
 					</ul>
 				</div>
 			</details>

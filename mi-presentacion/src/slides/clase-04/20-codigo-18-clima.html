@@ -60,7 +60,7 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
 									Qué debe hacer
 								</h4>
-								<p>Cada 60 s, el clima de <code>Lima,PE</code> en °C (ciudad, temperatura y humedad) y cada error explicado según su código.</p>
+								<p>Cada 60 s, el clima de Lima en °C (ciudad, temperatura y humedad) y cada error explicado según su causa.</p>
 							</div>
 							<div class="code-hour__section">
 								<h4>
@@ -83,7 +83,7 @@
 <b>3. Simulación.</b> Wokwi: ESP32 y OLED SSD1306 (VCC 3V3, GND, SDA 21, SCL 22).
 <b>4. Diagramas.</b> En Excalidraw: arquitectura y flujo de errores.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> La clave no se publica. https sin certificado cifra <code>appid</code>, pero no verifica al servidor.
+									<b>Por qué se pide así.</b> La clave no se publica. https sin certificado cifra la clave de la URL, pero no verifica al servidor.
 								</p>
 							</div>
 						</div>
@@ -131,16 +131,16 @@ Humedad: 83 %
 			</div>
 
 			<aside class="notas">
-				<p>Pregunta de predicción: recién clonado el proyecto, ¿compila? Compila, porque sin secrets.h __has_include usa la plantilla con un #warning, y la API responde 401. Una clave recién creada tarda en activarse y también da 401. La fuente de la OLED no tiene tildes: «invalida», «aun». Temperatura y humedad son ilustrativas; con units=metric llegan en °C. Al pedir Lima,PE el campo name vale «Lima». Tras un error, la OLED conserva el mensaje hasta la consulta siguiente.</p>
+				<p>Pregunta de predicción: recién clonado el proyecto, ¿compila? Compila, porque sin secrets.h el compilador usa la plantilla y muestra un aviso, y la API responde 401. Una clave recién creada tarda en activarse y también da 401. La fuente de la OLED no tiene tildes: «invalida», «aun». Temperatura y humedad son ilustrativas; con units=metric llegan en °C. Al pedir Lima,PE el campo name vale «Lima». Tras un error, la OLED conserva el mensaje hasta la consulta siguiente.</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>#if __has_include("secrets.h")</code> elige el archivo en compilación. <code>doc["main"]["temp"]</code> y <code>doc["main"]["humidity"]</code>; el cuerpo trae además coord, weather, wind y sys, de ahí los 2048 bytes. El plan gratuito admite 60 consultas por minuto.</p>
+					<p>El compilador elige secrets.h si existe y, si no, la plantilla. Temperatura y humedad están en el objeto main del JSON (main → temp, main → humidity); el cuerpo trae además coord, weather, wind y sys, de ahí los 2048 bytes. El plan gratuito admite 60 consultas por minuto.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Subir secrets.h al repositorio y dejar pública la clave.</li><li>Poner la clave en una URL http, donde viaja legible.</li><li>Tratar 401, 404 y 429 con un mismo «Error».</li><li>Olvidar <code>units=metric</code>; la temperatura llega entonces en kelvin.</li></ul>
+					<ul><li>Subir secrets.h al repositorio y dejar pública la clave.</li><li>Poner la clave en una URL http, donde viaja legible.</li><li>Tratar 401, 404 y 429 con un mismo «Error».</li><li>Omitir units=metric en la URL; la temperatura llega entonces en kelvin.</li></ul>
 				</div>
 			</details>
 
@@ -150,7 +150,7 @@ Humedad: 83 %
 					<span>Clave</span>
 				</a>
 				<a class="slide-nav__link" href="21-cuatro-fallos.html">
-					<span>Fallos</span>
+					<span>Diagnóstico por capas</span>
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 				</a>
 			</nav>

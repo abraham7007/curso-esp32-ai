@@ -21,87 +21,62 @@
 
 				<h1 class="slide__title slide__title--sm"><em>Declaración</em> en el .h y definición en el .cpp</h1>
 
-				<div class="rd s2 s2-enlace crece">
-					<section class="s2-tubo" aria-label="Cada .cpp se compila por separado y el enlazador une los objetos">
-						<svg aria-hidden="true" data-flechas></svg>
-
-						<div class="s2-nodo s2-nodo--h s2-col-1" data-n="h">
-							<span class="s2-nodo__nombre">Led.h</span>
-							<span class="s2-nodo__rol">declara</span>
-							<code class="s2-nodo__bloque">class Led {
-public:
-  void begin();
-  bool toggle();
-  …
-};</code>
-							<span class="s2-nodo__sub">declaración; cada .cpp la copia con #include</span>
+				<div class="rd s2v s2v-decl crece">
+					<div class="s2v-archivos">
+						<div class="s2v-caja s2v-caja--h">
+							<p class="s2v-caja__nombre">Led.h</p>
+							<p class="s2v-caja__rol">promete</p>
+							<p>qué métodos existen y qué reciben</p>
 						</div>
-
-						<div class="s2-nodo s2-nodo--cpp s2-quitar" data-n="cpp">
-							<span class="s2-nodo__nombre">Led.cpp</span>
-							<span class="s2-nodo__rol">define</span>
-							<code>bool Led::toggle() { … }</code>
-							<span class="s2-simbolo s2-simbolo--mal s2-sin" data-paso="3">archivo borrado</span>
+						<div class="s2v-caja s2v-caja--cpp s2v-borrable">
+							<p class="s2v-caja__nombre">Led.cpp <span class="s2v-pastilla s2v-pastilla--mal" data-paso="1">borrado</span></p>
+							<p class="s2v-caja__rol">cumple</p>
+							<p>el cuerpo de cada método</p>
 						</div>
-
-						<div class="s2-nodo s2-nodo--cpp s2-quitar" data-n="ocpp">
-							<span class="s2-nodo__nombre">Led.cpp.o</span>
-							<span class="s2-nodo__sub">compilado aparte · se archiva en libLed.a</span>
-							<span class="s2-simbolo s2-simbolo--def" data-paso="1">define Led::toggle()</span>
+						<div class="s2v-caja s2v-caja--main">
+							<p class="s2v-caja__nombre">main.cpp</p>
+							<p class="s2v-caja__rol">usa</p>
+							<p>llama a los métodos prometidos</p>
 						</div>
+					</div>
 
-						<div class="s2-nodo s2-nodo--ld s2-ld" data-n="ld">
-							<span class="s2-nodo__nombre">Enlazador</span>
-							<span class="s2-nodo__sub">ld · une los objetos y resuelve cada referencia</span>
-							<span class="s2-solo-bien s2-simbolo s2-simbolo--def" data-paso="2">✓ firmware.elf</span>
-							<span class="s2-solo-mal s2-simbolo s2-simbolo--mal">✗ sin firmware.elf</span>
-							<span class="s2-solo-mal s2-nodo__sub">Led::toggle() sin definir</span>
-						</div>
-
-						<div class="s2-nodo s2-nodo--main" data-n="main">
-							<span class="s2-nodo__nombre">main.cpp</span>
-							<span class="s2-nodo__rol">usa</span>
-							<code>led.toggle();</code>
-						</div>
-
-						<div class="s2-nodo s2-nodo--main" data-n="omain">
-							<span class="s2-nodo__nombre">main.cpp.o</span>
-							<span class="s2-nodo__sub">compilado aparte</span>
-							<span class="s2-simbolo s2-simbolo--pide" data-paso="1">referencia a Led::toggle()</span>
-						</div>
-					</section>
-
-					<section class="codepanel s2-codigo s2-terminal" aria-label="Salida de pio run">
-						<div class="codepanel__header">
-							<span class="codepanel__path">
-								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-								<span>terminal · pio run</span>
-							</span>
-						</div>
-						<pre class="s2-term"><span class="s2-c">$ pio run</span>
-<span>Compiling .pio/build/esp32dev/src/main.cpp.o</span>
-<span class="s2-solo-bien">Compiling .pio/build/esp32dev/libb7f/Led/Led.cpp.o</span>
-<span data-paso="2">Linking .pio/build/esp32dev/firmware.elf</span>
-<span class="s2-solo-bien s2-okt" data-paso="2"><b>[SUCCESS]</b></span><span class="s2-solo-mal"><span class="s2-c">ld: main.cpp.o:(.literal._Z5setupv+0x18):</span> undefined reference to `Led::begin()'
-<span class="s2-c">ld: main.cpp.o:(.literal._Z4loopv+0xc):</span> <b class="s2-err">undefined reference to `Led::toggle()'</b>
-<span class="s2-c">ld: main.cpp.o:(.literal.startup._GLOBAL__sub_I_led+0x0):</span> undefined reference to `Led::Led(unsigned char)'
-<span class="s2-err">collect2: error: ld returned 1 exit status</span></span></pre>
-					</section>
+					<ol class="s2v-etapas" aria-label="Etapas de la construcción y su error típico">
+						<li class="s2v-etapa">
+							<p class="s2v-etapa__n"><b>1</b> Preprocesador</p>
+							<p class="s2v-etapa__hace">Copia el .h dentro de cada .cpp que lo incluye.</p>
+							<p class="s2v-etapa__err">si no encuentra la cabecera</p>
+							<span class="s2v-msg">fatal error: Led.h: <b>No such file or directory</b></span>
+							<span class="s2v-pastilla s2v-pastilla--bien" data-paso="1">✓ pasa</span>
+						</li>
+						<li class="s2v-etapa">
+							<p class="s2v-etapa__n"><b>2</b> Compilador</p>
+							<p class="s2v-etapa__hace">Traduce cada .cpp por separado; le basta la promesa.</p>
+							<p class="s2v-etapa__err">si el .h no declara el método</p>
+							<span class="s2v-msg">error: 'class Led' <b>has no member named</b> 'toggle'</span>
+							<span class="s2v-pastilla s2v-pastilla--bien" data-paso="1">✓ pasa</span>
+						</li>
+						<li class="s2v-etapa s2v-etapa--ld">
+							<p class="s2v-etapa__n"><b>3</b> Enlazador</p>
+							<p class="s2v-etapa__hace">Une los archivos .o y busca cada definición prometida.</p>
+							<p class="s2v-etapa__err">si falta la definición</p>
+							<span class="s2v-msg"><b>undefined reference to</b> `Led::toggle()'</span>
+							<span class="s2v-pastilla s2v-pastilla--mal" data-paso="1">✗ sin firmware.elf</span>
+						</li>
+					</ol>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Antes del paso 3. Pregunta de predicción: si se borra
+					Antes del paso 1. Pregunta de predicción: si se borra
 					<code>Led.cpp</code> y se conserva <code>Led.h</code>, ¿falla el
-					compilador o el enlazador? Respuesta: el enlazador. Paso 1: cada
-					<code>.cpp</code> se compila por separado; a <code>main.cpp</code> le
-					basta la declaración del <code>.h</code>, y su objeto queda con una
-					referencia sin resolver. Paso 2: el enlazador busca cada referencia en
-					los demás objetos. Paso 3: sin <code>Led.cpp</code>,
-					<code>main.cpp</code> compila igual y el error aparece en el enlace,
-					sin número de línea útil. Es la etapa 4 de la cadena vista en la
-					sesión 1.
+					compilador o el enlazador? Respuesta: el enlazador. El preprocesador
+					sigue encontrando la cabecera y el compilador traduce
+					<code>main.cpp</code> con la sola promesa del <code>.h</code>; su archivo
+					objeto (<code>.o</code>) queda con referencias sin resolver. El enlazador
+					busca cada definición en los demás <code>.o</code>; las de Led faltan. El mensaje no trae número de
+					línea útil: nombra el símbolo que falta. En la cadena de cinco etapas de la
+					sesión 1 es la cuarta; esta lámina omite el ensamblador y esptool.
 				</p>
 			</aside>
 
@@ -110,23 +85,23 @@ public:
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Declaración en <code>Led.h</code>: <code>bool toggle();</code>.
-						Definición en <code>Led.cpp</code>: <code>bool Led::toggle() { … }</code>;
-						<code>Led::</code> indica a qué clase pertenece. PlatformIO compila
-						<code>lib/Led/Led.cpp</code> a <code>Led.cpp.o</code>, lo archiva en
-						<code>libLed.a</code> y lo pasa al enlazador.
+						<code>Led.h</code> declara la clase y sus métodos;
+						<code>Led.cpp</code> define cada método con el prefijo
+						<code>Led::</code>, que indica a qué clase pertenece. PlatformIO compila
+						<code>lib/Led/Led.cpp</code> a un archivo objeto (<code>.o</code>), lo archiva en una librería
+						y lo pasa al enlazador.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						La salida real sin <code>Led.cpp</code> lista tres símbolos:
-						<code>Led::begin()</code>, <code>Led::toggle()</code> y
-						<code>Led::Led(unsigned char)</code> (el constructor; <code>uint8_t</code>
-						es <code>unsigned char</code>).
+						La salida real sin <code>Led.cpp</code> lista tres símbolos sin
+						definir: <code>Led::begin()</code>, <code>Led::toggle()</code> y el
+						constructor <code>Led::Led(unsigned char)</code>
+						(<code>uint8_t</code> es <code>unsigned char</code>).
 					</p>
 					<h4>Errores frecuentes</h4>
 					<p>
-						Definir <code>bool toggle() { … }</code> sin <code>Led::</code>: crea
-						una función libre y el método sigue sin definir.
+						Definir el método sin el prefijo <code>Led::</code>: se crea una
+						función libre con el mismo nombre y el método sigue sin definir.
 					</p>
 				</div>
 			</details>
@@ -144,49 +119,5 @@ public:
 		</main>
 
 		<script type="module" src="../../js/deck.js"></script>
-
-		<script type="module">
-			// Flechas medidas sobre las cajas reales: #include, compilación y enlace.
-			const tubo = document.querySelector(".s2-tubo");
-			const trazo = tubo.querySelector("[data-flechas]");
-			const nodo = (n) => tubo.querySelector(`[data-n="${n}"]`);
-			const paso = (n) => document.querySelector(`[data-paso="${n}"]`).classList.contains("is-shown");
-
-			const TRAMOS = [
-				// [desde, hasta, a partir de qué paso]
-				["h", "cpp", 0],
-				["h", "main", 0],
-				["cpp", "ocpp", 0],
-				["main", "omain", 0],
-				["ocpp", "ld", 2],
-				["omain", "ld", 2],
-			];
-
-			function dibujar() {
-				const base = tubo.getBoundingClientRect();
-				const fs = Number.parseFloat(getComputedStyle(nodo("h").querySelector(".s2-nodo__sub")).fontSize);
-				const sin = paso(3);
-				let html =
-					'<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>';
-				for (const [de, a, desde] of TRAMOS) {
-					if (desde && !paso(desde)) continue;
-					const r1 = nodo(de).getBoundingClientRect();
-					const r2 = nodo(a).getBoundingClientRect();
-					const x1 = r1.right - base.left;
-					const y1 = r1.top + r1.height / 2 - base.top;
-					const x2 = r2.left - base.left - 4;
-					const y2 = Math.min(Math.max(y1, r2.top - base.top + fs), r2.bottom - base.top - fs);
-					const roto = sin && (de === "cpp" || de === "ocpp");
-					const dx = (x2 - x1) / 2;
-					html += `<path d="M${x1} ${y1}C${x1 + dx} ${y1} ${x2 - dx} ${y2} ${x2} ${y2}" fill="none" stroke="currentColor" stroke-width="3"${roto ? ' stroke-dasharray="8 8" opacity="0.35"' : ""} marker-end="url(#punta)"/>`;
-				}
-				trazo.innerHTML = html;
-			}
-
-			new ResizeObserver(dibujar).observe(tubo);
-			document.fonts.ready.then(dibujar);
-			document.addEventListener("paso", dibujar);
-			dibujar();
-		</script>
 	</body>
 </html>

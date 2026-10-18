@@ -22,11 +22,11 @@
 				<h1 class="slide__title slide__title--sm">Recorrido de una lista JSON con <em>tope</em></h1>
 
 				<div class="def">
-					<p>La respuesta real de open-notify contiene 12 nombres; la OLED muestra 5 por página y el bucle nunca pasa del tamaño del arreglo.</p>
+					<p>La respuesta real de open-notify contiene 12 nombres; la OLED muestra 5 por página y el recorrido nunca pasa del tamaño del arreglo.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la respuesta de open-notify: una lista people de 12 objetos con craft y name, number 12 y message success, 587 bytes. En el centro, tres pantallas OLED de 128 por 64 píxeles a escala: página 1 con los nombres 1 a 5, página 2 con los nombres 6 a 10 y página 3 con los nombres 11 y 12. El nombre 3, Tracy Caldwell Dyson, ocupa 22 caracteres y la pantalla admite 21: con setTextWrap en false la n final queda fuera del borde. Debajo, el código: JsonArray people, el tope cantidadLeer, que no pasa de 15, el tamaño del arreglo, y el bucle for hasta ese tope.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, la respuesta de open-notify: una lista people de 12 objetos con craft y name, number 12 y message success, 587 bytes. En el centro, tres pantallas OLED de 128 por 64 píxeles a escala: página 1 con los nombres 1 a 5, página 2 con los nombres 6 a 10 y página 3 con los nombres 11 y 12. El nombre 3, Tracy Caldwell Dyson, ocupa 22 caracteres y la pantalla admite 21: sin ajuste de línea, la n final queda fuera del borde. Debajo, el pseudocódigo: el tope es el menor entre el total recibido y 15, la capacidad del arreglo; se guarda cada nombre hasta el tope; cada 4 segundos se muestra la página siguiente de 5.">
 						<!-- la respuesta -->
 						<text class="sans mut" x="0" y="24" font-size="26">GET http://api.open-notify.org/astros.json · 200 · 587 bytes</text>
 						<text x="0" y="70" font-size="28">"people": [ <tspan class="acc">{"craft": "ISS", "name": "Oleg Kononenko"}</tspan>, … <tspan class="acc">12 objetos</tspan> ],</text>
@@ -59,16 +59,16 @@
 						<path class="ln ln--fina ln--mut" d="M456 292 H568 M1032 292 H1144" />
 						<text class="mid mut" x="512" y="266" font-size="24">4 s</text>
 						<text class="mid mut" x="1088" y="266" font-size="24">4 s</text>
-						<text x="0" y="434" font-size="26">página 1 · i = 0…4</text>
-						<text x="576" y="434" font-size="26">página 2 · i = 5…9</text>
-						<text x="1152" y="434" font-size="26">página 3 · i = 10…11</text>
-						<text class="acc" x="0" y="512" font-size="24">22 caracteres; setTextWrap(false) recorta la «n»</text>
+						<text class="sans" x="0" y="434" font-size="26">página 1 · nombres 1 a 5</text>
+						<text class="sans" x="576" y="434" font-size="26">página 2 · nombres 6 a 10</text>
+						<text class="sans" x="1152" y="434" font-size="26">página 3 · nombres 11 y 12</text>
+						<text class="sans acc" x="0" y="512" font-size="26">22 caracteres en 21 columnas: sin ajuste de línea, la «n» queda fuera</text>
 
-						<!-- el código con su tope -->
+						<!-- el recorrido con su tope, en pseudocódigo -->
 						<path class="ln ln--fina ln--mut" d="M0 546 H1600" />
-						<text x="0" y="584" font-size="28">JsonArray people = doc["people"];</text>
-						<text x="0" y="626" font-size="28">int cantidadLeer = (totalAstronautas &gt; <tspan class="acc">15</tspan>) ? <tspan class="acc">15</tspan> : totalAstronautas;<tspan class="mut" x="1150">// String nombres…[15]</tspan></text>
-						<text x="0" y="668" font-size="28">for (int i = 0; <tspan class="acc">i &lt; cantidadLeer</tspan>; i++) nombresAstronautas[i] = people[i]["name"]…;</text>
+						<text class="sans" x="0" y="584" font-size="30"><tspan class="acc" font-weight="700">tope</tspan> = el menor entre el total recibido y <tspan class="acc" font-weight="700">15</tspan>, la capacidad del arreglo</text>
+						<text class="sans" x="0" y="628" font-size="30">para cada nombre hasta el tope → guardarlo en el arreglo</text>
+						<text class="sans" x="0" y="672" font-size="30">cada 4 s → mostrar la página siguiente de 5 nombres</text>
 
 						<!-- paso 1: 200 no es dato vigente -->
 						<g data-paso="1">
@@ -86,7 +86,7 @@
 					personas, sin el tope se escribiría fuera del arreglo y el programa se
 					reiniciaría. El bucle llega como máximo a 15. Luego la
 					pantalla: 128 px de ancho son 21 caracteres de 6 px; el nombre 3 tiene 22. Con
-					<code>setTextWrap(false)</code> la letra sobrante se recorta en el borde; sin esa línea saltaría de renglón y se superpondría al nombre siguiente. Pregunta de predicción (antes del paso): ¿corresponde la lista a la tripulación actual de la estación? No corresponde: es de mediados de 2024, y el servidor responde 200 igualmente.
+					el ajuste de línea desactivado, la letra sobrante se recorta en el borde; activado, saltaría de renglón y se superpondría al nombre siguiente. Pregunta de predicción (antes del paso): ¿corresponde la lista a la tripulación actual de la estación? No corresponde: es de mediados de 2024, y el servidor responde 200 igualmente.
 				</p>
 			</aside>
 
@@ -95,11 +95,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>JsonArray people = doc["people"];</code>,
-						<code>people.size()</code>, <code>people[i]["name"].as&lt;String&gt;()</code>.
-						Página: <code>inicio = pagina * 5</code>, se corta con
-						<code>break</code> al llegar al total; páginas = (total + 4) / 5 = 3.
-						Texto de tamaño 1: 6 × 8 px por carácter.
+						La lista people se recorre por posición y de cada objeto se toma el
+						campo name. La página n, contada desde 0, empieza en la posición 5 × n y
+						se corta al llegar al total; páginas = (total + 4) / 5 = 3. Texto de tamaño 1:
+						6 × 8 px por carácter.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 17 (astronautas en la OLED).</p>

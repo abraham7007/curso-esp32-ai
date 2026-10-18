@@ -45,9 +45,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<ul>
-						<li>UART: <code>Serial2.begin(115200, SERIAL_8N1, 16, 17)</code> fija velocidad, formato y pines.</li>
-						<li>I²C: <code>Wire.begin(21, 22)</code>; reloj de 100 kHz por defecto, <code>Wire.setClock(400000)</code> para 400 kHz.</li>
-						<li>SPI: <code>SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0))</code> y un <code>digitalWrite</code> sobre CS.</li>
+						<li>UART: el arranque del puerto (<code>Serial2.begin()</code>) fija velocidad, formato 8N1 y pines 16 y 17.</li>
+						<li>I²C: el maestro se une al bus en SDA 21 y SCL 22; reloj de 100 kHz por defecto, 400 kHz en modo rápido.</li>
+						<li>SPI: cada transferencia fija velocidad, orden de bits y modo, y baja la línea CS del dispositivo elegido.</li>
 					</ul>
 					<h4>Errores frecuentes</h4>
 					<p>

@@ -132,9 +132,9 @@ Iniciando control de LED mediante Clase Encapsulada
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>explicit Led(uint8_t pin)</code> impide la conversión implícita de un entero en <code>Led</code>. <code>isOn() const</code> declara que no modifica el objeto. PlatformIO compila cada carpeta de <code>lib/</code> como una librería y añade su ruta de inclusión.</p>
+					<p>El constructor se declara <code>explicit</code> para que un número suelto no se convierta en un <code>Led</code> sin querer; el método de consulta se declara <code>const</code> porque no modifica el objeto. PlatformIO compila cada carpeta de <code>lib/</code> como una librería y añade su ruta de inclusión.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Llamar a <code>pinMode</code> en el constructor, que en un objeto global se ejecuta antes de <code>setup()</code>.</li><li>Olvidar <code>led.begin()</code>: el pin no queda como salida.</li><li>Leer <code>led._state</code> desde <code>main.cpp</code>. Es privado y no compila.</li></ul>
+					<ul><li>Llamar a <code>pinMode</code> en el constructor, que en un objeto global se ejecuta antes de <code>setup()</code>.</li><li>Olvidar <code>led.begin()</code>: el pin no queda como salida.</li><li>Leer el estado privado del objeto desde <code>main.cpp</code>: no compila.</li></ul>
 				</div>
 			</details>
 

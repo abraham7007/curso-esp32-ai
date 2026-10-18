@@ -3354,3 +3354,1009 @@ body.ponencia--trabajo {
 		padding-top: 2.5rem;
 	}
 }
+
+/* v3 sin código · sesión 2 */
+/* Láminas de concepto de la sesión 2 sin listados: diagramas de archivos,
+   etapas, memoria y estados. Todo crece con --rd-u (.rd). */
+.ponencia .s2v {
+	--s2v-fs: max(1.375rem, calc(var(--rd-u) * 3));
+	--s2v-fs-s: max(1.25rem, calc(var(--rd-u) * 2.45));
+	--s2v-fs-l: max(1.75rem, calc(var(--rd-u) * 4.2));
+	font-size: var(--s2v-fs);
+	line-height: 1.3;
+}
+
+.ponencia .s2v :where(p, li) {
+	margin: 0;
+	font-size: var(--s2v-fs);
+	line-height: 1.3;
+}
+
+/* Caja de archivo o módulo: filo izquierdo del color de su papel. */
+.ponencia .s2v-caja {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 0.8);
+	min-width: 0;
+	padding: calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 2.4);
+	border: 2px solid var(--color-border);
+	border-left: calc(var(--rd-u) * 0.8) solid
+		var(--s2v-c, var(--color-text-muted));
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	color: var(--color-text);
+}
+
+.ponencia .s2v-caja--h,
+.ponencia .s2v-franja--h {
+	--s2v-c: var(--color-navy);
+}
+
+.ponencia .s2v-caja--cpp,
+.ponencia .s2v-franja--cpp {
+	--s2v-c: var(--color-ok);
+}
+
+.ponencia .s2v-caja--main {
+	--s2v-c: var(--color-accent);
+}
+
+.ponencia .s2v-caja__nombre {
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-l);
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-caja__rol {
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--s2v-c, var(--color-text-muted));
+}
+
+/* Pseudocódigo en español: sangría y flechas, sin sintaxis. */
+.ponencia .s2v-pseudo {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15em;
+	margin: 0;
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 2.4);
+	border-left: calc(var(--rd-u) * 0.6) solid var(--s2v-c, var(--color-navy));
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+	background: var(--color-surface);
+	font-family: var(--font-sans);
+	font-size: var(--s2v-fs);
+	line-height: 1.35;
+	color: var(--color-heading);
+	list-style: none;
+}
+
+.ponencia .s2v-pseudo > li {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.ponencia .s2v-pseudo .s2v-in {
+	padding-left: 1.6em;
+}
+
+.ponencia .s2v-pseudo .s2v-in2 {
+	padding-left: 3.2em;
+}
+
+.ponencia .s2v-pseudo b {
+	font-family: var(--font-sans);
+	color: var(--s2v-c, var(--color-navy));
+}
+
+/* Mensaje de una herramienta (compilador, enlazador): un formato, en mono. */
+.ponencia .s2v-msg {
+	display: block;
+	padding: 0.35em 0.7em;
+	border-radius: var(--radius-sm);
+	background: var(--color-code-bg);
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-s);
+	line-height: 1.35;
+	color: var(--color-code-fg);
+	overflow-wrap: anywhere;
+}
+
+.ponencia .s2v-msg b {
+	color: color-mix(in oklab, var(--color-danger) 55%, var(--color-code-fg));
+}
+
+/* ---------- 02 · main.cpp monolítico frente a coordinador ---------- */
+.ponencia .s2v-coord {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+	column-gap: calc(var(--rd-u) * 5);
+}
+
+.ponencia .s2v-lado {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.6);
+	min-width: 0;
+	min-height: 0;
+}
+
+.ponencia .s2v-lado--mod {
+	padding-left: calc(var(--rd-u) * 5);
+	border-left: 2px solid var(--color-border);
+}
+
+.ponencia .s2v-lado__titulo {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	font-size: var(--s2v-fs-l);
+	font-weight: 600;
+	line-height: 1.1;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-lado__titulo .icon {
+	width: 1em;
+	height: 1em;
+	color: var(--color-accent);
+}
+
+.ponencia .s2v-lado__titulo b {
+	font-family: var(--font-mono);
+	color: var(--color-accent);
+}
+
+.ponencia .s2v-franjas {
+	flex: 1 1 auto;
+	display: grid;
+	grid-auto-rows: minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 1.2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	min-height: 0;
+}
+
+.ponencia .s2v-franja {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1em;
+	padding: calc(var(--rd-u) * 0.8) calc(var(--rd-u) * 2.2);
+	border-left: calc(var(--rd-u) * 0.8) solid var(--s2v-c, var(--color-border));
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+	background: var(--color-surface-2);
+	font-size: var(--s2v-fs);
+	line-height: 1.25;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-destino {
+	flex: none;
+	padding: 0.1em 0.6em;
+	border-radius: var(--radius-sm);
+	background: var(--color-surface);
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	white-space: nowrap;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-franja--h .s2v-destino {
+	background: var(--color-navy-soft);
+	color: var(--color-navy);
+}
+
+.ponencia .s2v-franja--cpp .s2v-destino {
+	background: var(--color-ok-soft);
+	color: var(--color-ok);
+}
+
+.ponencia .s2v-lado__pie {
+	padding-left: 0.8em;
+	border-left: 4px solid var(--s2v-c, var(--color-border));
+	font-size: var(--s2v-fs);
+	font-weight: 600;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-lado__pie--mal {
+	--s2v-c: var(--color-danger);
+}
+
+.ponencia .s2v-lado__pie--bien {
+	--s2v-c: var(--color-ok);
+}
+
+.ponencia .s2v-ordenes {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 1.2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ponencia .s2v-ordenes > li {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2em;
+	padding: calc(var(--rd-u) * 1.2) calc(var(--rd-u) * 1.6);
+	border-top: calc(var(--rd-u) * 0.6) solid var(--color-accent);
+	background: var(--color-surface-2);
+	font-size: var(--s2v-fs-s);
+	line-height: 1.25;
+	color: var(--color-text);
+}
+
+.ponencia .s2v-ordenes b {
+	font-size: var(--s2v-fs-l);
+	line-height: 1.1;
+	color: var(--color-accent);
+}
+
+/* «llama a»: flecha vertical hecha con el borde y un triángulo. */
+.ponencia .s2v-llama {
+	position: relative;
+	align-self: center;
+	padding: calc(var(--rd-u) * 0.4) 0 calc(var(--rd-u) * 0.4)
+		calc(var(--rd-u) * 3.5);
+	font-size: var(--s2v-fs-s);
+	font-weight: 600;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-llama::before {
+	content: "";
+	position: absolute;
+	left: calc(var(--rd-u) * 1.2);
+	top: 0;
+	bottom: calc(var(--rd-u) * 1.2);
+	border-left: calc(var(--rd-u) * 0.5) solid var(--color-text-muted);
+}
+
+.ponencia .s2v-llama::after {
+	content: "";
+	position: absolute;
+	left: calc(var(--rd-u) * 0.15);
+	bottom: 0;
+	border-top: calc(var(--rd-u) * 1.4) solid var(--color-text-muted);
+	border-left: calc(var(--rd-u) * 1.2) solid transparent;
+	border-right: calc(var(--rd-u) * 1.2) solid transparent;
+}
+
+.ponencia .s2v-modulo {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.2);
+	min-height: 0;
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 1.8);
+	border: 2px dashed var(--color-border);
+	border-radius: var(--radius-md);
+}
+
+.ponencia .s2v-modulo__ruta {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-modulo__ruta .icon {
+	width: 1em;
+	height: 1em;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-modulo__par {
+	flex: 1 1 auto;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 1.6);
+	min-height: 0;
+}
+
+.ponencia .s2v-caja > p:not([class]) {
+	font-size: var(--s2v-fs);
+	line-height: 1.3;
+}
+
+/* Pastilla de veredicto (✓ pasa, ✗ falla, borrado). */
+.ponencia .s2v-pastilla {
+	display: inline-block;
+	align-self: flex-start;
+	padding: 0.1em 0.6em;
+	border-radius: var(--radius-sm);
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	line-height: 1.3;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.ponencia .s2v-pastilla--bien {
+	background: var(--color-ok-soft);
+	color: var(--color-ok);
+}
+
+.ponencia .s2v-pastilla--mal {
+	background: var(--color-danger-soft);
+	color: var(--color-danger);
+}
+
+.ponencia .s2v-pastilla--aviso {
+	background: var(--color-warn-soft);
+	color: var(--color-warn);
+}
+
+/* ---------- 03 · Declaración, definición y etapas ---------- */
+.ponencia .s2v-decl {
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 3);
+}
+
+.ponencia .s2v-archivos {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 3);
+}
+
+.ponencia .s2v-caja__nombre .s2v-pastilla {
+	margin-left: 0.4em;
+	font-size: var(--s2v-fs-s);
+}
+
+.ponencia .s2v-borrable {
+	transition:
+		opacity 0.3s,
+		border-color 0.3s;
+}
+
+.ponencia .s2v-borrable:has(.is-shown) {
+	border-style: dashed;
+	border-left-style: dashed;
+}
+
+.ponencia .s2v-borrable:has(.is-shown) > p:not(:first-child) {
+	opacity: 0.35;
+}
+
+.ponencia .s2v-etapas {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	min-height: 0;
+}
+
+.ponencia .s2v-etapa {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	gap: calc(var(--rd-u) * 1.2);
+	min-width: 0;
+	padding: calc(var(--rd-u) * 2) calc(var(--rd-u) * 2.4);
+	border: 2px solid var(--color-border);
+	border-top: calc(var(--rd-u) * 0.7) solid var(--color-heading);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	transition:
+		border-color 0.3s,
+		background-color 0.3s;
+}
+
+/* Flecha entre etapas, en el hueco de la rejilla. */
+.ponencia .s2v-etapa:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: calc(var(--rd-u) * -4.2);
+	border-left: calc(var(--rd-u) * 2.6) solid var(--color-text-muted);
+	border-top: calc(var(--rd-u) * 1.8) solid transparent;
+	border-bottom: calc(var(--rd-u) * 1.8) solid transparent;
+	transform: translateY(-50%);
+}
+
+.ponencia .s2v-etapa__n {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	font-size: var(--s2v-fs-l);
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-etapa__n b {
+	display: inline-grid;
+	place-items: center;
+	width: 1.3em;
+	height: 1.3em;
+	border-radius: 50%;
+	background: var(--color-heading);
+	font-family: var(--font-mono);
+	font-size: 0.75em;
+	color: var(--color-bg);
+}
+
+.ponencia .s2v-etapa__err {
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-etapa--ld:has(.is-shown) {
+	border-color: var(--color-danger);
+	background: var(--color-danger-soft);
+}
+
+/* ---------- 04 · Guarda de inclusión ---------- */
+.ponencia .s2v-guarda {
+	display: grid;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 4);
+}
+
+.ponencia .s2v-col {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 2);
+	min-width: 0;
+	min-height: 0;
+}
+
+.ponencia .s2v-col + .s2v-col {
+	padding-left: calc(var(--rd-u) * 4);
+	border-left: 2px solid var(--color-border);
+}
+
+.ponencia .s2v-col__titulo {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5em;
+	font-size: var(--s2v-fs-l);
+	font-weight: 600;
+	line-height: 1.15;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-col__nota {
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-incl {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	gap: calc(var(--rd-u) * 1);
+}
+
+.ponencia .s2v-incl__rama {
+	position: relative;
+	padding-left: calc(var(--rd-u) * 5);
+	font-size: var(--s2v-fs-s);
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-incl__rama::before {
+	content: "";
+	position: absolute;
+	left: calc(var(--rd-u) * 2.2);
+	top: calc(var(--rd-u) * -0.8);
+	bottom: calc(var(--rd-u) * -0.4);
+	border-left: calc(var(--rd-u) * 0.5) solid var(--color-text-muted);
+}
+
+.ponencia .s2v-incl__rama::after {
+	content: "";
+	position: absolute;
+	left: calc(var(--rd-u) * 1.25);
+	bottom: calc(var(--rd-u) * -1.4);
+	border-top: calc(var(--rd-u) * 1.3) solid var(--color-text-muted);
+	border-left: calc(var(--rd-u) * 1.2) solid transparent;
+	border-right: calc(var(--rd-u) * 1.2) solid transparent;
+}
+
+.ponencia .s2v-pseudo--guarda {
+	flex: 0 0 auto;
+	margin-block: auto;
+	gap: 0.6em;
+	padding-block: calc(var(--rd-u) * 3.5);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.6));
+	background: var(--color-surface-2);
+}
+
+.ponencia .arbol.s2v-arbol-incl {
+	--fila: max(3rem, calc(1vh * 11));
+	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
+}
+
+.ponencia .s2v-guarda:has(.s2v-p2.is-shown) .s2v-pseudo--guarda > li {
+	color: var(--color-text-muted);
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
+}
+
+.ponencia .s2v-unidad {
+	flex: 1 1 auto;
+	display: grid;
+	grid-auto-rows: minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 1.4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	min-height: 0;
+}
+
+.ponencia .s2v-bloque {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 0.4em;
+	padding: calc(var(--rd-u) * 1.2) calc(var(--rd-u) * 2);
+	border: 2px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface-2);
+	font-family: var(--font-mono);
+	font-weight: 600;
+	color: var(--color-heading);
+	transition:
+		opacity 0.3s,
+		border-color 0.3s,
+		background-color 0.3s;
+}
+
+.ponencia .s2v-bloque--led {
+	border-left: calc(var(--rd-u) * 0.8) solid var(--color-navy);
+}
+
+/* Paso 1: la segunda copia se omite. Paso 2: sin guarda, se repite. */
+.ponencia .s2v-copia2:has(.s2v-p1.is-shown) {
+	border-style: dashed;
+	background: transparent;
+}
+
+.ponencia .s2v-copia2:has(.s2v-p1.is-shown) > :first-child {
+	color: var(--color-text-muted);
+	text-decoration: line-through;
+}
+
+.ponencia .s2v-copia2:has(.s2v-p2b.is-shown) {
+	border-style: solid;
+	border-color: var(--color-danger);
+	background: var(--color-danger-soft);
+}
+
+.ponencia .s2v-copia2:has(.s2v-p2b.is-shown) > :first-child {
+	color: var(--color-heading);
+	text-decoration: none;
+}
+
+.ponencia .s2v-copia2:has(.s2v-p2b.is-shown) > .s2v-p1 {
+	display: none;
+}
+
+/* ---------- 05 · Criterio para lib/ y src/ ---------- */
+.ponencia .s2v-criterio {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.2);
+	padding: calc(var(--rd-u) * 2) calc(var(--rd-u) * 2.6);
+	border-left: calc(var(--rd-u) * 0.8) solid var(--s2v-c);
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+	background: var(--color-surface-2);
+}
+
+.ponencia .s2v-criterio--lib {
+	--s2v-c: var(--color-ok);
+}
+
+.ponencia .s2v-criterio--src {
+	--s2v-c: var(--color-accent);
+}
+
+.ponencia .s2v-criterio__dir {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-l);
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--s2v-c);
+}
+
+.ponencia .s2v-criterio__dir > span {
+	font-family: var(--font-sans);
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-criterio ul {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	margin: 0;
+	padding: 0 0 0 1.1em;
+	color: var(--color-heading);
+}
+
+/* ---------- 07 · Encapsulamiento: objeto con interfaz y estado ---------- */
+.ponencia .s2v-encap {
+	display: grid;
+	grid-template-columns: minmax(0, 0.6fr) minmax(0, 0.95fr) minmax(0, 1.45fr);
+	grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
+	column-gap: calc(var(--rd-u) * 1.5);
+	row-gap: calc(var(--rd-u) * 2);
+}
+
+.ponencia .s2v-encap__otro {
+	grid-column: 1;
+	grid-row: 1 / span 2;
+	align-self: center;
+}
+
+.ponencia .s2v-acceso {
+	grid-column: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 1);
+	min-width: 0;
+}
+
+.ponencia .s2v-acceso--bien {
+	--s2v-c: var(--color-ok);
+	grid-row: 1;
+}
+
+.ponencia .s2v-acceso--mal {
+	--s2v-c: var(--color-danger);
+	grid-row: 2;
+}
+
+.ponencia .s2v-acceso > p {
+	font-weight: 600;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-acceso__flecha {
+	position: relative;
+	display: block;
+	height: calc(var(--rd-u) * 0.7);
+	margin-right: calc(var(--rd-u) * 2.6);
+	background: var(--s2v-c);
+}
+
+.ponencia .s2v-acceso__flecha::after {
+	content: "";
+	position: absolute;
+	right: calc(var(--rd-u) * -2.6);
+	top: 50%;
+	border-left: calc(var(--rd-u) * 2.6) solid var(--s2v-c);
+	border-top: calc(var(--rd-u) * 1.6) solid transparent;
+	border-bottom: calc(var(--rd-u) * 1.6) solid transparent;
+	transform: translateY(-50%);
+}
+
+/* Acceso rechazado: trazo discontinuo y barrera antes del objeto. */
+.ponencia .s2v-acceso--mal .s2v-acceso__flecha {
+	background: repeating-linear-gradient(
+		90deg,
+		var(--s2v-c) 0 calc(var(--rd-u) * 1.6),
+		transparent calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 2.6)
+	);
+}
+
+.ponencia .s2v-acceso--mal .s2v-acceso__flecha::after {
+	right: calc(var(--rd-u) * -1.4);
+	width: calc(var(--rd-u) * 1);
+	height: calc(var(--rd-u) * 7);
+	border: 0;
+	background: var(--s2v-c);
+}
+
+.ponencia .s2v-objeto {
+	grid-column: 3;
+	grid-row: 1 / span 2;
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+	gap: calc(var(--rd-u) * 1.4);
+	min-height: 0;
+	padding: calc(var(--rd-u) * 1.6) calc(var(--rd-u) * 2.2)
+		calc(var(--rd-u) * 2.2);
+	border: calc(var(--rd-u) * 0.6) solid var(--color-ok);
+	border-radius: calc(var(--rd-u) * 2.5);
+	background: var(--color-surface);
+}
+
+.ponencia .s2v-objeto__nombre {
+	font-family: var(--font-mono);
+	font-size: var(--s2v-fs-l);
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-objeto__rotulo {
+	font-size: var(--s2v-fs-s);
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var(--s2v-c);
+}
+
+.ponencia .s2v-objeto__pub {
+	--s2v-c: var(--color-ok);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 1.2);
+}
+
+.ponencia .s2v-metodos {
+	display: flex;
+	flex-wrap: wrap;
+	gap: calc(var(--rd-u) * 1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ponencia .s2v-metodos > li {
+	padding: 0.2em 0.7em;
+	border: 2px solid var(--color-ok);
+	border-radius: var(--radius-full);
+	background: var(--color-ok-soft);
+	font-weight: 600;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-metodos > li.is-usado {
+	background: var(--color-ok);
+	color: var(--color-bg);
+}
+
+.ponencia .s2v-objeto__priv {
+	--s2v-c: var(--color-danger);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: calc(var(--rd-u) * 1.2);
+	padding: calc(var(--rd-u) * 1.4) calc(var(--rd-u) * 2.2);
+	border: 3px dashed var(--color-danger);
+	border-radius: var(--radius-md);
+	background: var(--color-danger-soft);
+}
+
+.ponencia .s2v-campos {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4em 1.6em;
+	font-size: var(--s2v-fs-l);
+	color: var(--color-text-muted);
+}
+
+.ponencia .s2v-campos b {
+	margin-left: 0.3em;
+	font-family: var(--font-mono);
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-encap__msg {
+	grid-column: 1 / -1;
+	grid-row: 3;
+	font-size: var(--s2v-fs);
+}
+
+/* ---------- 09 y 11 · Pseudocódigo en la franja de una simulación ---------- */
+.ponencia .s2v-pseudo--franja {
+	gap: 0.1em;
+	padding-block: calc(var(--rd-u) * 1);
+	background: var(--color-surface-2);
+}
+
+.ponencia .s2v-pseudo--mal {
+	--s2v-c: var(--color-warn);
+}
+
+.ponencia .s2v-pseudo--bien {
+	--s2v-c: var(--color-ok);
+}
+
+/* ---------- 18 · Por valor y por referencia, sin firmas ---------- */
+.ponencia .refs p.s2v-firma {
+	margin: 0;
+	padding: 0.4em 0.8em;
+	border-left: 4px solid var(--modo);
+	background: var(--color-surface-2);
+	font-size: max(1.375rem, calc(var(--rd-u) * 3));
+	line-height: 1.3;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-firma b {
+	color: var(--modo);
+}
+
+/* ---------- 19 · Diagrama de estados sin código ---------- */
+.ponencia .s2v-inicio {
+	align-items: center;
+}
+
+.ponencia .s2v-inicio b {
+	color: var(--color-accent);
+}
+
+.ponencia .s2v-inicio__punto {
+	flex: none;
+	width: calc(var(--rd-u) * 2.6);
+	height: calc(var(--rd-u) * 2.6);
+	border-radius: 50%;
+	background: var(--color-heading);
+}
+
+/* Una línea de la traza serie: es un formato, se escribe en mono. */
+.ponencia .s2v-traza {
+	padding: 0.05em 0.45em;
+	border-radius: var(--radius-sm);
+	background: var(--color-code-bg);
+	font-family: var(--font-mono);
+	font-size: 0.92em;
+	font-weight: 600;
+	white-space: nowrap;
+	color: var(--color-code-fg);
+}
+
+.ponencia .estado .s2v-var {
+	margin: 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.2));
+	color: var(--color-text-muted);
+}
+
+.ponencia .estado .s2v-var b {
+	font-family: var(--font-mono);
+	color: var(--color-heading);
+}
+
+.ponencia .transicion .s2v-evento {
+	font-size: max(1.375rem, calc(var(--rd-u) * 3.1));
+	color: var(--color-heading);
+}
+
+.ponencia .transiciones .s2v-invierte {
+	margin: 0;
+	font-size: max(1.375rem, calc(var(--rd-u) * 2.9));
+	font-weight: 600;
+	text-align: center;
+	color: var(--color-heading);
+}
+
+/* ---------- 21 · Compila, enlaza, se graba… y falla al ejecutarse ---------- */
+.ponencia .s2v-ejecuta {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--rd-u) * 1.2);
+}
+
+.ponencia .s2v-cadena {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: calc(var(--rd-u) * 4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ponencia .s2v-cadena > li {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5em;
+	padding: calc(var(--rd-u) * 1) calc(var(--rd-u) * 2);
+	border: 2px solid var(--s2v-c);
+	border-radius: var(--radius-md);
+	background: color-mix(in oklab, var(--s2v-c) 12%, var(--color-surface));
+	font-size: var(--s2v-fs);
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .s2v-cadena > li > span {
+	font-family: var(--font-mono);
+	color: var(--s2v-c);
+}
+
+.ponencia .s2v-cadena__ok {
+	--s2v-c: var(--color-ok);
+}
+
+.ponencia .s2v-cadena__mal {
+	--s2v-c: var(--color-danger);
+}
+
+.ponencia .s2v-cadena > li:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	right: calc(var(--rd-u) * -3.2);
+	top: 50%;
+	border-left: calc(var(--rd-u) * 2) solid var(--color-text-muted);
+	border-top: calc(var(--rd-u) * 1.3) solid transparent;
+	border-bottom: calc(var(--rd-u) * 1.3) solid transparent;
+	transform: translateY(-50%);
+}
+
+.ponencia .s2v-ejecuta__causa {
+	color: var(--color-text);
+}
+
+.ponencia .s2v-ejecuta__causa b {
+	color: var(--color-danger);
+}
+
+/* 07: conector en codo de main.cpp a cada acceso. */
+.ponencia .s2v-encap__otro {
+	position: relative;
+}
+
+.ponencia .s2v-encap__otro::after {
+	content: "";
+	position: absolute;
+	left: 100%;
+	top: 50%;
+	width: calc(var(--rd-u) * 1.5);
+	height: calc(var(--rd-u) * 0.7);
+	background: var(--color-text-muted);
+	transform: translateY(-50%);
+}
+
+.ponencia .s2v-acceso {
+	position: relative;
+}
+
+.ponencia .s2v-acceso > p,
+.ponencia .s2v-acceso > .s2v-pastilla {
+	margin-left: calc(var(--rd-u) * 2.5);
+}
+
+.ponencia .s2v-acceso::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	width: calc(var(--rd-u) * 0.7);
+	background: var(--color-text-muted);
+}
+
+.ponencia .s2v-acceso--bien::before {
+	top: 50%;
+	bottom: calc(var(--rd-u) * -1.35);
+}
+
+.ponencia .s2v-acceso--mal::before {
+	top: calc(var(--rd-u) * -1.35);
+	bottom: 50%;
+}

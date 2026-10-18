@@ -22,11 +22,11 @@
 				<h1 class="slide__title slide__title--sm"><em>Ritmos</em> de consulta a la red y de refresco de pantalla</h1>
 
 				<div class="def">
-					<p>Una consulta consume tiempo y cuota, y repintar la OLED tiene un coste mínimo. Cada tarea lleva su propio <code>millis()</code> (sesión 2 · 09).</p>
+					<p>Una consulta consume tiempo y cuota, y repintar la OLED tiene un coste mínimo. Cada tarea lleva su propio temporizador con millis() (sesión 2 · 09).</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 80 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cronograma del ejemplo 16b durante 65 segundos. Fila Red, cada 60 segundos: un GET a los 0 segundos trae el dato 1 y otro a los 60 trae el dato 2. Fila Pantalla, cada 5 segundos: alterna BTC y DOGE; el dato 1 se pinta doce veces antes de que llegue el siguiente. Debajo, las dos comparaciones con millis, una por tarea.">
+					<svg class="s3d-svg crece" viewBox="0 80 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cronograma del ejemplo 16b durante 65 segundos. Fila Red, cada 60 segundos: un GET a los 0 segundos trae el dato 1 y otro a los 60 trae el dato 2. Fila Pantalla, cada 5 segundos: alterna BTC y DOGE; el dato 1 se pinta doce veces antes de que llegue el siguiente. Debajo, el pseudocódigo de la vuelta del programa: cada 60 segundos, consultar la API y guardar los precios; cada 5 segundos, pintar la otra moneda.">
 						<!-- rótulos de fila -->
 						<text class="sans" x="0" y="150" font-size="38" font-weight="700">Red</text>
 						<text class="mut" x="0" y="194" font-size="28">cada 60 s</text>
@@ -79,10 +79,11 @@
 						<text class="mid mut" x="1275" y="542" font-size="26">50</text>
 						<text class="mid mut" x="1478" y="542" font-size="26">60 s</text>
 
-						<!-- las dos comparaciones del loop() -->
+						<!-- la vuelta del programa, en pseudocódigo -->
 						<path class="ln ln--fina ln--mut" d="M0 616 H1600" />
-						<text x="0" y="664" font-size="30"><tspan class="acc">if (millis() - ultimoFetch &gt;= INTERVALO_FETCH)</tspan><tspan class="mut" x="1100">→ actualizarPreciosHTTP()</tspan></text>
-						<text x="0" y="712" font-size="30"><tspan class="navy">if (millis() - ultimoCambioPantalla &gt;= INTERVALO_PANTALLA)</tspan><tspan class="mut" x="1100">→ refrescarPantallaOLED()</tspan></text>
+						<text class="sans mut" x="0" y="664" font-size="28">en cada vuelta, sin esperar</text>
+						<text class="sans" x="420" y="664" font-size="32"><tspan class="acc" font-weight="700">cada 60 s</tspan> → consultar la API y guardar los precios</text>
+						<text class="sans" x="420" y="712" font-size="32"><tspan class="navy" font-weight="700">cada 5 s</tspan> → pintar la otra moneda en la OLED</text>
 
 						<g data-paso="1">
 							<text class="sans" x="0" y="776" font-size="32">Entre dos consultas, la pantalla se repinta 12 veces con el mismo dato.</text>
@@ -106,17 +107,16 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>const unsigned long INTERVALO_FETCH = 60000;</code> y
-						<code>INTERVALO_PANTALLA = 5000;</code>, cada uno con su
-						<code>ultimoFetch</code> / <code>ultimoCambioPantalla</code>. La resta
-						<code>millis() - ultimo</code> en <code>unsigned long</code> sigue siendo
-						correcta cuando <code>millis()</code> desborda (unos 49,7 días).
+						Cada tarea guarda el instante de su última ejecución y la repite cuando
+						ha pasado su intervalo: 60 000 ms la red y 5000 ms la pantalla. Medir
+						el tiempo transcurrido como diferencia entre instantes sigue
+						funcionando cuando millis() se desborda (unos 49,7 días).
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 16b (60 s y 5 s) y ejemplo 17 (lista de nombres por páginas).</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Usar un único <code>delay(60000)</code>, que impide alternar la pantalla.</li>
+						<li>Usar una única espera de 60 s, que impide alternar la pantalla.</li>
 						<li>Repintar antes de la primera respuesta válida, sin dato que mostrar.</li>
 					</ul>
 				</div>

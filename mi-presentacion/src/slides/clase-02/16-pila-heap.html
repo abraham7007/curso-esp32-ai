@@ -26,10 +26,10 @@
 				<div class="escenario">
 					<div class="escenario__texto franja-fila">
 						<div class="def">
-							<p><b>Estática</b>: globales y locales <code>static</code>; existen durante toda la ejecución.</p>
+							<p><b>Estática</b>: los objetos globales; existen durante toda la ejecución.</p>
 						</div>
 						<div class="def">
-							<p><b>Heap</b>: memoria reservada con <code>new</code>; existe hasta su <code>delete[]</code>.</p>
+							<p><b>Heap</b>: memoria que el programa reserva y libera de forma explícita.</p>
 						</div>
 						<div class="def">
 							<p><b>Pila</b> (<i>stack</i>): las locales de una función; se liberan al salir.</p>
@@ -47,7 +47,7 @@
 							<canvas
 								id="memoria"
 								role="img"
-								aria-label="Código del ejemplo 09 junto a tres zonas de memoria. El objeto global entrada está en memoria estática; su constructor reserva con new uint16_t[16] un arreglo de 32 bytes en el heap, apuntado por _buffer; cada vuelta de loop() apila crudo, voltios, promedio y char buffer[80], que desaparecen al salir mientras el arreglo del heap permanece."
+								aria-label="Mapa de memoria del ejemplo 09 en tres zonas. El objeto global entrada está en memoria estática; su constructor reserva en el heap un búfer de 16 muestras (32 bytes) y guarda su dirección; cada vuelta de loop() apila las lecturas crudo, voltios y promedio y un texto de 80 bytes, que desaparecen al salir mientras el búfer del heap permanece."
 							></canvas>
 						</div>
 					</div>
@@ -56,16 +56,15 @@
 
 			<aside class="notas">
 				<p>
-					Antes del paso 3. Pregunta de predicción: cuando <code>loop()</code>
-					termina, ¿qué desaparece: el <code>char buffer[80]</code>, el arreglo de
-					la media móvil o los dos? Respuesta: el <code>char buffer[80]</code>; el
-					arreglo permanece en el heap.
+					Antes del paso 3. Pregunta de predicción: cuando termina una vuelta de
+					<code>loop()</code>, ¿qué desaparece: el texto de 80 bytes que se
+					imprime, el búfer de la media móvil o los dos? Respuesta: el texto; el
+					búfer permanece en el heap.
 				</p>
 				<p>
 					Paso 1: los constructores de las globales se ejecutan antes de
-					<code>setup()</code>; <code>new</code> deja en el heap 16 ×
-					<code>uint16_t</code> = 32 B y guarda su dirección en
-					<code>_buffer</code>. Paso 2: las locales ocupan la pila de la tarea
+					<code>setup()</code>; el de <code>entrada</code> reserva en el heap 16
+					muestras de 2 bytes (32 B) y guarda su dirección. Paso 2: las locales ocupan la pila de la tarea
 					<code>loop()</code>. Paso 3: el marco de la pila se libera al retornar y
 					se vuelve a crear en la vuelta siguiente; el arreglo sigue en el heap.
 					Por eso el búfer de la media móvil no puede ser una local de
@@ -78,10 +77,8 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>new uint16_t[_n]</code> en el constructor y
-						<code>delete[] _buffer</code> en el destructor
-						<code>~EntradaAnalogica()</code>: cada <code>new[]</code> con su
-						<code>delete[]</code>. La pila de la tarea <code>loop()</code> mide
+						El constructor reserva el búfer con <code>new</code> y el destructor
+						lo libera con <code>delete[]</code>: cada reserva con su liberación. La pila de la tarea <code>loop()</code> mide
 						8 KB por defecto en Arduino-ESP32; <code>ESP.getFreeHeap()</code>
 						informa del heap libre.
 					</p>
@@ -93,8 +90,8 @@
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Devolver la dirección de una local: apunta a pila ya liberada.</li>
-						<li>Una local de gran tamaño (<code>char[16000]</code>) desborda la pila y reinicia el chip.</li>
-						<li><code>new</code> dentro de <code>loop()</code> sin <code>delete</code>: el heap se agota.</li>
+						<li>Una local de gran tamaño, como un texto de 16 000 bytes, desborda la pila y reinicia el chip.</li>
+						<li>Reservar memoria en cada vuelta de <code>loop()</code> sin liberarla: el heap se agota.</li>
 					</ul>
 				</div>
 			</details>
@@ -119,26 +116,6 @@
 			const MONO = "'IBM Plex Mono', monospace";
 			const SANS = "'IBM Plex Sans', sans-serif";
 			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
-
-			// [texto, tipo] — tipo: c = comentario, s = sangría
-			const CODIGO = [
-				["// main.cpp · global", "c"],
-				["EntradaAnalogica entrada(PIN_ADC, VENTANA_N);", ""],
-				["// EntradaAnalogica.cpp · constructor", "c"],
-				["_buffer = new uint16_t[_n];", ""],
-				["// main.cpp", "c"],
-				["void loop() {", ""],
-				["  entrada.update();", ""],
-				["  uint16_t crudo = entrada.leerCrudo();", ""],
-				["  float voltios = entrada.leerVoltios();", ""],
-				["  uint16_t promedio = …;", ""],
-				["  char buffer[80];", ""],
-				["  snprintf(buffer, sizeof(buffer), …);", ""],
-				["  Serial.println(buffer);", ""],
-				["  delay(100);", ""],
-				["}", ""],
-			];
-			const RESALTE = [[1], [3], [7, 8, 9, 10], [14]];
 
 			let paso = 0;
 
@@ -179,46 +156,20 @@
 					okSoft: token("--color-ok-soft"),
 					warn: token("--color-warn"),
 					warnSoft: token("--color-warn-soft"),
-					codeBg: token("--color-code-bg"),
-					codeFg: token("--color-code-fg"),
-					codeDim: token("--color-code-dim"),
-					codeBorde: token("--color-code-border"),
 				};
-				const fs = clamp(20, Math.min(h * 0.042, w * 0.0135), 28);
+				const fs = clamp(20, Math.min(h * 0.045, w * 0.016), 30);
 				ctx.fillStyle = c.bg;
 				ctx.fillRect(0, 0, w, h);
 				const pad = fs * 0.7;
 
-				// ---------- Código ----------
-				ctx.font = `600 ${fs}px ${MONO}`;
-				const anchoCod = ctx.measureText(CODIGO[1][0]).width;
-				const cw = anchoCod + pad * 2.4;
-				const lh = Math.min((h - pad * 2) / CODIGO.length, fs * 1.75);
-				const cy0 = (h - lh * CODIGO.length) / 2;
-				ctx.fillStyle = c.codeBg;
-				ctx.fillRect(0, 0, cw, h);
-				for (const [i, [linea, tipo]] of CODIGO.entries()) {
-					const y = cy0 + i * lh + lh / 2;
-					const marcada = RESALTE[paso].includes(i);
-					if (marcada) {
-						ctx.fillStyle = c.acento;
-						ctx.globalAlpha = 0.22;
-						ctx.fillRect(0, y - lh / 2, cw, lh);
-						ctx.globalAlpha = 1;
-						ctx.fillStyle = c.acento;
-						ctx.fillRect(0, y - lh / 2, 6, lh);
-					}
-					texto(ctx, linea, pad * 1.2, y, fs, tipo === "c" ? c.codeDim : c.codeFg, marcada ? 700 : 500);
-				}
-
 				// ---------- Tres zonas de memoria ----------
-				const zx0 = cw + pad * 1.6;
-				const zw = (w - zx0 - pad * 2) / 3;
+				const zx0 = pad;
+				const zw = (w - zx0 * 2 - pad * 2) / 3;
 				const zT = fs * 3.2;
 				const zB = h - pad;
 				const zonas = [
 					["Estática", "todo el programa", c.navy],
-					["Heap", "hasta delete[]", c.ok],
+					["Heap", "hasta que se libera", c.ok],
 					["Pila de loop()", "una vuelta", c.warn],
 				];
 				const zx = (i) => zx0 + i * (zw + pad);
@@ -245,14 +196,14 @@
 				// Desde el paso 2 ya corrió entrada.update(): primera muestra, 2048.
 				const m = paso >= 2;
 				const campos = [
-					["_pin", "32"],
-					["_n", "16"],
-					["_buffer", paso >= 1 ? "→ heap" : "—"],
-					["_indice", m ? "1" : "0"],
-					["_cuenta", m ? "1" : "0"],
-					["_suma", m ? "2048" : "0"],
-					["_crudo", m ? "2048" : "0"],
-					["_promedio", m ? "2048" : "0"],
+					["pin", paso >= 1 ? "32" : "0"],
+					["N", paso >= 1 ? "16" : "0"],
+					["búfer", paso >= 1 ? "→ heap" : "sin reservar"],
+					["índice", m ? "1" : "0"],
+					["cuenta", m ? "1" : "0"],
+					["suma", m ? "2048" : "0"],
+					["crudo", m ? "2048" : "0"],
+					["promedio", m ? "2048" : "0"],
 				];
 				const oy = zT + pad * 0.6;
 				// Debajo del objeto, otra global real: Serial, del núcleo de Arduino.
@@ -260,7 +211,7 @@
 				const flS = Math.max(fl, (zBaja - oy - serialH - pad - pad * 0.4) / (campos.length + 1));
 				const oh = flS * (campos.length + 1) + pad * 0.4;
 				caja(ctx, ox, oy, ow, oh, paso === 0 ? c.navySoft : c.sup, c.navy, paso === 0 ? 4 : 2);
-				texto(ctx, "entrada", ox + fs * 0.5, oy + flS / 2 + 2, zfs, c.navy, 700);
+				texto(ctx, "objeto entrada", ox + fs * 0.5, oy + flS / 2 + 2, zfs, c.navy, 700, "left", SANS);
 				const sy0 = oy + oh + pad;
 				caja(ctx, ox, sy0, ow, zBaja - sy0, c.sup, c.navy, 1.5);
 				texto(ctx, "Serial", ox + fs * 0.5, sy0 + fl * 0.6, zfs, c.navy, 700);
@@ -268,8 +219,8 @@
 				let yPuntero = 0;
 				for (const [i, [n, v]] of campos.entries()) {
 					const y = oy + flS * (i + 1);
-					if (n === "_buffer") yPuntero = y + flS / 2;
-					campo(ox, y, ow, n, v, n === "_buffer" && paso >= 1 ? c.ok : m && v !== "0" && i > 2 ? c.acento : c.muted, flS);
+					if (n === "búfer") yPuntero = y + flS / 2;
+					campo(ox, y, ow, n, v, n === "búfer" && paso >= 1 ? c.ok : m && v !== "0" && i > 2 ? c.acento : c.muted, flS);
 				}
 
 				// Heap: arreglo de 16 uint16_t.
@@ -277,7 +228,7 @@
 				const hw = zw - pad * 1.2;
 				const hy = oy;
 				if (paso >= 1) {
-					const celda = Math.min((hw - pad) / 4, zfs * 2.4);
+					const celda = Math.min((hw - pad) / 4, zfs * 2.8);
 					const gw = celda * 4;
 					const gx = hx + (hw - gw) / 2;
 					const gy = hy + fl * 1.3;
@@ -286,8 +237,8 @@
 					const fsD = Math.min(zfs, (hw - fs * 0.6) / (19 * 0.6));
 					const yD = (gy + celda * 4 + fl * 1.2 + zBaja) / 2;
 					texto(ctx, "lo libera", hx + hw / 2, yD - fl * 0.55, zfs, c.muted, 500, "center", SANS);
-					texto(ctx, "~EntradaAnalogica()", hx + hw / 2, yD + fl * 0.45, fsD, c.ok, 700, "center");
-					texto(ctx, "uint16_t[16]", hx + fs * 0.5, hy + fl * 0.65, zfs, c.ok, 700);
+					texto(ctx, "el destructor", hx + hw / 2, yD + fl * 0.45, fsD, c.ok, 700, "center", SANS);
+					texto(ctx, "búfer · 16 muestras", hx + fs * 0.5, hy + fl * 0.65, zfs, c.ok, 700, "left", SANS);
 					texto(ctx, "16 × 2 B = 32 B", hx + hw / 2, gy + celda * 4 + fl * 0.6, zfs, c.ok, 700, "center");
 					for (let i = 0; i < 16; i++) {
 						const x = gx + (i % 4) * celda;
@@ -298,7 +249,7 @@
 						const lleno = m && i === 0;
 						texto(ctx, lleno ? "2048" : "0", x + celda / 2, y + celda / 2, lleno ? Math.min(zfs, celda / 2.7) : zfs, lleno ? c.acento : c.muted, 700, "center");
 					}
-					// Flecha del puntero _buffer al arreglo.
+					// Flecha de la dirección guardada en el objeto al búfer.
 					const x1 = ox + ow - fs * 0.2;
 					const x2 = hx;
 					const y2 = hy + fl * 0.65;
@@ -318,7 +269,7 @@
 					caja(ctx, hx, hy, hw, zBaja - hy, null, c.borde, 2, true);
 					texto(ctx, "libre", hx + hw / 2, hy + (zBaja - hy) * 0.42, zfs, c.muted, 700, "center", SANS);
 					texto(ctx, "ninguna reserva", hx + hw / 2, hy + (zBaja - hy) * 0.42 + fl, zfs, c.muted, 500, "center", SANS);
-					texto(ctx, "con new", hx + hw / 2, hy + (zBaja - hy) * 0.42 + fl * 2, zfs, c.muted, 500, "center", SANS);
+					texto(ctx, "todavía", hx + hw / 2, hy + (zBaja - hy) * 0.42 + fl * 2, zfs, c.muted, 500, "center", SANS);
 				}
 
 				// Pila: toda la columna es la pila de la tarea loopTask (8 KB); el
@@ -329,14 +280,14 @@
 				const sh = zB - pad * 0.6 - sy;
 				const existe = paso >= 2;
 				caja(ctx, px, sy, pw, sh, null, existe ? c.warn : c.borde, 2, true);
-				texto(ctx, "loopTask", px + fs * 0.5, sy + fl * 0.6, zfs, existe ? c.warn : c.muted, 700);
+				texto(ctx, "tarea loop()", px + fs * 0.5, sy + fl * 0.6, zfs, existe ? c.warn : c.muted, 700);
 				texto(ctx, "8 KB", px + pw - fs * 0.5, sy + fl * 0.6, zfs, existe ? c.warn : c.muted, 700, "right");
 				const centro = (lineas, y0, col, peso = 500) => {
 					for (const [i, l] of lineas.entries()) texto(ctx, l, px + pw / 2, y0 + i * fl, zfs, col, i === 0 ? 700 : peso, "center", SANS);
 				};
 				const locales = [
 					["crudo", "2048"],
-					["voltios", "1.650"],
+					["voltios", "1,650"],
 					["promedio", "2048"],
 				];
 				const barra = zfs * 2.2;
@@ -352,7 +303,7 @@
 					texto(ctx, "marco de loop()", fx + fs * 0.5, py + fl / 2 + 2, zfs, c.warn, 700);
 					for (const [i, [n, v]] of locales.entries()) campo(fx, py + fl * (i + 1), fw, n, v, c.acento);
 					const by = py + fl * (locales.length + 1);
-					campo(fx, by, fw, "buffer[80]", "80 B", c.muted);
+					campo(fx, by, fw, "texto", "80 B", c.muted);
 					const bx = fx + fs * 0.5;
 					const bw = fw - fs;
 					ctx.fillStyle = c.acentoSoft;

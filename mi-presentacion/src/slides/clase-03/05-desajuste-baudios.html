@@ -78,16 +78,15 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Los dos extremos deben usar la misma cifra:
-						<code>Serial2.begin(115200, …)</code> en ambas placas y
-						<code>monitor_speed = 115200</code> en <code>platformio.ini</code>.
-						El ±5 % es el presupuesto total: se reparte entre el error del
-						divisor de reloj de cada lado.
+						Los dos extremos deben usar la misma cifra: 115 200 baudios en el
+						arranque del puerto de cada placa y en <code>monitor_speed</code> de
+						<code>platformio.ini</code> para el monitor. El ±5 % es el presupuesto
+						total: se reparte entre el error del divisor de reloj de cada lado.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						Causa habitual de caracteres extraños en el monitor serie:
-						<code>monitor_speed</code> distinto del valor de <code>Serial.begin()</code>.
+						<code>monitor_speed</code> distinto de la velocidad que fija el firmware.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>

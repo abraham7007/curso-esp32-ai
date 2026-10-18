@@ -21,157 +21,82 @@
 
 				<h1 class="slide__title slide__title--sm">Papel de <em>main.cpp</em> en un proyecto modular</h1>
 
-				<div class="rd s2 s2-migra s2-capas crece">
-					<!-- Antes: todo en main.cpp. Paso 1: qué línea se va a cada archivo. -->
-					<div class="s2-escena s2-escena--a s2-sustituido">
-						<section class="codepanel s2-codigo" aria-label="main.cpp con todo el programa en un solo archivo">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>src/main.cpp · todo en un archivo</span>
-								</span>
-							</div>
-							<div class="s2-lineas">
-								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l s2-marca s2-l--h" data-va="pin">const uint8_t PIN = 2;<span data-paso="1" class="s2-chip s2-chip--h">Led.h · _pin</span></span>
-								<span class="s2-l s2-marca s2-l--h" data-va="state">bool estado = false;<span data-paso="1" class="s2-chip s2-chip--h">Led.h · _state</span></span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">void setup() {</span>
-								<span class="s2-l">    Serial.begin(115200);</span>
-								<span class="s2-l s2-marca s2-l--cpp" data-va="pinmode">    pinMode(PIN, OUTPUT);<span data-paso="1" class="s2-chip s2-chip--cpp">Led.cpp · begin()</span></span>
-								<span class="s2-l s2-marca s2-l--cpp" data-va="low">    digitalWrite(PIN, LOW);<span data-paso="1" class="s2-chip s2-chip--cpp">Led.cpp · begin()</span></span>
-								<span class="s2-l s2-c">    …</span>
-								<span class="s2-l">}</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">void loop() {</span>
-								<span class="s2-l s2-marca s2-l--cpp" data-va="neg">    estado = !estado;<span data-paso="1" class="s2-chip s2-chip--cpp">Led.cpp · toggle()</span></span>
-								<span class="s2-l s2-marca s2-l--cpp" data-va="ret">    digitalWrite(PIN, estado);<span data-paso="1" class="s2-chip s2-chip--cpp">Led.cpp · toggle()</span></span>
-								<span class="s2-l">    Serial.print("[LED] estado=");</span>
-								<span class="s2-l">    Serial.println(estado ? "ENCENDIDO" : "APAGADO");</span>
-								<span class="s2-l">    delay(2000);</span>
-								<span class="s2-l">}</span>
-							</div>
-						</section>
+				<div class="rd s2v s2v-coord crece">
+					<section class="s2v-lado" aria-label="main.cpp monolítico: todas las responsabilidades en un archivo">
+						<p class="s2v-lado__titulo">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
+							<span>Todo en <b>main.cpp</b></span>
+						</p>
+						<ul class="s2v-franjas">
+							<li class="s2v-franja s2v-franja--h">
+								<span>Pin y estado del LED</span>
+								<span class="s2v-destino" data-paso="1">→ Led.h</span>
+							</li>
+							<li class="s2v-franja s2v-franja--cpp">
+								<span>Configurar el pin como salida</span>
+								<span class="s2v-destino" data-paso="1">→ Led.cpp</span>
+							</li>
+							<li class="s2v-franja s2v-franja--cpp">
+								<span>Invertir el estado y escribir el pin</span>
+								<span class="s2v-destino" data-paso="1">→ Led.cpp</span>
+							</li>
+							<li class="s2v-franja">
+								<span>Imprimir la traza</span>
+								<span class="s2v-destino" data-paso="1">se queda</span>
+							</li>
+							<li class="s2v-franja">
+								<span>Esperar 2 s</span>
+								<span class="s2v-destino" data-paso="1">se queda</span>
+							</li>
+						</ul>
+						<p class="s2v-lado__pie s2v-lado__pie--mal" data-paso="2">Un segundo LED duplica las tres primeras franjas.</p>
+					</section>
 
-						<div class="s2-monitor">
-							<section class="codepanel s2-codigo" aria-label="Salida por el monitor serie">
-								<div class="codepanel__header">
-									<span class="codepanel__path">
-										<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-terminal" /></svg>
-										<span>monitor serie</span>
-									</span>
-								</div>
-								<div class="s2-lineas">
-									<span class="s2-l">[LED] estado=ENCENDIDO</span>
-									<span class="s2-l">[LED] estado=APAGADO</span>
-									<span class="s2-l">[LED] estado=ENCENDIDO</span>
-									<span class="s2-l">[LED] estado=APAGADO</span>
-									<span class="s2-l">[LED] estado=ENCENDIDO</span>
-									<span class="s2-l">[LED] estado=APAGADO</span>
-									<span class="s2-l">[LED] estado=ENCENDIDO</span>
-									<span class="s2-l">[LED] estado=APAGADO</span>
-									<span class="s2-l">[LED] estado=ENCENDIDO</span>
-									<span class="s2-l">[LED] estado=APAGADO</span>
-									<span class="s2-l s2-c">… cada 2 s</span>
-								</div>
-							</section>
-							<p class="s2-monitor__pie" data-paso="1">
-								El pin y el estado del LED son variables globales de
-								<code>main.cpp</code>; un segundo LED duplica cada línea marcada.
+					<section class="s2v-lado s2v-lado--mod" aria-label="main.cpp como coordinador del módulo Led">
+						<p class="s2v-lado__titulo">
+							<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+							<span><b>main.cpp</b> coordina</span>
+						</p>
+						<ol class="s2v-ordenes" aria-label="Lo que hace main.cpp">
+							<li><b>crea</b> el objeto en el GPIO 2</li>
+							<li><b>configura</b> una vez</li>
+							<li><b>ordena</b> alternar e imprime</li>
+						</ol>
+						<p class="s2v-llama" aria-hidden="true">llama a</p>
+						<div class="s2v-modulo">
+							<p class="s2v-modulo__ruta">
+								<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-folder" /></svg>
+								<span>lib/Led/</span>
 							</p>
-						</div>
-					</div>
-
-					<!-- Paso 2: las líneas marcadas ya viven en la clase; main.cpp solo da órdenes. -->
-					<div class="s2-escena s2-escena--b s2-sustituye" data-paso="2">
-						<section class="codepanel s2-codigo" aria-label="main.cpp del ejemplo 06">
-							<div class="codepanel__header">
-								<span class="codepanel__path">
-									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-									<span>src/main.cpp · ejemplo 06</span>
-								</span>
+							<div class="s2v-modulo__par">
+								<div class="s2v-caja s2v-caja--h">
+									<p class="s2v-caja__nombre">Led.h</p>
+									<p class="s2v-caja__rol">qué ofrece</p>
+									<p>pin y estado privados; configurar, encender, apagar, alternar, consultar</p>
+								</div>
+								<div class="s2v-caja s2v-caja--cpp">
+									<p class="s2v-caja__nombre">Led.cpp</p>
+									<p class="s2v-caja__rol">cómo lo hace</p>
+									<p>configura el pin y escribe el nivel</p>
+								</div>
 							</div>
-							<div class="s2-lineas">
-								<span class="s2-l">#include &lt;Arduino.h&gt;</span>
-								<span class="s2-l">#include "Led.h"</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l s2-c">// Instancia de la clase Led asignada al GPIO 2</span>
-								<span class="s2-l s2-l--clave">Led led(2);<span class="s2-chip s2-chip--clave">crea</span></span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">void setup() {</span>
-								<span class="s2-l">    Serial.begin(115200);</span>
-								<span class="s2-l">    delay(100);</span>
-								<span class="s2-l s2-l--clave">    led.begin();<span class="s2-chip s2-chip--clave">configura</span></span>
-								<span class="s2-l s2-c">    …</span>
-								<span class="s2-l">}</span>
-								<span class="s2-l"> </span>
-								<span class="s2-l">void loop() {</span>
-								<span class="s2-l s2-c">    // Alterna el estado del LED utilizando la clase</span>
-								<span class="s2-l s2-l--clave">    bool estado = led.toggle();<span class="s2-chip s2-chip--clave">ordena</span></span>
-								<span class="s2-l">    Serial.print("[LED] estado=");</span>
-								<span class="s2-l">    Serial.println(estado ? "ENCENDIDO" : "APAGADO");</span>
-								<span class="s2-l">    delay(2000);</span>
-								<span class="s2-l">}</span>
-							</div>
-						</section>
-
-						<div class="s2-pila">
-							<section class="codepanel s2-codigo" aria-label="Led.h: declaración de la clase">
-								<div class="codepanel__header">
-									<span class="codepanel__path">
-										<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-										<span>lib/Led/Led.h</span>
-									</span>
-								</div>
-								<div class="s2-lineas">
-									<span class="s2-l">class Led {</span>
-									<span class="s2-l">private:</span>
-									<span class="s2-l s2-l--h" data-llega="pin">    uint8_t _pin;</span>
-									<span class="s2-l s2-l--h" data-llega="state">    bool _state;</span>
-									<span class="s2-l">public:</span>
-									<span class="s2-l">    explicit Led(uint8_t pin);</span>
-									<span class="s2-l">    void begin();</span>
-									<span class="s2-l">    bool toggle();</span>
-									<span class="s2-l s2-c">    // on(), off(), isOn() const</span>
-									<span class="s2-l">};</span>
-								</div>
-							</section>
-							<section class="codepanel s2-codigo" aria-label="Led.cpp: definición de los métodos">
-								<div class="codepanel__header">
-									<span class="codepanel__path">
-										<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-file" /></svg>
-										<span>lib/Led/Led.cpp</span>
-									</span>
-								</div>
-								<div class="s2-lineas">
-									<span class="s2-l">void Led::begin() {</span>
-									<span class="s2-l s2-l--cpp" data-llega="pinmode">    pinMode(_pin, OUTPUT);</span>
-									<span class="s2-l s2-l--cpp" data-llega="low">    digitalWrite(_pin, LOW);</span>
-									<span class="s2-l">    _state = false;</span>
-									<span class="s2-l">}</span>
-									<span class="s2-l">bool Led::toggle() {</span>
-									<span class="s2-l s2-l--cpp" data-llega="neg">    if (_state) { off(); } else { on(); }</span>
-									<span class="s2-l s2-l--cpp" data-llega="ret">    return _state;</span>
-									<span class="s2-l">}</span>
-								</div>
-							</section>
 						</div>
-					</div>
+						<p class="s2v-lado__pie s2v-lado__pie--bien" data-paso="2">Un segundo LED es otro objeto de la misma clase.</p>
+					</section>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Antes de avanzar. Pregunta de predicción: ¿qué líneas de este
-					<code>main.cpp</code> tendrían que copiarse para manejar un segundo LED?
-					Respuesta: las marcadas en el paso 1, que guardan el estado del LED y
-					escriben el pin; ninguna pertenece a la lógica de la aplicación. Paso
-					2: esas líneas pasan a <code>Led.h</code> (los datos) y
-					<code>Led.cpp</code> (las acciones), y <code>main.cpp</code> se reduce
-					a crear, configurar y conmutar. La salida por el monitor no cambia. En
-					<code>toggle()</code> la escritura del pin pasa a <code>on()</code> y
-					<code>off()</code>.
+					Pregunta de predicción: si el proyecto necesita un segundo LED, ¿qué
+					responsabilidades del <code>main.cpp</code> monolítico habría que
+					duplicar? Respuesta: las tres primeras franjas (los datos del LED, su
+					configuración y su conmutación); ninguna pertenece a la lógica de la
+					aplicación. Paso 1: cada franja muestra su destino; los datos van a
+					<code>Led.h</code>, las acciones a <code>Led.cpp</code>, y la traza y la
+					espera se quedan en <code>main.cpp</code>. Paso 2: con el módulo, un
+					segundo LED es una línea más que crea otro objeto. La salida por el
+					monitor serie no cambia entre las dos versiones.
 				</p>
 			</aside>
 
@@ -182,16 +107,15 @@
 					<p>
 						Ejemplo 06: <code>lib/Led/Led.h</code> declara la clase,
 						<code>lib/Led/Led.cpp</code> la implementa y <code>src/main.cpp</code>
-						crea <code>Led led(2)</code> y llama a <code>begin()</code> y
-						<code>toggle()</code>, que devuelve el nuevo estado
-						(<code>true</code> = encendido).
+						crea el objeto en el GPIO 2, llama a <code>begin()</code> en
+						<code>setup()</code> y a <code>toggle()</code> en cada vuelta;
+						<code>toggle()</code> devuelve el nuevo estado.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						En el ejemplo 10, <code>main.cpp</code> coordina tres módulos
 						(<code>Led</code>, <code>Boton</code>, <code>EntradaAnalogica</code>)
-						sin ninguna llamada a <code>pinMode()</code> ni a
-						<code>analogRead()</code>.
+						sin configurar ningún pin por su cuenta.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<p>
@@ -215,46 +139,5 @@
 		</main>
 
 		<script type="module" src="../../js/deck.js"></script>
-
-		<script type="module">
-			// Paso 2: cada línea marcada vuela desde main.cpp hasta su sitio en la
-			// clase. Se clona en posición fija y se traslada con transform.
-			const escenaB = document.querySelector(".s2-escena--b");
-			const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-			let antes = escenaB.classList.contains("is-shown");
-
-			function volar() {
-				const tamano = getComputedStyle(document.querySelector(".s2-lineas")).fontSize;
-				for (const origen of document.querySelectorAll("[data-va]")) {
-					const destino = document.querySelector(`[data-llega="${origen.dataset.va}"]`);
-					if (!destino) continue;
-					const a = origen.getBoundingClientRect();
-					const b = destino.getBoundingClientRect();
-					const clon = document.createElement("span");
-					clon.className = "s2-vuela";
-					clon.textContent = origen.firstChild.textContent;
-					clon.style.left = `${a.left}px`;
-					clon.style.top = `${a.top}px`;
-					clon.style.fontSize = tamano;
-					document.body.append(clon);
-					destino.style.opacity = "0";
-					requestAnimationFrame(() =>
-						requestAnimationFrame(() => {
-							clon.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px)`;
-						}),
-					);
-					setTimeout(() => {
-						clon.remove();
-						destino.style.opacity = "";
-					}, 950);
-				}
-			}
-
-			document.addEventListener("paso", () => {
-				const ahora = escenaB.classList.contains("is-shown");
-				if (ahora && !antes && !reducido) volar();
-				antes = ahora;
-			});
-		</script>
 	</body>
 </html>

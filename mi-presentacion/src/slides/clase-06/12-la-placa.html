@@ -22,7 +22,7 @@
 				<h1 class="slide__title slide__title--sm"><em>Sensores</em> de la Nano 33 BLE Sense Rev2</h1>
 
 				<div class="crece flex">
-					<svg class="s4a-svg crece" viewBox="0 0 1800 790" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dibujo de la cara superior de la Arduino Nano 33 BLE Sense Rev2 según su datasheet, con el conector micro-USB a la izquierda y dos filas de 15 pines. A la derecha, el módulo NINA-B306 con el nRF52840: Cortex-M4F a 64 MHz, 1 MB de flash, 256 KB de RAM y Bluetooth 5. Sensores, con su librería: HS3003, humedad y temperatura, Arduino_HS300x; BMI270 más BMM150, IMU de 9 ejes, Arduino_BMI270_BMM150; LPS22HB, presión y temperatura, Arduino_LPS22HB; APDS-9960, color y proximidad, Arduino_APDS9960; MP34DT06JTR, micrófono digital, librería PDM incluida en el núcleo. Además, el LED RGB, que es una salida y no un sensor, con los pines LEDR, LEDG y LEDB, activo en LOW. A la derecha, la comparación entre revisiones: la Rev1, que ya no se fabrica, llevaba el IMU LSM9DS1 (Arduino_LSM9DS1), el sensor de humedad HTS221 (Arduino_HTS221) y el micrófono MP34DT05; la Rev2 lleva BMI270 más BMM150, HS3003 y MP34DT06JTR. APDS-9960 y LPS22HB son iguales en las dos. Cómo distinguirlas: la serigrafía REV2 en la cara inferior, el SKU de la caja ABX00069 o ABX00070, y que IMU.begin() de la librería del BMI270 devuelve 0 si la placa es una Rev1.">
+					<svg class="s4a-svg crece" viewBox="0 0 1800 790" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Dibujo de la cara superior de la Arduino Nano 33 BLE Sense Rev2 según su datasheet, con el conector micro-USB a la izquierda y dos filas de 15 pines. A la derecha, el módulo NINA-B306 con el nRF52840: Cortex-M4F a 64 MHz, 1 MB de flash, 256 KB de RAM y Bluetooth 5. Sensores, con su librería: HS3003, humedad y temperatura, Arduino_HS300x; BMI270 más BMM150, IMU de 9 ejes, Arduino_BMI270_BMM150; LPS22HB, presión y temperatura, Arduino_LPS22HB; APDS-9960, color y proximidad, Arduino_APDS9960; MP34DT06JTR, micrófono digital, librería PDM incluida en el núcleo. Además, el LED RGB, que es una salida y no un sensor, con los pines LEDR, LEDG y LEDB, activo en LOW. A la derecha, la comparación entre revisiones: la Rev1, que ya no se fabrica, llevaba el IMU LSM9DS1 (Arduino_LSM9DS1), el sensor de humedad HTS221 (Arduino_HTS221) y el micrófono MP34DT05; la Rev2 lleva BMI270 más BMM150, HS3003 y MP34DT06JTR. APDS-9960 y LPS22HB son iguales en las dos. Cómo distinguirlas: la serigrafía REV2 en la cara inferior, el SKU de la caja ABX00069 o ABX00070, y que la librería del BMI270 no logra iniciar el IMU si la placa es una Rev1.">
 						<!-- placa: cara superior, topología del datasheet ABX00069 -->
 						<g transform="translate(6.4 172.4) scale(0.8)">
 							<rect class="s6a-pcb" x="67" y="22" width="1313" height="541" rx="14" />
@@ -115,7 +115,7 @@
 						<text class="navy" x="345" y="108" font-size="23">Arduino_BMI270_BMM150</text>
 						<text class="b" x="775" y="26" font-size="30">LED RGB</text>
 						<text class="sans" x="775" y="68" font-size="26">salida, no sensor</text>
-						<text class="navy" x="775" y="108" font-size="23">LEDR/G/B, en LOW</text>
+						<text class="navy" x="775" y="108" font-size="23">LEDR/G/B, activo en bajo</text>
 						<text class="acc b" x="0" y="682" font-size="30">LPS22HB</text>
 						<text class="sans" x="0" y="724" font-size="26">presión y temperatura</text>
 						<text class="navy" x="0" y="764" font-size="23">Arduino_LPS22HB</text>
@@ -152,21 +152,21 @@
 						<text class="sans b ok" x="1157" y="586" font-size="28">Cómo distinguirlas</text>
 						<text class="sans" x="1157" y="630" font-size="25">cara inferior: serigrafía «REV2»</text>
 						<text class="sans" x="1157" y="670" font-size="25">caja: SKU ABX00069 o ABX00070</text>
-						<text class="sans" x="1157" y="710" font-size="25"><tspan class="b">IMU.begin()</tspan> del BMI270 devuelve</text>
-						<text class="sans" x="1157" y="748" font-size="25">0 si la placa es una Rev1</text>
+						<text class="sans" x="1157" y="710" font-size="25">librería del BMI270: en una Rev1</text>
+						<text class="sans" x="1157" y="748" font-size="25">no logra iniciar el IMU</text>
 					</svg>
 				</div>
 			</div>
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: los ejemplos de gestos que circulan por Internet usan <code>#include &lt;Arduino_LSM9DS1.h&gt;</code>. ¿Qué pasa si se cargan en esta placa? Respuesta: compilan, pero <code>IMU.begin()</code> falla, porque la Rev2 no tiene ese chip. La solución es cambiar a <code>Arduino_BMI270_BMM150</code>, que mantiene la misma interfaz (<code>IMU.readAcceleration(x, y, z)</code>).
+					Pregunta de predicción: los ejemplos de gestos que circulan por Internet usan la librería Arduino_LSM9DS1. ¿Qué pasa si se cargan en esta placa? Respuesta: compilan, pero la inicialización del IMU falla, porque la Rev2 no tiene ese chip. La solución es cambiar a Arduino_BMI270_BMM150, que mantiene la misma interfaz para leer aceleración y giro.
 				</p>
 				<p>
 					El microcontrolador es el nRF52840 de Nordic, dentro del módulo NINA-B306 de u-blox (el blindaje metálico con la antena). Tiene la mitad de RAM que el ESP32 (256 KB frente a 520 KB); su núcleo es un Cortex-M4F con FPU y con las instrucciones DSP que aprovecha CMSIS-NN. No tiene WiFi; su radio es Bluetooth Low Energy.
 				</p>
 				<p>
-					Los sensores van conectados a un bus I²C interno de la placa; el micrófono usa PDM, una trama de un bit a alta frecuencia que el nRF52840 convierte en muestras. El ejemplo 20 usa el IMU (aceleración y giro, 6 de los 9 ejes) y el 21 el APDS-9960 (color). El LED RGB es activo en LOW: <code>digitalWrite(LEDR, LOW)</code> lo enciende en rojo.
+					Los sensores van conectados a un bus I²C interno de la placa; el micrófono usa PDM, una trama de un bit a alta frecuencia que el nRF52840 convierte en muestras. El ejemplo 20 usa el IMU (aceleración y giro, 6 de los 9 ejes) y el 21 el APDS-9960 (color). El LED RGB es activo en nivel bajo: poner LEDR en LOW lo enciende en rojo.
 				</p>
 			</aside>
 
@@ -175,11 +175,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>platformio.ini</code>: <code>platform = nordicnrf52</code>,
-						<code>board = nano33ble</code>, <code>framework = arduino</code>. Librerías:
-						<code>arduino-libraries/Arduino_BMI270_BMM150</code>,
-						<code>arduino-libraries/Arduino_APDS9960</code>. Las mismas líneas sirven
-						para la Rev1 y la Rev2; cambian las librerías de sensores.
+						En platformio.ini: plataforma nordicnrf52, placa nano33ble y framework
+						arduino, iguales para la Rev1 y la Rev2. Cambian las librerías de los sensores
+						distintos, como el IMU (Arduino_BMI270_BMM150 en la Rev2); Arduino_APDS9960
+						sirve en las dos.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 20 (IMU) y ejemplo 21 (APDS-9960); el micrófono, en la lámina 09.</p>

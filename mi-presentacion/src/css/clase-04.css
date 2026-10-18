@@ -700,3 +700,11 @@
 	align-items: flex-start;
 	gap: 0.2em;
 }
+
+/* v3 sin código */
+/* 12: el camino de bitcoin va en acento y el de dogecoin en azul institucional;
+   .s3d-svg (sesión 3) no trae la caja azul. */
+.ponencia .s3d-svg .caja--navy {
+	fill: var(--color-navy-soft);
+	stroke: var(--color-navy);
+}

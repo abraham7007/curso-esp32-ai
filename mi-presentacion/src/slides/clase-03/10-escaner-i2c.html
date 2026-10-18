@@ -76,18 +76,18 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>Wire.beginTransmission(dir); uint8_t e = Wire.endTransmission();</code>
-						— <code>e == 0</code>: ACK; <code>2</code>: NACK (de dirección o de
-						dato, el núcleo no los distingue); <code>4</code>: otro error;
-						<code>5</code>: tiempo agotado (códigos del núcleo Arduino-ESP32 2.x, el
-						que instala PlatformIO con <code>platform = espressif32</code>). Sin datos, la sonda es solo
-						dirección + STOP.
+						Cada sonda abre una transmisión a la dirección y la cierra sin datos:
+						START, dirección, W y STOP. El resultado de <code>endTransmission()</code>
+						indica la respuesta: 0, ACK; 2, NACK (de dirección o de dato, el núcleo
+						no los distingue); 4, otro error; 5, tiempo agotado. Son los códigos del
+						núcleo Arduino-ESP32 2.x, el que instala PlatformIO con
+						<code>platform = espressif32</code>.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
 						Primer diagnóstico de cualquier montaje I²C. Si la dirección
 						se repite: sensor con dirección configurable (BMP280: 0x76/0x77),
-						multiplexor TCA9548A o segundo controlador (<code>Wire1</code>).
+						multiplexor TCA9548A o segundo controlador I²C del ESP32.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>

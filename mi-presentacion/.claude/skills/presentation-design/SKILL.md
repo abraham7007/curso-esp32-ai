@@ -32,6 +32,18 @@ sesiones rehechas (**las 6**) usan `<body class="ponencia">` y
   («Publicación y suscripción por temas en un broker», no «El broker entrega cada
   mensaje según su tema»), con la palabra clave en `<em>` (se pinta en rojo), en IBM
   Plex Sans. Criterio de la skill `correccion-anti-ia`, pedido por el profesor.
+- **Se explica sin código.** El curso enseña conceptos, criterios, metodologías y
+  técnicas; el código lo escribe el asistente (Claude). En las láminas de concepto no
+  hay listados ni líneas de C++: la lógica va en pseudocódigo en español, diagrama de
+  flujo, de estados o de secuencia, o línea de tiempo; la organización, en árboles de
+  carpetas y archivos, diagramas de bloques o mapas de memoria; las decisiones, en
+  tablas comparativas y criterios. Un nombre de función o de archivo solo aparece como
+  nombre de un concepto («millis()», «lib/»), sin argumentos. Los formatos de datos
+  (tramas, JSON, mensajes HTTP, líneas del monitor serie) sí se muestran. «La hora del
+  código» enseña el método con el asistente (archivos, comportamiento, montaje, salida
+  esperada y prompt), sin fragmentos de código fuente. Una simulación se queda si
+  muestra algo invisible o temporal, se manipula para sostener la pregunta de
+  predicción y se entiende sin leer código.
 - **Sin papers** ni citas `[n]`, sin glosario ni lámina de referencias: el cierre
   enlaza solo documentación oficial. Sin tiras `.usecases` ni `.practice` visibles.
 - Lo que sale de la pantalla cambia de capa: `<aside class="notas">` (tecla N, notas

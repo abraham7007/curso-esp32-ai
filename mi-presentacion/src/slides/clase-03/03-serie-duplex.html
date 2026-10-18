@@ -62,9 +62,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<ul>
-						<li>UART: asíncrono y dúplex; <code>Serial2.write()</code> y <code>Serial2.read()</code> funcionan a la vez.</li>
+						<li>UART: asíncrono y dúplex; escribir y leer en el mismo puerto ocurren a la vez.</li>
 						<li>I²C: síncrono (SCL) y semidúplex; el maestro escribe o lee, nunca ambas a la vez.</li>
-						<li>SPI: síncrono (SCLK) y dúplex; <code>SPI.transfer(b)</code> envía un byte y devuelve el que llegó en el mismo reloj.</li>
+						<li>SPI: síncrono (SCLK) y dúplex; cada transferencia envía un byte y recibe otro en los mismos pulsos de reloj.</li>
 					</ul>
 					<h4>El orden de los bits</h4>
 					<p>
@@ -192,7 +192,7 @@
 							if (!llega) chip(ctx, xa + s * 0.8 + (recorrido - s * 1.6) * (tc / VIAJE), y, Math.min(s, paso * 0.85), BITS_LSB[i], c);
 						}
 						texto(ctx, llega ? "0x48" : "…", xb + bw / 2, yLineas + altoLineas * 0.45, fs, c.ok, 700, "center");
-						texto(ctx, llega ? "'H'" : "", xb + bw / 2, yLineas + altoLineas * 0.45 + fs * 1.3, fs, c.ok, 700, "center");
+						texto(ctx, llega ? "«H»" : "",  xb + bw / 2, yLineas + altoLineas * 0.45 + fs * 1.3, fs, c.ok, 700, "center");
 						texto(ctx, "8 bits de una vez, en 8 hilos que deben", x0, h - fs * 2.2, fs * 0.85, c.text, 500, "left", SANS);
 						texto(ctx, "llegar juntos: uso dentro de la placa", x0, h - fs * 1, fs * 0.85, c.text, 500, "left", SANS);
 					} else {

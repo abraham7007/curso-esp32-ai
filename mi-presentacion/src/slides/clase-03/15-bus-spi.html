@@ -38,7 +38,7 @@
 						<text class="sans mid" x="170" y="84" font-size="40">ESP32</text>
 						<text class="mid mut" x="170" y="128" font-size="26">maestro</text>
 						<text class="mid mut" x="170" y="600" font-size="26">bus VSPI</text>
-						<text class="mid" x="170" y="644" font-size="24">SPI.begin();</text>
+						<text class="sans mid mut" x="170" y="644" font-size="24">pines por defecto</text>
 						<text class="fin" x="306" y="200" font-size="26">GPIO 18</text>
 						<text class="fin" x="306" y="270" font-size="26">GPIO 23</text>
 						<text class="fin" x="306" y="340" font-size="26">GPIO 19</text>
@@ -111,11 +111,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>SPI.begin()</code> usa VSPI: SCK 18, MISO 19, MOSI 23, SS 5.
-						Cada transferencia:
-						<code>SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));</code>
-						<code>digitalWrite(cs, LOW);</code> <code>SPI.transfer(b);</code>
-						<code>digitalWrite(cs, HIGH);</code> <code>SPI.endTransaction();</code>
+						La biblioteca <code>SPI</code> arranca el bus VSPI en SCK 18, MISO 19,
+						MOSI 23 y SS 5. Cada transferencia sigue cuatro pasos: fijar velocidad
+						(1 MHz), orden de bits (MSB primero) y modo 0; bajar el CS del
+						dispositivo; intercambiar los bytes; subir el CS.
 					</p>
 					<h4>Modos 0 a 3</h4>
 					<p>

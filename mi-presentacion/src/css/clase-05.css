@@ -167,3 +167,11 @@
 	align-items: center;
 }
 /* fin sesión 5 agente D */
+
+/* v3 sin código */
+/* Tarjeta de pseudocódigo dibujada dentro de un .s3d-svg (11, 13). */
+.ponencia .s3d-svg .s5v-pseudo {
+	fill: var(--color-bg-subtle);
+	stroke: var(--color-border);
+	stroke-width: 2;
+}

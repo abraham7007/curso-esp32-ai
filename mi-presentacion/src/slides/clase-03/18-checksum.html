@@ -67,7 +67,7 @@
 					conmutar.
 				</p>
 				<p>
-					Respuesta: no lo detecta. Arranca con el bit 0 de carga[5] invertido
+					Respuesta: no lo detecta. Arranca con el bit 0 del sexto byte de carga invertido
 					(0x30 → 0x31): la suma da 0xDB frente a 0xDA recibido y la trama se
 					rechaza. Pasar a «Sin checksum»: se entrega «Hola 1» como válido. Volver
 					y pulsar «Dos errores que se compensan»: +1 en un byte y −1 en otro dejan
@@ -82,10 +82,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Ejemplo 13: <code>uint8_t suma = id + longitud;</code> y
-						<code>suma += carga[i];</code> — el desbordamiento de
-						<code>uint8_t</code> hace el módulo 256. La cabecera 0xAA no entra en
-						la suma.
+						Ejemplo 13: la suma se acumula en una variable de un byte, cuyo
+						desbordamiento hace el módulo 256. La cabecera 0xAA no entra en la
+						suma.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -118,7 +117,7 @@
 		<script type="module">
 			// Primera trama del ejemplo 13: AA 00 06 "Hola 0" DA.
 			const ORIGINAL = [0xaa, 0x00, 0x06, 0x48, 0x6f, 0x6c, 0x61, 0x20, 0x30, 0xda];
-			const CAMPOS = ["cabecera", "id", "longitud", "carga[0]", "carga[1]", "carga[2]", "carga[3]", "carga[4]", "carga[5]", "checksum"];
+			const CAMPOS = ["cabecera", "id", "longitud", "carga 1", "carga 2", "carga 3", "carga 4", "carga 5", "carga 6", "checksum"];
 			const TIPO = ["cab", "ctl", "ctl", "carga", "carga", "carga", "carga", "carga", "carga", "suma"];
 			const h2 = (v) => v.toString(16).toUpperCase().padStart(2, "0");
 			const imprimible = (v) => (v >= 0x20 && v <= 0x7e ? String.fromCharCode(v) : "·");
@@ -192,7 +191,7 @@
 				for (const [i, el] of [...trama.children].entries()) {
 					el.querySelector(".s3c-byte__hex").textContent = h2(bytes[i]);
 					const nota = { cab: "no se suma", ctl: `= ${bytes[i]}`, suma: "recibido" };
-					el.querySelector(".s3c-byte__car").textContent = TIPO[i] === "carga" ? `'${imprimible(bytes[i])}'` : nota[TIPO[i]];
+					el.querySelector(".s3c-byte__car").textContent = TIPO[i] === "carga" ? `«${imprimible(bytes[i])}»` : nota[TIPO[i]];
 					el.classList.toggle("s3c-byte--alterado", mascara[i] !== 0);
 				}
 				for (const bt of botonesBit) {

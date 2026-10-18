@@ -60,7 +60,7 @@
 									<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-target" /></svg>
 									Qué debe hacer
 								</h4>
-								<p>Recorrer cada 5 s las direcciones 0x08 a 0x77 y anotar las que responden con <em>ACK</em>: <code>endTransmission()</code> devuelve 0.</p>
+								<p>Recorrer cada 5 s las direcciones 0x08 a 0x77, sondear cada una sin enviar datos y anotar las que responden con <em>ACK</em>.</p>
 							</div>
 							<div class="code-hour__section">
 								<h4>
@@ -97,7 +97,7 @@ Iniciando escaneo del bus I2C (SDA=21, SCL=22)
 
 <b>4. Diagramas.</b> En Excalidraw: la conexión del bus con las dos líneas, las pull-ups y la dirección de cada dispositivo, y el flujo del barrido con la decisión de anotar o seguir.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> El rango 0x08–0x77 deja fuera las direcciones que la norma I²C reserva. <code>%02X</code> fija dos cifras hexadecimales, el formato con que las hojas de datos dan la dirección.
+									<b>Por qué se pide así.</b> El rango 0x08–0x77 deja fuera las direcciones que la norma I²C reserva. La dirección se imprime con dos cifras hexadecimales, el formato con que la dan las hojas de datos.
 								</p>
 							</div>
 						</div>
@@ -118,9 +118,9 @@ Iniciando escaneo del bus I2C (SDA=21, SCL=22)
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>endTransmission()</code> devuelve 0 si hubo ACK, 2 si la dirección recibió NACK y 5 si se agotó el tiempo. La dirección de 7 bits viaja desplazada un bit, con el de lectura o escritura al final.</p>
+					<p>Cada sonda abre y cierra una transmisión sin datos; el cierre (<code>endTransmission()</code>) devuelve 0 si hubo ACK, 2 si la dirección recibió NACK y 5 si se agotó el tiempo. La dirección de 7 bits viaja desplazada un bit, con el de lectura o escritura al final.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Escanear sin <code>Wire.begin()</code>: ninguna dirección responde.</li><li>Confundir la dirección de 7 bits con la de 8 (0x77 frente a 0xEE).</li><li>Sin pull-ups ni en los módulos ni en la placa: el bus no vuelve a nivel alto.</li></ul>
+					<ul><li>Escanear sin haber arrancado el bus: ninguna dirección responde.</li><li>Confundir la dirección de 7 bits con la de 8 (0x77 frente a 0xEE).</li><li>Sin pull-ups ni en los módulos ni en la placa: el bus no vuelve a nivel alto.</li></ul>
 				</div>
 			</details>
 

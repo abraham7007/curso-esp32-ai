@@ -26,47 +26,51 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba a la izquierda, el árbol del proyecto 18: include/secrets.h, que no se sube; include/secrets.example.h, src/main.cpp y .gitignore, que sí se suben; el .gitignore lista include/secrets.h. A la derecha, secrets.h define OWM_API_KEY con la clave real y secrets.example.h con TU_API_KEY_AQUI, que responde 401. En el centro, main.cpp incluye secrets.h si existe y, si no, la plantilla; la URL se arma con https y appid igual a OWM_API_KEY. Abajo, la misma petición por HTTP deja leer la clave en la red; por HTTPS viaja cifrada frente a quien solo escucha, pero sin verificar el certificado un impostor la lee.">
-						<!-- árbol del proyecto -->
+					<svg class="s3d-svg crece" viewBox="0 0 1600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Arriba, el árbol del proyecto 18 con lo que contiene cada archivo: include/secrets.h guarda la clave real de 32 caracteres y no se sube; include/secrets.example.h es la plantilla con TU_API_KEY_AQUI y se sube; src/main.cpp añade la clave al final de la URL, en appid, y se sube; .gitignore lista include/secrets.h y se sube. En el centro, la decisión al compilar: si existe secrets.h, el firmware lleva la clave real y la API responde 200; si no, lleva la plantilla, el compilador avisa y la API responde 401. Quien clona el proyecto recibe la plantilla y compila igual. Abajo, la misma petición por HTTP deja leer la clave en la red; por HTTPS viaja cifrada frente a quien solo escucha, pero sin verificar el certificado un impostor la lee.">
+						<!-- árbol del proyecto: qué contiene cada archivo y si se sube -->
 						<text class="sans mut" x="0" y="20" font-size="26">18-clima-openweathermap/</text>
-						<text x="0" y="66" font-size="28">include/</text>
-						<text class="acc" x="40" y="108" font-size="28">secrets.h</text>
-						<text class="sans acc" x="560" y="108" font-size="26" text-anchor="end">✗ no se sube</text>
-						<text x="40" y="150" font-size="28">secrets.example.h</text>
-						<text class="sans ok" x="560" y="150" font-size="26" text-anchor="end">✓ se sube</text>
-						<text x="0" y="192" font-size="28">src/main.cpp</text>
-						<text class="sans ok" x="560" y="192" font-size="26" text-anchor="end">✓ se sube</text>
-						<text x="0" y="234" font-size="28">.gitignore</text>
-						<text class="sans ok" x="560" y="234" font-size="26" text-anchor="end">✓ se sube</text>
-						<text class="mut" x="40" y="272" font-size="24">↳ contiene: include/secrets.h</text>
-						<path class="ln ln--fina ln--mut" d="M14 84 V150 H34 M14 108 H34" />
+						<text x="0" y="64" font-size="30">include/</text>
+						<path class="ln ln--fina ln--mut" d="M14 84 V152 H34 M14 108 H34" />
+						<text class="acc" x="44" y="108" font-size="30">secrets.h</text>
+						<text class="sans" x="500" y="108" font-size="28">la clave real, 32 caracteres</text>
+						<text class="sans acc" x="1600" y="108" font-size="28" text-anchor="end">✗ no se sube</text>
+						<text x="44" y="152" font-size="30">secrets.example.h</text>
+						<text class="sans" x="500" y="152" font-size="28">plantilla con TU_API_KEY_AQUI</text>
+						<text class="sans ok" x="1600" y="152" font-size="28" text-anchor="end">✓ se sube</text>
+						<text x="0" y="196" font-size="30">src/main.cpp</text>
+						<text class="sans" x="500" y="196" font-size="28">añade la clave al final de la URL (appid)</text>
+						<text class="sans ok" x="1600" y="196" font-size="28" text-anchor="end">✓ se sube</text>
+						<text x="0" y="240" font-size="30">.gitignore</text>
+						<text class="sans" x="500" y="240" font-size="28">lista include/secrets.h</text>
+						<text class="sans ok" x="1600" y="240" font-size="28" text-anchor="end">✓ se sube</text>
 
-						<!-- los dos archivos de la clave -->
-						<rect class="caja caja--acc" x="620" y="0" width="980" height="126" rx="12" />
-						<text class="sans acc" x="644" y="36" font-size="26">include/secrets.h · solo en el equipo local</text>
-						<text x="644" y="86" font-size="30">#define OWM_API_KEY "<tspan class="acc">clave de 32 caracteres</tspan>"</text>
-						<rect class="caja" x="620" y="152" width="980" height="126" rx="12" />
-						<text class="sans mut" x="644" y="188" font-size="26">include/secrets.example.h · plantilla versionada</text>
-						<text x="644" y="238" font-size="30">#define OWM_API_KEY "TU_API_KEY_AQUI"<tspan class="mut" font-size="26">  → 401</tspan></text>
-
-						<!-- main.cpp -->
-						<rect class="caja" x="0" y="339" width="1600" height="196" rx="12" />
-						<text class="sans mut" x="24" y="373" font-size="26">src/main.cpp</text>
-						<text x="24" y="417" font-size="28">#if __has_include("secrets.h")  #include "secrets.h"  #else  #include "secrets.example.h"</text>
-						<text x="24" y="461" font-size="28">String url = "<tspan class="ok">https</tspan>://api.openweathermap.org/data/2.5/weather?q=" + ciudad</text>
-						<text x="244" y="501" font-size="28">+ "&amp;units=metric&amp;appid=" + <tspan class="acc">OWM_API_KEY</tspan>;</text>
+						<!-- la decisión al compilar -->
+						<path class="ln ln--fina ln--mut" d="M0 282 H1600" />
+						<rect class="caja" x="0" y="336" width="340" height="104" rx="12" />
+						<text class="sans mut mid" x="170" y="366" font-size="26">al compilar</text>
+						<text class="sans mid" x="170" y="406" font-size="30" font-weight="700">¿existe secrets.h?</text>
+						<path class="ln ln--fina" d="M340 388 H380 V340 H412 M380 388 V436 H412" />
+						<text class="sans ok" x="348" y="356" font-size="26" font-weight="700">sí</text>
+						<text class="sans acc" x="346" y="424" font-size="26" font-weight="700">no</text>
+						<rect class="caja" x="420" y="306" width="660" height="68" rx="12" />
+						<text class="sans" x="444" y="340" font-size="28">clave real <tspan class="mut">→</tspan> la API responde <tspan class="ok" font-weight="700">200</tspan></text>
+						<rect class="caja caja--acc" x="420" y="402" width="660" height="68" rx="12" />
+						<text class="sans" x="444" y="436" font-size="28">plantilla y aviso <tspan class="mut">→</tspan> la API responde <tspan class="acc" font-weight="700">401</tspan></text>
+						<text class="sans mut" x="1130" y="370" font-size="26">quien clona el proyecto</text>
+						<text class="sans mut" x="1130" y="406" font-size="26">recibe la plantilla y</text>
+						<text class="sans mut" x="1130" y="442" font-size="26">compila igual</text>
 
 						<!-- lo que ve la red -->
-						<text class="sans dan" x="0" y="612" font-size="30" font-weight="700">HTTP</text>
-						<rect class="barra--dan" x="150" y="582" width="1450" height="60" rx="8" />
-						<text class="dan" x="170" y="612" font-size="26">GET /data/2.5/weather?q=Lima,PE&amp;units=metric&amp;appid=3f9a…  ← legible en la red</text>
-						<text class="sans ok" x="0" y="688" font-size="30" font-weight="700">HTTPS</text>
-						<rect class="barra--ok" x="150" y="658" width="1450" height="60" rx="8" />
-						<text class="ok" x="170" y="688" font-size="26">▮▮▮▮ cifrado frente a escuchas pasivas; un impostor (lámina 11) lee la clave</text>
+						<text class="sans dan" x="0" y="552" font-size="30" font-weight="700">HTTP</text>
+						<rect class="barra--dan" x="150" y="522" width="1450" height="60" rx="8" />
+						<text class="dan" x="170" y="552" font-size="26">GET /data/2.5/weather?q=Lima,PE&amp;units=metric&amp;appid=3f9a…  ← legible en la red</text>
+						<text class="sans ok" x="0" y="638" font-size="30" font-weight="700">HTTPS</text>
+						<rect class="barra--ok" x="150" y="608" width="1450" height="60" rx="8" />
+						<text class="ok" x="170" y="638" font-size="26">▮▮▮▮ cifrado; sin verificar el certificado, un impostor (lámina 11) lee la clave</text>
 
 						<!-- paso 1: qué hacer si ya se subió -->
 						<g data-paso="1">
-							<text class="sans" x="0" y="752" font-size="28">Clave publicada en un repositorio: <tspan class="acc">revocarla y crear otra</tspan>; el historial de git conserva la clave borrada.</text>
+							<text class="sans" x="0" y="736" font-size="28">Clave publicada en un repositorio: <tspan class="acc">revocarla y crear otra</tspan>; el historial de git conserva la clave borrada.</text>
 						</g>
 					</svg>
 				</div>
@@ -75,8 +79,8 @@
 			<aside class="notas">
 				<p>
 					Recorrer el árbol: de los cuatro archivos, solo secrets.h queda fuera de git.
-					Quien clona el proyecto recibe la plantilla; el main.cpp la usa si falta
-					secrets.h, así que compila igual y la API responde 401 hasta que se coloca una clave propia. Abajo, el porqué del HTTPS: OpenWeatherMap pide la clave en la URL
+					Quien clona el proyecto recibe la plantilla; al compilar sin secrets.h se usa
+					la plantilla con un aviso, así que el proyecto compila igual y la API responde 401 hasta que se coloca una clave propia. Abajo, el porqué del HTTPS: OpenWeatherMap pide la clave en la URL
 					(appid), y por HTTP esa URL viaja legible por cualquiera en la red (la
 					simulación de la lámina 11). Recordar que sin certificado cargado el canal
 					va cifrado pero no verificado: protege frente a quien escucha, pero no frente a un impostor que suplanta al servidor. Pregunta de predicción (antes del paso): si la clave ya se subió a GitHub, ¿basta con borrarla del repositorio? No basta, porque queda en el historial; hay que revocarla y crear otra.
@@ -88,10 +92,10 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>cp include/secrets.example.h include/secrets.h</code> y poner la clave
-						de <code>home.openweathermap.org/api_keys</code>. En
-						<code>.gitignore</code>: <code>include/secrets.h</code>. Sin el archivo,
-						la compilación avisa con <code>#warning</code> y usa la plantilla.
+						Se copia secrets.example.h como secrets.h y se pone en él la clave de
+						home.openweathermap.org/api_keys. La línea include/secrets.h del
+						.gitignore lo deja fuera del repositorio. Sin el archivo, el compilador
+						avisa y usa la plantilla.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplo 18 (clima de Lima,PE).</p>
@@ -103,7 +107,7 @@
 				</div>
 			</details>
 
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="18-limite-uso.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 					<span>Cuota</span>

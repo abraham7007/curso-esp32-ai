@@ -25,7 +25,7 @@
 					<div class="escenario__texto franja-fila s2c-cifras">
 						<div class="cifra">
 							<span class="cifra__valor">32<span class="cifra__unidad">bits</span></span>
-							<span class="cifra__que"><code>unsigned long</code> en el ESP32: de 0 a 4 294 967 295</span>
+							<span class="cifra__que">entero sin signo en el ESP32: de 0 a 4 294 967 295</span>
 						</div>
 						<div class="cifra cifra--navy">
 							<span class="cifra__valor">49<span class="s2c-coma">,</span>7<span class="cifra__unidad">días</span></span>
@@ -33,8 +33,8 @@
 						</div>
 						<div class="def">
 							<p>
-								Constante del mismo tipo que <code>millis()</code>:<br />
-								<code>static const unsigned long DEBOUNCE_DELAY = 30;</code>
+								<b>Criterio</b>: instantes e intervalos en el mismo entero de 32
+								bits sin signo; se compara la diferencia, ahora − antes.
 							</p>
 						</div>
 					</div>
@@ -46,13 +46,13 @@
 								<input type="range" id="trans" min="0" max="900" step="10" value="200" />
 								<output id="trans-out" for="trans" class="s2c-ancho">200 ms</output>
 							</label>
-							<span class="lectura lectura--fin"><small>now − previo = </small><span id="l-resta" class="s2c-ancho">200</span><small> ms</small></span>
+							<span class="lectura lectura--fin"><small>ahora − antes = </small><span id="l-resta" class="s2c-ancho">200</span><small> ms</small></span>
 						</div>
 						<div class="lienzo-caja">
 							<canvas
 								id="desborde"
 								role="img"
-								aria-label="Tres registros de 32 bits: previo vale 4 294 967 000 y now, 200 ms después, 4 294 967 200. La resta sin signo now − previo da 200, el tiempo real, antes y después del desborde. La comparación now >= previo + 500 es verdadera porque previo + 500 desbordó a 204, y se cumple 300 ms antes de tiempo."
+								aria-label="Reloj circular del contador de 32 bits, ampliado alrededor del desborde. El instante antes vale 4 294 967 000, 296 ms antes de volver a 0; ahora está 200 ms después. La diferencia ahora − antes da 200 ms, el tiempo real, antes y después del desborde. La comparación ahora ≥ antes + 500 es verdadera porque antes + 500 desbordó a 204, y se cumple 300 ms antes de tiempo."
 							></canvas>
 						</div>
 					</div>
@@ -61,16 +61,16 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: con <code>previo</code> guardado 296 ms antes
+					Pregunta de predicción: con el instante anterior guardado 296 ms antes
 					del desborde, 200 ms transcurridos y un período de 500 ms, ¿se cumple
-					<code>if (now &gt;= previo + 500)</code>?
+					la condición «ahora ≥ antes + 500»?
 				</p>
 				<p>
-					Respuesta: sí, 300 ms antes de tiempo, porque <code>previo + 500</code>
-					desbordó y vale 204. La resta sin signo es aritmética módulo
-					2<sup>32</sup> y da 200, el tiempo real. Mover el deslizador más allá
-					del desborde (296 ms): <code>now</code> pasa a valer casi cero y
-					<code>now - previo</code> sigue dando el intervalo exacto. Con la resta,
+					Respuesta: sí, 300 ms antes de tiempo, porque antes + 500 desbordó y
+					vale 204. La resta sin signo es aritmética módulo 2<sup>32</sup> y da
+					200, el tiempo real: en el reloj es el arco verde. Mover el deslizador
+					más allá del desborde (296 ms): ahora pasa a valer casi cero y la
+					diferencia sigue dando el intervalo exacto. Con la resta,
 					<code>update()</code> da el mismo resultado el día 50 que el día 1; la
 					forma con suma falla una vez cada 49,7 días, un fallo difícil de
 					reproducir al depurar.
@@ -84,8 +84,8 @@
 					<p>
 						<code>millis()</code> devuelve <code>unsigned long</code>, de 32 bits en
 						el ESP32 (equivale a <code>uint32_t</code>). Guardar el instante previo
-						y los intervalos con ese mismo tipo, y comparar siempre
-						<code>now - previo &gt;= intervalo</code>.
+						y los intervalos con ese mismo tipo, y comparar siempre la diferencia
+						contra el intervalo.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -95,8 +95,8 @@
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Guardar <code>millis()</code> en <code>int</code>: con signo, pasa a negativo a los 24,9 días.</li>
-						<li>Comparar contra una suma: <code>now &gt;= previo + intervalo</code>.</li>
-						<li>Un <code>#define</code> sin tipo para la ventana, cuyo tipo depende de cada expresión.</li>
+						<li>Comparar el instante actual con una suma, antes + intervalo.</li>
+						<li>Definir la ventana con <code>#define</code>, sin tipo: el tipo depende de cada expresión. Una constante del mismo tipo que <code>millis()</code> lo fija.</li>
 					</ul>
 				</div>
 			</details>
@@ -118,8 +118,9 @@
 		<script type="module">
 			import { lienzoAdaptable, token } from "../../js/lienzo.js";
 
-			const M = 2 ** 32; // valores de un unsigned long de 32 bits
-			const PREVIO = 4294967000; // 296 ms antes del desborde
+			const M = 2 ** 32; // valores de un entero sin signo de 32 bits
+			const ANTES = 4294967000; // 296 ms antes del desborde
+			const AL_DESBORDE = 296;
 			const INTERVALO = 500;
 			const MONO = "'IBM Plex Mono', monospace";
 			const SANS = "'IBM Plex Sans', sans-serif";
@@ -131,7 +132,7 @@
 			const transOut = document.getElementById("trans-out");
 			const lResta = document.getElementById("l-resta");
 
-			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = MONO) {
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS) {
 				ctx.font = `${peso} ${fs}px ${fam}`;
 				ctx.fillStyle = color;
 				ctx.textAlign = alin;
@@ -139,132 +140,166 @@
 				ctx.fillText(s, x, y);
 			}
 
+			// Reloj del contador: el desborde arriba. El sector de −700 a +1000 ms
+			// alrededor del desborde se amplía; el resto de la vuelta (49,7 días)
+			// se dibuja comprimido y discontinuo en la parte de abajo.
+			const O_MIN = -700;
+			const O_MAX = 1000;
+			const GRADOS_POR_MS = 0.15; // 150° cada segundo
+			const ang = (o) => (o * GRADOS_POR_MS * Math.PI) / 180; // horario desde arriba
+
 			function dibujar(ctx, w, h) {
 				const e = Number(trans.value);
-				const now = u32(PREVIO + e);
-				const resta = u32(now - PREVIO);
-				const limite = u32(PREVIO + INTERVALO);
+				const ahora = u32(ANTES + e);
+				const resta = u32(ahora - ANTES);
+				const limite = u32(ANTES + INTERVALO);
 				const c = {
 					bg: token("--color-bg-subtle"),
-					sup: token("--color-surface"),
 					borde: token("--color-border"),
 					heading: token("--color-heading"),
 					muted: token("--color-text-muted"),
 					acento: token("--color-accent"),
-					acentoSoft: token("--color-accent-soft"),
 					navy: token("--color-navy"),
-					navySoft: token("--color-navy-soft"),
 					ok: token("--color-ok"),
 					okSoft: token("--color-ok-soft"),
 					warn: token("--color-warn"),
 				};
-				const fs = clamp(20, Math.min(h * 0.05, w * 0.016), 30);
+				const fs = clamp(20, Math.min(h * 0.052, w * 0.017), 32);
 				ctx.fillStyle = c.bg;
 				ctx.fillRect(0, 0, w, h);
 
-				// ---------- Registros de 32 bits ----------
-				const pad = fs * 0.8;
-				const labW = fs * 8;
-				const valW = fs * 8.6;
-				const x0 = pad + labW;
-				const celdas = w - x0 - valW - pad;
-				const gap = fs * 0.35; // separación entre bytes
-				const cw = (celdas - 3 * gap) / 32;
-				const filaH = clamp(fs * 1.6, (h - pad * 2 - fs * 11.2) / 3, fs * 3.2);
-				const regs = [
-					["previo", PREVIO, c.navy, c.navySoft],
-					["now", now, c.acento, c.acentoSoft],
-					["now − previo", resta, c.ok, c.okSoft],
-				];
-				const yTop = pad;
-				texto(ctx, "bit 31", x0, yTop + fs * 0.5, fs * 0.85 < 20 ? 20 : fs * 0.85, c.muted, 500);
-				texto(ctx, "bit 0", x0 + celdas, yTop + fs * 0.5, 20, c.muted, 500, "right");
-				for (const [i, [nombre, v, col, soft]] of regs.entries()) {
-					const y = yTop + fs * 1.3 + i * (filaH + fs * 0.6);
-					texto(ctx, nombre, pad, y + filaH / 2, fs, col, 700);
-					const bits = v.toString(2).padStart(32, "0");
-					for (let b = 0; b < 32; b++) {
-						const x = x0 + b * cw + Math.floor(b / 8) * gap;
-						const uno = bits[b] === "1";
-						ctx.fillStyle = uno ? soft : c.sup;
-						ctx.fillRect(x + 1, y, cw - 2, filaH);
-						ctx.strokeStyle = uno ? col : c.borde;
-						ctx.lineWidth = uno ? 2 : 1;
-						ctx.strokeRect(x + 1, y, cw - 2, filaH);
-						texto(ctx, bits[b], x + cw / 2, y + filaH / 2 + 1, fs * 0.95, uno ? col : c.muted, uno ? 700 : 500, "center");
-					}
-					texto(ctx, miles(v), w - pad, y + filaH / 2, fs * 1.05, col, 700, "right");
-				}
-
-				// ---------- Recta del contador ----------
-				const yR = yTop + fs * 1.3 + 3 * (filaH + fs * 0.6) + fs * 2.6;
-				const E0 = -60;
-				const E1 = 960;
-				const rx0 = pad + labW;
-				const rx1 = w - pad - fs * 3;
-				const X = (ms) => rx0 + ((rx1 - rx0) * (ms - E0)) / (E1 - E0);
-				texto(ctx, "contador", pad, yR, fs, c.heading, 700);
-				ctx.strokeStyle = c.muted;
-				ctx.lineWidth = 3;
-				ctx.beginPath();
-				ctx.moveTo(X(E0), yR);
-				ctx.lineTo(X(296) - 4, yR);
-				ctx.moveTo(X(296) + 4, yR);
-				ctx.lineTo(X(E1), yR);
-				ctx.stroke();
-				// Desborde: corte de la recta
-				ctx.strokeStyle = c.warn;
-				ctx.lineWidth = 3;
-				ctx.beginPath();
-				ctx.moveTo(X(296), yR - fs * 1.1);
-				ctx.lineTo(X(296), yR + fs * 0.55);
-				ctx.stroke();
-				texto(ctx, "4 294 967 295 → 0", X(296), yR - fs * 1.7, fs * 0.95, c.warn, 700, "center");
-				// Intervalo transcurrido
-				ctx.fillStyle = c.okSoft;
-				ctx.fillRect(X(0), yR - fs * 0.45, X(e) - X(0), fs * 0.9);
-				// Marcas
-				const marca = (ms, col, arriba, etq) => {
-					ctx.fillStyle = col;
+				// ---------- Reloj ----------
+				const R = Math.max(fs * 4, Math.min(h * 0.5 - fs * 2.9, w * 0.18));
+				const cx = fs * 8.5 + R;
+				const cy = h / 2 + fs * 0.6;
+				const pt = (o, r) => [cx + r * Math.sin(ang(o)), cy - r * Math.cos(ang(o))];
+				const arco = (o0, o1, r) => {
 					ctx.beginPath();
-					ctx.arc(X(ms), yR, fs * 0.4, 0, Math.PI * 2);
-					ctx.fill();
-					texto(ctx, etq, X(ms), yR + (arriba ? -fs * 1.25 : fs * 1.25), fs * 0.95, col, 700, "center");
+					ctx.arc(cx, cy, r, ang(o0) - Math.PI / 2, ang(o1) - Math.PI / 2);
 				};
-				texto(ctx, "previo", X(0), yR - fs * 1.25, fs * 0.95, c.navy, 700, "center");
-				ctx.fillStyle = c.navy;
+				const grueso = fs * 0.55;
+
+				// Resto de la vuelta, comprimido.
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = grueso * 0.5;
+				ctx.setLineDash([fs * 0.3, fs * 0.4]);
 				ctx.beginPath();
-				ctx.arc(X(0), yR, fs * 0.4, 0, Math.PI * 2);
-				ctx.fill();
-				ctx.strokeStyle = c.muted;
-				ctx.lineWidth = 2;
-				ctx.setLineDash([5, 5]);
-				ctx.beginPath();
-				ctx.moveTo(X(INTERVALO), yR - fs * 0.9);
-				ctx.lineTo(X(INTERVALO), yR + fs * 0.9);
+				ctx.arc(cx, cy, R, ang(O_MAX) - Math.PI / 2, ang(O_MIN) + 2 * Math.PI - Math.PI / 2);
 				ctx.stroke();
 				ctx.setLineDash([]);
-				texto(ctx, "+500 ms", X(INTERVALO), yR - fs * 1.25, fs * 0.95, c.muted, 700, "center");
-				marca(e, c.acento, false, "now");
+				texto(ctx, "resto de la vuelta", cx, cy + R * 0.62, fs * 0.9, c.muted, 500, "center");
+				texto(ctx, "≈ 49,7 días", cx, cy + R * 0.62 + fs * 1.1, fs * 0.9, c.muted, 700, "center");
 
-				// ---------- Las dos comprobaciones ----------
-				const yC = yR + fs * 3.2;
+				// Sector ampliado y marcas cada 100 ms.
+				ctx.strokeStyle = c.borde;
+				ctx.lineWidth = grueso;
+				arco(O_MIN, O_MAX, R);
+				ctx.stroke();
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 2;
+				for (let o = -600; o <= O_MAX; o += 100) {
+					const [x1, y1] = pt(o, R - grueso * 0.5);
+					const [x2, y2] = pt(o, R - grueso * 0.5 - fs * 0.45);
+					ctx.beginPath();
+					ctx.moveTo(x1, y1);
+					ctx.lineTo(x2, y2);
+					ctx.stroke();
+				}
+
+				// Tiempo transcurrido: arco verde de antes a ahora.
+				const oAntes = -AL_DESBORDE;
+				const oAhora = oAntes + e;
+				ctx.strokeStyle = c.ok;
+				ctx.lineWidth = grueso;
+				ctx.lineCap = "round";
+				if (e > 0) {
+					arco(oAntes, oAhora, R);
+					ctx.stroke();
+				}
+				ctx.lineCap = "butt";
+
+				// Desborde arriba.
+				const [dx1, dy1] = pt(0, R + grueso * 1.4);
+				const [dx2, dy2] = pt(0, R - grueso * 1.4);
+				ctx.strokeStyle = c.warn;
+				ctx.lineWidth = 4;
+				ctx.beginPath();
+				ctx.moveTo(dx1, dy1);
+				ctx.lineTo(dx2, dy2);
+				ctx.stroke();
+				texto(ctx, "4 294 967 295 → 0", cx, cy - R - fs * 1.9, fs * 0.95, c.warn, 700, "center", MONO);
+
+				// antes + 500: dónde cae la suma, ya desbordada.
+				const oLim = AL_DESBORDE <= INTERVALO ? INTERVALO - AL_DESBORDE : 0;
+				const [lx1, ly1] = pt(oLim, R + grueso * 1.3);
+				const [lx2, ly2] = pt(oLim, R - grueso * 1.3);
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 3;
+				ctx.setLineDash([5, 4]);
+				ctx.beginPath();
+				ctx.moveTo(lx1, ly1);
+				ctx.lineTo(lx2, ly2);
+				ctx.stroke();
+				ctx.setLineDash([]);
+				const [ltx, lty] = pt(oLim, R + fs * 2);
+				texto(ctx, "antes + 500", ltx, lty, fs * 0.9, c.muted, 700, "left");
+
+				// Puntos: antes (fuera, a la izquierda) y ahora (rótulo dentro).
+				const punto = (o, col) => {
+					const [x, y] = pt(o, R);
+					ctx.fillStyle = col;
+					ctx.beginPath();
+					ctx.arc(x, y, grueso * 0.85, 0, Math.PI * 2);
+					ctx.fill();
+				};
+				punto(oAntes, c.navy);
+				const [atx, aty] = pt(oAntes, R + fs * 1.6);
+				texto(ctx, "antes", atx, aty, fs, c.navy, 700, "right");
+				punto(oAhora, c.acento);
+				const [htx, hty] = pt(oAhora, R - fs * 2.1);
+				texto(ctx, "ahora", htx, hty, fs, c.acento, 700, "center");
+
+				// Centro: la diferencia.
+				texto(ctx, "ahora − antes", cx, cy - fs * 0.6, fs * 0.9, c.muted, 600, "center");
+				texto(ctx, `${resta} ms`, cx, cy + fs * 0.75, fs * 1.5, c.ok, 700, "center", MONO);
+
+				// ---------- Valores y comparaciones ----------
+				const x0 = cx + R + fs * 7.5;
+				const fila = Math.min(fs * 2, (h - fs * 1.5) / 8);
+				let y = Math.max(fs * 1.2, h / 2 - fila * 3.6);
+				const valor = (nombre, v, col) => {
+					texto(ctx, nombre, x0, y, fs, col, 700);
+					texto(ctx, miles(v), x0 + fs * 6.2, y, fs, c.heading, 600, "left", MONO);
+					y += fila;
+				};
+				valor("antes", ANTES, c.navy);
+				valor("ahora", ahora, c.acento);
+				valor("antes + 500", limite, c.muted);
+				y += fila * 0.25;
+
 				const bien = resta >= INTERVALO;
-				const ingenua = now >= limite;
-				const correcta = ingenua === bien;
-				texto(ctx, `now - previo >= 500  →  ${bien}`, pad, yC, fs, c.heading, 700);
-				texto(ctx, "✓ el intervalo real", pad + fs * 21, yC, fs, c.ok, 700, "left", SANS);
-				texto(ctx, `now >= previo + 500  →  ${ingenua}`, pad, yC + fs * 1.6, fs, c.heading, 700);
+				const suma = ahora >= limite;
+				const coincide = suma === bien;
+				texto(ctx, "Diferencia", x0, y, fs * 0.85, c.muted, 700);
+				y += fila * 0.8;
+				texto(ctx, `ahora − antes ≥ 500  →  ${bien ? "sí" : "no"}`, x0, y, fs, c.heading, 700, "left", MONO);
+				y += fila * 0.85;
+				texto(ctx, `✓ ${resta} ms transcurridos: el tiempo real`, x0, y, fs * 0.9, c.ok, 700);
+				y += fila * 1.15;
+				texto(ctx, "Suma", x0, y, fs * 0.85, c.muted, 700);
+				y += fila * 0.8;
+				texto(ctx, `ahora ≥ antes + 500  →  ${suma ? "sí" : "no"}`, x0, y, fs, c.heading, 700, "left", MONO);
+				y += fila * 0.85;
 				texto(
 					ctx,
-					correcta ? "✓ coincide en este caso" : `✗ previo + 500 desbordó a ${limite}; se cumple ${INTERVALO - e} ms antes`,
-					pad + fs * 21,
-					yC + fs * 1.6,
-					fs,
-					correcta ? c.muted : c.acento,
+					coincide
+						? "✓ coincide en este caso"
+						: `✗ antes + 500 desbordó a ${limite}: se cumple ${INTERVALO - e} ms antes`,
+					x0,
+					y,
+					fs * 0.9,
+					coincide ? c.muted : c.acento,
 					700,
-					"left",
-					SANS,
 				);
 
 				lResta.textContent = String(resta);

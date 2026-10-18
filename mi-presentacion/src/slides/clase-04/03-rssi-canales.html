@@ -28,7 +28,7 @@
 						<div class="def">
 							<p>
 								<b>RSSI</b> (<i>Received Signal Strength Indicator</i>): potencia
-								recibida, en dBm y siempre negativa.
+								recibida, en dBm y siempre negativa; más cerca de 0, más potencia.
 							</p>
 						</div>
 						<div class="def">
@@ -37,7 +37,7 @@
 							</p>
 						</div>
 						<p class="franja-fila__ajusta">
-							<code>WiFi.RSSI()</code>
+							<b>−48 dBm</b> &gt; <b>−81 dBm</b>
 						</p>
 					</div>
 
@@ -79,7 +79,7 @@
 				<p>
 					Respuesta: unos 9 dB con el modelo de interior usado (exponente 3: 30 ×
 					log10 2 ≈ 9). En espacio libre serían 6 dB. Quitar la pared suma otros 6
-					dB. El modelo es ilustrativo; el valor real depende de antenas, materiales y orientación, y se mide con <code>WiFi.RSSI()</code>. Los umbrales de calidad son orientativos.
+					dB. El modelo es ilustrativo; el valor real depende de antenas, materiales y orientación, y lo mide el propio ESP32. Los umbrales de calidad son orientativos.
 				</p>
 				<p>
 					Canales: mover el router al 3. Su espectro de 22 MHz se solapa con las redes del 1 y del 6. En el 1, el 6 o el 11 comparte canal con una sola red; las dos transmiten por turnos y no hay solape parcial. Una red de 5 GHz no aparece en el escaneo del ESP32 clásico.
@@ -91,10 +91,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>WiFi.RSSI()</code> da el RSSI de la red a la que se está
-						conectado; tras <code>WiFi.scanNetworks()</code>,
-						<code>WiFi.RSSI(i)</code> y <code>WiFi.channel(i)</code> describen
-						cada red encontrada (ejemplo 15).
+						El ESP32 mide el RSSI de la red a la que está unido y, tras un barrido,
+						el de cada red encontrada junto con su canal (ejemplo 15). Para elegir
+						canal en el router se prefiere el 1, el 6 o el 11 que tenga menos redes.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>

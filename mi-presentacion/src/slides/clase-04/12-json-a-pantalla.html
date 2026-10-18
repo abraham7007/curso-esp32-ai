@@ -22,49 +22,63 @@
 				<h1 class="slide__title slide__title--sm">Extracción de <em>campos</em> de un JSON a variables</h1>
 
 				<div class="def">
-					<p>Respuesta real de CoinGecko en el ejemplo 16b: ArduinoJson (sesión 3 · 20) recorre la ruta de claves y copia el número en una variable.</p>
+					<p>Respuesta real de CoinGecko en el ejemplo 16b: ArduinoJson (sesión 3 · 20) convierte el texto en un árbol, recorre el camino de claves y copia el número en una variable.</p>
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, el cuerpo de la respuesta de CoinGecko, 53 bytes: bitcoin, usd 83257; dogecoin, usd 0.083771. En el centro, las rutas doc corchete bitcoin corchete usd, que va a la variable float precioBTC, y doc corchete dogecoin corchete usd, que va a precioDOGE. A la derecha, la pantalla OLED de 128 por 64 píxeles dibujada a escala 4 a 1: MERCADO CRIPTO, una línea, BTC en tamaño 2 y el precio 83257.00 USD. A los 5 segundos muestra DOGE, 0.0838 USD.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A la izquierda, el cuerpo de la respuesta de CoinGecko, 53 bytes: bitcoin, usd 83257; dogecoin, usd 0.083771. En el centro, el mismo JSON como árbol: de la raíz salen las ramas bitcoin y dogecoin, y de cada una la hoja usd. El camino raíz, bitcoin, usd llega a 83257, que se copia a una variable float; el camino raíz, dogecoin, usd llega a 0.083771, que se copia a otra. A la derecha, la pantalla OLED de 128 por 64 píxeles dibujada a escala 4 a 1: MERCADO CRIPTO, una línea, BTC en tamaño 2 y el precio 83257.00 USD. A los 5 segundos muestra DOGE, 0.0838 USD.">
 						<!-- A · cuerpo de la respuesta -->
 						<text class="sans mut" x="0" y="28" font-size="30">cuerpo · 53 bytes de texto</text>
-						<rect class="caja" x="0" y="64" width="520" height="496" rx="12" />
-						<text x="28" y="116" font-size="36">{</text>
-						<text x="64" y="172" font-size="36">"bitcoin": {</text>
-						<text class="acc" x="100" y="228" font-size="36">"usd": 83257</text>
-						<text x="64" y="284" font-size="36">},</text>
-						<text x="64" y="340" font-size="36">"dogecoin": {</text>
-						<text class="navy" x="100" y="396" font-size="36">"usd": 0.083771</text>
-						<text x="64" y="452" font-size="36">}</text>
-						<text x="28" y="508" font-size="36">}</text>
+						<rect class="caja" x="0" y="64" width="450" height="496" rx="12" />
+						<text x="24" y="116" font-size="34">{</text>
+						<text x="58" y="172" font-size="34">"bitcoin": {</text>
+						<text class="acc" x="92" y="228" font-size="34">"usd": 83257</text>
+						<text x="58" y="284" font-size="34">},</text>
+						<text x="58" y="340" font-size="34">"dogecoin": {</text>
+						<text class="navy" x="92" y="396" font-size="34">"usd": 0.083771</text>
+						<text x="58" y="452" font-size="34">}</text>
+						<text x="24" y="508" font-size="34">}</text>
 
-						<!-- B · rutas -->
-						<text class="sans mut" x="560" y="28" font-size="30">ruta de claves → variable</text>
-						<path class="ln ln--acc" d="M366 228 H540 V230 H560" />
-						<path class="ln ln--navy" d="M446 396 H548 V410 H560" />
-						<rect class="caja caja--acc" x="560" y="160" width="480" height="140" rx="12" />
-						<text class="acc" x="584" y="205" font-size="32">doc["bitcoin"]["usd"]</text>
-						<text x="584" y="260" font-size="32">→ float precioBTC</text>
-						<rect class="caja" x="560" y="340" width="480" height="140" rx="12" />
-						<text class="navy" x="584" y="385" font-size="32">doc["dogecoin"]["usd"]</text>
-						<text x="584" y="440" font-size="32">→ float precioDOGE</text>
+						<!-- B · el mismo JSON como árbol; cada fila se alinea con su línea de texto -->
+						<text class="sans mut" x="480" y="28" font-size="30">camino en el árbol</text>
+						<rect class="caja" x="480" y="284" width="92" height="56" rx="10" />
+						<text class="mid" x="526" y="312" font-size="26">raíz</text>
+						<path class="ln ln--acc" d="M572 312 H589 V228 H606" />
+						<path class="ln ln--navy" d="M589 312 V396 H606" />
+
+						<rect class="caja caja--acc" x="606" y="200" width="168" height="56" rx="10" />
+						<text class="mid acc" x="690" y="228" font-size="28">bitcoin</text>
+						<path class="ln ln--acc" d="M774 228 H800" />
+						<rect class="caja caja--acc" x="800" y="200" width="76" height="56" rx="10" />
+						<text class="mid acc" x="838" y="228" font-size="28">usd</text>
+						<path class="ln ln--acc" d="M876 228 H894" />
+						<text class="acc" x="900" y="228" font-size="32" font-weight="700">83257</text>
+						<text class="sans mut" x="900" y="274" font-size="24">→ variable</text>
+
+						<rect class="caja caja--navy" x="606" y="368" width="168" height="56" rx="10" />
+						<text class="mid navy" x="690" y="396" font-size="28">dogecoin</text>
+						<path class="ln ln--navy" d="M774 396 H800" />
+						<rect class="caja caja--navy" x="800" y="368" width="76" height="56" rx="10" />
+						<text class="mid navy" x="838" y="396" font-size="28">usd</text>
+						<path class="ln ln--navy" d="M876 396 H894" />
+						<text class="navy" x="900" y="396" font-size="32" font-weight="700">0.083771</text>
+						<text class="sans mut" x="900" y="442" font-size="24">→ variable</text>
 
 						<!-- C · OLED a escala 4:1: el vidrio rodea el área activa de 512 × 256 -->
 						<text class="sans mut" x="1060" y="28" font-size="30">OLED 128 × 64 px · escala 4:1</text>
-						<path class="ln ln--acc" d="M1040 230 H1060" />
+						<path class="ln ln--acc" d="M1000 228 H1060" />
 						<rect class="s4d-oled" x="1060" y="56" width="540" height="284" rx="8" />
 						<text class="s4d-oled-t" x="1134" y="86" font-size="34" textLength="336" lengthAdjust="spacingAndGlyphs">MERCADO CRIPTO</text>
 						<line class="s4d-oled-ln" x1="1074" y1="112" x2="1586" y2="112" />
 						<text class="s4d-oled-t" x="1074" y="202" font-size="68" textLength="144" lengthAdjust="spacingAndGlyphs">BTC</text>
 						<text class="s4d-oled-t" x="1074" y="278" font-size="34" textLength="336" lengthAdjust="spacingAndGlyphs">$ 83257.00 USD</text>
-						<text class="sans mut" x="1060" y="396" font-size="30">a los 5 s: DOGE · $ 0.0838 USD</text>
-						<text class="mut" x="1060" y="448" font-size="26">printf("$ %.2f USD", precioBTC)</text>
+						<text class="sans mut" x="1100" y="396" font-size="30">a los 5 s: DOGE · $ 0.0838 USD</text>
+						<text class="sans mut" x="1100" y="442" font-size="26">la pantalla dibuja la variable</text>
 
 						<!-- paso 1 · qué sobrevive -->
 						<g data-paso="1">
 							<path class="ln ln--fina ln--mut" d="M0 610 H1600" />
-							<text class="sans" x="0" y="666" font-size="34">Al salir de la función se liberan payload y doc; de los 53 bytes quedan dos <tspan class="acc">float</tspan> (8 bytes).</text>
+							<text class="sans" x="0" y="666" font-size="34">Tras copiar los dos campos se liberan el texto y el árbol; de los 53 bytes quedan dos <tspan class="acc">float</tspan> (8 bytes).</text>
 						</g>
 					</svg>
 				</div>
@@ -72,9 +86,9 @@
 
 			<aside class="notas">
 				<p>
-					Señalar la ruta de izquierda a derecha: la respuesta es texto; deserializeJson
-					lo convierte en un árbol dentro de doc; la ruta ["bitcoin"]["usd"] baja dos
-					niveles y entrega un número, que se copia a una variable global. La pantalla no lee JSON; dibuja el valor de la variable. Pregunta de predicción (antes del paso): cuando la función termina, ¿qué queda en memoria de la respuesta? Quedan los dos float, 8 bytes; payload y doc se liberan. La OLED está a escala: cada píxel real son 4 × 4
+					Señalar el camino de izquierda a derecha: la respuesta es texto; ArduinoJson
+					lo convierte en un árbol; el camino raíz → bitcoin → usd baja dos
+					niveles y entrega un número, que se copia a una variable global. La pantalla no lee JSON; dibuja el valor de la variable. Pregunta de predicción (antes del paso): cuando termina la consulta, ¿qué queda en memoria de la respuesta? Quedan los dos float, 8 bytes; el texto y el árbol se liberan. La OLED está a escala: cada píxel real son 4 × 4
 					del dibujo, y el texto de tamaño 1 ocupa 6 × 8 píxeles por carácter.
 				</p>
 			</aside>
@@ -84,11 +98,11 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>String payload = http.getString();</code>,
-						<code>StaticJsonDocument&lt;256&gt; doc;</code>,
-						<code>deserializeJson(doc, payload)</code> y, si no hay error,
-						<code>precioBTC = doc["bitcoin"]["usd"];</code>. Una clave inexistente devuelve 0 sin señalar error; se comprueba con
-						<code>doc["bitcoin"]["usd"].is&lt;float&gt;()</code>.
+						El documento JSON tiene un tamaño fijo (256 bytes en el ejemplo 16b) y
+						vive solo mientras dura la consulta. El camino de claves se escribe
+						nivel a nivel, igual que se lee en el árbol. Una clave inexistente
+						devuelve 0 sin señalar error; conviene comprobar que el campo existe y
+						es numérico antes de copiarlo.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>Ejemplos 16 (monitor serie) y 16b (OLED SSD1306 en 0x3C por I²C, sesión 3 · 09).</p>
@@ -100,7 +114,7 @@
 				</div>
 			</details>
 
-			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+<nav class="slide-nav" aria-label="Navegación de la diapositiva">
 				<a class="slide-nav__link" href="11-http-https.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 					<span>HTTPS</span>

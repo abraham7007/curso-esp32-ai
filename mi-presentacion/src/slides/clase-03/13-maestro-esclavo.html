@@ -26,7 +26,7 @@
 				</div>
 
 				<div class="crece flex">
-					<svg class="s3d-svg crece" viewBox="0 0 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia del ejemplo 12c. La placa A, maestro, prepara el mensaje con beginTransmission y write sin que salga nada por el cable; endTransmission envía START, la dirección 0x11 con escritura, recibe ACK, envía los bytes 68 6F 6C 61 0A y STOP. En la placa B, esclavo en 0x11, se ejecuta alRecibirI2C con 5 bytes y el loop imprime el mensaje. endTransmission devuelve 0; sin placa B devolvería 2, NACK en la dirección.">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 740" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama de secuencia del ejemplo 12c. Al arrancar, la placa A se une al bus como maestro, sin dirección propia, y la placa B como esclavo en 0x11 con una rutina de recepción registrada. El maestro prepara cinco bytes en su búfer sin que salga nada por el cable; después inicia la transmisión a 0x11: START, dirección 0x11 con escritura, ACK del esclavo, los bytes 68 6F 6C 61 0A, que son hola y fin de línea, y STOP. En B, el driver entrega los 5 bytes a la rutina de recepción, que los copia y marca que hay mensaje; el bucle principal lo imprime. El maestro obtiene el resultado 0; sin placa B obtendría 2, NACK en la dirección.">
 						<defs>
 							<marker id="f13-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="rel-acc" /></marker>
 							<marker id="f13-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="rel-ok" /></marker>
@@ -41,46 +41,42 @@
 						<text class="mid mut" x="1040" y="92" font-size="26">0x11 · GPIO 4 libre</text>
 						<path class="ln ln--vida" d="M560 120 V712 M1040 120 V712" />
 
-						<!-- setup() -->
-						<text class="fin" x="530" y="168" font-size="28">Wire.begin(21, 22);</text>
-						<text class="fin mut" x="530" y="206" font-size="24">sin dirección propia</text>
-						<text class="navy" x="1070" y="168" font-size="26">Wire.onReceive(alRecibirI2C);</text>
-						<text x="1070" y="206" font-size="26">Wire.begin(0x11, 21, 22, 100000);</text>
-
+						<!-- al arrancar -->
+						<text class="sans fin" x="530" y="168" font-size="28">se une al bus como maestro</text>
+						<text class="sans fin mut" x="530" y="206" font-size="24">sin dirección propia</text>
+						<text class="sans" x="1070" y="168" font-size="28">se une al bus como esclavo en 0x11</text>
+						<text class="sans mut" x="1070" y="206" font-size="24">deja registrada su rutina de recepción</text>
 						<!-- el maestro prepara: nada sale aún -->
-						<text class="fin" x="530" y="278" font-size="28">Wire.beginTransmission(0x11);</text>
-						<text class="fin" x="530" y="320" font-size="28">Wire.write(c);  // × 5</text>
-						<text class="mid mut" x="800" y="299" font-size="26">aún no sale nada</text>
-
+						<text class="sans fin" x="530" y="278" font-size="28">prepara el mensaje para 0x11</text>
+						<text class="sans fin mut" x="530" y="316" font-size="24">5 bytes quedan en su búfer</text>
+						<text class="sans mid mut" x="800" y="299" font-size="26">aún no sale nada</text>
 						<!-- lo que viaja por SDA/SCL -->
 						<g>
-							<text class="fin acc" x="530" y="392" font-size="28">Wire.endTransmission();</text>
+							<text class="sans fin acc" x="530" y="392" font-size="28">inicia la transmisión a 0x11</text>
 							<text class="mid" x="800" y="362" font-size="28">START · 0x11 + W</text>
 							<path class="ln ln--acc" d="M568 392 H1030" marker-end="url(#f13-acc)" />
 							<text class="mid ok" x="800" y="430" font-size="28">ACK</text>
 							<path class="ln ln--ok" d="M1032 458 H570" marker-end="url(#f13-ok)" />
 							<text class="mid" x="800" y="498" font-size="28">68 6F 6C 61 0A</text>
 							<path class="ln ln--acc" d="M568 526 H1030" marker-end="url(#f13-acc)" />
-							<text class="mut" x="1070" y="512" font-size="24">"hola\n", un ACK</text>
-							<text class="mut" x="1070" y="542" font-size="24">tras cada byte</text>
+							<text class="sans mut" x="1070" y="512" font-size="24">«hola» y fin de línea,</text>
+							<text class="sans mut" x="1070" y="542" font-size="24">un ACK tras cada byte</text>
 							<text class="mid" x="800" y="566" font-size="28">STOP</text>
 							<path class="ln ln--acc" d="M568 594 H1030" marker-end="url(#f13-acc)" />
 						</g>
-
 						<!-- el esclavo reacciona; el maestro recibe 0 -->
 						<g>
-							<text class="navy" x="1070" y="594" font-size="28">alRecibirI2C(5)</text>
-							<text class="mut" x="1070" y="634" font-size="24">Wire.read() × 5 → hayMensaje</text>
+							<text class="sans navy" x="1070" y="594" font-size="28">el driver le entrega 5 bytes</text>
+							<text class="sans mut" x="1070" y="634" font-size="24">copia los bytes y marca «hay mensaje»</text>
 							<text class="ok" x="1070" y="684" font-size="24">[Mensaje recibido por I2C]: hola</text>
-							<text class="fin ok" x="530" y="634" font-size="28">devuelve 0</text>
+							<text class="sans fin ok" x="530" y="634" font-size="28">resultado 0: entregado</text>
 							<text class="fin ok" x="530" y="684" font-size="24">[Enviado por I2C a 0x11]: hola</text>
 						</g>
-
 						<!-- paso 1: sin esclavo -->
 						<g data-paso="1">
 							<rect class="caja caja--dan" x="1056" y="394" width="420" height="84" rx="10" />
-							<text class="dan" x="1074" y="420" font-size="26">si no hubiera placa B:</text>
-							<text class="dan" x="1074" y="454" font-size="26">NACK → devuelve 2</text>
+							<text class="sans dan" x="1074" y="420" font-size="26">si no hubiera placa B:</text>
+							<text class="sans dan" x="1074" y="454" font-size="26">NACK → resultado 2</text>
 						</g>
 					</svg>
 				</div>
@@ -88,15 +84,17 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción, antes de revelar: cuando el maestro llama a
-					<code>Wire.write()</code>, ¿cuántos bits han pasado ya por SDA? Respuesta:
-					ninguno. <code>write()</code> solo llena el búfer de 128 bytes; todo sale
-					en <code>endTransmission()</code>. Recorrer la secuencia: START, dirección
-					0x11 con el bit de escritura, ACK del esclavo, cinco bytes con su ACK y
-					STOP. En B no hay bucle de espera; el driver llama a
-					<code>alRecibirI2C(5)</code> y el loop imprime. Antes del paso, desconectar
-					B y pedir a la clase el código que devuelve A: es 2, NACK en la dirección.
-					El papel de cada placa lo fija el puente de GPIO 4 al arrancar.
+					Pregunta de predicción, antes de revelar: cuando el maestro prepara el
+					mensaje, ¿cuántos bits han pasado ya por SDA? Respuesta: ninguno. Los
+					bytes esperan en un búfer de 128 bytes y todo sale cuando el maestro
+					inicia la transmisión (<code>endTransmission()</code>). Recorrer la
+					secuencia: START, dirección 0x11 con el bit de escritura, ACK del
+					esclavo, cinco bytes con su ACK y STOP. En B no hay bucle de espera: el
+					driver llama a la rutina de recepción con 5 bytes, esta copia y levanta
+					una bandera, y el bucle principal imprime. Antes del paso, desconectar
+					B y pedir a la clase el resultado que obtiene A: es 2, NACK en la
+					dirección. El papel de cada placa lo fija el puente de GPIO 4 al
+					arrancar.
 				</p>
 			</aside>
 
@@ -105,22 +103,23 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Maestro: <code>Wire.begin(21, 22)</code>; esclavo:
-						<code>Wire.onReceive(f)</code>, con <code>f(int n)</code>, y después
-						<code>Wire.begin(0x11, 21, 22, 100000)</code>, como en el ejemplo 12c.
-						<code>endTransmission()</code> devuelve 0 éxito, 2 cualquier NACK, 4 otro error
-						(también si el puerto es esclavo), 5 tiempo agotado.
+						El maestro se une al bus solo con sus pines (SDA 21, SCL 22). El
+						esclavo registra primero su rutina de recepción
+						(<code>Wire.onReceive()</code>) y después se une con su dirección,
+						0x11, y la frecuencia, 100 kHz, como en el ejemplo 12c. Resultado de
+						la transmisión: 0 éxito, 2 cualquier NACK, 4 otro error (también si el
+						puerto es esclavo), 5 tiempo agotado.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
-						Ejemplo 12c: la línea viaja en bloques de 32 bytes con <code>'\n'</code>
-						como marca de fin. En el núcleo 2.0.x, <code>onReceive</code> corre en
-						una tarea del driver: por eso solo copia y levanta una bandera.
+						Ejemplo 12c: la línea viaja en bloques de 32 bytes con el fin de línea
+						como marca de cierre. En el núcleo 2.0.x, la rutina de recepción corre
+						en una tarea del driver: por eso solo copia y levanta una bandera.
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Esperar que B responda iniciando él: un esclavo no inicia transmisiones.</li>
-						<li>Imprimir dentro de <code>onReceive</code> o ignorar el valor de <code>endTransmission()</code>.</li>
+						<li>Imprimir dentro de la rutina de recepción o ignorar el resultado de la transmisión.</li>
 					</ul>
 				</div>
 			</details>

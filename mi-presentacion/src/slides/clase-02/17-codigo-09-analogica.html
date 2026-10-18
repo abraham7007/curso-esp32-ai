@@ -131,7 +131,7 @@ Iniciando media movil de ADC (N=16, GPIO 32)
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>La suma corriente cuesta una resta y una suma por muestra, sea cual sea N. <code>_suma</code> es <code>uint32_t</code>: 16 × 4095 = 65 520 cabe en 16 bits y N = 17 supera ese límite.</p>
+					<p>La suma corriente cuesta una resta y una suma por muestra, sea cual sea N. La suma se guarda en 32 bits: 16 × 4095 = 65 520 cabe en 16 bits y N = 17 supera ese límite.</p>
 					<h4>Errores frecuentes</h4>
 					<ul><li>Recorrer las N muestras dentro de <code>update()</code>: N lecturas por vuelta.</li><li>Copiar el objeto por valor: dos destructores liberan el mismo búfer.</li><li>Dividir siempre entre N, con lo que el promedio arranca con una rampa desde 0.</li></ul>
 				</div>

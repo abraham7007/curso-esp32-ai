@@ -127,9 +127,9 @@ Iniciando detección de pulsaciones con filtrado antirrebote (30 ms)
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>millis()</code> devuelve <code>unsigned long</code> de 32 bits; la resta <code>now - _lastDebounceTime</code> sigue siendo correcta cuando el contador desborda. <code>PRIu32</code> es la macro de <code>&lt;inttypes.h&gt;</code> para imprimir un <code>uint32_t</code>.</p>
+					<p><code>millis()</code> devuelve un entero sin signo de 32 bits; restar al instante actual el del último flanco sigue dando el tiempo real cuando el contador desborda. <code>PRIu32</code> es la macro de <code>inttypes.h</code> para imprimir un entero de 32 bits sin signo.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li><code>delay(30)</code> dentro de <code>update()</code>, que bloquea todo el bucle.</li><li>Leer el pin dos veces en la misma vuelta: durante el rebote, las dos lecturas pueden diferir.</li><li>Olvidar <code>boton.update()</code> en <code>loop()</code>: <code>fuePulsado()</code> nunca devuelve true.</li></ul>
+					<ul><li>Una espera con <code>delay()</code> dentro de <code>update()</code>, que bloquea todo el bucle.</li><li>Leer el pin dos veces en la misma vuelta: durante el rebote, las dos lecturas pueden diferir.</li><li>No llamar a <code>update()</code> en cada vuelta: <code>fuePulsado()</code> nunca devuelve verdadero.</li></ul>
 				</div>
 			</details>
 

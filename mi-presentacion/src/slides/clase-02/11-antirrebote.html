@@ -22,20 +22,18 @@
 				<h1 class="slide__title slide__title--sm"><em>Rebote</em> de contactos y antirrebote por software</h1>
 
 				<div class="escenario">
-					<div class="escenario__texto franja-fila">
+					<div class="escenario__texto franja-fila rd s2v">
 						<div class="def">
 							<p>
 								<b>Rebote</b> (<i>bounce</i>): al cerrarse, la lámina del
 								pulsador abre y cierra varias veces durante unos milisegundos.
 							</p>
 						</div>
-						<div class="def">
-							<p>
-								<b>Antirrebote</b>: cada flanco reinicia la ventana; el estado
-								cambia tras <code>DEBOUNCE_DELAY</code> sin flancos
-								(30&nbsp;ms en el ejemplo&nbsp;07).
-							</p>
-						</div>
+						<ul class="s2v-pseudo s2v-pseudo--franja s2v-pseudo--bien franja-fila__ajusta" aria-label="Antirrebote en pseudocódigo">
+							<li>si la lectura cambia → reiniciar la ventana</li>
+							<li>si lleva una ventana estable y difiere →</li>
+							<li class="s2v-in">aceptar el nuevo estado</li>
+						</ul>
 					</div>
 
 					<div class="escenario__visual">
@@ -46,7 +44,7 @@
 								<output id="ventana-out" for="ventana" class="s2c-ancho">0 ms</output>
 							</label>
 							<button type="button" class="btn btn--secondary" id="otra">Otros rebotes</button>
-							<span class="lectura lectura--fin"><small>eventos </small><span id="l-eventos" class="s2c-ancho s2c-ancho--corto">9</span><small> de 2 · latencia </small><span id="l-latencia" class="s2c-ancho">—</span></span>
+							<span class="lectura lectura--fin"><small>eventos </small><span id="l-eventos" class="s2c-ancho s2c-ancho--corto">9</span><small> de 2 · latencia </small><span id="l-latencia" class="s2c-ancho">sin evento</span></span>
 						</div>
 						<div class="lienzo-caja">
 							<canvas
@@ -62,7 +60,7 @@
 			<aside class="notas">
 				<p>
 					Pregunta de predicción: con dos pulsaciones y la ventana en 0 ms,
-					¿cuántas veces devuelve <code>fuePulsado()</code> <code>true</code>?
+					¿cuántas pulsaciones cuenta el filtro?
 					Respuesta: 9, porque cuenta cada rebote, también los de soltar. La
 					simulación arranca en ese estado.
 				</p>
@@ -83,11 +81,9 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						En <code>Boton::update()</code>: si la lectura cambia,
-						<code>_lastDebounceTime = now</code>; si
-						<code>now - _lastDebounceTime &gt;= DEBOUNCE_DELAY</code> y la lectura
-						difiere de <code>_state</code>, se acepta. Al pasar a pulsado se activa
-						<code>_pressedFlag</code>, que <code>fuePulsado()</code> consume una vez.
+						<code>update()</code> de <code>Boton</code> sigue el pseudocódigo de la
+							lámina con una ventana de 30 ms. Al pasar a pulsado activa un
+							indicador que <code>fuePulsado()</code> entrega una sola vez.
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -96,7 +92,7 @@
 					</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
-						<li>Filtrar con <code>delay(30)</code>, que bloquea el resto del programa.</li>
+						<li>Filtrar con una espera de 30 ms, que bloquea el resto del programa.</li>
 						<li>Una ventana menor que el rebote real del pulsador: cuentas dobles intermitentes.</li>
 						<li>Contar flancos en vez de cambios del estado filtrado.</li>
 					</ul>
@@ -247,7 +243,7 @@
 				let y0 = ys[0];
 				let yA = y0 + hs[0] * 0.18;
 				let yB = y0 + hs[0] * 0.82;
-				texto(ctx, "digitalRead(4)", 0, y0 + hs[0] * 0.3, fs, c.heading, 700);
+				texto(ctx, "GPIO 4", 0, y0 + hs[0] * 0.3, fs, c.heading, 700);
 				texto(ctx, "lectura cruda", 0, y0 + hs[0] * 0.68, fs, c.muted, 500, "left", SANS);
 				texto(ctx, "1", L - fs * 0.5, yA, fs, c.muted, 600, "right");
 				texto(ctx, "0", L - fs * 0.5, yB, fs, c.muted, 600, "right");
@@ -258,7 +254,7 @@
 
 				// 2 · Ventanas: cada flanco abre una; gris si un flanco la reinicia.
 				y0 = ys[1];
-				texto(ctx, "ventana", 0, y0 + hs[1] * 0.5, fs, c.heading, 700);
+				texto(ctx, "ventana", 0, y0 + hs[1] * 0.5, fs, c.heading, 700, "left", SANS);
 				const bh = Math.min(hs[1] * 0.6, fs * 1.4);
 				const by = y0 + (hs[1] - bh) / 2;
 				for (const [ini, fin, cumplida] of sim.ventanas) {
@@ -278,7 +274,7 @@
 				y0 = ys[2];
 				yA = y0 + hs[2] * 0.18;
 				yB = y0 + hs[2] * 0.82;
-				texto(ctx, "_state", 0, y0 + hs[2] * 0.3, fs, c.heading, 700);
+				texto(ctx, "estado", 0, y0 + hs[2] * 0.3, fs, c.heading, 700, "left", SANS);
 				texto(ctx, "estado filtrado", 0, y0 + hs[2] * 0.68, fs, c.muted, 500, "left", SANS);
 				texto(ctx, "reposo", L - fs * 0.5, yA, fs, c.muted, 500, "right", SANS);
 				texto(ctx, "pulsado", L - fs * 0.5, yB, fs, c.muted, 500, "right", SANS);
@@ -288,8 +284,8 @@
 
 				// 4 · Eventos de fuePulsado()
 				y0 = ys[3];
-				texto(ctx, "fuePulsado()", 0, y0 + hs[3] * 0.32, fs, c.heading, 700);
-				texto(ctx, "eventos", 0, y0 + hs[3] * 0.7, fs, c.muted, 500, "left", SANS);
+				texto(ctx, "pulsaciones", 0, y0 + hs[3] * 0.32, fs, c.heading, 700, "left", SANS);
+				texto(ctx, "eventos aceptados", 0, y0 + hs[3] * 0.7, fs, c.muted, 500, "left", SANS);
 				const varios = sim.eventos.length !== 2;
 				const r = Math.min(hs[3] * 0.3, fs * 0.9);
 				let xPrev = Number.NEGATIVE_INFINITY;
@@ -324,7 +320,7 @@
 				texto(ctx, "t (ms)", L - fs * 0.5, ejeY + fs * 1.05, fs, c.muted, 600, "right");
 
 				lEventos.textContent = String(sim.eventos.length);
-				lLatencia.textContent = sim.eventos.length ? `${sim.eventos[0] - flancos[0]} ms` : "—";
+				lLatencia.textContent = sim.eventos.length ? `${sim.eventos[0] - flancos[0]} ms` : "sin evento";
 				lEventos.classList.toggle("s2c-mal", varios);
 			}
 

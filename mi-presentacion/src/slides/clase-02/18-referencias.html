@@ -26,53 +26,53 @@
 				<div class="rd refs crece">
 					<section class="modo modo--valor" aria-label="Paso por valor">
 						<p class="modo__titulo">Por valor <span class="modo__tag">copia</span></p>
-						<code class="modo__firma">void imprimir(EntradaAnalogica e)</code>
+						<p class="modo__firma s2v-firma">la función recibe <b>una copia</b> del objeto</p>
 						<div class="memoria" data-memoria="valor">
 							<svg class="memoria__trazo" aria-hidden="true" data-trazo></svg>
 							<div class="memoria__objetos">
 								<div class="obj" data-obj="entrada">
 									<b>entrada</b><small>global</small>
-									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+									<span class="obj__campo">puntero <i class="obj__ancla"></i></span>
 								</div>
 								<div class="obj obj--copia" data-obj="copia">
-									<b>e</b><small data-copia-estado>copia, en la pila</small>
-									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+									<b>copia</b><small data-copia-estado>en la pila</small>
+									<span class="obj__campo">puntero <i class="obj__ancla"></i></span>
 								</div>
 							</div>
 							<div class="bloque" data-bloque>
 								<span class="bloque__celdas" aria-hidden="true"></span>
-								<span class="bloque__rotulo" data-bloque-rotulo>new uint16_t[16]</span>
+								<span class="bloque__rotulo" data-bloque-rotulo>búfer en el heap</span>
 							</div>
 						</div>
 						<ol class="modo__eventos">
 							<li><span>Ambos objetos apuntan al búfer.</span></li>
 							<li data-paso="1"><span>La copia lo libera al salir.</span></li>
-							<li data-paso="2"><span>Otro <code>delete[]</code> reinicia el chip.</span></li>
+							<li data-paso="2"><span>Liberarlo otra vez reinicia el chip.</span></li>
 						</ol>
 					</section>
 
 					<section class="modo modo--ref" aria-label="Paso por referencia">
 						<p class="modo__titulo">Por referencia <span class="modo__tag">sin copia</span></p>
-						<code class="modo__firma">void imprimir(EntradaAnalogica<em>&amp;</em> e)</code>
+						<p class="modo__firma s2v-firma">la función recibe <b>otro nombre</b> del mismo objeto</p>
 						<div class="memoria" data-memoria="ref">
 							<svg class="memoria__trazo" aria-hidden="true" data-trazo></svg>
 							<div class="memoria__objetos">
 								<div class="obj" data-obj="entrada">
 									<b>entrada</b><small>global</small>
-									<span class="obj__campo">_buffer <i class="obj__ancla"></i></span>
+									<span class="obj__campo">puntero <i class="obj__ancla"></i></span>
 								</div>
 								<div class="obj obj--alias" data-obj="alias" data-hacia="entrada">
-									<b>e</b><small>referencia, en la pila</small>
+									<b>alias</b><small>referencia</small>
 									<span class="obj__campo">→ entrada <i class="obj__ancla"></i></span>
 								</div>
 							</div>
 							<div class="bloque" data-bloque>
 								<span class="bloque__celdas" aria-hidden="true"></span>
-								<span class="bloque__rotulo">new uint16_t[16]</span>
+								<span class="bloque__rotulo">búfer en el heap</span>
 							</div>
 						</div>
 						<ol class="modo__eventos">
-							<li><span>e es otro nombre de entrada.</span></li>
+							<li><span>Un solo objeto, con dos nombres.</span></li>
 							<li data-paso="3"><span>Sin copia ni destructor.</span></li>
 						</ol>
 					</section>
@@ -81,18 +81,18 @@
 
 			<aside class="notas">
 				<p>
-					Pregunta de predicción: ¿compila
-					<code>void imprimir(EntradaAnalogica e)</code>? Respuesta: sí, sin error.
+					Pregunta de predicción: ¿compila una función que recibe
+					<code>EntradaAnalogica</code> por valor? Respuesta: sí, sin error.
 					EntradaAnalogica declara su destructor pero no su constructor de copia,
-					así que C++ genera uno que copia miembro a miembro, y el puntero
-					<code>_buffer</code> se copia tal cual. Recorrer los pasos: la copia se
+					así que C++ genera uno que copia miembro a miembro, y la dirección
+					del búfer se copia tal cual. Recorrer los pasos: la copia se
 					destruye al salir de imprimir() y libera el búfer que entrada sigue
 					usando en cada update(); en la vuelta siguiente, otra copia lo libera
-					otra vez. Con <code>&amp;</code> no hay segundo objeto ni segundo
-					destructor.
+					otra vez. Con una referencia (el tipo seguido de <code>&amp;</code>) no
+					hay segundo objeto ni segundo destructor.
 				</p>
 				<p>
-					Al salir de imprimir(), el destructor de la copia hace delete[] y
+					Al salir de imprimir(), el destructor de la copia libera el búfer y
 					entrada queda apuntando a memoria liberada, que su update() sigue
 					escribiendo; la llamada siguiente crea otra copia que libera el mismo
 					bloque, con el heap corrupto y el consiguiente reinicio. Con la
@@ -105,14 +105,12 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Objetos con recursos propios se pasan como
-						<code>EntradaAnalogica&amp;</code>. Una
-						<code>const EntradaAnalogica&amp;</code> solo admite métodos
-						<code>const</code>: en la clase real <code>leerVoltios()</code> no
-						lo es, así que habría que declararlo
-						<code>float leerVoltios() const;</code>. Para que el compilador
-						rechace la copia: <code>EntradaAnalogica(const EntradaAnalogica&amp;) = delete;</code>
-						y el paso por valor da «use of deleted function».
+						Los objetos con recursos propios se pasan por referencia. Una
+						referencia <code>const</code> solo admite métodos <code>const</code>: en
+						la clase real <code>leerVoltios()</code> no lo es y habría que
+						declararlo así. Si se borra el constructor de copia
+						(<code>= delete</code>), el compilador rechaza el paso por valor con
+						«use of deleted function».
 					</p>
 					<h4>Dónde aparece</h4>
 					<p>
@@ -190,11 +188,11 @@
 				const liberado = n >= 1;
 				const doble = n >= 2;
 				copia.classList.toggle("is-destruido", liberado);
-				copiaEstado.textContent = liberado ? "destruida al salir" : "copia, en la pila";
+				copiaEstado.textContent = liberado ? "destruida al salir" : "en la pila";
 				valor.classList.toggle("is-colgante", liberado);
 				bloque.classList.toggle("is-libre", liberado && !doble);
 				bloque.classList.toggle("is-doble", doble);
-				rotulo.textContent = doble ? "delete[] dos veces" : liberado ? "liberado" : "new uint16_t[16]";
+				rotulo.textContent = doble ? "liberado dos veces" : liberado ? "liberado" : "búfer en el heap";
 				for (const m of document.querySelectorAll("[data-memoria]")) dibujar(m);
 			}
 

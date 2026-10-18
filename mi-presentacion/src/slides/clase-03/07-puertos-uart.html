@@ -44,9 +44,8 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						<code>Serial2.begin(115200, SERIAL_8N1, 16, 17)</code>: el orden es
-						velocidad, formato, <b>RX</b> y luego <b>TX</b>. UART1 sirve si se le
-						dan otros pines: <code>Serial1.begin(9600, SERIAL_8N1, 25, 26)</code>.
+						Al arrancar un puerto se indican velocidad, formato, <b>RX</b> y luego
+						<b>TX</b>. UART1 sirve si se le dan otros pines, por ejemplo 25 y 26.
 					</p>
 					<h4>Restricción de UART1</h4>
 					<p>
@@ -57,7 +56,7 @@
 					<ul>
 						<li>Conectar un módulo a TX0/RX0: compite con el monitor y puede impedir la grabación.</li>
 						<li>En módulos WROVER, GPIO 16 y 17 van a la PSRAM: allí UART2 también necesita otros pines.</li>
-						<li>Dar por fijos los pines por defecto: son los del núcleo 2.x que instala <code>platform = espressif32</code>; el 3.x los cambia (Serial1 a 26/27, Serial2 a 4/25). El ejemplo 11 los fija en <code>begin()</code>.</li>
+						<li>Dar por fijos los pines por defecto: son los del núcleo 2.x que instala <code>platform = espressif32</code>; el 3.x los cambia (Serial1 a 26/27, Serial2 a 4/25). El ejemplo 11 los fija al arrancar el puerto.</li>
 					</ul>
 				</div>
 			</details>

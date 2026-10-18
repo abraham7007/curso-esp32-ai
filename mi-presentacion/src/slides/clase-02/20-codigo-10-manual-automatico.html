@@ -133,16 +133,16 @@
 			</div>
 
 			<aside class="notas">
-				<p>La línea [AUTO] se imprime cuando cambia el duty porque loop() no tiene pausa; imprimir en cada vuelta repetiría la misma línea sin interrupción. Pregunta de predicción: con el potenciómetro a 1,650 V, ¿qué valor de pwm imprime la traza? Respuesta: 127, porque el cast trunca 127,53. La etiqueta adc= muestra voltios, no el código del conversor. setup() no espera antes de imprimir; en placa real «[MODO] MANUAL» puede perderse si el monitor se abre después del arranque.</p>
+				<p>La línea [AUTO] se imprime cuando cambia el duty porque loop() no tiene pausa; imprimir en cada vuelta repetiría la misma línea sin interrupción. Pregunta de predicción: con el potenciómetro a 1,650 V, ¿qué valor de pwm imprime la traza? Respuesta: 127, porque el cast trunca 127,53. La etiqueta adc= muestra voltios; el código del conversor no aparece en la traza. setup() no espera antes de imprimir; en placa real «[MODO] MANUAL» puede perderse si el monitor se abre después del arranque.</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p><code>ESP_ARDUINO_VERSION_MAJOR</code> viene de <code>esp_arduino_version.h</code>. En el núcleo 3.x el LEDC se maneja por pin, <code>ledcWrite(pin, duty)</code>; en 2.x, por canal.</p>
+					<p>La macro <code>ESP_ARDUINO_VERSION_MAJOR</code> viene de <code>esp_arduino_version.h</code> y permite compilar el mismo módulo en los dos núcleos. En el 3.x el LEDC se maneja por pin; en el 2.x, por canal.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Pasar <code>entrada</code> a una función por valor: la copia libera dos veces el búfer.</li><li>Olvidar <code>boton.begin()</code>: el pin queda sin pull-up y aparecen pulsaciones falsas.</li><li>Imprimir en cada vuelta, con lo que las líneas [AUTO] ocultan los cambios de modo.</li></ul>
+					<ul><li>Pasar <code>entrada</code> a una función por valor: la copia libera dos veces el búfer.</li><li>Omitir la configuración del botón en <code>setup()</code>: el pin queda sin pull-up y aparecen pulsaciones falsas.</li><li>Imprimir en cada vuelta, con lo que las líneas [AUTO] ocultan los cambios de modo.</li></ul>
 				</div>
 			</details>
 

@@ -11,7 +11,13 @@ Proyectos reales de los estudiantes: /Users/mecatronica/Documents/UNI/cursos/esp
    palabra clave en `<em>` (se pinta en rojo).
 2. Sin láminas de papers, sin citas [n], sin glosario ni lámina de referencias (el cierre enlaza solo
    documentación oficial). Sin tiras `.usecases` ni `.practice` visibles.
-3. Gráficos y simulaciones donde aclaran algo abstracto o invisible (no en todas).
+3. Gráficos y simulaciones donde aclaran algo abstracto o invisible (no en todas). Una simulación
+   se queda si muestra algo invisible o temporal, se manipula para sostener la pregunta de
+   predicción y se entiende sin leer código.
+3b. **Sin código en la explicación** (pedido el 2026-10-17): el curso enseña conceptos, criterios y
+   métodos; el código lo escribe el asistente. Pseudocódigo en español, flujos, estados, líneas de
+   tiempo, árboles de archivos, arquitectura, formatos de datos y tablas comparativas en lugar de
+   listados o líneas de C++. Nombres de función solo como nombre de concepto, sin argumentos.
 4. **Que aproveche TODO el espacio.** Rechazó una versión con el contenido «solo al centro».
 5. Lo que sale de la pantalla no se pierde: `<aside class="notas">` (ponente, tecla N → ventana
    aparte) y `<details class="detalle"><summary>Para estudiar</summary><div class="detalle__cuerpo">`

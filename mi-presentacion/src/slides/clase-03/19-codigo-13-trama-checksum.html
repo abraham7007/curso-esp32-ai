@@ -114,16 +114,16 @@ Rx: [AA 01 06 B7 6F 6C 61 20 31 DC] -&gt; RECHAZADA (Checksum erróneo)</div>
 			</div>
 
 			<aside class="notas">
-				<p>Pregunta de predicción: ¿qué suma calcula el receptor para la trama 1? Respuesta: 0x4B. Cambia un byte, de 0x48 a 0xB7: 476 − 72 + 183 = 587, y 587 mod 256 = 75 = 0x4B. La traza imprime el checksum recibido (DC), no el calculado. Desde la trama 10, la carga «Hola 10» mide 7 bytes. Las dos placas muestran lo mismo si arrancan a la vez; en placas reales, las líneas Rx se desplazan según el instante de arranque de cada una.</p>
+				<p>Pregunta de predicción: ¿qué suma calcula el receptor para la trama 1? Respuesta: 0x4B. Cambia un byte, de 0x48 a 0xB7: 476 − 72 + 183 = 587, y 587 mod 256 = 75 = 0x4B. La traza muestra el checksum recibido (DC) y omite el calculado. Desde la trama 10, la carga «Hola 10» mide 7 bytes. Las dos placas muestran lo mismo si arrancan a la vez; en placas reales, las líneas Rx se desplazan según el instante de arranque de cada una.</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>Una suma en <code>uint8_t</code> es módulo 256: el desbordamiento descarta lo que sobra. <code>Serial.printf("%02X ", b)</code> imprime cada byte con dos cifras. La cabecera 0xAA solo marca el inicio y no entra en la suma.</p>
+					<p>Una suma en una variable de un byte es módulo 256: el desbordamiento descarta lo que sobra. La traza imprime cada byte con dos cifras hexadecimales. La cabecera 0xAA solo marca el inicio y queda fuera de la suma.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Sumar la cabecera en un extremo y no en el otro: todas las tramas se rechazan.</li><li>Esperar la trama entera con <code>readBytes()</code>: bloquea y pierde la sincronía tras un byte perdido.</li><li>No volver a esperar cabecera tras un error.</li></ul>
+					<ul><li>Sumar la cabecera solo en uno de los extremos: todas las tramas se rechazan.</li><li>Esperar la trama entera de una vez: bloquea y pierde la sincronía tras un byte perdido.</li><li>No volver a esperar cabecera tras un error.</li></ul>
 				</div>
 			</details>
 

@@ -69,13 +69,12 @@
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
 					<p>
-						Umbral de confianza: tras <code>modelRunInference()</code>, aceptar la clase
-						solo si <code>modelGetOutput(i)</code> supera, por ejemplo, 0,8; si no,
-						imprimir «desconocido». En la nRF52840, el registro APPROTECT del UICR
+						Umbral de confianza, en pseudocódigo: tras la inferencia, si la mayor
+						probabilidad supera 0,8 → aceptar la clase; si no → «desconocido». En la nRF52840, el registro APPROTECT del UICR
 						bloquea la lectura de la flash por el puerto de depuración.
 					</p>
 					<h4>Dónde aparece</h4>
-					<p>Ejemplo 20: <code>UMBRAL_CONFIANZA = 0.80</code>; por debajo, el LED se pone amarillo («dudoso»). Ejemplo 21: un objeto de un color ausente en el entrenamiento.</p>
+					<p>Ejemplo 20: umbral de confianza de 0,80; por debajo, el LED se pone amarillo («dudoso»). Ejemplo 21: un objeto de un color ausente en el entrenamiento.</p>
 					<h4>Errores frecuentes</h4>
 					<ul>
 						<li>Evaluar con las mismas personas que grabaron los datos de entrenamiento.</li>

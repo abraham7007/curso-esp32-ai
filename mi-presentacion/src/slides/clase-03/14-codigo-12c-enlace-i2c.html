@@ -83,7 +83,7 @@
 <b>3. Simulación.</b> La de Wokwi: dos ESP32 con SDA, SCL y GND unidos, pull-ups de 4,7 kΩ y el GPIO 4 de A a GND.
 <b>4. Diagramas.</b> En Excalidraw: la conexión con el puente de rol y el flujo desde la lectura del GPIO 4.</div>
 								<p class="prompt-note">
-									<b>Por qué se pide así.</b> El esclavo no puede iniciar transmisiones; imprimir en <code>loop()</code> saca <code>Serial</code> de la rutina de recepción.
+									<b>Por qué se pide así.</b> El esclavo no inicia transmisiones; la rutina de recepción solo guarda la línea y el bucle la imprime.
 								</p>
 							</div>
 						</div>
@@ -126,9 +126,9 @@ Esperando mensajes de la Placa A...
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
 					<h4>En la práctica</h4>
-					<p>Maestro: <code>Wire.begin(sda, scl)</code>, sin dirección propia. Esclavo: <code>Wire.onReceive(funcion)</code> y <code>Wire.begin(direccion, sda, scl, frecuencia)</code>. La rutina de <code>onReceive</code> recibe el número de bytes y los lee con <code>Wire.read()</code>.</p>
+					<p>Maestro: se une al bus solo con sus pines, sin dirección propia. Esclavo: registra su rutina de recepción (<code>Wire.onReceive()</code>) y se une con dirección, pines y frecuencia. La rutina recibe el número de bytes llegados y los lee uno a uno.</p>
 					<h4>Errores frecuentes</h4>
-					<ul><li>Cruzar SDA con SCL como si fuera TX y RX.</li><li>Una pareja de pull-ups en cada placa sin calcular el paralelo.</li><li>Imprimir dentro de <code>onReceive</code>: se ejecuta fuera de <code>loop()</code>.</li><li>Puente en las dos placas: ambas arrancan como maestro.</li></ul>
+					<ul><li>Cruzar SDA con SCL como si fuera TX y RX.</li><li>Una pareja de pull-ups en cada placa sin calcular el paralelo.</li><li>Imprimir dentro de la rutina de recepción: se ejecuta fuera del bucle principal.</li><li>Puente en las dos placas: ambas arrancan como maestro.</li></ul>
 				</div>
 			</details>
 
