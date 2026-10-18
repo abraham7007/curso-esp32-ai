@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Conexión persistente · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">01 · Sistema IoT</span>
+
+				<h1 class="slide__title slide__title--sm">Sondeo periódico y conexión <em>persistente</em> con el servidor</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+						<div class="def">
+							<p>
+								El router del aula descarta lo que llega de Internet sin pedirlo (NAT, 4·07):
+								la conexión la abre el ESP32. Con <b>sondeo</b> (<i>polling</i>) consulta cada
+								cierto tiempo; con una <b>conexión persistente</b> la abre una vez y recibe el
+								comando por ella.
+							</p>
+						</div>
+						<div class="mandos franja-fila__ajusta s5v4-mando">
+							<label class="control">
+								<span>Intervalo de sondeo</span>
+								<input type="range" id="intervalo" min="0" max="11" step="1" value="6" />
+								<output id="intervalo-out" for="intervalo" class="s5c-ancho s5c-ancho--corto">60 s</output>
+							</label>
+						</div>
+					</div>
+
+					<div class="escenario__visual">
+						<div class="lienzo-caja">
+							<canvas
+								id="escuchar"
+								role="img"
+								aria-label="Línea de tiempo de 0 a 300 s con tres comandos enviados desde el celular en instantes fijos. Arriba, con sondeo, el ESP32 consulta al servidor cada cierto intervalo; cada comando espera hasta la consulta siguiente y se rotula cuánto espera, entre 0 y el intervalo; cada consulta abre y cierra su propia conexión. Abajo, con la conexión persistente que abre el ESP32 al principio, cada comando llega en el mismo instante en que se envía. La conexión se mantiene con un aviso periódico (ping); sin avisos durante un plazo, el otro extremo la da por cortada."
+							></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Recordar la lámina 4·07: el router descarta lo que llega de Internet sin una
+					conexión saliente previa. El servidor no puede llamar al ESP32; el ESP32
+					tiene que abrir la conexión desde dentro.
+				</p>
+				<p>
+					Pregunta de predicción: el ESP32 consulta cada 60 s y el profesor pulsa el
+					interruptor en un instante cualquiera. ¿Cuánto tarda en encenderse el LED:
+					nada, unos segundos o hasta un minuto?
+				</p>
+				<p>
+					Respuesta: depende del instante; puede ser casi nada o casi un minuto. En
+					la figura, entre 2 y 49 s. Mover el deslizador: con consultas más seguidas
+					la espera se acorta, pero cada consulta abre y cierra una conexión. Abajo,
+					la conexión persistente: el comando llega en cuanto se envía. Leer la
+					línea del aviso periódico: sin ella, las desconexiones de las láminas 06, 14 y
+					16 no tendrían causa.
+				</p>
+				<p>
+					Analogía para la explicación oral: preguntar cada minuto si hay mensajes
+					frente a recibir una notificación <i>push</i>.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Espera y coste del sondeo</h4>
+					<p>
+						Con una consulta cada T segundos, el comando llega en un instante
+						cualquiera entre dos consultas: espera de media T/2 y, en el peor caso,
+						T entero. Bajar T acorta la espera y multiplica las conexiones: 3600/T
+						por hora, 60 con T = 60 s y 720 con T = 5 s, cada una con su negociación
+						TCP y TLS (4·06). La conexión persistente es una sola y la espera se
+						reduce a una ida por la red, decenas de milisegundos.
+					</p>
+					<h4>Mantener la conexión abierta</h4>
+					<p>
+						Para que el router y el servidor no la cierren por inactividad, la
+						biblioteca del ejemplo 19 envía un <i>ping</i> cuando pasan 40 s sin
+						tráfico (<i>heartbeat</i>, <code>BLYNK_HEARTBEAT</code>); MQTT hace lo
+						mismo con su <i>keepalive</i>. Lo atiende la llamada de cada vuelta del
+						<code>loop()</code> (lámina 12).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Bajar el intervalo de sondeo para reducir la espera hasta agotar la cuota.</li>
+						<li>Intentar abrir una conexión hacia el ESP32 desde Internet.</li>
+						<li>Bloquear el <code>loop()</code> y dejar sin respuesta el ping.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="02-sistema-iot.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Sistema IoT</span>
+				</a>
+				<a class="slide-nav__link" href="04-publicar-suscribir.html">
+					<span>Publicación y suscripción</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+
+		<script type="module">
+			import { lienzoAdaptable, token } from "../../js/lienzo.js";
+
+			const MONO = "'IBM Plex Mono', monospace";
+			const SANS = "'IBM Plex Sans', sans-serif";
+			const clamp = (a, x, b) => Math.max(a, Math.min(b, x));
+			const MIN_FS = 20;
+
+			const VENTANA = 300; // s de línea de tiempo
+			const ORDENES = [71, 118, 209]; // instantes fijos de las órdenes
+			const AVISO = 40; // intervalo del ping, solo para dibujar (sin cifra en pantalla)
+			const INTERVALOS = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300];
+
+			let T = 60;
+
+			function texto(ctx, s, x, y, fs, color, peso = 600, alin = "left", fam = SANS, maxW = Number.POSITIVE_INFINITY) {
+				let f = Math.max(fs, MIN_FS);
+				ctx.font = `${peso} ${f}px ${fam}`;
+				while (f > MIN_FS && ctx.measureText(s).width > maxW) {
+					f -= 1;
+					ctx.font = `${peso} ${f}px ${fam}`;
+				}
+				if (ctx.measureText(s).width > maxW + 0.5) {
+					window.__cortes = window.__cortes ?? [];
+					window.__cortes.push(s);
+				}
+				ctx.fillStyle = color;
+				ctx.textAlign = alin;
+				ctx.textBaseline = "middle";
+				ctx.fillText(s, x, y);
+				return ctx.measureText(s).width;
+			}
+
+			// Rectángulo de fondo bajo una etiqueta (x = borde izquierdo del texto).
+			function placa(ctx, x, y, ancho, fs, color) {
+				ctx.fillStyle = color;
+				ctx.beginPath();
+				ctx.roundRect(x - fs * 0.25, y - fs * 0.6, ancho + fs * 0.5, fs * 1.2, 4);
+				ctx.fill();
+			}
+
+			function flecha(ctx, x0, y0, x1, y1, color, grosor, punta) {
+				ctx.strokeStyle = color;
+				ctx.fillStyle = color;
+				ctx.lineWidth = grosor;
+				ctx.beginPath();
+				ctx.moveTo(x0, y0);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+				const ang = Math.atan2(y1 - y0, x1 - x0);
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x1 - punta * Math.cos(ang - 0.4), y1 - punta * Math.sin(ang - 0.4));
+				ctx.lineTo(x1 - punta * Math.cos(ang + 0.4), y1 - punta * Math.sin(ang + 0.4));
+				ctx.closePath();
+				ctx.fill();
+			}
+
+			const siguienteGet = (t) => Math.ceil(t / T) * T;
+
+			function dibujar(ctx, w, h) {
+				const c = {
+					bg: token("--color-bg-subtle"),
+					borde: token("--color-border"),
+					heading: token("--color-heading"),
+					muted: token("--color-text-muted"),
+					acento: token("--color-accent"),
+					acentoSoft: token("--color-accent-soft"),
+					navy: token("--color-navy"),
+					navySoft: token("--color-navy-soft"),
+					ok: token("--color-ok"),
+					okSoft: token("--color-ok-soft"),
+					surface: token("--color-surface"),
+				};
+				ctx.fillStyle = c.bg;
+				ctx.fillRect(0, 0, w, h);
+
+				const fs = clamp(MIN_FS, Math.min(h * 0.042, w * 0.0145), 28);
+				const m = fs * 1.1;
+				const colRot = fs * 11.2;
+				const x0 = m + colRot;
+				const x1 = w - m * 1.6;
+				const X = (t) => x0 + (t / VENTANA) * (x1 - x0);
+
+				// Filas: órdenes, sondeo (alto), conexión persistente, eje.
+				const yOrd = fs * 1.3;
+				const yEje = h - fs * 1.2;
+				const altoB = fs * 6.5;
+				const yB1 = yEje - fs * 1.1;
+				const yB0 = yB1 - altoB;
+				const yA0 = yOrd + fs * 1.6;
+				const yA1 = yB0 - fs * 0.9;
+
+				// Fondos de los dos carriles.
+				ctx.fillStyle = c.surface;
+				ctx.fillRect(m * 0.5, yA0, w - m, yA1 - yA0);
+				ctx.fillRect(m * 0.5, yB0, w - m, yB1 - yB0);
+
+				// Guías verticales de cada orden.
+				ctx.strokeStyle = c.acento;
+				ctx.globalAlpha = 0.35;
+				ctx.lineWidth = 2;
+				ctx.setLineDash([6, 6]);
+				for (const o of ORDENES) {
+					ctx.beginPath();
+					ctx.moveTo(X(o), yOrd + fs * 0.6);
+					ctx.lineTo(X(o), yB0 + fs * 0.4);
+					ctx.stroke();
+				}
+				ctx.setLineDash([]);
+				ctx.globalAlpha = 1;
+
+				// Fila de órdenes.
+				texto(ctx, "comandos del celular", m, yOrd, fs, c.acento, 700, "left", SANS, X(ORDENES[0]) - fs - m);
+				for (const [i, o] of ORDENES.entries()) {
+					const x = X(o);
+					ctx.fillStyle = c.acento;
+					ctx.beginPath();
+					ctx.arc(x, yOrd, fs * 0.72, 0, Math.PI * 2);
+					ctx.fill();
+					texto(ctx, String(i + 1), x, yOrd, fs * 0.9, token("--color-accent-contrast"), 700, "center", MONO);
+				}
+
+				// --- Carril A: sondeo HTTP ---
+				// Fila inferior: cada GET es una conexión nueva (DNS, TCP, TLS, cierre).
+				const hCon = fs * 1.7;
+				const yCon = yA1 - hCon / 2 - fs * 0.2;
+				const ancho = (x1 - x0) / (VENTANA / T);
+				const nGets = Math.floor(VENTANA / T);
+				for (let k = 0; k <= nGets; k++) {
+					const x = X(k * T);
+					ctx.strokeStyle = c.navy;
+					ctx.lineWidth = ancho > fs * 0.5 ? 4 : 2.5;
+					ctx.beginPath();
+					ctx.moveTo(x, yA0 + fs * 1.3);
+					ctx.lineTo(x, yCon);
+					ctx.stroke();
+					if (ancho > fs * 3) texto(ctx, "GET", x, yA0 + fs * 0.7, fs * 0.85, c.navy, 700, "center", MONO);
+				}
+				if (ancho <= fs * 3) {
+					const rotGet = `${nGets + 1} consultas en 300 s`;
+					ctx.font = `700 ${Math.max(fs * 0.85, MIN_FS)}px ${MONO}`;
+					const aG = ctx.measureText(rotGet).width;
+					placa(ctx, X(VENTANA / 2) - aG / 2, yA0 + fs * 0.7, aG, fs, c.surface);
+					texto(ctx, rotGet, X(VENTANA / 2), yA0 + fs * 0.7, fs * 0.85, c.navy, 700, "center", MONO);
+				}
+
+				// Esperas: una subfila por orden, de la orden al GET siguiente.
+				const sub = (yA1 - yA0 - fs * 1.6 - hCon) / ORDENES.length;
+				const hBarra = clamp(fs * 0.5, sub * 0.55, fs * 1.1);
+				for (const [i, o] of ORDENES.entries()) {
+					const g = siguienteGet(o);
+					const y = yA0 + fs * 1.4 + sub * (i + 0.5);
+					const xa = X(o);
+					const fuera = g > VENTANA;
+					const xb = X(Math.min(g, VENTANA));
+					ctx.fillStyle = c.acentoSoft;
+					ctx.fillRect(xa, y - hBarra / 2, Math.max(3, xb - xa), hBarra);
+					ctx.fillStyle = c.acento;
+					ctx.fillRect(xa, y - hBarra / 2, 4, hBarra);
+					if (!fuera) {
+						ctx.beginPath();
+						ctx.arc(xb, y, hBarra * 0.32, 0, Math.PI * 2);
+						ctx.fill();
+					}
+					const rot = fuera ? `+${g - o} s →` : `+${g - o} s`;
+					ctx.font = `700 ${Math.max(fs * 0.9, MIN_FS)}px ${MONO}`;
+					const anchoRot = ctx.measureText(rot).width;
+					let xr;
+					if (xb + fs * 0.5 + anchoRot < x1 + m) xr = xb + fs * 0.5;
+					else if (xb - xa > anchoRot + fs * 1.5) xr = xa + fs * 0.7;
+					else xr = xa - fs * 0.5 - anchoRot;
+					// Fondo opaco: con GET muy seguidos la etiqueta no se pisa con sus líneas.
+					placa(ctx, xr, y, anchoRot, fs, c.surface);
+					texto(ctx, rot, xr, y, fs * 0.9, c.acento, 700, "left", MONO);
+				}
+
+				texto(ctx, "Sondeo", m, yA0 + fs * 1.5, fs * 1.05, c.heading, 700, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, `consulta cada ${T} s`, m, yA0 + fs * 2.8, fs * 0.95, c.navy, 700, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, `espera: de 0 a ${T} s`, m, yA0 + fs * 4.0, fs * 0.95, c.acento, 700, "left", SANS, colRot - fs * 0.5);
+				const anchoBloque = Math.min(ancho * 0.8, fs * 7);
+				for (let k = 0; k <= nGets; k++) {
+					const xc = clamp(x0 + anchoBloque / 2, X(k * T), x1 - anchoBloque / 2);
+					ctx.fillStyle = c.navy;
+					ctx.beginPath();
+					ctx.roundRect(xc - anchoBloque / 2, yCon - fs * 0.6, anchoBloque, fs * 1.2, 4);
+					ctx.fill();
+					if (anchoBloque > fs * 6) texto(ctx, "abre y cierra", xc, yCon, fs * 0.8, token("--color-navy-contrast"), 700, "center", SANS, anchoBloque - 8);
+				}
+				texto(ctx, "una por consulta", m, yCon, fs * 0.95, c.navy, 700, "left", SANS, colRot - fs * 0.5);
+
+				// --- Carril B: conexión persistente ---
+				const yBanda = yB0 + fs * 3.0;
+				const hBanda = fs * 0.9;
+				ctx.fillStyle = c.okSoft;
+				ctx.fillRect(X(0), yBanda - hBanda / 2, X(VENTANA) - X(0), hBanda);
+				ctx.strokeStyle = c.ok;
+				ctx.lineWidth = 3;
+				ctx.strokeRect(X(0), yBanda - hBanda / 2, X(VENTANA) - X(0), hBanda);
+				// Apertura por el ESP32.
+				ctx.fillStyle = c.ok;
+				ctx.fillRect(X(0) - 3, yBanda - hBanda, 6, hBanda * 2);
+				// Avisos periódicos (ping) sobre la conexión abierta.
+				for (let t = AVISO; t < VENTANA; t += AVISO) {
+					ctx.fillStyle = c.surface;
+					ctx.strokeStyle = c.navy;
+					ctx.lineWidth = 3;
+					ctx.beginPath();
+					ctx.arc(X(t), yBanda, hBanda * 0.34, 0, Math.PI * 2);
+					ctx.fill();
+					ctx.stroke();
+				}
+				// Órdenes que llegan en el acto.
+				for (const o of ORDENES) {
+					flecha(ctx, X(o), yB0 + fs * 0.4, X(o), yBanda - hBanda / 2 - 2, c.acento, 4, fs * 0.6);
+				}
+				texto(ctx, "Conexión persistente", m, yB0 + fs * 0.9, fs * 1.05, c.heading, 700, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, "la abre el ESP32", m, yB0 + fs * 2.2, fs * 0.95, c.muted, 600, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, "el comando llega", m, yB0 + fs * 3.4, fs * 0.95, c.ok, 700, "left", SANS, colRot - fs * 0.5);
+				texto(ctx, "en el acto", m, yB0 + fs * 4.4, fs * 0.95, c.ok, 700, "left", SANS, colRot - fs * 0.5);
+				texto(
+					ctx,
+					"la conexión se mantiene con un aviso periódico (ping); sin avisos durante un plazo, el otro extremo la da por cortada",
+					m,
+					yB0 + fs * 5.75,
+					fs * 0.95,
+					c.navy,
+					700,
+					"left",
+					SANS,
+					x1 - m,
+				);
+
+				// Eje de tiempo.
+				ctx.strokeStyle = c.muted;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(X(0), yB1 + 2);
+				ctx.lineTo(X(VENTANA), yB1 + 2);
+				ctx.stroke();
+				for (let t = 0; t <= VENTANA; t += 60) {
+					texto(ctx, `${t} s`, X(t), yEje, fs * 0.85, c.muted, 600, t === 0 ? "left" : t === VENTANA ? "right" : "center", MONO);
+				}
+			}
+
+			const lienzo = lienzoAdaptable(document.getElementById("escuchar"), dibujar);
+			const ctrl = document.getElementById("intervalo");
+			const out = document.getElementById("intervalo-out");
+
+			function render() {
+				T = INTERVALOS[Number(ctrl.value)];
+				out.textContent = `${T} s`;
+				lienzo.redibujar();
+			}
+			ctrl.addEventListener("input", render);
+			render();
+		</script>
+	</body>
+</html>

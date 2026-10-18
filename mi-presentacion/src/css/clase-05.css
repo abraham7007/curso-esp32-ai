@@ -181,3 +181,167 @@
 	stroke: var(--color-border);
 	stroke-width: 2;
 }
+
+/* v4 · lámina 01 */
+/* Portada: a la derecha, la pregunta guía y el escenario del aula 1, en
+   la misma celda que ocupaba el monitor serie (filas 2 y 3 del grid). */
+.ponencia .s4a-portada-grid > .s5v4-guia {
+	grid-column: 2;
+	grid-row: 2 / 4;
+	display: flex;
+	flex-direction: column;
+	gap: clamp(0.4rem, 1.4vh, 1.2rem);
+	min-width: 0;
+	min-height: 0;
+}
+
+.ponencia .s5v4-guia__rotulo {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: var(--fs-eyebrow);
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--color-accent);
+}
+
+.ponencia .s5v4-guia__pregunta {
+	margin: 0;
+	font-family: var(--font-sans);
+	font-size: var(--fs-lede);
+	font-weight: 700;
+	line-height: 1.2;
+	color: var(--color-heading);
+}
+
+.ponencia .s5v4-guia__pregunta em {
+	font-style: normal;
+	color: var(--color-accent);
+}
+
+.ponencia .s5v4-guia__dibujo {
+	flex: 1 1 0;
+}
+
+.ponencia .s5v4-guia__antes {
+	margin: 0;
+	font-size: var(--fs-body);
+	color: var(--color-text-muted);
+}
+
+/* v4 · lámina 04 */
+/* Conexión abierta por cada cliente: franja de fondo por la que viajan los
+   mensajes en los dos sentidos. */
+.ponencia .s4a-svg .s5v4-tubo {
+	fill: var(--color-bg-subtle);
+	stroke: var(--color-border);
+	stroke-width: 2;
+}
+
+/* LED de aviso del GPIO 15: apagado y encendido. */
+.ponencia .s4a-svg .s5v4-led {
+	fill: var(--color-surface);
+	stroke: var(--color-text-muted);
+	stroke-width: 3;
+}
+
+.ponencia .s4a-svg .s5v4-led--on {
+	fill: var(--color-accent);
+	stroke: var(--color-accent);
+}
+
+/* v4 · lámina 03 */
+/* El deslizador sube a la franja de texto, junto a la definición: el lienzo
+   gana el alto de la barra de mandos. */
+.ponencia .escenario__texto.franja-fila > .s5v4-mando {
+	flex: 0 1 30rem;
+	align-self: center;
+}
+
+.ponencia .s5v4-mando .control {
+	flex-wrap: wrap;
+}
+
+/* v4 · lámina 10 */
+/* Switch y Gauge dibujados en el paso 3 de la consola (.s4a-svg). */
+.ponencia .s4a-svg .s5v4c-pastilla {
+	fill: var(--color-ok);
+}
+
+.ponencia .s4a-svg .s5v4c-perilla {
+	fill: var(--color-surface);
+}
+
+.ponencia .s4a-svg .s5v4c-arco {
+	fill: none;
+	stroke: var(--color-border);
+	stroke-width: 22;
+}
+
+.ponencia .s4a-svg .s5v4c-arco--valor {
+	stroke: var(--color-navy);
+}
+
+/* v4 · lámina 17 */
+/* Cierre: un renglón por objetivo (verbo y concepto, idea, evidencia en el
+   ejemplo 19); la tabla reparte las cinco filas en todo el alto libre. */
+.ponencia .s5v4-cierre {
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+	font-size: var(--fs-body);
+	line-height: 1.25;
+}
+
+.ponencia .s5v4-cierre th,
+.ponencia .s5v4-cierre td,
+.ponencia .s5v4-cierre tr {
+	background: none;
+}
+
+.ponencia .s5v4-cierre th,
+.ponencia .s5v4-cierre td {
+	padding: 0.35em 1.2em 0.35em 0;
+	text-align: left;
+	vertical-align: middle;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.ponencia .s5v4-cierre thead th {
+	font-family: var(--font-mono);
+	font-size: var(--fs-eyebrow);
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+.ponencia .s5v4-cierre tbody th {
+	width: 30%;
+	font-family: var(--font-sans);
+	font-size: var(--fs-lede);
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+.ponencia .s5v4-cierre__verbo {
+	display: block;
+	font-family: var(--font-mono);
+	font-size: var(--fs-eyebrow);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-accent);
+}
+
+.ponencia .s5v4-cierre__evidencia {
+	width: 34%;
+	font-weight: 600;
+	color: var(--color-navy);
+}
+
+/* v4 · lámina 11 */
+/* El paso 2 del prompt va en seis viñetas y el monitor omite líneas: el
+   prompt toma más ancho y la columna del monitor se estrecha. */
+.ponencia--trabajo .s5b-blynk.s5v4-11 .code-hour__body--pair {
+	grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+}

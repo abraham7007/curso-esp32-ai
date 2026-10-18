@@ -12,3 +12,10 @@ publica (Vite solo compila `src/slides/`), pero se conserva por si se recupera.
   (TinyML) es `src/slides/clase-06`, a la espera de rehacerse a mano en modo
   ponencia; por eso sus generadores ya no deben ejecutarse (escribirían en las
   carpetas antiguas).
+
+## slides/clase-05-v3-retiradas/
+
+Láminas retiradas de la sesión 5 al reordenarla con criterio pedagógico (2026-10-18):
+`07-protocolo-blynk.html` (trama binaria del protocolo de Blynk, detalle excesivo para un curso
+básico) y `13-telemetria-comandos.html` (su contenido pasó a la lámina de arquitectura, a la de QoS
+y a «Para estudiar»).

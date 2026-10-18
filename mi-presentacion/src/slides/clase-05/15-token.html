@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Protección del token · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Operación</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Protección del <em>token</em> en el repositorio, la red y la placa
+				</h1>
+
+				<div class="def">
+					<p>El token es la llave del dispositivo: quien lo tiene lee sus datos y le envía órdenes. Se guarda fuera del código, viaja cifrado y cada placa tiene el suyo.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tres franjas. Repositorio: el árbol del ejemplo 19. include/secrets.h guarda el token real y no se sube; include/secrets.example.h es la plantilla con TU_TOKEN_AQUI y se sube; src/main.cpp lee secrets.h o, si falta, la plantilla, y se sube; .gitignore lista include/secrets.h y se sube. Red: por el puerto 80 la conexión va sin cifrar y el token es legible en la red; por el puerto 443, con TLS, va cifrada y el certificado del servidor se verifica, y el monitor muestra Certificate OK. Placas: el ESP32 del aula 1 usa el token 1 del dispositivo Aula 1 y el del aula 2 usa el token 2 del dispositivo Aula 2; el mismo token en dos placas hace que se desconecten entre sí, lámina 16. Al final: un token filtrado se sustituye por uno nuevo; borrarlo del archivo no basta, porque git conserva el historial.">
+						<!-- franja 1 · repositorio -->
+						<text class="sans navy" x="0" y="40" font-size="30" font-weight="700">Repositorio</text>
+						<text class="sans mut" x="0" y="80" font-size="22">ejemplo 19</text>
+						<text class="sans mut" x="1000" y="12" font-size="22">contiene</text>
+						<text class="sans mut fin" x="1600" y="12" font-size="22">git</text>
+						<text class="acc" x="300" y="48" font-size="28">include/secrets.h</text>
+						<text class="sans acc" x="1000" y="48" font-size="26">el token real</text>
+						<text class="sans acc fin" x="1600" y="48" font-size="26" font-weight="700">✗ no se sube</text>
+						<text x="300" y="96" font-size="28">include/secrets.example.h</text>
+						<text x="1000" y="96" font-size="24">TU_TOKEN_AQUI</text>
+						<text class="sans ok fin" x="1600" y="96" font-size="26" font-weight="700">✓ se sube</text>
+						<text x="300" y="144" font-size="28">src/main.cpp</text>
+						<text class="sans" x="1000" y="144" font-size="26">secrets.h o la plantilla</text>
+						<text class="sans ok fin" x="1600" y="144" font-size="26" font-weight="700">✓ se sube</text>
+						<text x="300" y="192" font-size="28">.gitignore</text>
+						<text class="sans" x="1000" y="192" font-size="26">lista include/secrets.h</text>
+						<text class="sans ok fin" x="1600" y="192" font-size="26" font-weight="700">✓ se sube</text>
+						<path class="ln ln--fina ln--mut" d="M0 228 H1600" />
+
+						<!-- franja 2 · red -->
+						<text class="sans navy" x="0" y="292" font-size="30" font-weight="700">Red</text>
+						<text class="sans dan" x="300" y="262" font-size="28" font-weight="700">puerto 80</text>
+						<rect class="barra--dan" x="560" y="236" width="1036" height="52" rx="8" />
+						<text class="sans dan" x="584" y="262" font-size="26">sin cifrar: el token viaja legible en la red</text>
+						<text class="sans ok" x="300" y="324" font-size="28" font-weight="700">puerto 443 · TLS</text>
+						<rect class="barra--ok" x="560" y="298" width="1036" height="52" rx="8" />
+						<text class="sans ok" x="584" y="324" font-size="26">cifrado y certificado verificado · <tspan class="s4d-mono">«Certificate OK»</tspan></text>
+						<path class="ln ln--fina ln--mut" d="M0 372 H1600" />
+
+						<!-- franja 3 · un token por placa -->
+						<text class="sans navy" x="0" y="440" font-size="30" font-weight="700">Placas</text>
+						<rect class="caja" x="300" y="390" width="300" height="60" rx="10" />
+						<text class="sans mid" x="450" y="420" font-size="26">ESP32 · aula 1</text>
+						<path class="ln" d="M600 420 H676 M660 408 L676 420 L660 432" />
+						<rect class="barra--navy" x="680" y="390" width="220" height="60" rx="10" />
+						<text class="sans mid navy" x="790" y="420" font-size="26" font-weight="700">token 1</text>
+						<path class="ln" d="M900 420 H976 M960 408 L976 420 L960 432" />
+						<rect class="caja" x="980" y="390" width="360" height="60" rx="10" />
+						<text class="sans mid" x="1160" y="420" font-size="26">dispositivo Aula 1</text>
+
+						<rect class="caja" x="300" y="470" width="300" height="60" rx="10" />
+						<text class="sans mid" x="450" y="500" font-size="26">ESP32 · aula 2</text>
+						<path class="ln" d="M600 500 H676 M660 488 L676 500 L660 512" />
+						<rect class="barra--navy" x="680" y="470" width="220" height="60" rx="10" />
+						<text class="sans mid navy" x="790" y="500" font-size="26" font-weight="700">token 2</text>
+						<path class="ln" d="M900 500 H976 M960 488 L976 500 L960 512" />
+						<rect class="caja" x="980" y="470" width="360" height="60" rx="10" />
+						<text class="sans mid" x="1160" y="500" font-size="26">dispositivo Aula 2</text>
+
+						<text class="sans ok" x="1380" y="440" font-size="26" font-weight="700">✓ un token</text>
+						<text class="sans ok" x="1380" y="476" font-size="26" font-weight="700">por placa</text>
+						<text class="sans acc" x="300" y="576" font-size="26">✗ El mismo token en dos placas: se desconectan entre sí (lámina 16).</text>
+						<path class="ln ln--fina ln--mut" d="M0 610 H1600" />
+
+						<!-- paso 1 · token filtrado -->
+						<g data-paso="1">
+							<text class="sans" x="0" y="660" font-size="30"><tspan class="acc" font-weight="700">Token filtrado:</tspan> sustituirlo por uno nuevo; borrarlo del archivo no basta, git conserva el historial.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Presentar el token como la llave del dispositivo: abre la puerta a sus datos
+					y a sus órdenes, así que se guarda, se transporta y se reparte como una llave.
+				</p>
+				<p>
+					Repositorio: es el mismo esquema que la clave de OpenWeatherMap (sesión 4,
+					lámina 19). Solo secrets.h queda fuera de git; quien clona el proyecto recibe
+					la plantilla, compila igual y el servidor responde «Invalid auth token»
+					hasta que coloca su propio token.
+				</p>
+				<p>
+					Red: el primer mensaje de la conexión lleva el token completo. Sin cifrar,
+					cualquier equipo de la misma red lo lee; el ejemplo 19 usa la versión
+					cifrada, que además comprueba el certificado del servidor, de modo que un
+					servidor suplantado tampoco obtiene el token.
+				</p>
+				<p>
+					Pregunta de predicción: si el token ya se subió a un repositorio público,
+					¿basta con borrarlo del archivo? Respuesta: no; el historial lo conserva y
+					hay que sustituirlo por uno nuevo (paso 1).
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						Copiar include/secrets.example.h como include/secrets.h y pegar en él los
+						tres valores de la pestaña «Device Info»: Template ID, Template name y Auth
+						token. Las credenciales deben definirse antes de cargar la cabecera de
+						Blynk. Cabeceras: BlynkSimpleEsp32.h (puerto 80, sin cifrar) y
+						BlynkSimpleEsp32_SSL.h (puerto 443, TLS con el certificado raíz incluido en
+						la biblioteca). Para un dispositivo creado a mano, docs.blynk.io no describe
+						cómo regenerar el token: la vía segura es borrar el dispositivo y crear otro
+						desde la plantilla, que recibe un token nuevo.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19: .gitignore con include/secrets.h y la cabecera SSL de Blynk.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Cargar la cabecera de Blynk antes que secrets.h: compila, pero el Template ID no llega al servidor.</li>
+						<li>Compartir una captura de «Device Info» con el token visible.</li>
+						<li>Añadir secrets.h al .gitignore después de subirlo, cuando git ya lo sigue.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="14-sincronizacion-estado.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Sincronización del estado</span>
+				</a>
+				<a class="slide-nav__link" href="16-diagnostico-fallos.html">
+					<span>Diagnóstico de fallos</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

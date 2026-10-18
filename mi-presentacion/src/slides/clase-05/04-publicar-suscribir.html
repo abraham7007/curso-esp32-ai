@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Publicación y suscripción · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">02 · Protocolo MQTT</span>
+
+				<h1 class="slide__title slide__title--sm">Publicación y suscripción por <em>temas</em> en un broker MQTT</h1>
+
+				<div class="escenario">
+					<div class="escenario__texto franja-fila">
+				<div class="def">
+					<p>
+						<b>MQTT</b> reparte mensajes a través de un servidor intermedio, el <b>broker</b>.
+						Quien publica envía el mensaje a un <b>tema</b> (<i>topic</i>); el broker lo
+						entrega a cada cliente suscrito a ese tema. Ningún cliente conoce la dirección
+						del otro.
+					</p>
+				</div>
+						<p class="franja-fila__ajusta">
+							<b>Broker público:</b> abierto, para pruebas<br />
+							<b>Privado:</b> con usuario y contraseña
+						</p>
+					</div>
+
+				<div class="escenario__visual">
+					<svg class="s4a-svg crece" viewBox="0 0 1600 616" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Estación del aula con MQTT. A la izquierda, el ESP32 del aula 1, detrás del router: publica en aula/1/temp y está suscrito a aula/1/led. En el centro, el broker MQTT con sus suscripciones: aula/1/temp se entrega al celular y aula/1/led al ESP32. A la derecha, el celular del profesor, fuera de la universidad: publica en aula/1/led y está suscrito a aula/1/temp. Cada cliente abre su propia conexión con el broker. La temperatura 23.4 sube del ESP32 al broker y del broker al celular. Después, el celular publica 1 en aula/1/led y el broker la entrega al ESP32 por la conexión que el propio ESP32 abrió, y el LED se enciende.">
+						<!-- red del aula, detrás del router -->
+						<rect class="caja caja--zona" x="8" y="46" width="340" height="566" rx="18" />
+						<text class="sans mut" x="24" y="20" font-size="26">aula 1 · detrás del router (NAT)</text>
+						<text class="sans mut fin" x="1592" y="20" font-size="26">fuera de la universidad</text>
+
+						<!-- ESP32 -->
+						<rect class="caja caja--acc" x="34" y="80" width="288" height="470" rx="16" />
+						<text class="mid b" x="178" y="134" font-size="44">ESP32</text>
+						<path class="ln ln--fina ln--mut" d="M58 182 H 298" />
+						<text class="mid sans mut" x="178" y="226" font-size="26">publica</text>
+						<text class="mid navy b" x="178" y="268" font-size="30">aula/1/temp</text>
+						<text class="mid sans mut" x="178" y="338" font-size="26">suscrito a</text>
+						<text class="mid acc b" x="178" y="380" font-size="30">aula/1/led</text>
+						<circle class="s5v4-led" cx="80" cy="480" r="20" />
+						<text class="sans" x="112" y="480" font-size="26">LED</text>
+
+						<!-- celular -->
+						<rect class="caja" x="1278" y="80" width="288" height="470" rx="16" />
+						<text class="mid b" x="1422" y="134" font-size="44">Celular</text>
+						<path class="ln ln--fina ln--mut" d="M1302 182 H 1542" />
+						<text class="mid sans mut" x="1422" y="226" font-size="26">publica</text>
+						<text class="mid acc b" x="1422" y="268" font-size="30">aula/1/led</text>
+						<text class="mid sans mut" x="1422" y="338" font-size="26">suscrito a</text>
+						<text class="mid navy b" x="1422" y="380" font-size="30">aula/1/temp</text>
+
+						<!-- broker -->
+						<rect class="caja caja--navy" x="640" y="46" width="320" height="566" rx="16" />
+						<text class="mid navy b" x="800" y="104" font-size="36">broker MQTT</text>
+						<text class="mid sans mut" x="800" y="176" font-size="26">suscripciones</text>
+						<text class="mid navy b" x="800" y="232" font-size="28">aula/1/temp</text>
+						<text class="mid sans" x="800" y="270" font-size="26">→ celular</text>
+						<text class="mid acc b" x="800" y="336" font-size="28">aula/1/led</text>
+						<text class="mid sans" x="800" y="374" font-size="26">→ ESP32</text>
+						<path class="ln ln--fina ln--mut" d="M672 452 H 928" />
+						<text class="mid sans" x="800" y="510" font-size="26">entrega cada mensaje</text>
+						<text class="mid sans" x="800" y="548" font-size="26">según su tema</text>
+
+						<!-- conexiones abiertas por cada cliente -->
+						<rect class="s5v4-tubo" x="322" y="170" width="318" height="280" rx="12" />
+						<rect class="s5v4-tubo" x="960" y="170" width="318" height="280" rx="12" />
+						<text class="mid sans mut" x="481" y="504" font-size="26">conexión que</text>
+						<text class="mid sans mut" x="481" y="540" font-size="26">abre el ESP32</text>
+						<text class="mid sans mut" x="1119" y="504" font-size="26">conexión que</text>
+						<text class="mid sans mut" x="1119" y="540" font-size="26">abre el celular</text>
+
+						<!-- telemetría: sube del ESP32 y el broker la entrega al celular -->
+						<text class="mid navy b" x="481" y="210" font-size="28">aula/1/temp</text>
+						<path class="ln ln--navy" d="M330 248 H 620" />
+						<path class="rel-navy" d="M632 248 L 614 238 L 614 258 Z" />
+						<text class="mid" x="481" y="286" font-size="28">23.4</text>
+						<text class="mid navy b" x="1119" y="210" font-size="28">aula/1/temp</text>
+						<path class="ln ln--navy" d="M968 248 H 1258" />
+						<path class="rel-navy" d="M1270 248 L 1252 238 L 1252 258 Z" />
+						<text class="mid" x="1119" y="286" font-size="28">23.4</text>
+
+						<!-- comando: baja del celular y el broker lo entrega al ESP32 -->
+						<g data-paso="1">
+							<text class="mid acc b" x="1119" y="336" font-size="28">aula/1/led</text>
+							<path class="ln ln--acc" d="M1270 374 H 980" />
+							<path class="rel-acc" d="M968 374 L 986 364 L 986 384 Z" />
+							<text class="mid" x="1119" y="412" font-size="28">1 <tspan class="sans mut" font-size="26">= encender</tspan></text>
+							<text class="mid acc b" x="481" y="336" font-size="28">aula/1/led</text>
+							<path class="ln ln--acc" d="M632 374 H 342" />
+							<path class="rel-acc" d="M330 374 L 348 364 L 348 384 Z" />
+							<text class="mid" x="481" y="412" font-size="28">1 <tspan class="sans mut" font-size="26">= encender</tspan></text>
+							<circle class="s5v4-led s5v4-led--on" cx="80" cy="480" r="20" />
+							<text class="sans acc b" x="166" y="480" font-size="26">encendido</text>
+						</g>
+					</svg>
+				</div>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Leer la definición y recorrer la figura de izquierda a derecha: el ESP32
+					publica la temperatura en <code>aula/1/temp</code>; el broker consulta sus
+					suscripciones y la entrega al celular. Las dos conexiones las abren los
+					clientes hacia el broker; el ESP32 sigue detrás del NAT (lámina 4·07).
+				</p>
+				<p>
+					Pregunta de predicción: el celular quiere encender el LED y publica
+					<code>1</code> en <code>aula/1/led</code>; ¿qué dirección necesita conocer:
+					la del ESP32, la del router o la del broker?
+				</p>
+				<p>
+					Respuesta: solo la del broker. Pulsar →: el broker entrega la orden por la
+					conexión que el ESP32 ya tenía abierta, de modo que el router la deja pasar.
+					Ni el celular sabe dónde está el ESP32 ni el ESP32 sabe quién lee su
+					temperatura.
+				</p>
+				<p>
+					Analogía para el ponente: un canal de mensajería. Quien escribe en el canal
+					no conoce a los miembros; el servicio reparte el mensaje a quienes se
+					unieron.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>Comodines en la suscripción</h4>
+					<p>
+						Los niveles del tema se separan con <code>/</code>. Una suscripción puede
+						usar comodines: <code>+</code> ocupa exactamente un nivel
+						(<code>aula/+/temp</code> recibe la temperatura de todas las aulas) y
+						<code>#</code> abarca el resto de niveles; va solo o tras una
+						<code>/</code>, y siempre al final (<code>aula/1/#</code> recibe todo lo del
+						aula 1). Al publicar no se admiten comodines. Por eso conviene poner el aula
+						antes que la magnitud: el orden de los niveles decide qué patrones se pueden
+						escribir después.
+					</p>
+					<h4>Brokers</h4>
+					<p>
+						Públicos de prueba: <code>test.mosquitto.org</code> y
+						<code>broker.hivemq.com</code>; cualquiera puede leer y publicar en sus
+						temas. Privados: Mosquitto instalado en un servidor propio o un servicio en
+						la nube, con usuario, contraseña y TLS. Blynk.Cloud también ofrece un broker
+						MQTT, aunque la biblioteca de Blynk usa su propio protocolo (lámina 07).
+					</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Suponer que <code>+</code> abarca varios niveles (<code>+/temp</code> no recibe <code>aula/1/temp</code>).</li>
+						<li>Escribir <code>aula/#/temp</code>, que el broker rechaza porque <code>#</code> va siempre al final.</li>
+						<li>Mezclar mayúsculas o añadir una <code>/</code> inicial (<code>Aula/1/temp</code> y <code>/aula/1/temp</code> son temas distintos de <code>aula/1/temp</code>).</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="03-preguntar-escuchar.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Conexión persistente</span>
+				</a>
+				<a class="slide-nav__link" href="05-qos.html">
+					<span>Calidad de servicio (QoS)</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>

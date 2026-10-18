@@ -17,62 +17,79 @@
 	<body class="ponencia" data-deck-total="17">
 		<main class="slide slide--start">
 			<div class="slide__content">
-				<h1 class="slide__title">Resumen de la <em>sesión 5</em></h1>
-
-				<ol class="puntos crece justify-evenly s5d-cierre">
-					<li class="text-4xl">
-						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Conexión persistente</p>
-							<p class="slide__lede col-span-3">La orden llega sin espera; un ping tras 40 s sin tráfico evita el cierre por inactividad.</p>
-						</div>
-					</li>
-					<li class="text-4xl">
-						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Plataforma de IoT</p>
-							<p class="slide__lede col-span-3">El broker reparte por tema; la plataforma además guarda, muestra, avisa y administra.</p>
-						</div>
-					</li>
-					<li class="text-4xl">
-						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Pines virtuales</p>
-							<p class="slide__lede col-span-3">Plantilla, datastream y dispositivo; la orden llega a la función de su pin y el dato sale hacia su datastream.</p>
-						</div>
-					</li>
-					<li class="text-4xl">
-						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Política de envío</p>
-							<p class="slide__lede col-span-3">Loop sin esperas; la cuota mensual fija el intervalo, y la orden se confirma.</p>
-						</div>
-					</li>
-					<li class="text-4xl">
-						<div class="grid grid-cols-5 items-center gap-12">
-							<p class="enunciado col-span-2">Seguridad y estado</p>
-							<p class="slide__lede col-span-3">Token fuera del código y por el 443; la sincronización al conectar recupera el estado tras una reconexión.</p>
-						</div>
-					</li>
-				</ol>
+				<h1 class="slide__title slide__title--sm">Resumen de la <em>sesión 5</em></h1>
 
 				<div class="def">
 					<p>
-						<b>Sesión 6</b> · TinyML: un modelo pequeño entrenado en Colab se ejecuta dentro del microcontrolador (una Arduino Nano 33 BLE Sense), sin consultar a la nube.
+						<b>Respuesta a la pregunta guía</b> · El ESP32 abre desde el aula una
+						conexión persistente con el broker de la plataforma; el celular publica la
+						orden y el broker la reenvía por esa conexión hasta el LED del GPIO 15.
 					</p>
+				</div>
+
+				<div class="crece flex flex-col">
+					<table class="s5v4-cierre">
+						<thead>
+							<tr>
+								<th scope="col">Objetivo</th>
+								<th scope="col">Idea</th>
+								<th scope="col">Evidencia en el ejemplo 19</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">Explicar</span>Conexión persistente</th>
+								<td>La abre el ESP32 desde el aula; el comando baja por ella.</td>
+								<td class="s5v4-cierre__evidencia">El LED responde al interruptor en el acto.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">Explicar</span>Publicación y suscripción</th>
+								<td>El broker reparte cada mensaje por su tema.</td>
+								<td class="s5v4-cierre__evidencia">V0 y V1 cumplen el papel de <code>aula/1/led</code> y <code>aula/1/temp</code>.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">Decidir</span>Criterio por flujo</th>
+								<td>Pérdida (QoS), último valor (retenido), corte (última voluntad) y ritmo (cuota).</td>
+								<td class="s5v4-cierre__evidencia">Temperatura cada 30 s; V0 sincronizado al conectar; Offline en la consola.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">Relacionar</span>Componentes de Blynk</th>
+								<td>Plantilla, dispositivo, token, datastream, pin virtual y widget.</td>
+								<td class="s5v4-cierre__evidencia">Switch → V0 → LED; temperatura → V1 → gráfica.</td>
+							</tr>
+							<tr>
+								<th scope="row"><span class="s5v4-cierre__verbo">Diagnosticar</span>Fallos frecuentes</th>
+								<td>Síntoma en el monitor o la consola, causa y comprobación.</td>
+								<td class="s5v4-cierre__evidencia">«Token inválido» en el monitor serie.</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
 				<div class="def">
 					<p>
-						<b>Documentación de referencia</b> ·
+						<b>Sesión 6</b> · TinyML: un modelo pequeño se ejecuta dentro del microcontrolador, sin consultar a la nube.
+						<b>Documentación</b> ·
+						<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html" target="_blank" rel="noopener">MQTT 3.1.1</a>
+						·
 						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/virtual-pins" target="_blank" rel="noopener">Blynk: pines virtuales</a>
 						·
 						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/state-syncing" target="_blank" rel="noopener">Blynk: sincronizar</a>
 						·
 						<a href="https://docs.blynk.io/en/blynk-library-firmware-api/limitations-and-recommendations" target="_blank" rel="noopener">Blynk: límites</a>
-						·
-						<a href="https://docs.blynk.io/en/blynk.cloud-mqtt-api/device-mqtt-api" target="_blank" rel="noopener">Blynk: API MQTT</a>
 					</p>
 				</div>
 			</div>
 
 			<aside class="notas">
+				<p>
+					Volver a la pregunta guía de la portada y leer la respuesta del recuadro.
+					Después, recorrer los cinco objetivos y pedir para cada uno la prueba en el
+					ejemplo 19: el LED que responde al interruptor sin espera, la
+					correspondencia de temas y pines virtuales, el envío cada 30 s y la
+					sincronización al conectar, los componentes creados en la consola y el
+					mensaje del monitor cuando el token no es válido.
+				</p>
 				<p>
 					Pregunta de predicción: en el ejemplo 19, ¿qué dos sucesos ejecutan la
 					función asociada a V0?
@@ -82,38 +99,35 @@
 					tras cada conexión.
 				</p>
 				<p>
-					Recorrer las ideas y pedir para cada una la prueba del ejemplo 19: el LED
-					que responde al Switch sin espera; la consola con su gauge y su historial;
-					el loop de dos líneas con envío cada 30 s; el secrets.h que no aparece en
-					git.
-				</p>
-				<p>
-					Presentar la sesión 6: una Arduino Nano 33 BLE Sense ejecuta un modelo que
-					determina, en el propio microcontrolador, qué datos se envían.
+					Presentar la sesión 6: una Arduino Nano 33 BLE Sense ejecuta un modelo
+					entrenado en Colab que decide, en el propio microcontrolador, qué datos se
+					envían.
 				</p>
 			</aside>
 
 			<details class="detalle">
 				<summary>Para estudiar</summary>
 				<div class="detalle__cuerpo">
-					<h4>Términos de la sesión</h4>
+					<h4>Glosario</h4>
 					<ul>
-						<li><b>Publicación/suscripción</b> (<i>publish/subscribe</i>): el emisor publica en un tema; el broker lo entrega a quien se suscribió.</li>
-						<li><b>Broker</b>: servidor que recibe y reparte los mensajes por tema.</li>
-						<li><b>Mensaje retenido</b>: el broker guarda el último valor de un tema; en Blynk, la sincronización al conectar.</li>
-						<li><b>Mensaje de última voluntad</b> (<i>Last Will</i>): mensaje que el broker publica si el cliente se desconecta sin enviar el paquete DISCONNECT; en Blynk, el estado Offline.</li>
+						<li><b>Telemetría</b> (<i>telemetry</i>): dato que el dispositivo envía. <b>Comando</b>: orden que recibe.</li>
+						<li><b>Sondeo</b> (<i>polling</i>): consulta periódica al servidor.</li>
+						<li><b>Conexión persistente</b>: la abre el dispositivo una vez y queda abierta en los dos sentidos.</li>
+						<li><b>Broker</b>: servidor que recibe los mensajes y los reparte por tema.</li>
+						<li><b>Tema</b> (<i>topic</i>): nombre jerárquico del flujo, como <code>aula/1/temp</code>.</li>
+						<li><b>QoS</b> (<i>quality of service</i>): garantía de entrega elegida para cada mensaje.</li>
+						<li><b>Mensaje retenido</b>: último valor de un tema que el broker guarda para quien llega después.</li>
+						<li><b>Mensaje de última voluntad</b> (<i>Last Will</i>): aviso que el broker publica si el cliente se corta sin despedirse.</li>
 						<li><b>Plantilla</b> (<i>template</i>): define datastreams y panel para muchos dispositivos.</li>
-						<li><b>Datastream</b>: canal con nombre, pin virtual, tipo y rango.</li>
-						<li><b>Pin virtual</b>: V0…V255; une un widget con una función del firmware.</li>
-						<li><b>Token</b>: credencial que identifica al dispositivo ante el servidor.</li>
-						<li><b>Heartbeat</b>: ping que evita el cierre de la conexión por inactividad (40 s en la biblioteca).</li>
-						<li><b>Telemetría</b>: datos que el dispositivo envía; <b>comando</b>: orden que recibe.</li>
+						<li><b>Token</b>: credencial que identifica a cada dispositivo ante el servidor.</li>
+						<li><b>Datastream</b>, <b>pin virtual</b> y <b>widget</b>: canal con tipo y rango, su número (V0…V255) y el control del panel que lo muestra.</li>
+						<li><b>Cuota</b>: mensajes permitidos al mes; 100 000 en el plan gratuito de Blynk.</li>
 					</ul>
 				</div>
 			</details>
 
 			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
-				<a class="slide-nav__link" href="16-fallos-blynk.html">
+				<a class="slide-nav__link" href="16-diagnostico-fallos.html">
 					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
 					<span>Diagnóstico de fallos</span>
 				</a>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sincronización del estado · Sesión 5</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../../css/base.css" />
+	</head>
+	<body class="ponencia" data-deck-total="17">
+		<main class="slide slide--start">
+			<div class="slide__content">
+				<span class="badge">04 · Operación</span>
+
+				<h1 class="slide__title slide__title--sm">
+					Sincronización del <em>estado</em> del LED tras un corte de luz
+				</h1>
+
+				<div class="def">
+					<p>Tras un corte de luz, el ESP32 arranca con el LED apagado aunque el panel siga en ON. Al conectar, el ESP32 pide al servidor el último valor de V0 y lo aplica.</p>
+				</div>
+
+				<div class="crece flex">
+					<svg class="s3d-svg crece" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tabla de estados de la estación del aula en tres momentos, para el panel del celular, el servidor de Blynk y el LED del GPIO 15. El Switch de V0 está en ON en los tres. Momento 1, corte de luz: el servidor guarda V0 igual a 1 y marca el dispositivo Offline; el LED queda sin alimentación. Offline equivale al mensaje de última voluntad de la lámina 06: el servidor lo declara cuando deja de recibir el ping. Momento 2, reinicio sin sincronizar: el servidor sigue con V0 igual a 1 y Online, pero el LED arranca apagado y contradice el panel hasta que alguien mueva el Switch. Momento 3, reinicio con sincronización: el servidor entrega V0 igual a 1 al conectar y el LED se enciende; equivale al mensaje retenido de la lámina 06. El monitor serie del ejemplo 19 muestra Conectado a Blynk. Sincronizando V0... y Comando recibido de Blynk! Estado del LED: 1. Regla: al conectar, pedir el último valor de cada pin que gobierna una salida.">
+						<!-- cabecera de los tres momentos -->
+						<text class="sans mid" x="485" y="28" font-size="28" font-weight="700">1 · Corte de luz</text>
+						<text class="sans mid" x="931" y="28" font-size="28" font-weight="700">2 · Reinicio sin sincronizar</text>
+						<text class="sans mid navy" x="1377" y="28" font-size="28" font-weight="700">3 · Reinicio con sincronización</text>
+						<path class="ln ln--fina" d="M0 62 H1600" />
+						<path class="ln ln--fina ln--mut" d="M708 72 V484 M1154 72 V484" />
+
+						<!-- fila A · panel del celular: no cambia -->
+						<text class="sans" x="0" y="104" font-size="28" font-weight="700">Panel</text>
+						<text class="sans mut" x="0" y="140" font-size="22">Switch de V0</text>
+						<rect class="barra--ok" x="395" y="98" width="88" height="44" rx="22" />
+						<circle class="caja" cx="461" cy="120" r="15" />
+						<text class="ok" x="503" y="120" font-size="32">ON</text>
+						<rect class="barra--ok" x="841" y="98" width="88" height="44" rx="22" />
+						<circle class="caja" cx="907" cy="120" r="15" />
+						<text class="ok" x="949" y="120" font-size="32">ON</text>
+						<rect class="barra--ok" x="1287" y="98" width="88" height="44" rx="22" />
+						<circle class="caja" cx="1353" cy="120" r="15" />
+						<text class="ok" x="1395" y="120" font-size="32">ON</text>
+						<path class="ln ln--fina ln--mut" d="M0 170 H1600" />
+
+						<!-- fila B · servidor -->
+						<text class="sans" x="0" y="212" font-size="28" font-weight="700">Servidor</text>
+						<text class="sans mut" x="0" y="248" font-size="22">Blynk.Cloud</text>
+						<text class="navy mid" x="485" y="210" font-size="26">V0 = 1 guardado</text>
+						<text class="sans warn mid" x="485" y="250" font-size="28" font-weight="700">Offline</text>
+						<text class="navy mid" x="931" y="210" font-size="26">V0 = 1 guardado</text>
+						<text class="sans ok mid" x="931" y="250" font-size="28" font-weight="700">Online</text>
+						<text class="navy mid" x="1377" y="210" font-size="26">V0 = 1 guardado</text>
+						<g data-paso="2">
+							<text class="sans mid" x="1377" y="250" font-size="28" font-weight="700"><tspan class="ok">Online</tspan><tspan class="navy"> · envía V0 = 1</tspan></text>
+						</g>
+						<path class="ln ln--fina ln--mut" d="M0 280 H1600" />
+
+						<!-- fila C · LED del ESP32 -->
+						<text class="sans" x="0" y="320" font-size="28" font-weight="700">LED</text>
+						<text class="sans mut" x="0" y="356" font-size="22">GPIO 15</text>
+						<circle class="caja--fantasma" cx="320" cy="335" r="22" />
+						<text class="sans mut" x="360" y="335" font-size="28">sin alimentación</text>
+						<g data-paso="1">
+							<circle class="caja" cx="766" cy="335" r="22" />
+							<text class="sans acc" x="806" y="318" font-size="28" font-weight="700">apagado</text>
+							<text class="sans acc" x="806" y="354" font-size="24">✗ contradice el panel</text>
+						</g>
+						<g data-paso="2">
+							<circle class="rel-acc" cx="1212" cy="335" r="22" />
+							<text class="sans ok" x="1252" y="318" font-size="28" font-weight="700">encendido</text>
+							<text class="sans ok" x="1252" y="354" font-size="24">✓ coincide con el panel</text>
+						</g>
+						<path class="ln ln--fina ln--mut" d="M0 390 H1600" />
+
+						<!-- fila D · equivalencias con MQTT (lámina 06) -->
+						<rect class="barra--warn" x="270" y="404" width="430" height="80" rx="10" />
+						<text class="sans warn" x="290" y="430" font-size="26" font-weight="700">Offline ≈ última voluntad</text>
+						<text class="sans" x="290" y="464" font-size="22">el servidor deja de recibir el ping</text>
+						<g data-paso="1">
+							<text class="sans acc mid" x="931" y="444" font-size="24">hasta que alguien mueva el Switch</text>
+						</g>
+						<g data-paso="2">
+							<rect class="barra--navy" x="1162" y="404" width="434" height="80" rx="10" />
+							<text class="sans navy" x="1182" y="430" font-size="26" font-weight="700">Sincronización ≈ retenido</text>
+							<text class="sans" x="1182" y="464" font-size="22">el último V0 llega al conectar</text>
+						</g>
+
+						<!-- monitor serie del ejemplo 19 (momento 3) -->
+						<rect class="s4d-term" x="0" y="512" width="1600" height="104" rx="10" />
+						<text class="s4d-term-d" x="24" y="548" font-size="22">monitor serie</text>
+						<text class="s4d-term-d" x="24" y="582" font-size="22">ejemplo 19 · momento 3</text>
+						<g data-paso="2">
+							<text class="s4d-term-t" x="380" y="546" font-size="26">Conectado a Blynk. Sincronizando V0...</text>
+							<text class="s4d-term-t" x="380" y="584" font-size="26">Comando recibido de Blynk! Estado del LED: 1</text>
+						</g>
+
+						<!-- regla -->
+						<g data-paso="2">
+							<text class="sans" x="0" y="668" font-size="30"><tspan class="acc" font-weight="700">Regla:</tspan> al conectar, pedir el último valor de cada pin que gobierna una salida.</text>
+						</g>
+					</svg>
+				</div>
+			</div>
+
+			<aside class="notas">
+				<p>
+					Plantear primero el problema con la columna 1: el profesor dejó el LED de
+					aviso encendido desde el celular y se fue la luz del aula. Pregunta de
+					predicción: al volver la luz, el ESP32 reinicia sin sincronizar; ¿cuándo
+					vuelven a coincidir el panel y el LED? Respuesta: solo cuando alguien mueva
+					el Switch; hasta entonces el panel dice ON y el LED está apagado (paso 1).
+				</p>
+				<p>
+					Paso 2: el ejemplo 19 resuelve el desfase al conectar. La función de
+					conexión (BLYNK_CONNECTED) se ejecuta en cada conexión, también tras una
+					reconexión, y pide el último V0 (syncVirtual). El valor llega por la misma
+					vía que una orden del Switch, así que el monitor imprime la misma línea que
+					con una orden.
+				</p>
+				<p>
+					Relacionar con la lámina 06. El servidor guarda el último V0 y lo entrega
+					al que llega tarde: es la idea del mensaje retenido, como el mensaje fijado
+					de un grupo, que se lee al entrar sin esperar uno nuevo. «Offline» es la
+					idea de la última voluntad, como el «últ. vez en línea»: el ESP32 se apagó
+					sin despedirse, deja de enviar el ping y el aviso lo genera el servidor al
+					notar esa falta.
+				</p>
+			</aside>
+
+			<details class="detalle">
+				<summary>Para estudiar</summary>
+				<div class="detalle__cuerpo">
+					<h4>En la práctica</h4>
+					<p>
+						En la función de conexión (BLYNK_CONNECTED), pedir con syncVirtual el
+						último valor de cada pin que gobierna una salida; una sola petición admite
+						varios pines. La opción del datastream «Sync with latest server value»
+						incluye ese pin en la respuesta de syncAll. Plazo de «Offline»: el
+						servidor espera el intervalo de <i>heartbeat</i> multiplicado por 1,5
+						(docs.blynk.io ›
+						<a href="https://docs.blynk.io/en/concepts/connection-lifecycle-management/disconnections-and-heartbeat" target="_blank" rel="noopener">Disconnections and Heartbeat</a>:
+						45 s → 67 s; con los 40 s de la biblioteca, unos 60 s). Si el ESP32 cierra
+						la conexión de forma ordenada, el servidor lo sabe casi al instante.
+					</p>
+					<h4>Dónde aparece</h4>
+					<p>Ejemplo 19: la función de conexión imprime «Conectado a Blynk. Sincronizando V0...» y pide V0.</p>
+					<h4>Errores frecuentes</h4>
+					<ul>
+						<li>Poner en la función de conexión algo que debe ocurrir una sola vez: se repite en cada reconexión.</li>
+						<li>Esperar «Offline» nada más desenchufar la placa: el servidor tarda cerca de un minuto.</li>
+					</ul>
+				</div>
+			</details>
+
+			<nav class="slide-nav" aria-label="Navegación de la diapositiva">
+				<a class="slide-nav__link" href="13-cuota-intervalo.html">
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+					<span>Cuota e intervalo</span>
+				</a>
+				<a class="slide-nav__link" href="15-token.html">
+					<span>Protección del token</span>
+					<svg class="icon" aria-hidden="true"><use href="/course-icons.svg#i-flow" /></svg>
+				</a>
+			</nav>
+		</main>
+
+		<script type="module" src="../../js/deck.js"></script>
+	</body>
+</html>
